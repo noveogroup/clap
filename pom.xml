@@ -78,6 +78,7 @@
         <javaee-api.version>6.0</javaee-api.version>
         <jsf-api.version>2.1</jsf-api.version>
         <primefaces.version>3.5</primefaces.version>
+        <jersey.version>1.17.1</jersey.version>
         <slf4j.version>1.7.5</slf4j.version>
         <logback.version>1.0.12</logback.version>
     </properties>
@@ -198,6 +199,7 @@
                 <version>${javaee-api.version}</version>
             </dependency>
 
+            <!-- JSF dependensies -->
 
             <dependency>
                 <groupId>javax.faces</groupId>
@@ -208,6 +210,13 @@
                 <groupId>org.primefaces</groupId>
                 <artifactId>primefaces</artifactId>
                 <version>${primefaces.version}</version>
+            </dependency>
+
+            <!-- JAX-RS dependensies -->
+            <dependency>
+                <groupId>com.sun.jersey</groupId>
+                <artifactId>jersey-server</artifactId>
+                <version>${jersey.version}</version>
             </dependency>
 
         </dependencies>

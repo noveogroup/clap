@@ -1,4 +1,4 @@
-package com.noveogroup;
+package com.noveogroup.clap.web;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
