@@ -76,6 +76,8 @@
         <mockito-all.version>1.9.5</mockito-all.version>
         <glassfish-embedded-all.version>3.1.1</glassfish-embedded-all.version>
         <javaee-api.version>6.0</javaee-api.version>
+        <jsf-api.version>2.1</jsf-api.version>
+        <primefaces.version>3.5</primefaces.version>
     </properties>
 
     <reporting>
@@ -112,6 +114,14 @@
 
     </profiles>
 
+    <repositories>
+        <repository>
+            <id>prime-repo</id>
+            <name>PrimeFaces Maven Repository</name>
+            <url>http://repository.primefaces.org</url>
+            <layout>default</layout>
+        </repository>
+    </repositories>
 
     <dependencyManagement>
         <dependencies>
@@ -170,11 +180,15 @@
                 <version>${javaee-api.version}</version>
             </dependency>
 
-
             <dependency>
                 <groupId>javax.faces</groupId>
                 <artifactId>jsf-api</artifactId>
-                <version>2.1</version>
+                <version>${jsf-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.primefaces</groupId>
+                <artifactId>primefaces</artifactId>
+                <version>${primefaces.version}</version>
             </dependency>
 
         </dependencies>

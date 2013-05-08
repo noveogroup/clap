@@ -4,6 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:h="http://java.sun.com/jsf/html">
 
 <h:head>
@@ -12,5 +13,11 @@
 <h:body>
     <h1>Bean Test</h1>
     <h:outputText value="HelloBean says: #{helloBean.greeting}" />
+    <h:form>
+        <h:outputText value="Magic counter: #{testSessionBean.counter}"/>
+        <p:commandButton value="increment"
+                         actionListener="#{testSessionBean.increment}"
+                         update="@form"/>
+    </h:form>
 </h:body>
 </html>
