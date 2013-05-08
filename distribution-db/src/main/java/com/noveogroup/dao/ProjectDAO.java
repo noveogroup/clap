@@ -1,6 +1,6 @@
 package com.noveogroup.dao;
 
-import com.noveogroup.entity.Project;
+import com.noveogroup.clap.entity.Project;
 
 /**
  * @author

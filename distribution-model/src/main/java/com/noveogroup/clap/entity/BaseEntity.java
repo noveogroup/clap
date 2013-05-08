@@ -1,4 +1,4 @@
-package com.noveogroup.entity;
+package com.noveogroup.clap.entity;
 
 import javax.persistence.*;
 import java.io.Serializable;

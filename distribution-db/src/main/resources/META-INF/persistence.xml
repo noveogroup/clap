@@ -6,6 +6,10 @@
     <persistence-unit name="distribution_pu" transaction-type="JTA">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
         <jta-data-source>app/jdbc/distribution</jta-data-source>
+
+        <class>com.noveogroup.clap.entity.BaseEntity</class>
+        <class>com.noveogroup.clap.entity.Project</class>
+
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
             <!--<property name="eclipselink.ddl-generation" value="create-tables" />-->
