@@ -1,6 +1,6 @@
 package com.noveogroup.clap.model;
 
-public class Project {
+public class ProjectDTO {
 
     private String name;
 
