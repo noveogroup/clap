@@ -10,9 +10,15 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>distribution-db</artifactId>
     <name>Distribution database</name>
+    <packaging>jar</packaging>
 
 
     <dependencies>
+        <dependency>
+            <groupId>com.noveogroup</groupId>
+            <artifactId>distribution-model</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
@@ -20,6 +26,15 @@
         <dependency>
             <groupId>javax</groupId>
             <artifactId>javaee-api</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.extras</groupId>
+            <artifactId>glassfish-embedded-all</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>
