@@ -1,18 +1,21 @@
-package com.noveogroup.clap.impl;
+package com.noveogroup.clap.service.impl;
 
-import com.noveogroup.clap.ProjectService;
+import com.noveogroup.clap.interceptor.TransactionInterceptor;
+import com.noveogroup.clap.service.ProjectService;
 import com.noveogroup.clap.dao.ProjectDAO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.interceptor.Interceptors;
 
 /**
- * @author
+ * @author Mikhail Demidov
  */
-@TransactionManagement(TransactionManagementType.CONTAINER)
 @Stateless
+@TransactionManagement(TransactionManagementType.BEAN)
+@Interceptors({TransactionInterceptor.class})
 public class ProjectServiceImpl implements ProjectService {
 
 

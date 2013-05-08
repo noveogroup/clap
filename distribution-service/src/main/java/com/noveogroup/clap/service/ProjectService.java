@@ -1,4 +1,4 @@
-package com.noveogroup.clap;
+package com.noveogroup.clap.service;
 
 /**
  * @author

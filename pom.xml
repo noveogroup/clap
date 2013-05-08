@@ -72,8 +72,8 @@
         <cobertura-maven-plugin.version>2.5.2</cobertura-maven-plugin.version>
         <tomcat7-maven-plugin.version>2.1</tomcat7-maven-plugin.version>
         <hsqldb.version>1.8.0.10</hsqldb.version>
-        <mysql-connector-java.version>5.1.23</mysql-connector-java.version>
-        <hibernate.version>4.1.10.Final</hibernate.version>
+        <mysql-connector-java.version>5.1.24</mysql-connector-java.version>
+        <hibernate.version>4.2.1.Final</hibernate.version>
         <mockito-all.version>1.9.5</mockito-all.version>
         <glassfish-embedded-all.version>3.1.1</glassfish-embedded-all.version>
         <javaee-api.version>6.0</javaee-api.version>

@@ -1,6 +1,6 @@
 package com.noveogroup.clap.web;
 
-import com.noveogroup.clap.ProjectService;
+import com.noveogroup.clap.service.ProjectService;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -1,6 +1,6 @@
 package com.noveogroup.clap.rest;
 
-import com.noveogroup.clap.ProjectService;
+import com.noveogroup.clap.service.ProjectService;
 import com.noveogroup.clap.entity.Project;
 import com.noveogroup.clap.model.ProjectDTO;
 import org.dozer.DozerBeanMapper;
