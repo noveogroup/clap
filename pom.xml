@@ -9,6 +9,7 @@
         <module>distribution-db</module>
         <module>distribution-service</module>
         <module>distribution-ui</module>
+        <module>distribution-common</module>
     </modules>
     <artifactId>distribution</artifactId>
     <packaging>pom</packaging>
