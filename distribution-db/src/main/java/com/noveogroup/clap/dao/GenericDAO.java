@@ -1,4 +1,4 @@
-package com.noveogroup.dao;
+package com.noveogroup.clap.dao;
 
 import java.io.Serializable;
 import java.util.List;

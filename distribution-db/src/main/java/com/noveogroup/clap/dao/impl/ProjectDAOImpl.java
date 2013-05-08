@@ -1,6 +1,6 @@
-package com.noveogroup.dao.impl;
+package com.noveogroup.clap.dao.impl;
 
-import com.noveogroup.dao.ProjectDAO;
+import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.entity.Project;
 
 import javax.ejb.Stateless;

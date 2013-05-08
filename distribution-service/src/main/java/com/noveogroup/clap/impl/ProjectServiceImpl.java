@@ -1,7 +1,7 @@
-package com.noveogroup.impl;
+package com.noveogroup.clap.impl;
 
-import com.noveogroup.ProjectService;
-import com.noveogroup.dao.ProjectDAO;
+import com.noveogroup.clap.ProjectService;
+import com.noveogroup.clap.dao.ProjectDAO;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;

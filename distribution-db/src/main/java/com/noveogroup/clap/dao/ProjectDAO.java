@@ -1,4 +1,4 @@
-package com.noveogroup.dao;
+package com.noveogroup.clap.dao;
 
 import com.noveogroup.clap.entity.Project;
 
