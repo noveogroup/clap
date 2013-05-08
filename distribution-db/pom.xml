@@ -16,6 +16,11 @@
     <dependencies>
         <dependency>
             <groupId>com.noveogroup</groupId>
+            <artifactId>distribution-common</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.noveogroup</groupId>
             <artifactId>distribution-model</artifactId>
             <version>${project.version}</version>
         </dependency>
