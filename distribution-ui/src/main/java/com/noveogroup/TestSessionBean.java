@@ -9,7 +9,7 @@ import java.io.Serializable;
  */
 @Named
 @SessionScoped
-public class TestSessionBean implements Serializable{
+public class TestSessionBean implements Serializable {
 
     private int counter;
 
@@ -21,7 +21,7 @@ public class TestSessionBean implements Serializable{
         this.counter = counter;
     }
 
-    public void increment(){
+    public void increment() {
         counter++;
     }
 }

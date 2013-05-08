@@ -78,6 +78,8 @@
         <javaee-api.version>6.0</javaee-api.version>
         <jsf-api.version>2.1</jsf-api.version>
         <primefaces.version>3.5</primefaces.version>
+        <slf4j.version>1.7.5</slf4j.version>
+        <logback.version>1.0.12</logback.version>
     </properties>
 
     <reporting>
@@ -140,6 +142,22 @@
 
             <!--LOGGING DEPENDENCIES-->
 
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+
 
             <!--DATABASE DEPENDENCIES-->
 
@@ -180,6 +198,7 @@
                 <version>${javaee-api.version}</version>
             </dependency>
 
+
             <dependency>
                 <groupId>javax.faces</groupId>
                 <artifactId>jsf-api</artifactId>
@@ -193,6 +212,21 @@
 
         </dependencies>
     </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-core</artifactId>
+        </dependency>
+    </dependencies>
 
     <build>
         <pluginManagement>
