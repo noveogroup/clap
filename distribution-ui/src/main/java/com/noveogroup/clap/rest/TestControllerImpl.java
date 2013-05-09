@@ -24,19 +24,14 @@ public class TestControllerImpl implements TestController {
     private ProjectService projectService;
 
     @Override
-    @GET
-    @Path("echo")
-    public String echo(@QueryParam("q") String original) {
+    public String echo(String original) {
         Project project = new Project();
         project.setName("Name");
         return MAPPER.map(project, com.noveogroup.clap.model.ProjectDTO.class).getName();
     }
 
     @Override
-    @GET
-    @Path("testProject")
-    @Produces(MediaType.APPLICATION_JSON)
-    public ProjectDTO getTestProject(@QueryParam("q") String name) {
+    public ProjectDTO getTestProject(String name) {
         ProjectDTO projectDTO = new ProjectDTO();
         projectDTO.setName(name);
         return projectDTO;

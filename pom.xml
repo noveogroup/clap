@@ -83,7 +83,8 @@
         <slf4j.version>1.7.5</slf4j.version>
         <logback.version>1.0.12</logback.version>
         <dozer.version>5.4.0</dozer.version>
-        <jax-rs-api.version>2.0-m15</jax-rs-api.version>
+        <jax-rs-api.version>2.0-m16</jax-rs-api.version>
+        <hibernate-validator.version>5.0.0.Final</hibernate-validator.version>
     </properties>
 
     <reporting>
@@ -189,7 +190,7 @@
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-validator</artifactId>
-                <version>${hibernate.version}</version>
+                <version>${hibernate-validator.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.glassfish.extras</groupId>
