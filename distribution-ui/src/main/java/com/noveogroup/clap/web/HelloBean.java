@@ -2,6 +2,7 @@ package com.noveogroup.clap.web;
 
 import com.noveogroup.clap.service.ProjectService;
 
+import com.noveogroup.clap.web.util.config.ConfigBean;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,6 +22,8 @@ public class HelloBean {
     @Inject
     private ProjectService projectService;
 
+    @Inject
+    private ConfigBean configBean;
 
     public String getGreeting() {
         LOG.trace("Hello World!");
@@ -28,6 +31,6 @@ public class HelloBean {
         LOG.info("I am fine.");
         LOG.warn("I love programming.");
         LOG.error("I am programming.");
-        return "Hello World!" + projectService.getName();
+        return "Hello World!" + projectService.getName()+" " + configBean.getTestProperty();
     }
 }
