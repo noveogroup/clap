@@ -8,14 +8,10 @@ import org.dozer.Mapper;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 @ApplicationScoped
-@Path("/")
 public class TestControllerImpl implements TestController {
 
     private static Mapper MAPPER = new DozerBeanMapper();
@@ -31,9 +27,8 @@ public class TestControllerImpl implements TestController {
     }
 
     @Override
-    public ProjectDTO getTestProject(String name) {
-        ProjectDTO projectDTO = new ProjectDTO();
-        projectDTO.setName(name);
+    public ProjectDTO getTestModifyProject(ProjectDTO projectDTO) {
+        projectDTO.setName(projectDTO.getName()+"_ololo");
         return projectDTO;
     }
 }
