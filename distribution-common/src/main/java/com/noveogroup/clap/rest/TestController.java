@@ -11,7 +11,6 @@ import javax.ws.rs.core.MediaType;
 /**
  * @author Andrey Sokolov
  */
-@Path("/")
 public interface TestController {
     @GET
     @Path("echo")
