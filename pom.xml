@@ -128,6 +128,10 @@
             <url>http://repository.primefaces.org</url>
             <layout>default</layout>
         </repository>
+        <repository>
+            <id>gcm-server-repository</id>
+            <url>https://raw.github.com/slorber/gcm-server-repository/master/releases/</url>
+        </repository>
     </repositories>
 
     <dependencyManagement>
@@ -243,23 +247,15 @@
                 <version>${dozer.version}</version>
             </dependency>
 
+            <!--GCM-->
+            <dependency>
+                <groupId>com.google.android.gcm</groupId>
+                <artifactId>gcm-server</artifactId>
+                <version>3</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-        </dependency>
-    </dependencies>
 
     <build>
         <pluginManagement>
