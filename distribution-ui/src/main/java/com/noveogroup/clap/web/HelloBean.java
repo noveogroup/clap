@@ -17,9 +17,7 @@ import org.slf4j.LoggerFactory;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 
 /**
  * @author
@@ -39,11 +37,15 @@ public class HelloBean {
     private StreamedContent QRCode;
 
     public HelloBean() throws IOException, WriterException {
-        File qrcodeFile = new File("QRCode");
+        ByteArrayOutputStream buf = new ByteArrayOutputStream();
         Writer writer = new QRCodeWriter();
-        BitMatrix matrix = writer.encode("ololo-test", BarcodeFormat.QR_CODE, 100, 100);
-        MatrixToImageWriter.writeToFile(matrix,"PNG",qrcodeFile);
-        QRCode = new DefaultStreamedContent(new FileInputStream(qrcodeFile), "image/png");
+        //151 chars
+        BitMatrix matrix = writer.encode("123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890_",
+                BarcodeFormat.QR_CODE, 100, 100);
+        MatrixToImageWriter.writeToStream(matrix, "PNG", buf);
+        //422 bytes
+        byte[] bytes = buf.toByteArray();
+        QRCode = new DefaultStreamedContent(new ByteArrayInputStream(bytes), "image/png");
     }
 
     public String getGreeting() {
