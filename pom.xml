@@ -85,6 +85,7 @@
         <dozer.version>5.4.0</dozer.version>
         <jax-rs-api.version>2.0-m16</jax-rs-api.version>
         <hibernate-validator.version>5.0.0.Final</hibernate-validator.version>
+        <zxing.version>2.1</zxing.version>
     </properties>
 
     <reporting>
@@ -253,6 +254,21 @@
                 <artifactId>gcm-server</artifactId>
                 <version>3</version>
             </dependency>
+
+            <!-- QR-code generation -->
+
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>core</artifactId>
+                <version>${zxing.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.zxing</groupId>
+                <artifactId>javase</artifactId>
+                <version>${zxing.version}</version>
+            </dependency>
+
         </dependencies>
     </dependencyManagement>
 
