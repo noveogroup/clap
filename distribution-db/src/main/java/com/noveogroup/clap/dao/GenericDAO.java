@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface GenericDAO<T, ID extends Serializable> {
 
-    public void persist(T entity);
+    public T persist(T entity);
 
     public void remove(T entity);
 

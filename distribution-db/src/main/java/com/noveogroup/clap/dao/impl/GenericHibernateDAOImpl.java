@@ -35,8 +35,9 @@ public abstract class GenericHibernateDAOImpl<T, ID extends Serializable> implem
     }
 
     @Override
-    public void persist(T entity) {
+    public T persist(T entity) {
         entityManager.persist(entity);
+        return entity;
     }
 
     @Override
