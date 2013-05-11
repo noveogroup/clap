@@ -5,6 +5,7 @@ import com.noveogroup.clap.model.revision.RevisionDTO;
 import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.web.controller.ProjectsController;
 import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,11 +29,11 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
 
 
     @Override
-    public RevisionDTO createRevision(final String projectId
-            , final InputStream mainPackageInputStream
-            , final FormDataContentDisposition mainPackageDetail
-            , final InputStream specialPackageInputStream
-            , final FormDataContentDisposition specialPackageDetail) {
+    public RevisionDTO createRevision(final String projectId,
+                                      final InputStream mainPackageInputStream,
+                                      final FormDataContentDisposition mainPackageDetail,
+                                      final InputStream specialPackageInputStream,
+                                      final FormDataContentDisposition specialPackageDetail) {
 
         byte[] mainPackage = null;
         byte[] specialPackage = null;
@@ -49,6 +50,16 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
         Long id = Long.parseLong(projectId);
         RevisionDTO revisionDTO = new RevisionDTO();
         return revisionService.addRevision(id, revisionDTO, mainPackage, specialPackage);
+    }
+
+    @Override
+    public RevisionDTO updateRevisionPackages(Long revisionTimestamp,
+                                              InputStream mainPackageInputStream,
+                                              FormDataContentDisposition mainPackageDetail,
+                                              InputStream specialPackageInputStream,
+                                              FormDataContentDisposition specialPackageDetail) {
+
+        return null;
     }
 
     @Override

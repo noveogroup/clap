@@ -20,11 +20,21 @@ public interface RevisionEndpoint {
     @Path("createRevision")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    RevisionDTO createRevision(@FormDataParam("projectId") String projectId
-            , @FormDataParam("mainPackage") InputStream mainPackageInputStream
-            , @FormDataParam("mainPackage") FormDataContentDisposition mainPackageDetail
-            , @FormDataParam("specialPackage") InputStream specialPackageInputStream
-            , @FormDataParam("specialPackage") FormDataContentDisposition specialPackageDetail);
+    RevisionDTO createRevision(@FormDataParam("projectId") String projectId,
+                               @FormDataParam("mainPackage") InputStream mainPackageInputStream,
+                               @FormDataParam("mainPackage") FormDataContentDisposition mainPackageDetail,
+                               @FormDataParam("specialPackage") InputStream specialPackageInputStream,
+                               @FormDataParam("specialPackage") FormDataContentDisposition specialPackageDetail);
+
+    @POST
+    @Path("updateRevisionPackages")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    RevisionDTO updateRevisionPackages(@FormDataParam("revisionTimestamp") Long revisionTimestamp,
+                                       @FormDataParam("mainPackage") InputStream mainPackageInputStream,
+                                       @FormDataParam("mainPackage") FormDataContentDisposition mainPackageDetail,
+                                       @FormDataParam("specialPackage") InputStream specialPackageInputStream,
+                                       @FormDataParam("specialPackage") FormDataContentDisposition specialPackageDetail);
 
     @GET
     @Path("downloadAPK/{id}/{type}")

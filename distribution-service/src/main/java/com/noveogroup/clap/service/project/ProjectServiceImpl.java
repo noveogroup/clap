@@ -6,6 +6,7 @@ import com.noveogroup.clap.entity.Project;
 import com.noveogroup.clap.entity.revision.Revision;
 import com.noveogroup.clap.entity.revision.RevisionType;
 import com.noveogroup.clap.interceptor.TransactionInterceptor;
+import com.noveogroup.clap.interceptor.Transactional;
 import com.noveogroup.clap.model.ProjectDTO;
 import com.noveogroup.clap.model.revision.RevisionDTO;
 import com.noveogroup.clap.service.project.ProjectService;
@@ -46,6 +47,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Inject
     private UrlService urlService;
 
+    @Transactional
     @Override
     public ProjectDTO createProject(final ProjectDTO project) {
         if (project.getCreationDate() == null) {
@@ -55,12 +57,14 @@ public class ProjectServiceImpl implements ProjectService {
         return MAPPER.map(projectDAO.persist(inProject), ProjectDTO.class);
     }
 
+    @Transactional
     @Override
     public ProjectDTO save(final ProjectDTO project) {
         Project inProject = MAPPER.map(project, Project.class);
         return MAPPER.map(projectDAO.persist(inProject), ProjectDTO.class);
     }
 
+    @Transactional
     @Override
     public ProjectDTO findById(final Long id) {
         Project project = projectDAO.findById(id);
@@ -80,6 +84,7 @@ public class ProjectServiceImpl implements ProjectService {
         return projectDTO;
     }
 
+    @Transactional
     @Override
     public List<ProjectDTO> findAllProjects() {
         List<Project> projectList = projectDAO.selectAll();

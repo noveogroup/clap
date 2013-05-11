@@ -8,6 +8,7 @@ import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 import javax.transaction.SystemException;
 import javax.transaction.UserTransaction;
+import java.lang.annotation.Annotation;
 
 /**
  * @author Mikhail Demidov
@@ -24,16 +25,29 @@ public class TransactionInterceptor {
     @AroundInvoke
     public Object businessIntercept(InvocationContext ctx) throws SystemException {
         Object result = null;
+        Annotation[] methodAnnotations = ctx.getMethod().getDeclaredAnnotations();
+        if (methodAnnotations.length > 0) {
+            for (Annotation annotation : methodAnnotations) {
+                if (annotation instanceof Transactional) {
+                    try {
+                        userTransaction.begin();
+                        result = ctx.proceed();
+                        userTransaction.commit();
+                    } catch (IllegalStateException e) {
+                        LOGGER.error("Transaction error " + e.getMessage(), e);
+                        userTransaction.rollback();
+                    } catch (Exception e) {
+                        LOGGER.error("Transaction error " + e.getMessage(), e);
+                        userTransaction.rollback();
+                    }
+                    return result;
+                }
+            }
+        }
         try {
-            userTransaction.begin();
             result = ctx.proceed();
-            userTransaction.commit();
-        } catch (IllegalStateException e) {
-            LOGGER.error("Transaction error " + e.getMessage(), e);
-            userTransaction.rollback();
         } catch (Exception e) {
-            LOGGER.error("Transaction error " + e.getMessage(), e);
-            userTransaction.rollback();
+            LOGGER.error("error beyond transaction " + e.getMessage(), e);
         }
         return result;
     }
