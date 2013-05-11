@@ -1,25 +1,21 @@
-package com.noveogroup.clap.service.impl;
+package com.noveogroup.clap.service.revision.impl;
 
-import com.noveogroup.clap.dao.MessageDAO;
+import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.Project;
 import com.noveogroup.clap.entity.revision.Revision;
 import com.noveogroup.clap.entity.revision.RevisionType;
 import com.noveogroup.clap.interceptor.TransactionInterceptor;
-import com.noveogroup.clap.model.ProjectDTO;
 import com.noveogroup.clap.model.revision.RevisionDTO;
-import com.noveogroup.clap.service.ProjectService;
-import com.noveogroup.clap.dao.ProjectDAO;
+import com.noveogroup.clap.service.revision.RevisionService;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
-import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import javax.interceptor.Interceptors;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author Mikhail Demidov
@@ -27,55 +23,16 @@ import java.util.List;
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
 @Interceptors({TransactionInterceptor.class})
-public class ProjectServiceImpl implements ProjectService {
+public class RevisionServiceImpl implements RevisionService {
 
     private static Mapper MAPPER = new DozerBeanMapper();
 
-
-    @EJB
+    @Inject
     private ProjectDAO projectDAO;
 
-    @EJB
+    @Inject
     private RevisionDAO revisionDAO;
 
-    @EJB
-    private MessageDAO messageDAO;
-
-    @Override
-    public ProjectDTO createProject(final ProjectDTO project) {
-        if (project.getCreationDate() == null) {
-            project.setCreationDate(System.currentTimeMillis());
-        }
-        Project inProject = MAPPER.map(project, Project.class);
-        return MAPPER.map(projectDAO.persist(inProject), ProjectDTO.class);
-    }
-
-    @Override
-    public String getName() {
-        projectDAO.selectAll();
-        return "Mikhail";
-    }
-
-    @Override
-    public ProjectDTO save(final ProjectDTO project) {
-        Project inProject = MAPPER.map(project, Project.class);
-        return MAPPER.map(projectDAO.persist(inProject), ProjectDTO.class);
-    }
-
-    @Override
-    public ProjectDTO findById(final Long id) {
-        return MAPPER.map(projectDAO.findById(id), ProjectDTO.class);
-    }
-
-    @Override
-    public List<ProjectDTO> findAllProjects() {
-        List<Project> projectList = projectDAO.selectAll();
-        List<ProjectDTO> projectDTOList = new ArrayList<ProjectDTO>();
-        for (Project project : projectList) {
-            projectDTOList.add(MAPPER.map(project, ProjectDTO.class));
-        }
-        return projectDTOList;
-    }
 
     @Override
     public RevisionDTO addRevision(final Long projectId, final RevisionDTO revisionDTO, final byte[] mainPackage, final byte[] specialPackage) {
@@ -97,4 +54,5 @@ public class ProjectServiceImpl implements ProjectService {
         project.getRevisions().add(revision);
         return MAPPER.map(revision, RevisionDTO.class);
     }
+
 }

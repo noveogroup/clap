@@ -1,8 +1,7 @@
 package com.noveogroup.clap.web.controller;
 
-import com.noveogroup.clap.entity.Project;
 import com.noveogroup.clap.model.ProjectDTO;
-import com.noveogroup.clap.service.ProjectService;
+import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.ProjectsListDataModel;
 import com.noveogroup.clap.web.model.ProjectsModel;

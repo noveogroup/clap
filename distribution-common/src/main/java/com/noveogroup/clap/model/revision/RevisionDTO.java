@@ -16,6 +16,12 @@ public class RevisionDTO extends BaseDTO {
 
     private List<MessageDTO> messages;
 
+    private Long projectId;
+
+    private String mainPackage;
+
+    private String specialPackage;
+
 
     public RevisionDTO() {
     }

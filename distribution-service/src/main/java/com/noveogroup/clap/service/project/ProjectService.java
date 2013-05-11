@@ -1,4 +1,4 @@
-package com.noveogroup.clap.service;
+package com.noveogroup.clap.service.project;
 
 import com.noveogroup.clap.entity.Project;
 import com.noveogroup.clap.model.ProjectDTO;
@@ -22,7 +22,7 @@ public interface ProjectService {
 
     List<ProjectDTO> findAllProjects();
 
-    RevisionDTO addRevision(Long projectId, RevisionDTO revisionDTO, byte[] mainPackage, byte[] specialPackage);
+
 
 
 }

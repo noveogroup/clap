@@ -2,14 +2,12 @@ package com.noveogroup.clap.rest;
 
 import com.noveogroup.clap.entity.Project;
 import com.noveogroup.clap.model.ProjectDTO;
-import com.noveogroup.clap.service.ProjectService;
+import com.noveogroup.clap.service.project.ProjectService;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 
 @ApplicationScoped
 public class TestControllerImpl implements TestController {
