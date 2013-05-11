@@ -1,0 +1,31 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core" xmlns:p="http://java.sun.com/jsf/html">
+<ui:composition template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+        <h:form>
+            <p:messages/>
+            <p:panelGrid columns="2">
+                <h:outputLabel for="name"
+                               value="#{msgs['project.add.label.name']}"/>
+                <p:inputText id="name"
+                             value="#{projectsModel.newProject.name}"
+                             validatorMessage="#{msgs['project.add.message.name']}">
+                    <f:validateLength minimum="5" maximum="20"/>
+                </p:inputText>
+                <h:outputLabel for="description"
+                               value="#{msgs['project.add.label.description']}"/>
+                <p:inputText id="description"
+                             value="#{projectsModel.newProject.description}"/>
+                <f:facet name="footer">
+                    <p:commandButton value="#{msgs['common.form.label.add']}"
+                                     action="#{projectsController.addProject}"/>
+                </f:facet>
+            </p:panelGrid>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

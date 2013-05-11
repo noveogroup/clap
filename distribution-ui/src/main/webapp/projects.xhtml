@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/WEB-INF/template.xhtml">
+    <ui:define name="menuItems">
+        <p:menuitem value="test"/>
+    </ui:define>
+    <ui:define name="content">
+
+
+        <p:dataTable id="projects"
+                     var="project"
+                     value="#{projectsModel.projects}"
+                     selection="#{projectsModel.selectedProject}"
+                     selectionMode="single">
+
+            <p:ajax event="rowSelect" listener="#{projectsController.onProjectSelect}"/>
+
+            <p:column headerText="#{msgs['project.add.label.name']}">
+                #{project.name}
+            </p:column>
+            <p:column headerText="#{msgs['project.add.label.description']}">
+                #{project.description}
+            </p:column>
+
+        </p:dataTable>
+
+    </ui:define>
+</ui:composition>
+</html>
