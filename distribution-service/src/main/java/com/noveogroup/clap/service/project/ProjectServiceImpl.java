@@ -23,6 +23,7 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -51,7 +52,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ProjectDTO createProject(final ProjectDTO project) {
         if (project.getCreationDate() == null) {
-            project.setCreationDate(System.currentTimeMillis());
+            project.setCreationDate(new Date());
         }
         Project inProject = MAPPER.map(project, Project.class);
         return MAPPER.map(projectDAO.persist(inProject), ProjectDTO.class);

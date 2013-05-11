@@ -17,11 +17,14 @@
 
             <p:ajax event="rowSelect" listener="#{projectsController.onProjectSelect}"/>
 
-            <p:column headerText="#{msgs['project.add.label.name']}">
-                #{project.name}
+            <p:column headerText="#{msgs['project.label.name']}">
+                <h:outputText value="#{project.name}"/>
             </p:column>
-            <p:column headerText="#{msgs['project.add.label.description']}">
-                #{project.description}
+            <p:column headerText="#{msgs['project.label.creationDate']}">
+                <h:outputText value="#{project.creationDate}"/>
+            </p:column>
+            <p:column headerText="#{msgs['project.label.description']}">
+                <h:outputText value="#{project.description}"/>
             </p:column>
 
         </p:dataTable>

@@ -1,6 +1,7 @@
 package com.noveogroup.clap.rest;
 
 
+import com.noveogroup.clap.model.revision.ApplicationFile;
 import com.noveogroup.clap.model.revision.RevisionDTO;
 import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.web.controller.ProjectsController;
@@ -76,7 +77,8 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
 
     @Override
     public Response downloadAPK(final long id, final int type) {
-        return Response.ok(revisionService.getApplication(id, type)).header("Content-Disposition", "attachment; filename=\"Vasya.apk\"").build();
+        ApplicationFile application = revisionService.getApplication(id, type);
+        return Response.ok(application.getContent()).header("Content-Disposition", "attachment; filename=\""+application.getFilename()+"\"").build();
     }
 
     @Override

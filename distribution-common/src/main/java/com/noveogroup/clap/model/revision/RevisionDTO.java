@@ -3,6 +3,7 @@ package com.noveogroup.clap.model.revision;
 import com.noveogroup.clap.model.BaseDTO;
 import com.noveogroup.clap.model.message.MessageDTO;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -10,7 +11,7 @@ import java.util.List;
  */
 public class RevisionDTO extends BaseDTO {
 
-    private Long timestamp;
+    private Date timestamp;
 
     private RevisionType revisionType;
 
@@ -24,14 +25,6 @@ public class RevisionDTO extends BaseDTO {
 
 
     public RevisionDTO() {
-    }
-
-    public Long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(final Long timestamp) {
-        this.timestamp = timestamp;
     }
 
     public RevisionType getRevisionType() {
@@ -72,5 +65,13 @@ public class RevisionDTO extends BaseDTO {
 
     public void setSpecialPackageUrl(final String specialPackageUrl) {
         this.specialPackageUrl = specialPackageUrl;
+    }
+
+    public Date getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 }

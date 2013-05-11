@@ -2,11 +2,9 @@ package com.noveogroup.clap.entity;
 
 import com.noveogroup.clap.entity.revision.Revision;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -19,7 +17,8 @@ public class Project extends BaseEntity {
 
     private String description;
 
-    private Long creationDate;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date creationDate;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
     private List<Revision> revisions;
@@ -58,22 +57,12 @@ public class Project extends BaseEntity {
         return description;
     }
 
-    /**
-     * Sets new creationDate.
-     *
-     * @param creationDate New value of creationDate.
-     */
-    public void setCreationDate(final Long creationDate) {
-        this.creationDate = creationDate;
+    public Date getCreationDate() {
+        return creationDate;
     }
 
-    /**
-     * Gets creationDate.
-     *
-     * @return Value of creationDate.
-     */
-    public Long getCreationDate() {
-        return creationDate;
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
     }
 
     /**

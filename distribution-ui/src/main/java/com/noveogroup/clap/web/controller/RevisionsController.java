@@ -56,7 +56,7 @@ public class RevisionsController extends BaseController{
         ProjectDTO projectDTO = projectsModel.getSelectedProject();
         RevisionDTO revisionDTO = new RevisionDTO();
         revisionDTO.setRevisionType(RevisionType.DEVELOP);
-        revisionDTO.setTimestamp(new Date().getTime());
+        revisionDTO.setTimestamp(new Date());
         UploadedFile newRevisionCleanApk = revisionsModel.getUploadCleanApk();
         UploadedFile newRevisionHackedApk = revisionsModel.getUploadHackedApk();
         revisionService.addRevision(projectDTO.getId(),

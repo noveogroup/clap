@@ -37,7 +37,7 @@ public class ProjectsController extends BaseController {
 
     public String addProject() {
         LOGGER.debug("add project : " + projectsModel.getNewProject());
-        projectService.save(projectsModel.getNewProject());
+        projectService.createProject(projectsModel.getNewProject());
         projectsModel.setNewProject(new ProjectDTO());
         LOGGER.debug("project saved");
         return Navigation.PROJECTS.getView();

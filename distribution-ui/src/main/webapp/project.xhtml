@@ -24,13 +24,14 @@
                         listener="#{revisionsController.onRevisionSelected}"/>
 
                 <p:column headerText="#{msgs['revision.label.id']}">
-                    #{revision.id}
+                    <h:outputText value="#{revision.id}"/>
                 </p:column>
                 <p:column headerText="#{msgs['revision.label.date']}">
-                    #{revision.timestamp}
+                    <h:outputText value="#{revision.timestamp}">
+                    </h:outputText>
                 </p:column>
                 <p:column headerText="#{msgs['revision.label.type']}">
-                    #{revision.revisionType}
+                    <h:outputText value="#{revision.revisionType}"/>
                 </p:column>
             </p:dataTable>
 

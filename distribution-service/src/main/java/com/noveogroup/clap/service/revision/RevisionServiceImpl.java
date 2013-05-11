@@ -8,6 +8,7 @@ import com.noveogroup.clap.entity.revision.Revision;
 import com.noveogroup.clap.entity.revision.RevisionType;
 import com.noveogroup.clap.interceptor.TransactionInterceptor;
 import com.noveogroup.clap.interceptor.Transactional;
+import com.noveogroup.clap.model.revision.ApplicationFile;
 import com.noveogroup.clap.model.revision.RevisionDTO;
 import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.service.url.UrlService;
@@ -21,6 +22,7 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -47,7 +49,7 @@ public class RevisionServiceImpl implements RevisionService {
     public RevisionDTO addRevision(final Long projectId, final RevisionDTO revisionDTO, final byte[] mainPackage, final byte[] specialPackage) {
         Revision revision = MAPPER.map(revisionDTO, Revision.class);
         if (revision.getTimestamp() == null) {
-            revision.setTimestamp(System.currentTimeMillis());
+            revision.setTimestamp(new Date());
         }
         if (revision.getRevisionType() == null) {
             revision.setRevisionType(RevisionType.DEVELOP);
@@ -81,13 +83,18 @@ public class RevisionServiceImpl implements RevisionService {
 
     @Transactional
     @Override
-    public byte[] getApplication(final Long revisionId, final Integer type) {
+    public ApplicationFile getApplication(final Long revisionId, final Integer type) {
         Revision revision = revisionDAO.findById(revisionId);
         if (revision != null) {
+            ApplicationFile ret = new ApplicationFile();
             if (type == 1) {
-                return revision.getSpecialPackage();
+                ret.setContent(revision.getSpecialPackage());
+                ret.setFilename(createFileName(revision.getProject(),false));
+                return ret;
             } else if (type == 0) {
-                return revision.getMainPackage();
+                ret.setContent(revision.getMainPackage());
+                ret.setFilename(createFileName(revision.getProject(), true));
+                return ret;
             }
         }
         return null;
@@ -128,6 +135,10 @@ public class RevisionServiceImpl implements RevisionService {
         if(revision.isSpecialPackageLoaded()){
             outcomeRevision.setSpecialPackageUrl(urlService.createUrl(outcomeRevision.getId(),false));
         }
+    }
+
+    private String createFileName(Project project,boolean mainPackage){
+        return project.getName() + (mainPackage ? "" : "_hacked")+ ".apk" ;
     }
 
 }

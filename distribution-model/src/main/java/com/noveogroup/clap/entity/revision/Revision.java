@@ -5,6 +5,7 @@ import com.noveogroup.clap.entity.Project;
 import com.noveogroup.clap.entity.message.Message;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -16,7 +17,8 @@ import java.util.List;
 public class Revision extends BaseEntity {
 
 
-    private Long timestamp;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timestamp;
 
     private RevisionType revisionType;
 
@@ -45,11 +47,11 @@ public class Revision extends BaseEntity {
     public Revision() {
     }
 
-    public Long getTimestamp() {
+    public Date getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(final Long timestamp) {
+    public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 

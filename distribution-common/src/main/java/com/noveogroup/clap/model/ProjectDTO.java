@@ -2,6 +2,7 @@ package com.noveogroup.clap.model;
 
 import com.noveogroup.clap.model.revision.RevisionDTO;
 
+import java.util.Date;
 import java.util.List;
 
 public class ProjectDTO extends BaseDTO {
@@ -11,7 +12,7 @@ public class ProjectDTO extends BaseDTO {
 
     private String description;
 
-    private Long creationDate;
+    private Date creationDate;
 
     private List<RevisionDTO> revisions;
 
@@ -32,11 +33,11 @@ public class ProjectDTO extends BaseDTO {
         this.description = description;
     }
 
-    public Long getCreationDate() {
+    public Date getCreationDate() {
         return creationDate;
     }
 
-    public void setCreationDate(final Long creationDate) {
+    public void setCreationDate(Date creationDate) {
         this.creationDate = creationDate;
     }
 

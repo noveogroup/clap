@@ -1,6 +1,7 @@
 package com.noveogroup.clap.service.revision;
 
 import com.noveogroup.clap.dao.ProjectDAO;
+import com.noveogroup.clap.model.revision.ApplicationFile;
 import com.noveogroup.clap.model.revision.RevisionDTO;
 
 import javax.inject.Inject;
@@ -25,7 +26,7 @@ public interface RevisionService {
      * @param type
      * @return
      */
-    byte[] getApplication(Long revisionId, Integer type);
+    ApplicationFile getApplication(Long revisionId, Integer type);
 
     RevisionDTO getRevision(Long timestamp);
 
