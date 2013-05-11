@@ -11,6 +11,7 @@ import com.noveogroup.clap.service.revision.RevisionService;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
+import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
@@ -27,10 +28,10 @@ public class RevisionServiceImpl implements RevisionService {
 
     private static Mapper MAPPER = new DozerBeanMapper();
 
-    @Inject
+    @EJB
     private ProjectDAO projectDAO;
 
-    @Inject
+    @EJB
     private RevisionDAO revisionDAO;
 
 

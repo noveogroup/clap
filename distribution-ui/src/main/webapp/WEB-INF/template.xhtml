@@ -13,8 +13,8 @@
 <h:body>
     <h:form>
         <p:menubar id="mainMenu">
-            <p:menuitem action="#{projectsController.toProjectsView}" value="#{msgs['menu.project.list']}"/>
-            <p:menuitem action="addProject" value="#{msgs['menu.project.add']}"/>
+            <p:menuitem ajax="false"  action="#{projectsController.toProjectsView}" value="#{msgs['menu.project.list']}"/>
+            <p:menuitem ajax="false"  action="addProject" value="#{msgs['menu.project.add']}"/>
             <ui:insert name="menuItems"/>
         </p:menubar>
     </h:form>

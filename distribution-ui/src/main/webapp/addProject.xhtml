@@ -22,6 +22,7 @@
                              value="#{projectsModel.newProject.description}"/>
                 <f:facet name="footer">
                     <p:commandButton value="#{msgs['common.form.label.add']}"
+                                     ajax="false"
                                      action="#{projectsController.addProject}"/>
                 </f:facet>
             </p:panelGrid>

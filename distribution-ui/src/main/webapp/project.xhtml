@@ -11,10 +11,29 @@
     </ui:define>
     <ui:define name="content">
 
-        #{projectsModel.selectedProject.name}
+        <p:panel id="projectSummary" header="#{projectsModel.selectedProject.name}">
+            <h:outputText value="#{projectsModel.selectedProject.description}"/>
+        </p:panel>
 
-        <p:panel header="#{msgs['project.view.uploadRevision.header']}">
-            <h:form>
+        <p:dataTable id="revisions"
+                     var="revision"
+                     value="#{projectsModel.selectedProject.revisions}">
+
+            <p:column headerText="#{msgs['revision.label.id']}">
+                #{revision.id}
+            </p:column>
+            <p:column headerText="#{msgs['revision.label.date']}">
+                #{revision.timestamp}
+            </p:column>
+            <p:column headerText="#{msgs['revision.label.type']}">
+                #{revision.revisionType}
+            </p:column>
+
+        </p:dataTable>
+
+        <h:form>
+            <p:panel header="#{msgs['project.view.uploadRevision.header']}">
+                <p:messages/>
                 <p:panelGrid columns="2">
 
                     <h:outputText value="#{msgs['project.view.uploadRevision.cleanApk']}"/>
@@ -25,7 +44,7 @@
                             sizeLimit="#{configBean.maxApkSize}"
                             value="#{revisionsModel.newRevisionCleanApk}"/>
 
-                    <h:outputText value="#{msgs['project.add.label.description']}"/>
+                    <h:outputText value="#{msgs['project.view.uploadRevision.hackedApk']}"/>
 
                     <p:fileUpload
                             id="hackedApkFileUpload"
@@ -35,14 +54,13 @@
 
                     <f:facet name="footer">
                         <p:commandButton value="#{msgs['common.form.label.add']}"
+                                         ajax="false"
                                          action="#{revisionsController.saveNewRevision}"/>
                     </f:facet>
 
                 </p:panelGrid>
-
-
-            </h:form>
-        </p:panel>
+            </p:panel>
+        </h:form>
 
     </ui:define>
 </ui:composition>

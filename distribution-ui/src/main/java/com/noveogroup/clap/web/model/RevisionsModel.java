@@ -13,6 +13,11 @@ public class RevisionsModel implements Serializable{
     private UploadedFile newRevisionCleanApk;
     private UploadedFile newRevisionHackedApk;
 
+    public void reset(){
+        newRevisionCleanApk = null;
+        newRevisionHackedApk = null;
+    }
+
     public UploadedFile getNewRevisionCleanApk() {
         return newRevisionCleanApk;
     }
