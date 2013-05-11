@@ -18,9 +18,9 @@ public class RevisionDTO extends BaseDTO {
 
     private Long projectId;
 
-    private String mainPackage;
+    private String mainPackageUrl;
 
-    private String specialPackage;
+    private String specialPackageUrl;
 
 
     public RevisionDTO() {
@@ -56,5 +56,21 @@ public class RevisionDTO extends BaseDTO {
 
     public void setProjectId(final Long projectId) {
         this.projectId = projectId;
+    }
+
+    public String getMainPackageUrl() {
+        return mainPackageUrl;
+    }
+
+    public void setMainPackageUrl(final String mainPackageUrl) {
+        this.mainPackageUrl = mainPackageUrl;
+    }
+
+    public String getSpecialPackageUrl() {
+        return specialPackageUrl;
+    }
+
+    public void setSpecialPackageUrl(final String specialPackageUrl) {
+        this.specialPackageUrl = specialPackageUrl;
     }
 }

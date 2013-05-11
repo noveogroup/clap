@@ -1,5 +1,6 @@
 package com.noveogroup.clap.service.revision.impl;
 
+import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.Project;
@@ -34,6 +35,8 @@ public class RevisionServiceImpl implements RevisionService {
     @EJB
     private RevisionDAO revisionDAO;
 
+    @Inject
+    private ConfigBean configBean;
 
     @Override
     public RevisionDTO addRevision(final Long projectId, final RevisionDTO revisionDTO, final byte[] mainPackage, final byte[] specialPackage) {
@@ -53,11 +56,14 @@ public class RevisionServiceImpl implements RevisionService {
         Project project = projectDAO.findById(projectId);
         revision.setProject(project);
         project.getRevisions().add(revision);
+
         projectDAO.persist(project);
         revision = revisionDAO.persist(revision);
         RevisionDTO outcomeRevision = MAPPER.map(revision, RevisionDTO.class);
         outcomeRevision.setProjectId(projectId);
-
+//        String baseUrl = configBean.getDownloadApkUrl();
+        outcomeRevision.setMainPackageUrl("bla" + "/" + projectId + "/0");
+        outcomeRevision.setSpecialPackageUrl("bla" + "/" + projectId + "/1");
         return outcomeRevision;
     }
 
