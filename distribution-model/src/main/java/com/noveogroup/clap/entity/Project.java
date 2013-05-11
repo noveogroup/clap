@@ -1,5 +1,7 @@
 package com.noveogroup.clap.entity;
 
+import com.noveogroup.clap.entity.revision.Revision;
+
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
