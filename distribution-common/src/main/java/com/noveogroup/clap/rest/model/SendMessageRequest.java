@@ -8,8 +8,6 @@ public class SendMessageRequest {
 
     private Long revisionTimestamp;
 
-    private String projectName;
-
     public MessageDTO getMessageDTO() {
         return messageDTO;
     }
@@ -26,20 +24,11 @@ public class SendMessageRequest {
         this.revisionTimestamp = revisionTimestamp;
     }
 
-    public String getProjectName() {
-        return projectName;
-    }
-
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
-
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("SendMessageRequest{");
         sb.append("messageDTO=").append(messageDTO);
         sb.append(", revisionTimestamp=").append(revisionTimestamp);
-        sb.append(", projectName='").append(projectName).append('\'');
         sb.append('}');
         return sb.toString();
     }

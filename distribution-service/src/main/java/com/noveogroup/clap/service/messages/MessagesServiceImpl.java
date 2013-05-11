@@ -28,9 +28,6 @@ public class MessagesServiceImpl implements MessagesService {
     private static Mapper MAPPER = new DozerBeanMapper();
 
     @EJB
-    private ProjectDAO projectDAO;
-
-    @EJB
     private RevisionDAO revisionDAO;
 
     @EJB
@@ -38,21 +35,16 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Transactional
     @Override
-    public void saveMessage(String projectName, long revisionTimestamp, MessageDTO messageDTO) {
-        Project project = projectDAO.findProjectByName(projectName);
-        for(Revision revision : project.getRevisions()){
-            if(revision.getTimestamp().getTime() == revisionTimestamp){
-                Message message = MAPPER.map(messageDTO,Message.class);
-                message = messageDAO.persist(message);
-                List<Message> messages = revision.getMessages();
-                if(messages == null){
-                    messages = new ArrayList<Message>();
-                    revision.setMessages(messages);
-                }
-                messages.add(message);
-                revisionDAO.persist(revision);
-                projectDAO.persist(project);
-            }
+    public void saveMessage(long revisionTimestamp, MessageDTO messageDTO) {
+        Revision revision = revisionDAO.getRevisionByTimestamp(revisionTimestamp);
+        Message message = MAPPER.map(messageDTO, Message.class);
+        message = messageDAO.persist(message);
+        List<Message> messages = revision.getMessages();
+        if (messages == null) {
+            messages = new ArrayList<Message>();
+            revision.setMessages(messages);
         }
+        messages.add(message);
+        revisionDAO.persist(revision);
     }
 }
