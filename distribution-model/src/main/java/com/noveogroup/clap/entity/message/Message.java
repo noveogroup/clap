@@ -17,9 +17,29 @@ import javax.persistence.Table;
 public class Message extends BaseEntity {
 
 
+    private Long timestamp;
+
+    private String message;
+
     /**
      * Constructor
      */
     public Message() {
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(final Long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(final String message) {
+        this.message = message;
     }
 }

@@ -1,6 +1,7 @@
 package com.noveogroup.clap.entity.revision;
 
 import com.noveogroup.clap.entity.BaseEntity;
+import com.noveogroup.clap.entity.Project;
 import com.noveogroup.clap.entity.message.Message;
 
 import javax.persistence.*;
@@ -22,9 +23,12 @@ public class Revision extends BaseEntity {
     @Lob
     private byte[] build;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY)
     private List<Message> messages;
 
+
+    @ManyToOne
+    private Project project;
 
     /**
      * Constructor

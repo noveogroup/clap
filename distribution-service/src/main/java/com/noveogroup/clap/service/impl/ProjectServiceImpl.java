@@ -12,6 +12,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.Interceptors;
+import java.util.List;
 
 /**
  * @author Mikhail Demidov
@@ -53,5 +54,10 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project findById(final Long id) {
         return projectDAO.findById(id);
+    }
+
+    @Override
+    public List<Project> findAllProjects() {
+        return projectDAO.selectAll();
     }
 }

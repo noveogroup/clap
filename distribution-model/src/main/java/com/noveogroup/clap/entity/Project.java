@@ -3,6 +3,7 @@ package com.noveogroup.clap.entity;
 import com.noveogroup.clap.entity.revision.Revision;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.util.List;
@@ -19,7 +20,7 @@ public class Project extends BaseEntity {
 
     private Long creationDate;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
     private List<Revision> revisions;
 
     /**
