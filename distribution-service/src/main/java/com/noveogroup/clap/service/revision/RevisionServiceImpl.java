@@ -26,6 +26,7 @@ import java.util.List;
  * @author Mikhail Demidov
  */
 @Stateless
+@Interceptors({TransactionInterceptor.class})
 @TransactionManagement(TransactionManagementType.BEAN)
 public class RevisionServiceImpl implements RevisionService {
 
@@ -40,7 +41,6 @@ public class RevisionServiceImpl implements RevisionService {
     @Inject
     private UrlService urlService;
 
-    @Interceptors({TransactionInterceptor.class})
     @Override
     public RevisionDTO addRevision(final Long projectId, final RevisionDTO revisionDTO, final byte[] mainPackage, final byte[] specialPackage) {
         Revision revision = MAPPER.map(revisionDTO, Revision.class);
@@ -50,7 +50,14 @@ public class RevisionServiceImpl implements RevisionService {
         if (revision.getRevisionType() == null) {
             revision.setRevisionType(RevisionType.DEVELOP);
         }
-        addToRevision(revision,mainPackage,specialPackage);
+        if(mainPackage != null){
+            revision.setMainPackage(mainPackage);
+            revision.setMainPackageLoaded(true);
+        }
+        if (specialPackage != null) {
+            revision.setSpecialPackage(specialPackage);
+            revision.setSpecialPackageLoaded(true);
+        }
         Project project = projectDAO.findById(projectId);
         revision.setProject(project);
         project.getRevisions().add(revision);
@@ -59,22 +66,37 @@ public class RevisionServiceImpl implements RevisionService {
         revision = revisionDAO.persist(revision);
         RevisionDTO outcomeRevision = MAPPER.map(revision, RevisionDTO.class);
         outcomeRevision.setProjectId(projectId);
-        generateRevisionDTOUrls(outcomeRevision,revision);
+        if(revision.isMainPackageLoaded()){
+            outcomeRevision.setMainPackageUrl(urlService.createUrl(outcomeRevision.getId(),true));
+        }
+        if(revision.isSpecialPackageLoaded()){
+            outcomeRevision.setSpecialPackageUrl(urlService.createUrl(outcomeRevision.getId(),false));
+        }
         return outcomeRevision;
     }
 
-    @Interceptors({TransactionInterceptor.class})
     @Override
     public RevisionDTO updateRevisionPackages(RevisionDTO revisionDTO, byte[] mainPackage, byte[] specialPackage) {
         Revision revision = revisionDAO.findById(revisionDTO.getId());
-        addToRevision(revision,mainPackage,specialPackage);
+        if(mainPackage != null){
+            revision.setMainPackage(mainPackage);
+            revision.setMainPackageLoaded(true);
+        }
+        if (specialPackage != null) {
+            revision.setSpecialPackage(specialPackage);
+            revision.setSpecialPackageLoaded(true);
+        }
         revision = revisionDAO.persist(revision);
         RevisionDTO outcomeRevision = MAPPER.map(revision, RevisionDTO.class);
-        generateRevisionDTOUrls(outcomeRevision,revision);
+        if(revision.isMainPackageLoaded()){
+            outcomeRevision.setMainPackageUrl(urlService.createUrl(outcomeRevision.getId(),true));
+        }
+        if(revision.isSpecialPackageLoaded()){
+            outcomeRevision.setSpecialPackageUrl(urlService.createUrl(outcomeRevision.getId(),false));
+        }
         return outcomeRevision;
     }
 
-    @Interceptors({TransactionInterceptor.class})
     @Override
     public byte[] getApplication(final Long revisionId, final Integer type) {
         Revision revision = revisionDAO.findById(revisionId);
@@ -87,7 +109,7 @@ public class RevisionServiceImpl implements RevisionService {
         }
         return null;
     }
-
+            /*
     private void generateRevisionDTOUrls(RevisionDTO outcomeRevision,Revision revision){
         if(revision.isMainPackageLoaded()){
             outcomeRevision.setMainPackageUrl(urlService.createUrl(outcomeRevision.getId(),true));
@@ -106,6 +128,6 @@ public class RevisionServiceImpl implements RevisionService {
             revision.setSpecialPackage(specialPackage);
             revision.setSpecialPackageLoaded(true);
         }
-    }
+    }            */
 
 }

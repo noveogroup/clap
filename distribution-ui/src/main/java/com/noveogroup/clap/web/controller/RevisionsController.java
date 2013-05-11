@@ -76,22 +76,27 @@ public class RevisionsController {
         RevisionDTO revisionDTO = (RevisionDTO) event.getObject();
         revisionsModel.setSelectedRevisionDTO(revisionDTO);
         LOGGER.debug(revisionDTO.getId() + " revision selected, generation qrcodes...");
-        revisionsModel.setCleanApkQRCode(getQRCodeFromUrl(revisionDTO.getMainPackageUrl()));
-        revisionsModel.setHackedApkQRCode(getQRCodeFromUrl(revisionDTO.getSpecialPackageUrl()));
+        updateQRCodes(revisionDTO);
         LOGGER.debug(revisionDTO.getId() + " revision processing finished");
         ConfigurableNavigationHandler configurableNavigationHandler = (ConfigurableNavigationHandler) FacesContext.getCurrentInstance().getApplication().getNavigationHandler();
         configurableNavigationHandler.performNavigation(Navigation.REVISION.getView());
     }
 
-    public String uploadApkToRevision() {
+    public String uploadApkToRevision() throws IOException, WriterException {
         UploadedFile newRevisionCleanApk = revisionsModel.getUploadCleanApk();
         UploadedFile newRevisionHackedApk = revisionsModel.getUploadHackedApk();
         RevisionDTO updatedRevision = revisionService.updateRevisionPackages(revisionsModel.getSelectedRevisionDTO(),
                 newRevisionCleanApk != null ? newRevisionCleanApk.getContents() : null,
                 newRevisionHackedApk != null ? newRevisionHackedApk.getContents() : null);
         revisionsModel.setSelectedRevisionDTO(updatedRevision);
+        updateQRCodes(updatedRevision);
         LOGGER.debug("revision updated");
         return Navigation.SAME_PAGE.getView();
+    }
+
+    private void updateQRCodes(RevisionDTO revisionDTO) throws IOException, WriterException {
+        revisionsModel.setCleanApkQRCode(getQRCodeFromUrl(revisionDTO.getMainPackageUrl()));
+        revisionsModel.setHackedApkQRCode(getQRCodeFromUrl(revisionDTO.getSpecialPackageUrl()));
     }
 
     private StreamedContent getQRCodeFromUrl(String url) throws WriterException, IOException {
