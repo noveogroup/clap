@@ -57,6 +57,25 @@
                     </h:form>
                 </h:panelGroup>
             </p:panel>
+
+            <p:dataTable var="message" value="#{revisionsModel.selectedRevisionDTO.messages}">
+
+                <p:column style="width:2%">
+                    <p:rowToggler/>
+                </p:column>
+                <p:column headerText="#{msgs['message.label.time']}">
+                    <h:outputText value="#{message.timestamp}"/>
+                </p:column>
+
+                <p:rowExpansion>
+                    <p:panelGrid columns="2">
+                        <h:outputText value="#{msgs['message.label.deviceInfo']}"/>
+                        <h:outputText value="#{message.deviceInfo}"/>
+                    </p:panelGrid>
+
+                </p:rowExpansion>
+
+            </p:dataTable>
         </p:panelGrid>
     </ui:define>
 </ui:composition>

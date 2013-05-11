@@ -11,7 +11,7 @@ import java.util.List;
  */
 public class RevisionDTO extends BaseDTO {
 
-    private Date timestamp;
+    private Long timestamp;
 
     private RevisionType revisionType;
 
@@ -67,11 +67,11 @@ public class RevisionDTO extends BaseDTO {
         this.specialPackageUrl = specialPackageUrl;
     }
 
-    public Date getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 }

@@ -28,7 +28,7 @@ public class DBInitBean {
         projectDTO.setCreationDate(new Date(1368318474));
         projectDTO = projectService.createProject(projectDTO);
         RevisionDTO revisionDTO = new RevisionDTO();
-        revisionDTO.setTimestamp(new Date(1368318776));
+        revisionDTO.setTimestamp(1368318776L);
         revisionService.addRevision(projectDTO.getId(),revisionDTO,null,null);
     }
 

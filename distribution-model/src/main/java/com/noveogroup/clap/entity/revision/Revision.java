@@ -17,9 +17,8 @@ import java.util.List;
 public class Revision extends BaseEntity {
 
 
-    @Temporal(TemporalType.TIMESTAMP)
     @Column(unique = true)
-    private Date timestamp;
+    private Long timestamp;
 
     private RevisionType revisionType;
 
@@ -48,11 +47,11 @@ public class Revision extends BaseEntity {
     public Revision() {
     }
 
-    public Date getTimestamp() {
+    public Long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
 

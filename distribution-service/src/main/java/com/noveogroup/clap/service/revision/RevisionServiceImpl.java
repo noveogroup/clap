@@ -49,7 +49,7 @@ public class RevisionServiceImpl implements RevisionService {
     public RevisionDTO addRevision(final Long projectId, final RevisionDTO revisionDTO, final byte[] mainPackage, final byte[] specialPackage) {
         Revision revision = MAPPER.map(revisionDTO, Revision.class);
         if (revision.getTimestamp() == null) {
-            revision.setTimestamp(new Date());
+            revision.setTimestamp(new Date().getTime());
         }
         if (revision.getRevisionType() == null) {
             revision.setRevisionType(RevisionType.DEVELOP);
