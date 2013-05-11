@@ -1,5 +1,7 @@
 package com.noveogroup.clap.service.impl;
 
+import com.noveogroup.clap.dao.MessageDAO;
+import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.Project;
 import com.noveogroup.clap.interceptor.TransactionInterceptor;
 import com.noveogroup.clap.service.ProjectService;
@@ -22,6 +24,20 @@ public class ProjectServiceImpl implements ProjectService {
 
     @EJB
     private ProjectDAO projectDAO;
+
+    @EJB
+    private RevisionDAO revisionDAO;
+
+    @EJB
+    private MessageDAO messageDAO;
+
+    @Override
+    public Project createProject(final Project project) {
+        if (project.getCreationDate() == null) {
+            project.setCreationDate(System.currentTimeMillis());
+        }
+        return projectDAO.persist(project);
+    }
 
     @Override
     public String getName() {
