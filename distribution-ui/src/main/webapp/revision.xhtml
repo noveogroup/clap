@@ -6,8 +6,13 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/template.xhtml">
+    <ui:define name="menuItems">
+        <p:menuitem value="#{msgs['menu.project.view']}" action="project"/>
+    </ui:define>
     <ui:define name="content">
-        <p:panelGrid id="revisionDetails" columns="2">
+        <f:event type="preRenderView" listener="#{revisionsController.prepareRevisionView}"/>
+
+        <p:panelGrid id="revisionDetails" columns="2" rendered="#{not empty revisionsModel.selectedRevisionDTO}">
             <p:panel header="#{msgs['revision.label.exp.clean']}">
                 <h:panelGroup rendered="#{not empty revisionsModel.selectedRevisionDTO.mainPackageUrl}">
                     <div>

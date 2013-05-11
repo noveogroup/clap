@@ -41,4 +41,9 @@ public interface RevisionEndpoint {
     @Produces("application/vnd.android.package-archive")
     Response downloadAPK(@PathParam("id") long id, @PathParam("type") int type);
 
+    @GET
+    @Path("getRevByTs")
+    @Produces(MediaType.APPLICATION_JSON)
+    RevisionDTO getRevisionByTimestamp(@QueryParam("t") long timestamp);
+
 }

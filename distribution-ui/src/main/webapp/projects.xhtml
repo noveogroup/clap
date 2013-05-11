@@ -7,7 +7,7 @@
       xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/template.xhtml">
     <ui:define name="content">
-
+        <f:event type="preRenderView" listener="#{projectsController.prepareProjectsListView}"/>
 
         <p:dataTable id="projects"
                      var="project"

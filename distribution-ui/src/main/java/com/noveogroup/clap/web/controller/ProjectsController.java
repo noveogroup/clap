@@ -20,9 +20,11 @@ import java.util.List;
 
 @Named
 @RequestScoped
-public class ProjectsController {
+public class ProjectsController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProjectsController.class);
+
+    private long projectId;
 
     @Inject
     private ProjectService projectService;
@@ -34,30 +36,38 @@ public class ProjectsController {
     private RevisionsModel revisionsModel;
 
     public String addProject() {
-
         LOGGER.debug("add project : " + projectsModel.getNewProject());
-
         projectService.save(projectsModel.getNewProject());
         projectsModel.setNewProject(new ProjectDTO());
         LOGGER.debug("project saved");
-
-        return toProjectsView();
-    }
-
-    public String toProjectsView() {
-        List<ProjectDTO> projectDTOList = projectService.findAllProjects();
-        projectsModel.setProjectsListDataModel(new ProjectsListDataModel(projectDTOList));
-        LOGGER.debug(projectDTOList.size() + " projects loaded");
         return Navigation.PROJECTS.getView();
     }
 
+    public void prepareProjectsListView() {
+        List<ProjectDTO> projectDTOList = projectService.findAllProjects();
+        projectsModel.setProjectsListDataModel(new ProjectsListDataModel(projectDTOList));
+        LOGGER.debug(projectDTOList.size() + " projects loaded");
+    }
+
+    public void prepareProjectView(){
+        ProjectDTO selectedProject = projectsModel.getSelectedProject();
+        if(selectedProject != null){
+            ProjectDTO projectWithRevisions = projectService.findById(selectedProject.getId());
+            projectsModel.setSelectedProject(projectWithRevisions);
+            revisionsModel.setRevisionsListDataModel(new RevisionsListDataModel(projectWithRevisions.getRevisions()));
+        }
+        else {
+            LOGGER.error("project not selected");
+        }
+    }
+
+
     public void onProjectSelect(SelectEvent event) {
         ProjectDTO selectedProject = (ProjectDTO) event.getObject();
-        ProjectDTO projectWithRevisions = projectService.findById(selectedProject.getId());
-        projectsModel.setSelectedProject(projectWithRevisions);
-        revisionsModel.setRevisionsListDataModel(new RevisionsListDataModel(projectWithRevisions.getRevisions()));
+        projectsModel.setSelectedProject(selectedProject);
         LOGGER.debug(selectedProject.getName() + " prject selected");
-        ConfigurableNavigationHandler configurableNavigationHandler = (ConfigurableNavigationHandler) FacesContext.getCurrentInstance().getApplication().getNavigationHandler();
-        configurableNavigationHandler.performNavigation(Navigation.PROJECT.getView());
+        redirectTo(Navigation.PROJECT);
     }
+
+
 }

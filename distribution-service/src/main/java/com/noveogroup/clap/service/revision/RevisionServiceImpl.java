@@ -69,11 +69,14 @@ public class RevisionServiceImpl implements RevisionService {
     @Override
     public RevisionDTO updateRevisionPackages(RevisionDTO revisionDTO, byte[] mainPackage, byte[] specialPackage) {
         Revision revision = revisionDAO.findById(revisionDTO.getId());
-        addPackages(revision,mainPackage,specialPackage);
-        revision = revisionDAO.persist(revision);
-        RevisionDTO outcomeRevision = MAPPER.map(revision, RevisionDTO.class);
-        createUrls(outcomeRevision,revision);
-        return outcomeRevision;
+        return updateRevisionPackages(revision,mainPackage,specialPackage);
+    }
+
+    @Transactional
+    @Override
+    public RevisionDTO updateRevisionPackages(Long revisionTimestamp, byte[] mainPackage, byte[] specialPackage) {
+       Revision revision = revisionDAO.getRevisionByTimestamp(revisionTimestamp);
+       return updateRevisionPackages(revision,mainPackage,specialPackage);
     }
 
     @Transactional
@@ -88,6 +91,23 @@ public class RevisionServiceImpl implements RevisionService {
             }
         }
         return null;
+    }
+
+    @Transactional
+    @Override
+    public RevisionDTO getRevision(Long timestamp) {
+        Revision revisionByTimestamp = revisionDAO.getRevisionByTimestamp(timestamp);
+        RevisionDTO revisionDTO = MAPPER.map(revisionByTimestamp, RevisionDTO.class);
+        createUrls(revisionDTO,revisionByTimestamp);
+        return revisionDTO;
+    }
+
+    private RevisionDTO updateRevisionPackages(Revision revision, byte[] mainPackage, byte[] specialPackage){
+        addPackages(revision,mainPackage,specialPackage);
+        revision = revisionDAO.persist(revision);
+        RevisionDTO outcomeRevision = MAPPER.map(revision, RevisionDTO.class);
+        createUrls(outcomeRevision,revision);
+        return outcomeRevision;
     }
 
     private void addPackages(Revision revision,byte[] mainPackage, byte[] specialPackage){

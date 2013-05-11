@@ -12,6 +12,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "revisions")
+@NamedQuery(name="getRevisionByTimestamp",query="SELECT rev FROM Revision rev WHERE rev.timestamp = :timestamp")
 public class Revision extends BaseEntity {
 
 

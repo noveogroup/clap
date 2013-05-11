@@ -15,6 +15,9 @@ public interface RevisionService {
 
     RevisionDTO updateRevisionPackages(RevisionDTO revisionDTO, byte[] mainPackage, byte[] specialPackage);
 
+
+    RevisionDTO updateRevisionPackages(Long revisionTimestamp, byte[] mainPackage, byte[] specialPackage);
+
     /**
      * Change type to enum
      *
@@ -24,5 +27,6 @@ public interface RevisionService {
      */
     byte[] getApplication(Long revisionId, Integer type);
 
+    RevisionDTO getRevision(Long timestamp);
 
 }

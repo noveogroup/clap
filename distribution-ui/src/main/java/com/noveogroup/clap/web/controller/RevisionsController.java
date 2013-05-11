@@ -35,7 +35,7 @@ import java.util.Date;
 
 @Named
 @RequestScoped
-public class RevisionsController {
+public class RevisionsController extends BaseController{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RevisionsController.class);
     @Inject
@@ -72,14 +72,22 @@ public class RevisionsController {
         return Navigation.SAME_PAGE.getView();
     }
 
-    public void onRevisionSelected(SelectEvent event) throws IOException, WriterException {
+    public void prepareRevisionView() throws IOException, WriterException {
+        RevisionDTO selectedRevisionDTO = revisionsModel.getSelectedRevisionDTO();
+        if(selectedRevisionDTO != null){
+            updateQRCodes(selectedRevisionDTO);
+            LOGGER.debug(selectedRevisionDTO.getId() + " revision preparing finished");
+        }
+        else {
+            LOGGER.error("revision not selected");
+        }
+    }
+
+    public void onRevisionSelected(SelectEvent event){
         RevisionDTO revisionDTO = (RevisionDTO) event.getObject();
         revisionsModel.setSelectedRevisionDTO(revisionDTO);
-        LOGGER.debug(revisionDTO.getId() + " revision selected, generation qrcodes...");
-        updateQRCodes(revisionDTO);
-        LOGGER.debug(revisionDTO.getId() + " revision processing finished");
-        ConfigurableNavigationHandler configurableNavigationHandler = (ConfigurableNavigationHandler) FacesContext.getCurrentInstance().getApplication().getNavigationHandler();
-        configurableNavigationHandler.performNavigation(Navigation.REVISION.getView());
+        LOGGER.debug(revisionDTO.getId() + " revision selected");
+        redirectTo(Navigation.REVISION);
     }
 
     public String uploadApkToRevision() throws IOException, WriterException {

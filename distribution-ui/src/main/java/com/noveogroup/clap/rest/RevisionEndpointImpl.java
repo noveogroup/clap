@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
@@ -58,12 +59,28 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
                                               FormDataContentDisposition mainPackageDetail,
                                               InputStream specialPackageInputStream,
                                               FormDataContentDisposition specialPackageDetail) {
-
-        return null;
+        byte[] mainPackage = null;
+        byte[] specialPackage = null;
+        try {
+            if (mainPackageInputStream != null) {
+                mainPackage = IOUtils.toByteArray(mainPackageInputStream);
+            }
+            if (specialPackage != null) {
+                specialPackage = IOUtils.toByteArray(specialPackageInputStream);
+            }
+        } catch (IOException e) {
+            LOGGER.error("Error while uploading apk " + e.getMessage(), e);
+        }
+        return revisionService.updateRevisionPackages(revisionTimestamp,mainPackage,specialPackage);
     }
 
     @Override
     public Response downloadAPK(final long id, final int type) {
         return Response.ok(revisionService.getApplication(id, type)).header("Content-Disposition", "attachment; filename=\"Vasya.apk\"").build();
+    }
+
+    @Override
+    public RevisionDTO getRevisionByTimestamp(long timestamp) {
+        return revisionService.getRevision(timestamp);
     }
 }

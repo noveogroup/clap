@@ -6,67 +6,66 @@
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/template.xhtml">
-    <ui:define name="menuItems">
-        <p:menuitem value="#{msgs['menu.project.edit']}" action="editProject"/>
-    </ui:define>
     <ui:define name="content">
+        <f:event type="preRenderView" listener="#{projectsController.prepareProjectView}"/>
+        <h:panelGroup rendered="#{not empty projectsModel.selectedProject}">
 
-        <p:panel id="projectSummary" header="#{projectsModel.selectedProject.name}">
-            <h:outputText value="#{projectsModel.selectedProject.description}"/>
-        </p:panel>
+            <p:panel id="projectSummary" header="#{projectsModel.selectedProject.name}">
+                <h:outputText value="#{projectsModel.selectedProject.description}"/>
+            </p:panel>
 
+            <p:dataTable id="revisions"
+                         var="revision"
+                         selectionMode="single"
+                         selection="#{revisionsModel.selectedRevisionDTO}"
+                         value="#{revisionsModel.revisionsListDataModel}">
 
-        <p:dataTable id="revisions"
-                     var="revision"
-                     selectionMode="single"
-                     selection="#{revisionsModel.selectedRevisionDTO}"
-                     value="#{revisionsModel.revisionsListDataModel}">
+                <p:ajax event="rowSelect"
+                        listener="#{revisionsController.onRevisionSelected}"/>
 
-            <p:ajax event="rowSelect"
-                    listener="#{revisionsController.onRevisionSelected}"/>
+                <p:column headerText="#{msgs['revision.label.id']}">
+                    #{revision.id}
+                </p:column>
+                <p:column headerText="#{msgs['revision.label.date']}">
+                    #{revision.timestamp}
+                </p:column>
+                <p:column headerText="#{msgs['revision.label.type']}">
+                    #{revision.revisionType}
+                </p:column>
+            </p:dataTable>
 
-            <p:column headerText="#{msgs['revision.label.id']}">
-                #{revision.id}
-            </p:column>
-            <p:column headerText="#{msgs['revision.label.date']}">
-                #{revision.timestamp}
-            </p:column>
-            <p:column headerText="#{msgs['revision.label.type']}">
-                #{revision.revisionType}
-            </p:column>
-        </p:dataTable>
+            <p:panel header="#{msgs['project.view.uploadRevision.header']}">
+                <h:form enctype="multipart/form-data">
+                    <p:messages/>
+                    <p:panelGrid columns="2">
 
-        <p:panel header="#{msgs['project.view.uploadRevision.header']}">
-            <h:form enctype="multipart/form-data">
-                <p:messages/>
-                <p:panelGrid columns="2">
+                        <h:outputText value="#{msgs['project.view.uploadRevision.cleanApk']}"/>
 
-                    <h:outputText value="#{msgs['project.view.uploadRevision.cleanApk']}"/>
+                        <p:fileUpload
+                                mode="simple"
+                                id="cleanApkFileUpload"
+                                sizeLimit="#{configBean.maxApkSize}"
+                                value="#{revisionsModel.uploadCleanApk}"/>
 
-                    <p:fileUpload
-                            mode="simple"
-                            id="cleanApkFileUpload"
-                            sizeLimit="#{configBean.maxApkSize}"
-                            value="#{revisionsModel.uploadCleanApk}"/>
+                        <h:outputText value="#{msgs['project.view.uploadRevision.hackedApk']}"/>
 
-                    <h:outputText value="#{msgs['project.view.uploadRevision.hackedApk']}"/>
+                        <p:fileUpload
+                                mode="simple"
+                                id="hackedApkFileUpload"
+                                sizeLimit="#{configBean.maxApkSize}"
+                                value="#{revisionsModel.uploadHackedApk}"/>
 
-                    <p:fileUpload
-                            mode="simple"
-                            id="hackedApkFileUpload"
-                            sizeLimit="#{configBean.maxApkSize}"
-                            value="#{revisionsModel.uploadHackedApk}"/>
+                        <f:facet name="footer">
+                            <p:commandButton value="#{msgs['common.form.label.add']}"
+                                             ajax="false"
+                                             action="#{revisionsController.saveNewRevision}"/>
+                        </f:facet>
 
-                    <f:facet name="footer">
-                        <p:commandButton value="#{msgs['common.form.label.add']}"
-                                         ajax="false"
-                                         action="#{revisionsController.saveNewRevision}"/>
-                    </f:facet>
+                    </p:panelGrid>
+                </h:form>
+            </p:panel>
 
-                </p:panelGrid>
-            </h:form>
-        </p:panel>
-
+        </h:panelGroup>
     </ui:define>
 </ui:composition>
 </html>
