@@ -11,6 +11,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -48,5 +50,10 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
         Long id = Long.parseLong(projectId);
         RevisionDTO revisionDTO = new RevisionDTO();
         return revisionService.addRevision(id, revisionDTO, mainPackage, specialPackage);
+    }
+
+    @Override
+    public Response downloadAPK(final long id, final int type) {
+        return Response.ok(revisionService.getApplication(id, type)).build();
     }
 }

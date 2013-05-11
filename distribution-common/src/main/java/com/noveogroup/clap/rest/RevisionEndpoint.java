@@ -6,6 +6,7 @@ import com.sun.jersey.multipart.FormDataParam;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.Response;
 import java.io.InputStream;
 
 /**
@@ -24,5 +25,9 @@ public interface RevisionEndpoint {
             , @FormDataParam("mainPackage") FormDataContentDisposition mainPackageDetail
             , @FormDataParam("specialPackage") InputStream specialPackageInputStream
             , @FormDataParam("specialPackage") FormDataContentDisposition specialPackageDetail);
+
+    @GET
+    @Path("downloadAPK/{id}/{type}")
+    Response downloadAPK(@PathParam("id") long id, @PathParam("type") int type);
 
 }
