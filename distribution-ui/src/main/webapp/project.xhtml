@@ -7,7 +7,7 @@
       xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/template.xhtml">
     <ui:define name="menuItems">
-        <p:menuitem value="#{msgs['menu.project.edit']}"/>
+        <p:menuitem value="#{msgs['menu.project.edit']}" action="editProject"/>
     </ui:define>
     <ui:define name="content">
 
@@ -19,16 +19,19 @@
 
                     <h:outputText value="#{msgs['project.view.uploadRevision.cleanApk']}"/>
 
-                    <p:fileUpload mode="advanced"
+                    <p:fileUpload
+                            id="cleanApkFileUpload"
+                            mode="simple"
                             sizeLimit="#{configBean.maxApkSize}"
-                            fileUploadListener="#{revisionsController.handleNewRevisionCleanApkUpload}"/>
-
+                            value="#{revisionsModel.newRevisionCleanApk}"/>
 
                     <h:outputText value="#{msgs['project.add.label.description']}"/>
 
-                    <p:fileUpload mode="advanced"
-                                  sizeLimit="#{configBean.maxApkSize}"
-                                  fileUploadListener="#{revisionsController.handleNewRevisionCleanApkUpload}"/>
+                    <p:fileUpload
+                            id="hackedApkFileUpload"
+                            mode="simple"
+                            sizeLimit="#{configBean.maxApkSize}"
+                            value="#{revisionsModel.newRevisionHackedApk}"/>
 
                     <f:facet name="footer">
                         <p:commandButton value="#{msgs['common.form.label.add']}"

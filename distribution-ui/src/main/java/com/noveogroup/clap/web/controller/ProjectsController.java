@@ -28,7 +28,7 @@ public class ProjectsController {
     @Inject
     private ProjectsModel projectsModel;
 
-    public String addProject(){
+    public String addProject() {
 
         LOGGER.debug("add project : " + projectsModel.getNewProject());
 
@@ -39,21 +39,18 @@ public class ProjectsController {
         return toProjectsView();
     }
 
-    public String toProjectsView(){
+    public String toProjectsView() {
         List<ProjectDTO> projectDTOList = projectService.findAllProjects();
         projectsModel.setProjectsListDataModel(new ProjectsListDataModel(projectDTOList));
         LOGGER.debug(projectDTOList.size() + " projects loaded");
         return Navigation.PROJECTS.getView();
     }
 
-    public void onProjectSelect(SelectEvent event){
-        ProjectDTO selectedProject = projectsModel.getSelectedProject();
-        if(selectedProject != null){
-            LOGGER.debug(selectedProject.getName() + " prject selected");
-            ConfigurableNavigationHandler configurableNavigationHandler = (ConfigurableNavigationHandler) FacesContext.getCurrentInstance().getApplication().getNavigationHandler();
-            configurableNavigationHandler.performNavigation(Navigation.PROJECT.getView());
-        } else {
-            LOGGER.error("no projects selected");
-        }
+    public void onProjectSelect(SelectEvent event) {
+        ProjectDTO selectedProject = (ProjectDTO) event.getObject();
+        projectsModel.setSelectedProject(selectedProject);
+        LOGGER.debug(selectedProject.getName() + " prject selected");
+        ConfigurableNavigationHandler configurableNavigationHandler = (ConfigurableNavigationHandler) FacesContext.getCurrentInstance().getApplication().getNavigationHandler();
+        configurableNavigationHandler.performNavigation(Navigation.PROJECT.getView());
     }
 }
