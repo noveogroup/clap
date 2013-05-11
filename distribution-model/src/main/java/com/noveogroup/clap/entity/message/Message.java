@@ -17,4 +17,9 @@ import javax.persistence.Table;
 public class Message extends BaseEntity {
 
 
+    /**
+     * Constructor
+     */
+    public Message() {
+    }
 }
