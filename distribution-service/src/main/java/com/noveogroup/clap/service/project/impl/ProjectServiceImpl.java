@@ -12,6 +12,7 @@ import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.dao.ProjectDAO;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
+import org.hibernate.Hibernate;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -64,7 +65,10 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public ProjectDTO findById(final Long id) {
-        return MAPPER.map(projectDAO.findById(id), ProjectDTO.class);
+
+        Project project = projectDAO.findById(id);
+        Hibernate.initialize(project.getRevisions());
+        return MAPPER.map(project, ProjectDTO.class);
     }
 
     @Override

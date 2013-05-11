@@ -28,6 +28,7 @@ public interface RevisionEndpoint {
 
     @GET
     @Path("downloadAPK/{id}/{type}")
+    @Produces("application/vnd.android.package-archive")
     Response downloadAPK(@PathParam("id") long id, @PathParam("type") int type);
 
 }
