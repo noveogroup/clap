@@ -2,9 +2,11 @@ package com.noveogroup.clap.web.util.config;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.inject.Named;
 import java.io.*;
 import java.util.Properties;
 
+@Named
 @ApplicationScoped
 public class ConfigBean {
     // Glassfish Instance Root folder system variable
@@ -13,17 +15,17 @@ public class ConfigBean {
     private static String glassfishDomainConfigurationFolderName = "config";
 
 
-    private String testProperty;
+    private long maxApkSize;
 
     @PostConstruct
     protected void setup() throws IOException {
         Properties properties = new Properties();
         properties.load(readFileFromGlassfishDomainConfigFolder("clap.properties"));
-        testProperty = properties.getProperty("testProperty");
+        maxApkSize = Long.parseLong(properties.getProperty("maxApkSize"));
     }
 
-    public String getTestProperty() {
-        return testProperty;
+    public long getMaxApkSize() {
+        return maxApkSize;
     }
 
     // Read a given file from Glassfish Domain Configuration folder

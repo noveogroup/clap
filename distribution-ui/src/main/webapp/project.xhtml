@@ -7,10 +7,39 @@
       xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/template.xhtml">
     <ui:define name="menuItems">
+        <p:menuitem value="#{msgs['menu.project.edit']}"/>
     </ui:define>
     <ui:define name="content">
 
         #{projectsModel.selectedProject.name}
+
+        <p:panel header="#{msgs['project.view.uploadRevision.header']}">
+            <h:form>
+                <p:panelGrid columns="2">
+
+                    <h:outputText value="#{msgs['project.view.uploadRevision.cleanApk']}"/>
+
+                    <p:fileUpload mode="advanced"
+                            sizeLimit="#{configBean.maxApkSize}"
+                            fileUploadListener="#{revisionsController.handleNewRevisionCleanApkUpload}"/>
+
+
+                    <h:outputText value="#{msgs['project.add.label.description']}"/>
+
+                    <p:fileUpload mode="advanced"
+                                  sizeLimit="#{configBean.maxApkSize}"
+                                  fileUploadListener="#{revisionsController.handleNewRevisionCleanApkUpload}"/>
+
+                    <f:facet name="footer">
+                        <p:commandButton value="#{msgs['common.form.label.add']}"
+                                         action="#{revisionsController.saveNewRevision}"/>
+                    </f:facet>
+
+                </p:panelGrid>
+
+
+            </h:form>
+        </p:panel>
 
     </ui:define>
 </ui:composition>

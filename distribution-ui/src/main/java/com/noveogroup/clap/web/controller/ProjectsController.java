@@ -1,15 +1,21 @@
 package com.noveogroup.clap.web.controller;
 
 import com.noveogroup.clap.entity.Project;
+import com.noveogroup.clap.model.ProjectDTO;
 import com.noveogroup.clap.service.ProjectService;
 import com.noveogroup.clap.web.Navigation;
+import com.noveogroup.clap.web.model.ProjectsListDataModel;
 import com.noveogroup.clap.web.model.ProjectsModel;
+import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.ConfigurableNavigationHandler;
+import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.List;
 
 @Named
 @RequestScoped
@@ -27,29 +33,28 @@ public class ProjectsController {
 
         LOGGER.debug("add project : " + projectsModel.getNewProject());
 
-//        projectService.save(projectsModel.getNewProject());
-        projectsModel.setNewProject(new Project());
+        projectService.save(projectsModel.getNewProject());
+        projectsModel.setNewProject(new ProjectDTO());
         LOGGER.debug("project saved");
 
         return toProjectsView();
     }
 
     public String toProjectsView(){
-
-        //TODO init projects list
-
-        LOGGER.debug(projectsModel.getProjects().size() + " projects loaded");
+        List<ProjectDTO> projectDTOList = projectService.findAllProjects();
+        projectsModel.setProjectsListDataModel(new ProjectsListDataModel(projectDTOList));
+        LOGGER.debug(projectDTOList.size() + " projects loaded");
         return Navigation.PROJECTS.getView();
     }
 
-    public String onProjectSelect(){
-        Project selectedProject = projectsModel.getSelectedProject();
+    public void onProjectSelect(SelectEvent event){
+        ProjectDTO selectedProject = projectsModel.getSelectedProject();
         if(selectedProject != null){
             LOGGER.debug(selectedProject.getName() + " prject selected");
-            return Navigation.PROJECT.getView();
+            ConfigurableNavigationHandler configurableNavigationHandler = (ConfigurableNavigationHandler) FacesContext.getCurrentInstance().getApplication().getNavigationHandler();
+            configurableNavigationHandler.performNavigation(Navigation.PROJECT.getView());
         } else {
             LOGGER.error("no projects selected");
-            return null;
         }
     }
 }

@@ -26,11 +26,6 @@ import java.io.*;
 @RequestScoped
 public class HelloBean {
 
-    private static final Logger LOG = LoggerFactory.getLogger(HelloBean.class);
-
-    @Inject
-    private ProjectService projectService;
-
     @Inject
     private ConfigBean configBean;
 
@@ -46,15 +41,6 @@ public class HelloBean {
         //422 bytes
         byte[] bytes = buf.toByteArray();
         QRCode = new DefaultStreamedContent(new ByteArrayInputStream(bytes), "image/png");
-    }
-
-    public String getGreeting() {
-        LOG.trace("Hello World!");
-        LOG.debug("How are you today?");
-        LOG.info("I am fine.");
-        LOG.warn("I love programming.");
-        LOG.error("I am programming.");
-        return "Hello World!" + projectService.getName()+" " + configBean.getTestProperty();
     }
 
     public StreamedContent getQRCode() {
