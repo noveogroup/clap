@@ -23,7 +23,7 @@ public class TestControllerImpl implements TestController {
     public String echo(String original) {
         Project project = new Project();
         project.setName("Name");
-        projectService.save(project);
+//        projectService.save(project);
         return MAPPER.map(project, com.noveogroup.clap.model.ProjectDTO.class).getName();
     }
 

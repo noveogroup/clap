@@ -4,14 +4,18 @@ import com.noveogroup.clap.dao.MessageDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.Project;
 import com.noveogroup.clap.interceptor.TransactionInterceptor;
+import com.noveogroup.clap.model.ProjectDTO;
 import com.noveogroup.clap.service.ProjectService;
 import com.noveogroup.clap.dao.ProjectDAO;
+import org.dozer.DozerBeanMapper;
+import org.dozer.Mapper;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.Interceptors;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,6 +25,8 @@ import java.util.List;
 @TransactionManagement(TransactionManagementType.BEAN)
 @Interceptors({TransactionInterceptor.class})
 public class ProjectServiceImpl implements ProjectService {
+
+    private static Mapper MAPPER = new DozerBeanMapper();
 
 
     @EJB
@@ -33,11 +39,12 @@ public class ProjectServiceImpl implements ProjectService {
     private MessageDAO messageDAO;
 
     @Override
-    public Project createProject(final Project project) {
+    public ProjectDTO createProject(final ProjectDTO project) {
         if (project.getCreationDate() == null) {
             project.setCreationDate(System.currentTimeMillis());
         }
-        return projectDAO.persist(project);
+        Project inProject = MAPPER.map(project, Project.class);
+        return MAPPER.map(projectDAO.persist(inProject), ProjectDTO.class);
     }
 
     @Override
@@ -47,17 +54,23 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project save(final Project project) {
-        return projectDAO.persist(project);
+    public ProjectDTO save(final ProjectDTO project) {
+        Project inProject = MAPPER.map(project, Project.class);
+        return MAPPER.map(projectDAO.persist(inProject), ProjectDTO.class);
     }
 
     @Override
-    public Project findById(final Long id) {
-        return projectDAO.findById(id);
+    public ProjectDTO findById(final Long id) {
+        return MAPPER.map(projectDAO.findById(id), ProjectDTO.class);
     }
 
     @Override
-    public List<Project> findAllProjects() {
-        return projectDAO.selectAll();
+    public List<ProjectDTO> findAllProjects() {
+        List<Project> projectList = projectDAO.selectAll();
+        List<ProjectDTO> projectDTOList = new ArrayList<ProjectDTO>();
+        for (Project project : projectList) {
+            projectDTOList.add(MAPPER.map(project, ProjectDTO.class));
+        }
+        return projectDTOList;
     }
 }

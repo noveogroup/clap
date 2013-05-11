@@ -1,6 +1,5 @@
 package com.noveogroup.clap.rest;
 
-import com.noveogroup.clap.entity.Project;
 import com.noveogroup.clap.model.ProjectDTO;
 import com.noveogroup.clap.service.ProjectService;
 import org.dozer.DozerBeanMapper;
@@ -24,14 +23,11 @@ public class ProjectControllerImpl implements ProjectController {
 
     @Override
     public ProjectDTO createProject(final ProjectDTO projectDTO) {
-        Project project = MAPPER.map(projectDTO, Project.class);
-        project = projectService.createProject(project);
-        return MAPPER.map(project, ProjectDTO.class);
+        return projectService.createProject(projectDTO);
     }
 
     @Override
     public ProjectDTO getProject(@QueryParam("id") final Long id) {
-        Project project = projectService.findById(id);
-        return MAPPER.map(project, ProjectDTO.class);
+        return projectService.findById(id);
     }
 }

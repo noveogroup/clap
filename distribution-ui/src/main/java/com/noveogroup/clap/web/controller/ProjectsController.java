@@ -26,7 +26,8 @@ public class ProjectsController {
     public String addProject(){
 
         LOGGER.debug("add project : " + projectsModel.getNewProject());
-        projectService.save(projectsModel.getNewProject());
+
+//        projectService.save(projectsModel.getNewProject());
         projectsModel.setNewProject(new Project());
         LOGGER.debug("project saved");
 
