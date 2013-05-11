@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.application.ConfigurableNavigationHandler;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -36,11 +37,19 @@ public class ProjectsController extends BaseController {
     private RevisionsModel revisionsModel;
 
     public String addProject() {
-        LOGGER.debug("add project : " + projectsModel.getNewProject());
-        projectService.createProject(projectsModel.getNewProject());
-        projectsModel.setNewProject(new ProjectDTO());
-        LOGGER.debug("project saved");
-        return Navigation.PROJECTS.getView();
+        try {
+            LOGGER.debug("add project : " + projectsModel.getNewProject());
+            projectService.createProject(projectsModel.getNewProject());
+            projectsModel.setNewProject(new ProjectDTO());
+            LOGGER.debug("project saved");
+            return Navigation.PROJECTS.getView();
+        } catch (Exception e){
+            FacesMessage message = new FacesMessage();
+            message.setSeverity(FacesMessage.SEVERITY_ERROR);
+            message.setSummary("Error while creating project");
+            FacesContext.getCurrentInstance().addMessage(null,message);
+            return Navigation.SAME_PAGE.getView();
+        }
     }
 
     public void prepareProjectsListView() {
