@@ -53,6 +53,6 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
 
     @Override
     public Response downloadAPK(final long id, final int type) {
-        return Response.ok(revisionService.getApplication(id, type)).build();
+        return Response.ok(revisionService.getApplication(id, type)).header("Content-Disposition", "attachment; filename=\"Vasya.apk\"").build();
     }
 }
