@@ -3,8 +3,11 @@ package com.noveogroup.clap.service.impl;
 import com.noveogroup.clap.dao.MessageDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.Project;
+import com.noveogroup.clap.entity.revision.Revision;
+import com.noveogroup.clap.entity.revision.RevisionType;
 import com.noveogroup.clap.interceptor.TransactionInterceptor;
 import com.noveogroup.clap.model.ProjectDTO;
+import com.noveogroup.clap.model.revision.RevisionDTO;
 import com.noveogroup.clap.service.ProjectService;
 import com.noveogroup.clap.dao.ProjectDAO;
 import org.dozer.DozerBeanMapper;
@@ -72,5 +75,22 @@ public class ProjectServiceImpl implements ProjectService {
             projectDTOList.add(MAPPER.map(project, ProjectDTO.class));
         }
         return projectDTOList;
+    }
+
+    @Override
+    public RevisionDTO addRevision(final Long projectId, final RevisionDTO revisionDTO, final byte[] mainPackage, final byte[] specialPackage) {
+        Revision revision = MAPPER.map(revisionDTO, Revision.class);
+        if (revision.getTimestamp() == null) {
+            revision.setTimestamp(System.currentTimeMillis());
+        }
+        if (revision.getRevisionType() == null) {
+            revision.setRevisionType(RevisionType.DEVELOP);
+        }
+        revision.setMainPackage(mainPackage);
+        revision.setSpecialPackage(specialPackage);
+        Project project = projectDAO.findById(projectId);
+        revision.setProject(project);
+        project.getRevisions().add(revision);
+        return MAPPER.map(revision, RevisionDTO.class);
     }
 }

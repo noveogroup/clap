@@ -6,6 +6,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,6 +28,7 @@ public class Project extends BaseEntity {
      * Constructor
      */
     public Project() {
+        revisions = new ArrayList<Revision>();
     }
 
     /**

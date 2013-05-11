@@ -19,9 +19,13 @@ public class Revision extends BaseEntity {
 
     private RevisionType revisionType;
 
-    @Column(name = "package")
+    @Column(name = "main_package")
     @Lob
-    private byte[] build;
+    private byte[] mainPackage;
+
+    @Column(name = "special_package")
+    @Lob
+    private byte[] specialPackage;
 
     @OneToMany(fetch = FetchType.LAZY)
     private List<Message> messages;
@@ -58,5 +62,29 @@ public class Revision extends BaseEntity {
 
     public void setMessages(final List<Message> messages) {
         this.messages = messages;
+    }
+
+    public byte[] getMainPackage() {
+        return mainPackage;
+    }
+
+    public void setMainPackage(final byte[] mainPackage) {
+        this.mainPackage = mainPackage;
+    }
+
+    public byte[] getSpecialPackage() {
+        return specialPackage;
+    }
+
+    public void setSpecialPackage(final byte[] specialPackage) {
+        this.specialPackage = specialPackage;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(final Project project) {
+        this.project = project;
     }
 }

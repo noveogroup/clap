@@ -9,10 +9,10 @@ import java.util.List;
  * @author Mikhail Demidov
  */
 public class RevisionDTO extends BaseDTO {
+
     private Long timestamp;
 
     private RevisionType revisionType;
-
 
     private List<MessageDTO> messages;
 
