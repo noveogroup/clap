@@ -49,4 +49,9 @@ public class ProjectServiceImpl implements ProjectService {
     public Project save(final Project project) {
         return projectDAO.persist(project);
     }
+
+    @Override
+    public Project findById(final Long id) {
+        return projectDAO.findById(id);
+    }
 }

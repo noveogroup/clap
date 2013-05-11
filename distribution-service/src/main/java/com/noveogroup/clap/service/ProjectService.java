@@ -14,4 +14,7 @@ public interface ProjectService {
 
     Project save(Project project);
 
+
+    Project findById(Long id);
+
 }

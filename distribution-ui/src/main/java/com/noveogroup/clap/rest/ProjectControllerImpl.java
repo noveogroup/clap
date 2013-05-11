@@ -8,6 +8,7 @@ import org.dozer.Mapper;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.QueryParam;
 
 /**
  * @author Mikhail Demidov
@@ -25,6 +26,12 @@ public class ProjectControllerImpl implements ProjectController {
     public ProjectDTO createProject(final ProjectDTO projectDTO) {
         Project project = MAPPER.map(projectDTO, Project.class);
         project = projectService.createProject(project);
+        return MAPPER.map(project, ProjectDTO.class);
+    }
+
+    @Override
+    public ProjectDTO getProject(@QueryParam("id") final Long id) {
+        Project project = projectService.findById(id);
         return MAPPER.map(project, ProjectDTO.class);
     }
 }

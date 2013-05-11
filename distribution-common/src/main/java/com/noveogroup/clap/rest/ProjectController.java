@@ -2,10 +2,7 @@ package com.noveogroup.clap.rest;
 
 import com.noveogroup.clap.model.ProjectDTO;
 
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 
 /**
@@ -16,10 +13,15 @@ public interface ProjectController {
 
 
     @POST
-    @Path("createController")
+    @Path("createProject")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     ProjectDTO createProject(ProjectDTO projectDTO);
+
+    @GET
+    @Path("getProject")
+    @Produces(MediaType.APPLICATION_JSON)
+    ProjectDTO getProject(@QueryParam("id") Long id);
 
 
 }
