@@ -57,4 +57,18 @@ public class RevisionServiceImpl implements RevisionService {
         return outcomeRevision;
     }
 
+    @Override
+    public byte[] getApplication(final Long revisionId, final Integer type) {
+        Revision revision = revisionDAO.findById(revisionId);
+        if (revision != null) {
+            if (type == 1) {
+                return revision.getSpecialPackage();
+            } else if (type == 0) {
+                return revision.getMainPackage();
+            }
+        }
+        return null;
+    }
+
+
 }
