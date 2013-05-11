@@ -9,10 +9,12 @@ import java.util.List;
 
 @Entity
 @Table(name = "projects")
+@NamedQuery(name="getProjectByName",query="SELECT p FROM Project p WHERE p.name = :name")
 public class Project extends BaseEntity {
 
     private static final long serialVersionUID = 8306757495649843962L;
 
+    @Column(unique = true)
     private String name;
 
     private String description;

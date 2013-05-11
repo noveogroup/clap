@@ -18,6 +18,7 @@ public class Revision extends BaseEntity {
 
 
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(unique = true)
     private Date timestamp;
 
     private RevisionType revisionType;

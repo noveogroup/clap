@@ -4,6 +4,9 @@ import com.noveogroup.clap.entity.BaseEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,7 +20,8 @@ import javax.persistence.Table;
 public class Message extends BaseEntity {
 
 
-    private Long timestamp;
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date timestamp;
 
     private String message;
 
@@ -27,11 +31,11 @@ public class Message extends BaseEntity {
     public Message() {
     }
 
-    public Long getTimestamp() {
+    public Date getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(final Long timestamp) {
+    public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 
