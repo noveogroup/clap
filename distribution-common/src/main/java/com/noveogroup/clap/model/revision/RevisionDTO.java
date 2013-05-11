@@ -49,4 +49,12 @@ public class RevisionDTO extends BaseDTO {
     public void setMessages(final List<MessageDTO> messages) {
         this.messages = messages;
     }
+
+    public Long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(final Long projectId) {
+        this.projectId = projectId;
+    }
 }

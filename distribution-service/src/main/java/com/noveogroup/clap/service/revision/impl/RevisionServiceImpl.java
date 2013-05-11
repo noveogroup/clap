@@ -52,7 +52,9 @@ public class RevisionServiceImpl implements RevisionService {
         Project project = projectDAO.findById(projectId);
         revision.setProject(project);
         project.getRevisions().add(revision);
-        return MAPPER.map(revision, RevisionDTO.class);
+        RevisionDTO outcomeRevision = MAPPER.map(revision, RevisionDTO.class);
+        outcomeRevision.setProjectId(projectId);
+        return outcomeRevision;
     }
 
 }
