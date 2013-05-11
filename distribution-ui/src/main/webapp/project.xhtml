@@ -4,7 +4,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui" xmlns:t="http://myfaces.apache.org/tomahawk">
 <ui:composition template="/WEB-INF/template.xhtml">
     <ui:define name="menuItems">
         <p:menuitem value="#{msgs['menu.project.edit']}" action="editProject"/>
@@ -31,25 +31,23 @@
 
         </p:dataTable>
 
-        <h:form>
-            <p:panel header="#{msgs['project.view.uploadRevision.header']}">
+        <p:panel header="#{msgs['project.view.uploadRevision.header']}">
+            <h:form enctype="multipart/form-data">
                 <p:messages/>
                 <p:panelGrid columns="2">
 
                     <h:outputText value="#{msgs['project.view.uploadRevision.cleanApk']}"/>
 
                     <p:fileUpload
-                            id="cleanApkFileUpload"
                             mode="simple"
-                            sizeLimit="#{configBean.maxApkSize}"
+                            id="cleanApkFileUpload"
                             value="#{revisionsModel.newRevisionCleanApk}"/>
 
                     <h:outputText value="#{msgs['project.view.uploadRevision.hackedApk']}"/>
 
                     <p:fileUpload
-                            id="hackedApkFileUpload"
                             mode="simple"
-                            sizeLimit="#{configBean.maxApkSize}"
+                            id="hackedApkFileUpload"
                             value="#{revisionsModel.newRevisionHackedApk}"/>
 
                     <f:facet name="footer">
@@ -59,8 +57,8 @@
                     </f:facet>
 
                 </p:panelGrid>
-            </p:panel>
-        </h:form>
+            </h:form>
+        </p:panel>
 
     </ui:define>
 </ui:composition>

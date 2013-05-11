@@ -48,7 +48,7 @@ public class ProjectsController {
 
     public void onProjectSelect(SelectEvent event) {
         ProjectDTO selectedProject = (ProjectDTO) event.getObject();
-        projectsModel.setSelectedProject(selectedProject);
+        projectsModel.setSelectedProject(projectService.findById(selectedProject.getId()));
         LOGGER.debug(selectedProject.getName() + " prject selected");
         ConfigurableNavigationHandler configurableNavigationHandler = (ConfigurableNavigationHandler) FacesContext.getCurrentInstance().getApplication().getNavigationHandler();
         configurableNavigationHandler.performNavigation(Navigation.PROJECT.getView());

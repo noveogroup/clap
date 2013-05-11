@@ -1,5 +1,6 @@
 package com.noveogroup.clap.web.model;
 
+
 import org.primefaces.model.UploadedFile;
 
 import javax.enterprise.context.SessionScoped;
