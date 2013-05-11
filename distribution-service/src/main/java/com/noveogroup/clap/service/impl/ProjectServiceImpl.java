@@ -86,8 +86,12 @@ public class ProjectServiceImpl implements ProjectService {
         if (revision.getRevisionType() == null) {
             revision.setRevisionType(RevisionType.DEVELOP);
         }
-        revision.setMainPackage(mainPackage);
-        revision.setSpecialPackage(specialPackage);
+        if (mainPackage != null) {
+            revision.setMainPackage(mainPackage);
+        }
+        if (specialPackage != null) {
+            revision.setSpecialPackage(specialPackage);
+        }
         Project project = projectDAO.findById(projectId);
         revision.setProject(project);
         project.getRevisions().add(revision);
