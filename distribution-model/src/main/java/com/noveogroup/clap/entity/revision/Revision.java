@@ -19,11 +19,11 @@ public class Revision extends BaseEntity {
 
     private RevisionType revisionType;
 
-    @Column(name = "main_package", length = 16777215)
+    @Column(name = "main_package")
     @Lob
     private byte[] mainPackage;
 
-    @Column(name = "special_package", length = 16777215)
+    @Column(name = "special_package")
     @Lob
     private byte[] specialPackage;
 
