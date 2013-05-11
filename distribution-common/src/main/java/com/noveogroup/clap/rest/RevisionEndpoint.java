@@ -19,7 +19,7 @@ public interface RevisionEndpoint {
     @Path("createRevision")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    RevisionDTO createRevision(@FormParam("projectId") String projectId
+    RevisionDTO createRevision(@FormDataParam("projectId") String projectId
             , @FormDataParam("mainPackage") InputStream mainPackageInputStream
             , @FormDataParam("mainPackage") FormDataContentDisposition mainPackageDetail
             , @FormDataParam("specialPackage") InputStream specialPackageInputStream

@@ -15,7 +15,7 @@ public abstract class BaseEntity implements Serializable {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.TABLE)
-    protected Long id;
+    private Long id;
 
     /**
      * Constructor
