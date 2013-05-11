@@ -5,6 +5,8 @@ import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.ProjectsListDataModel;
 import com.noveogroup.clap.web.model.ProjectsModel;
+import com.noveogroup.clap.web.model.RevisionsListDataModel;
+import com.noveogroup.clap.web.model.RevisionsModel;
 import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +30,9 @@ public class ProjectsController {
     @Inject
     private ProjectsModel projectsModel;
 
+    @Inject
+    private RevisionsModel revisionsModel;
+
     public String addProject() {
 
         LOGGER.debug("add project : " + projectsModel.getNewProject());
@@ -48,7 +53,9 @@ public class ProjectsController {
 
     public void onProjectSelect(SelectEvent event) {
         ProjectDTO selectedProject = (ProjectDTO) event.getObject();
-        projectsModel.setSelectedProject(projectService.findById(selectedProject.getId()));
+        ProjectDTO projectWithRevisions = projectService.findById(selectedProject.getId());
+        projectsModel.setSelectedProject(projectWithRevisions);
+        revisionsModel.setRevisionsListDataModel(new RevisionsListDataModel(projectWithRevisions.getRevisions()));
         LOGGER.debug(selectedProject.getName() + " prject selected");
         ConfigurableNavigationHandler configurableNavigationHandler = (ConfigurableNavigationHandler) FacesContext.getCurrentInstance().getApplication().getNavigationHandler();
         configurableNavigationHandler.performNavigation(Navigation.PROJECT.getView());

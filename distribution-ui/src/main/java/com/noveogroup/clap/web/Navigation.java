@@ -1,6 +1,7 @@
 package com.noveogroup.clap.web;
 
 public enum Navigation {
+    REVISION("revision"),
     PROJECT("project"),
     PROJECTS("projects"),
     SAME_PAGE("");

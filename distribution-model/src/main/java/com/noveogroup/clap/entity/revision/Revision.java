@@ -27,6 +27,10 @@ public class Revision extends BaseEntity {
     @Lob
     private byte[] specialPackage;
 
+    private boolean mainPackageLoaded;
+
+    private boolean specialPackageLoaded;
+
     @OneToMany(fetch = FetchType.LAZY)
     private List<Message> messages;
 
@@ -86,5 +90,21 @@ public class Revision extends BaseEntity {
 
     public void setProject(final Project project) {
         this.project = project;
+    }
+
+    public boolean isMainPackageLoaded() {
+        return mainPackageLoaded;
+    }
+
+    public void setMainPackageLoaded(boolean mainPackageLoaded) {
+        this.mainPackageLoaded = mainPackageLoaded;
+    }
+
+    public boolean isSpecialPackageLoaded() {
+        return specialPackageLoaded;
+    }
+
+    public void setSpecialPackageLoaded(boolean specialPackageLoaded) {
+        this.specialPackageLoaded = specialPackageLoaded;
     }
 }

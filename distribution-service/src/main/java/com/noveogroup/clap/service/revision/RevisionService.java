@@ -13,6 +13,8 @@ public interface RevisionService {
 
     RevisionDTO addRevision(Long projectId, RevisionDTO revisionDTO, byte[] mainPackage, byte[] specialPackage);
 
+    RevisionDTO updateRevisionPackages(RevisionDTO revisionDTO, byte[] mainPackage, byte[] specialPackage);
+
     /**
      * Change type to enum
      *
@@ -21,8 +23,6 @@ public interface RevisionService {
      * @return
      */
     byte[] getApplication(Long revisionId, Integer type);
-
-    List<RevisionDTO> getAllRevisions();
 
 
 }

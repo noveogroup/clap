@@ -4,7 +4,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui" xmlns:t="http://myfaces.apache.org/tomahawk">
+      xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/template.xhtml">
     <ui:define name="menuItems">
         <p:menuitem value="#{msgs['menu.project.edit']}" action="editProject"/>
@@ -15,9 +15,15 @@
             <h:outputText value="#{projectsModel.selectedProject.description}"/>
         </p:panel>
 
+
         <p:dataTable id="revisions"
                      var="revision"
-                     value="#{projectsModel.selectedProject.revisions}">
+                     selectionMode="single"
+                     selection="#{revisionsModel.selectedRevisionDTO}"
+                     value="#{revisionsModel.revisionsListDataModel}">
+
+            <p:ajax event="rowSelect"
+                    listener="#{revisionsController.onRevisionSelected}"/>
 
             <p:column headerText="#{msgs['revision.label.id']}">
                 #{revision.id}
@@ -28,7 +34,6 @@
             <p:column headerText="#{msgs['revision.label.type']}">
                 #{revision.revisionType}
             </p:column>
-
         </p:dataTable>
 
         <p:panel header="#{msgs['project.view.uploadRevision.header']}">
@@ -41,14 +46,16 @@
                     <p:fileUpload
                             mode="simple"
                             id="cleanApkFileUpload"
-                            value="#{revisionsModel.newRevisionCleanApk}"/>
+                            sizeLimit="#{configBean.maxApkSize}"
+                            value="#{revisionsModel.uploadCleanApk}"/>
 
                     <h:outputText value="#{msgs['project.view.uploadRevision.hackedApk']}"/>
 
                     <p:fileUpload
                             mode="simple"
                             id="hackedApkFileUpload"
-                            value="#{revisionsModel.newRevisionHackedApk}"/>
+                            sizeLimit="#{configBean.maxApkSize}"
+                            value="#{revisionsModel.uploadHackedApk}"/>
 
                     <f:facet name="footer">
                         <p:commandButton value="#{msgs['common.form.label.add']}"

@@ -14,7 +14,7 @@ public final class ConfigurationUtils {
     }
 
     public static Properties getPropertiesFromConfig(final String configFileName) throws IOException {
-        Properties properties = new Properties();
+        Properties properties = new VariablableProperties();
         properties.load(readFileFromGlassfishDomainConfigFolder(configFileName));
         return properties;
     }

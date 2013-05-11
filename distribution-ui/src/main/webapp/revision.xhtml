@@ -1,0 +1,58 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+        <p:panelGrid id="revisionDetails" columns="2">
+            <p:panel header="#{msgs['revision.label.exp.clean']}">
+                <h:panelGroup rendered="#{not empty revisionsModel.selectedRevisionDTO.mainPackageUrl}">
+                    <div>
+                        <a href="#{revisionsModel.selectedRevisionDTO.mainPackageUrl}">#{msgs['common.form.label.download']}</a>
+                    </div>
+                    <div>
+                        <p:graphicImage value="#{revisionsModel.cleanApkQRCode}"/>
+                    </div>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{empty revisionsModel.selectedRevisionDTO.mainPackageUrl}">
+                    <h:form enctype="multipart/form-data">
+                        <p:fileUpload
+                                mode="simple"
+                                id="cleanApkFileUpload"
+                                sizeLimit="#{configBean.maxApkSize}"
+                                value="#{revisionsModel.uploadCleanApk}"/>
+                        <p:commandButton value="#{msgs['common.form.label.add']}"
+                                         ajax="false"
+                                         action="#{revisionsController.uploadApkToRevision}"/>
+                    </h:form>
+                </h:panelGroup>
+            </p:panel>
+            <p:panel header="#{msgs['revision.label.exp.hacked']}">
+                <h:panelGroup rendered="#{not empty revisionsModel.selectedRevisionDTO.specialPackageUrl}">
+                    <div>
+                        <a href="#{revisionsModel.selectedRevisionDTO.specialPackageUrl}">#{msgs['common.form.label.download']}</a>
+                    </div>
+                    <div>
+                        <p:graphicImage value="#{revisionsModel.hackedApkQRCode}"/>
+                    </div>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{empty revisionsModel.selectedRevisionDTO.specialPackageUrl}">
+                    <h:form enctype="multipart/form-data">
+                        <p:fileUpload
+                                mode="simple"
+                                id="hackedApkFileUpload"
+                                sizeLimit="#{configBean.maxApkSize}"
+                                value="#{revisionsModel.uploadHackedApk}"/>
+                        <p:commandButton value="#{msgs['common.form.label.add']}"
+                                         ajax="false"
+                                         action="#{revisionsController.uploadApkToRevision}"/>
+                    </h:form>
+                </h:panelGroup>
+            </p:panel>
+        </p:panelGrid>
+    </ui:define>
+</ui:composition>
+</html>

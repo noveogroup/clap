@@ -14,8 +14,6 @@ public interface ProjectService {
 
     ProjectDTO createProject(ProjectDTO project);
 
-    String getName();
-
     ProjectDTO save(ProjectDTO project);
 
     ProjectDTO findById(Long id);
