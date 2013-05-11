@@ -4,6 +4,7 @@ import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.model.revision.RevisionDTO;
 
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * @author Mikhail Demidov
@@ -20,6 +21,8 @@ public interface RevisionService {
      * @return
      */
     byte[] getApplication(Long revisionId, Integer type);
+
+    List<RevisionDTO> getAllRevisions();
 
 
 }

@@ -18,6 +18,8 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Mikhail Demidov
@@ -78,6 +80,20 @@ public class RevisionServiceImpl implements RevisionService {
             }
         }
         return null;
+    }
+
+    @Override
+    public List<RevisionDTO> getAllRevisions() {
+        List<Revision> revisions = revisionDAO.selectAll();
+        List<RevisionDTO> revisionDTOs = new ArrayList<RevisionDTO>();
+        for (Revision revision : revisions) {
+            RevisionDTO revisionDTO = MAPPER.map(revision, RevisionDTO.class);
+            revisionDTO.setProjectId(revision.getProject().getId());
+            revisionDTO.setMainPackageUrl("bla" + "/" + revision.getProject().getId() + "/0");
+            revisionDTO.setSpecialPackageUrl("bla" + "/" + revision.getProject().getId() + "/1");
+            revisionDTOs.add(revisionDTO);
+        }
+        return getAllRevisions();
     }
 
 
