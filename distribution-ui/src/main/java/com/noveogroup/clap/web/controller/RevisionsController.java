@@ -1,7 +1,6 @@
 package com.noveogroup.clap.web.controller;
 
 import com.noveogroup.clap.web.model.RevisionsModel;
-import org.primefaces.event.FileUploadEvent;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -14,8 +13,9 @@ public class RevisionsController {
     @Inject
     private RevisionsModel revisionsModel;
 
-    public String saveNewRevision(){
+    public String saveNewRevision() {
         //TODO
         return null;
     }
+
 }

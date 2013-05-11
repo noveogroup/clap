@@ -9,7 +9,7 @@ import javax.ws.rs.core.MediaType;
  * @author Mikhail Demidov
  */
 @Path("/project")
-public interface ProjectController {
+public interface ProjectEndpoint {
 
 
     @POST

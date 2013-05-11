@@ -13,7 +13,7 @@ import javax.ws.rs.QueryParam;
  * @author Mikhail Demidov
  */
 @ApplicationScoped
-public class ProjectControllerImpl implements ProjectController {
+public class ProjectEndpointImpl implements ProjectEndpoint {
 
     private static Mapper MAPPER = new DozerBeanMapper();
 
