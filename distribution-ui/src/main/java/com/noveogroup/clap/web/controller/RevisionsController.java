@@ -76,7 +76,7 @@ public class RevisionsController extends BaseController{
         RevisionDTO selectedRevisionDTO = revisionsModel.getSelectedRevisionDTO();
         if(selectedRevisionDTO != null){
             revisionsModel.setSelectedRevisionDTO(revisionService.findById(selectedRevisionDTO.getId()));
-            updateQRCodes(selectedRevisionDTO);
+            updateQRCodes(revisionsModel.getSelectedRevisionDTO());
             LOGGER.debug(selectedRevisionDTO.getId() + " revision preparing finished");
         }
         else {
