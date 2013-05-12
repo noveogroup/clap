@@ -28,6 +28,7 @@
                 </p:column>
                 <p:column headerText="#{msgs['revision.label.date']}">
                     <h:outputText value="#{revision.timestamp}">
+                        <f:converter converterId="TimestampConverter"/>
                     </h:outputText>
                 </p:column>
                 <p:column headerText="#{msgs['revision.label.type']}">

@@ -12,5 +12,10 @@
             <default-locale>ru</default-locale>
             <supported-locale>en</supported-locale>
         </locale-config>
+
     </application>
+    <converter>
+        <converter-id>TimestampConverter</converter-id>
+        <converter-class>com.noveogroup.clap.web.util.converter.TimestampConverter</converter-class>
+    </converter>
 </faces-config>

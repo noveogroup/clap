@@ -25,7 +25,7 @@ public class DBInitBean {
     protected void initDB(){
         ProjectDTO projectDTO = new ProjectDTO();
         projectDTO.setName("test_project");
-        projectDTO.setCreationDate(new Date(1368318474));
+        projectDTO.setCreationDate(new Date(1368308474));
         projectDTO = projectService.createProject(projectDTO);
         RevisionDTO revisionDTO = new RevisionDTO();
         revisionDTO.setTimestamp(1368318776L);
