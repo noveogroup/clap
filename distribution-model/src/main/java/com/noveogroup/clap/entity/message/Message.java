@@ -2,10 +2,7 @@ package com.noveogroup.clap.entity.message;
 
 import com.noveogroup.clap.entity.BaseEntity;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -23,9 +20,13 @@ public class Message extends BaseEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
 
+    @Column(length = 16777215)
     private String deviceInfo;
+    @Column(length = 16777215)
     private String stackTraceInfo;
+    @Column(length = 16777215)
     private String logCat;
+    @Column(length = 16777215)
     private String activityTraceLog;
 
     /**

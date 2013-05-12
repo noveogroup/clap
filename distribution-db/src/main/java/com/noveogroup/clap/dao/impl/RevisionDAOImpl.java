@@ -6,6 +6,7 @@ import org.hibernate.Hibernate;
 
 import javax.ejb.Stateless;
 import javax.persistence.Query;
+import java.util.Date;
 
 /**
  * @author Mikhail Demidov
@@ -19,7 +20,8 @@ public class RevisionDAOImpl extends GenericHibernateDAOImpl<Revision, Long> imp
     @Override
     public Revision getRevisionByTimestamp(Long timestamp) {
         Query query = entityManager.createNamedQuery(REVISION_BY_TIMESTAMP);
-        query.setParameter(REVISION_BY_TIMESTAMP_PARAMETER,timestamp);
+
+        query.setParameter(REVISION_BY_TIMESTAMP_PARAMETER, timestamp);
         Revision revision = (Revision) query.getSingleResult();
         Hibernate.initialize(revision.getMessages());
         return revision;
