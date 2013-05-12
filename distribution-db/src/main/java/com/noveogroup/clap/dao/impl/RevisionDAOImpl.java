@@ -26,4 +26,11 @@ public class RevisionDAOImpl extends GenericHibernateDAOImpl<Revision, Long> imp
         Hibernate.initialize(revision.getMessages());
         return revision;
     }
+
+    @Override
+    public Revision findById(Long aLong) {
+        Revision revision = super.findById(aLong);
+        Hibernate.initialize(revision.getMessages());
+        return revision;
+    }
 }

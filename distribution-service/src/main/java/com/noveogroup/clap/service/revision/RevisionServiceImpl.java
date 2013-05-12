@@ -109,6 +109,12 @@ public class RevisionServiceImpl implements RevisionService {
         return revisionDTO;
     }
 
+    @Override
+    public RevisionDTO findById(Long id) {
+        Revision revision = revisionDAO.findById(id);
+        return MAPPER.map(revision,RevisionDTO.class);
+    }
+
     private RevisionDTO updateRevisionPackages(Revision revision, byte[] mainPackage, byte[] specialPackage){
         addPackages(revision,mainPackage,specialPackage);
         revision = revisionDAO.persist(revision);

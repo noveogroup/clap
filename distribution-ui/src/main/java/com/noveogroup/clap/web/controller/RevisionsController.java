@@ -75,6 +75,7 @@ public class RevisionsController extends BaseController{
     public void prepareRevisionView() throws IOException, WriterException {
         RevisionDTO selectedRevisionDTO = revisionsModel.getSelectedRevisionDTO();
         if(selectedRevisionDTO != null){
+            revisionsModel.setSelectedRevisionDTO(revisionService.findById(selectedRevisionDTO.getId()));
             updateQRCodes(selectedRevisionDTO);
             LOGGER.debug(selectedRevisionDTO.getId() + " revision preparing finished");
         }

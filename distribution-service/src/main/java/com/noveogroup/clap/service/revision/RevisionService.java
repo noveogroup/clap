@@ -30,4 +30,6 @@ public interface RevisionService {
 
     RevisionDTO getRevision(Long timestamp);
 
+    RevisionDTO findById(Long id);
+
 }
