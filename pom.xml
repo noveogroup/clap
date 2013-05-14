@@ -182,6 +182,10 @@
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>${mysql-connector-java.version}</version>
+                <scope>provided</scope>
+                <!--
+                    you should put it in %glassfish_home%/glassfish/lib folder
+                -->
             </dependency>
 
             <dependency>
