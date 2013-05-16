@@ -1,18 +1,20 @@
 package com.noveogroup.clap.web;
 
 public enum Navigation {
-    REVISION("revision"),
-    PROJECT("project"),
-    PROJECTS("projects"),
-    SAME_PAGE("");
+    REVISION("revision", true),
+    PROJECT("project", true),
+    PROJECTS("projects", true),
+    SAME_PAGE("", false);
 
-    private Navigation(String view) {
+    private Navigation(String view, boolean facesRedirect) {
         this.view = view;
+        this.facesRedirect = facesRedirect;
     }
 
-    private String view;
+    private final boolean facesRedirect;
+    private final String view;
 
     public String getView() {
-        return view;
+        return view + (facesRedirect ? "?faces-redirect=true" : "");
     }
 }

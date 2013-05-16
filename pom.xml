@@ -3,6 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.noveogroup</groupId>
+    <artifactId>distribution</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>distribution-model</module>
@@ -11,9 +12,8 @@
         <module>distribution-ui</module>
         <module>distribution-common</module>
     </modules>
-    <artifactId>distribution</artifactId>
     <packaging>pom</packaging>
-    <name>Distribution</name>
+    <name>CLAP</name>
     <description>
         Noveo hackday project
     </description>
@@ -43,16 +43,6 @@
                 <role>Developer</role>
             </roles>
         </developer>
-        <developer>
-            <id>sbondarev</id>
-            <name>Semen Bondarev</name>
-            <organization>Noveo</organization>
-            <organizationUrl>http://noveogroup.com</organizationUrl>
-            <email>Semen.Bondarev@noveogroup.com</email>
-            <roles>
-                <role>Developer</role>
-            </roles>
-        </developer>
     </developers>
 
     <licenses>
@@ -63,6 +53,14 @@
     </licenses>
 
     <properties>
+        <!-- glassfish configuration-->
+        <glassfish.home>R:\glassfish3</glassfish.home>
+        <domain.username>root</domain.username>
+        <domain.passwordFile>${glassfish.home}\pwdfile.txt</domain.passwordFile>
+        <test.int.skip>false</test.int.skip>
+        <glassfish.domain.name>${project.artifactId}</glassfish.domain.name>
+
+        <!-- versions -->
         <maven-compiler-plugin.version>3.0</maven-compiler-plugin.version>
         <junit.version>4.11</junit.version>
         <maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
@@ -71,6 +69,7 @@
         <sourceEncoding>UTF-8</sourceEncoding>
         <cobertura-maven-plugin.version>2.5.2</cobertura-maven-plugin.version>
         <tomcat7-maven-plugin.version>2.1</tomcat7-maven-plugin.version>
+        <maven-glassfish-plugin.version>2.1</maven-glassfish-plugin.version>
         <hsqldb.version>1.8.0.10</hsqldb.version>
         <mysql-connector-java.version>5.1.24</mysql-connector-java.version>
         <hibernate.version>4.2.1.Final</hibernate.version>
@@ -207,6 +206,7 @@
                 <groupId>org.glassfish.extras</groupId>
                 <artifactId>glassfish-embedded-all</artifactId>
                 <version>${glassfish-embedded-all.version}</version>
+                <scope>provided</scope>
             </dependency>
             <dependency>
                 <groupId>javax</groupId>
@@ -329,16 +329,39 @@
                     <artifactId>tomcat7-maven-plugin</artifactId>
                     <version>${tomcat7-maven-plugin.version}</version>
                 </plugin>
-
-
+                <plugin>
+                    <groupId>org.glassfish.maven.plugin</groupId>
+                    <artifactId>maven-glassfish-plugin</artifactId>
+                    <version>${maven-glassfish-plugin.version}</version>
+                    <configuration>
+                        <glassfishDirectory>${glassfish.home}</glassfishDirectory>
+                        <user>${domain.username}</user>
+                        <passwordFile>${domain.passwordFile}</passwordFile>
+                        <autoCreate>true</autoCreate>
+                        <debug>true</debug>
+                        <echo>true</echo>
+                        <terse>true</terse>
+                        <skip>${test.int.skip}</skip>
+                        <domain>
+                            <name>${project.artifactId}</name>
+                            <adminPort>4848</adminPort>
+                            <httpPort>8080</httpPort>
+                            <httpsPort>8443</httpsPort>
+                            <iiopPort>3700</iiopPort>
+                            <jmsPort>7676</jmsPort>
+                            <reuse>false</reuse>
+                            <resourceDescriptor>${domain.resources.xml}</resourceDescriptor>
+                        </domain>
+                        <components>
+                            <component>
+                                <name>${project.artifactId}</name>
+                                <artifact>${project.build.directory}/${project.build.finalName}.war</artifact>
+                            </component>
+                        </components>
+                    </configuration>
+                </plugin>
             </plugins>
         </pluginManagement>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-            </plugin>
-        </plugins>
     </build>
 
 </project>

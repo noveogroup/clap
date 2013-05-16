@@ -11,6 +11,19 @@
 
     <artifactId>distribution-ui</artifactId>
 
+    <properties>
+        <domain.resources.xml>${project.basedir}\src\test\resources\glassfish-clap-resources.xml</domain.resources.xml>
+    </properties>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.glassfish.maven.plugin</groupId>
+                <artifactId>maven-glassfish-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
     <dependencies>
         <dependency>
             <groupId>javax.faces</groupId>
@@ -41,7 +54,6 @@
         <dependency>
             <groupId>org.glassfish.extras</groupId>
             <artifactId>glassfish-embedded-all</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>net.sf.dozer</groupId>
