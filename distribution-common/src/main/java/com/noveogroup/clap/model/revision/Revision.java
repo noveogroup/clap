@@ -1,21 +1,20 @@
 package com.noveogroup.clap.model.revision;
 
-import com.noveogroup.clap.model.BaseDTO;
-import com.noveogroup.clap.model.message.MessageDTO;
+import com.noveogroup.clap.model.BaseModel;
+import com.noveogroup.clap.model.message.Message;
 
-import java.util.Date;
 import java.util.List;
 
 /**
  * @author Mikhail Demidov
  */
-public class RevisionDTO extends BaseDTO {
+public class Revision extends BaseModel {
 
     private Long timestamp;
 
     private RevisionType revisionType;
 
-    private List<MessageDTO> messages;
+    private List<Message> messages;
 
     private Long projectId;
 
@@ -24,7 +23,7 @@ public class RevisionDTO extends BaseDTO {
     private String specialPackageUrl;
 
 
-    public RevisionDTO() {
+    public Revision() {
     }
 
     public RevisionType getRevisionType() {
@@ -35,11 +34,11 @@ public class RevisionDTO extends BaseDTO {
         this.revisionType = revisionType;
     }
 
-    public List<MessageDTO> getMessages() {
+    public List<Message> getMessages() {
         return messages;
     }
 
-    public void setMessages(final List<MessageDTO> messages) {
+    public void setMessages(final List<Message> messages) {
         this.messages = messages;
     }
 

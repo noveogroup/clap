@@ -6,7 +6,7 @@ import com.noveogroup.clap.entity.message.MessageEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.interceptor.TransactionInterceptor;
 import com.noveogroup.clap.interceptor.Transactional;
-import com.noveogroup.clap.model.message.MessageDTO;
+import com.noveogroup.clap.model.message.Message;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
@@ -33,9 +33,9 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Transactional
     @Override
-    public void saveMessage(long revisionTimestamp, MessageDTO messageDTO) {
+    public void saveMessage(long revisionTimestamp, Message message) {
         RevisionEntity revisionEntity = revisionDAO.getRevisionByTimestamp(revisionTimestamp);
-        MessageEntity messageEntity = MAPPER.map(messageDTO, MessageEntity.class);
+        MessageEntity messageEntity = MAPPER.map(message, MessageEntity.class);
         messageEntity = messageDAO.persist(messageEntity);
         List<MessageEntity> messageEntities = revisionEntity.getMessages();
         if (messageEntities == null) {

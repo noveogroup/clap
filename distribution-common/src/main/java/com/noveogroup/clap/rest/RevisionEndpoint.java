@@ -1,6 +1,6 @@
 package com.noveogroup.clap.rest;
 
-import com.noveogroup.clap.model.revision.RevisionDTO;
+import com.noveogroup.clap.model.revision.Revision;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
 
@@ -20,7 +20,7 @@ public interface RevisionEndpoint {
     @Path("createRevision")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    RevisionDTO createRevision(@FormDataParam("projectId") String projectId,
+    Revision createRevision(@FormDataParam("projectId") String projectId,
                                @FormDataParam("mainPackage") InputStream mainPackageInputStream,
                                @FormDataParam("mainPackage") FormDataContentDisposition mainPackageDetail,
                                @FormDataParam("specialPackage") InputStream specialPackageInputStream,
@@ -30,7 +30,7 @@ public interface RevisionEndpoint {
     @Path("updateRevisionPackages")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    RevisionDTO updateRevisionPackages(@FormDataParam("revisionTimestamp") Long revisionTimestamp,
+    Revision updateRevisionPackages(@FormDataParam("revisionTimestamp") Long revisionTimestamp,
                                        @FormDataParam("mainPackage") InputStream mainPackageInputStream,
                                        @FormDataParam("mainPackage") FormDataContentDisposition mainPackageDetail,
                                        @FormDataParam("specialPackage") InputStream specialPackageInputStream,
@@ -44,6 +44,6 @@ public interface RevisionEndpoint {
     @GET
     @Path("getRevByTs")
     @Produces(MediaType.APPLICATION_JSON)
-    RevisionDTO getRevisionByTimestamp(@QueryParam("t") long timestamp);
+    Revision getRevisionByTimestamp(@QueryParam("t") long timestamp);
 
 }

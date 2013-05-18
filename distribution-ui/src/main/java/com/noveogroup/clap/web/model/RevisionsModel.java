@@ -1,7 +1,7 @@
 package com.noveogroup.clap.web.model;
 
 
-import com.noveogroup.clap.model.revision.RevisionDTO;
+import com.noveogroup.clap.model.revision.Revision;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
@@ -14,7 +14,7 @@ import java.io.Serializable;
 public class RevisionsModel implements Serializable{
 
     private RevisionsListDataModel revisionsListDataModel;
-    private RevisionDTO selectedRevisionDTO;
+    private Revision selectedRevision;
 
     private StreamedContent cleanApkQRCode;
     private StreamedContent hackedApkQRCode;
@@ -51,12 +51,12 @@ public class RevisionsModel implements Serializable{
         this.revisionsListDataModel = revisionsListDataModel;
     }
 
-    public RevisionDTO getSelectedRevisionDTO() {
-        return selectedRevisionDTO;
+    public Revision getSelectedRevision() {
+        return selectedRevision;
     }
 
-    public void setSelectedRevisionDTO(RevisionDTO selectedRevisionDTO) {
-        this.selectedRevisionDTO = selectedRevisionDTO;
+    public void setSelectedRevision(Revision selectedRevision) {
+        this.selectedRevision = selectedRevision;
     }
 
     public StreamedContent getCleanApkQRCode() {

@@ -1,6 +1,6 @@
 package com.noveogroup.clap.rest;
 
-import com.noveogroup.clap.model.ProjectDTO;
+import com.noveogroup.clap.model.Project;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -19,5 +19,5 @@ public interface TestEndpoint {
     @Path("testModifyProject")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    ProjectDTO getTestModifyProject(ProjectDTO projectDTO);
+    Project getTestModifyProject(Project project);
 }

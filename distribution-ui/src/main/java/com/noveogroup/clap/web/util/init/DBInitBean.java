@@ -1,7 +1,7 @@
 package com.noveogroup.clap.web.util.init;
 
-import com.noveogroup.clap.model.ProjectDTO;
-import com.noveogroup.clap.model.revision.RevisionDTO;
+import com.noveogroup.clap.model.Project;
+import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.service.revision.RevisionService;
 
@@ -23,13 +23,13 @@ public class DBInitBean {
 
     @PostConstruct
     protected void initDB(){
-        ProjectDTO projectDTO = new ProjectDTO();
-        projectDTO.setName("test_project");
-        projectDTO.setCreationDate(new Date(1368308474));
-        projectDTO = projectService.createProject(projectDTO);
-        RevisionDTO revisionDTO = new RevisionDTO();
-        revisionDTO.setTimestamp(1368318776L);
-        revisionService.addRevision(projectDTO.getId(),revisionDTO,null,null);
+        Project project = new Project();
+        project.setName("test_project");
+        project.setCreationDate(new Date(1368308474));
+        project = projectService.createProject(project);
+        Revision revision = new Revision();
+        revision.setTimestamp(1368318776L);
+        revisionService.addRevision(project.getId(), revision,null,null);
     }
 
     public void fakeMethod(){

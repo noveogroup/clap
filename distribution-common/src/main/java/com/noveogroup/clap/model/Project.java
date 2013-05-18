@@ -1,11 +1,11 @@
 package com.noveogroup.clap.model;
 
-import com.noveogroup.clap.model.revision.RevisionDTO;
+import com.noveogroup.clap.model.revision.Revision;
 
 import java.util.Date;
 import java.util.List;
 
-public class ProjectDTO extends BaseDTO {
+public class Project extends BaseModel {
 
 
     private String name;
@@ -14,7 +14,7 @@ public class ProjectDTO extends BaseDTO {
 
     private Date creationDate;
 
-    private List<RevisionDTO> revisions;
+    private List<Revision> revisions;
 
 
     public String getName() {
@@ -41,11 +41,11 @@ public class ProjectDTO extends BaseDTO {
         this.creationDate = creationDate;
     }
 
-    public List<RevisionDTO> getRevisions() {
+    public List<Revision> getRevisions() {
         return revisions;
     }
 
-    public void setRevisions(final List<RevisionDTO> revisions) {
+    public void setRevisions(final List<Revision> revisions) {
         this.revisions = revisions;
     }
 }

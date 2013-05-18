@@ -1,6 +1,6 @@
 package com.noveogroup.clap.rest;
 
-import com.noveogroup.clap.model.ProjectDTO;
+import com.noveogroup.clap.model.Project;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -16,12 +16,12 @@ public interface ProjectEndpoint {
     @Path("createProject")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    ProjectDTO createProject(ProjectDTO projectDTO);
+    Project createProject(Project project);
 
     @GET
     @Path("getProject")
     @Produces(MediaType.APPLICATION_JSON)
-    ProjectDTO getProject(@QueryParam("id") Long id);
+    Project getProject(@QueryParam("id") Long id);
 
 
 }

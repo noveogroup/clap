@@ -1,19 +1,19 @@
 package com.noveogroup.clap.rest.model;
 
-import com.noveogroup.clap.model.message.MessageDTO;
+import com.noveogroup.clap.model.message.Message;
 
 public class SendMessageRequest {
 
-    private MessageDTO messageDTO;
+    private Message message;
 
     private Long revisionTimestamp;
 
-    public MessageDTO getMessageDTO() {
-        return messageDTO;
+    public Message getMessage() {
+        return message;
     }
 
-    public void setMessageDTO(MessageDTO messageDTO) {
-        this.messageDTO = messageDTO;
+    public void setMessage(Message message) {
+        this.message = message;
     }
 
     public Long getRevisionTimestamp() {
@@ -27,7 +27,7 @@ public class SendMessageRequest {
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("SendMessageRequest{");
-        sb.append("messageDTO=").append(messageDTO);
+        sb.append("message=").append(message);
         sb.append(", revisionTimestamp=").append(revisionTimestamp);
         sb.append('}');
         return sb.toString();

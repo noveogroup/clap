@@ -1,13 +1,13 @@
 package com.noveogroup.clap.model.message;
 
-import com.noveogroup.clap.model.BaseDTO;
+import com.noveogroup.clap.model.BaseModel;
 
 import java.util.Date;
 
 /**
  * @author Mikhail Demidov
  */
-public class MessageDTO extends BaseDTO {
+public class Message extends BaseModel {
 
     private Date timestamp;
 

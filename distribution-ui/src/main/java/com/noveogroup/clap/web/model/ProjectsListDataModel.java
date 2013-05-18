@@ -1,32 +1,32 @@
 package com.noveogroup.clap.web.model;
 
-import com.noveogroup.clap.model.ProjectDTO;
+import com.noveogroup.clap.model.Project;
 import org.primefaces.model.SelectableDataModel;
 
 import javax.faces.model.ListDataModel;
 import java.util.List;
 
-public class ProjectsListDataModel extends ListDataModel<ProjectDTO> implements SelectableDataModel<ProjectDTO> {
+public class ProjectsListDataModel extends ListDataModel<Project> implements SelectableDataModel<Project> {
 
     public ProjectsListDataModel() {
     }
 
-    public ProjectsListDataModel(List<ProjectDTO> projectDTOs) {
-        super(projectDTOs);
+    public ProjectsListDataModel(List<Project> projects) {
+        super(projects);
     }
 
     @Override
-    public Object getRowKey(ProjectDTO projectDTO) {
-        return projectDTO.getId();
+    public Object getRowKey(Project project) {
+        return project.getId();
     }
 
     @Override
-    public ProjectDTO getRowData(String s) {
+    public Project getRowData(String s) {
         final long id = Long.parseLong(s);
-        List<ProjectDTO> projectDTOs = (List<ProjectDTO>) getWrappedData();
-        for (ProjectDTO projectDTO : projectDTOs) {
-            if (id == projectDTO.getId()) {
-                return projectDTO;
+        List<Project> projects = (List<Project>) getWrappedData();
+        for (Project project : projects) {
+            if (id == project.getId()) {
+                return project;
             }
         }
         return null;

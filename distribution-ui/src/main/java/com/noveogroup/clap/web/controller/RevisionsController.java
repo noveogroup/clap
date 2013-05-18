@@ -6,8 +6,8 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.noveogroup.clap.model.ProjectDTO;
-import com.noveogroup.clap.model.revision.RevisionDTO;
+import com.noveogroup.clap.model.Project;
+import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.service.revision.RevisionService;
@@ -24,8 +24,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.RequestScoped;
-import javax.faces.application.ConfigurableNavigationHandler;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.ByteArrayInputStream;
@@ -53,31 +51,31 @@ public class RevisionsController extends BaseController{
 
     public String saveNewRevision() throws IOException {
         LOGGER.debug("saving new revision");
-        ProjectDTO projectDTO = projectsModel.getSelectedProject();
-        RevisionDTO revisionDTO = new RevisionDTO();
-        revisionDTO.setRevisionType(RevisionType.DEVELOP);
-        revisionDTO.setTimestamp(new Date().getTime());
+        Project project = projectsModel.getSelectedProject();
+        Revision revision = new Revision();
+        revision.setRevisionType(RevisionType.DEVELOP);
+        revision.setTimestamp(new Date().getTime());
         UploadedFile newRevisionCleanApk = revisionsModel.getUploadCleanApk();
         UploadedFile newRevisionHackedApk = revisionsModel.getUploadHackedApk();
-        revisionService.addRevision(projectDTO.getId(),
-                revisionDTO,
+        revisionService.addRevision(project.getId(),
+                revision,
                 newRevisionCleanApk != null ? newRevisionCleanApk.getContents() : null,
                 newRevisionHackedApk != null ? newRevisionHackedApk.getContents() : null);
         revisionsModel.reset();
         LOGGER.debug("revision saved");
 
-        ProjectDTO updatedProject = projectService.findById(projectsModel.getSelectedProject().getId());
+        Project updatedProject = projectService.findById(projectsModel.getSelectedProject().getId());
         projectsModel.setSelectedProject(updatedProject);
         revisionsModel.setRevisionsListDataModel(new RevisionsListDataModel(updatedProject.getRevisions()));
         return Navigation.SAME_PAGE.getView();
     }
 
     public void prepareRevisionView() throws IOException, WriterException {
-        RevisionDTO selectedRevisionDTO = revisionsModel.getSelectedRevisionDTO();
-        if(selectedRevisionDTO != null){
-            revisionsModel.setSelectedRevisionDTO(revisionService.findById(selectedRevisionDTO.getId()));
-            updateQRCodes(revisionsModel.getSelectedRevisionDTO());
-            LOGGER.debug(selectedRevisionDTO.getId() + " revision preparing finished");
+        Revision selectedRevision = revisionsModel.getSelectedRevision();
+        if(selectedRevision != null){
+            revisionsModel.setSelectedRevision(revisionService.findById(selectedRevision.getId()));
+            updateQRCodes(revisionsModel.getSelectedRevision());
+            LOGGER.debug(selectedRevision.getId() + " revision preparing finished");
         }
         else {
             LOGGER.error("revision not selected");
@@ -85,27 +83,27 @@ public class RevisionsController extends BaseController{
     }
 
     public void onRevisionSelected(SelectEvent event){
-        RevisionDTO revisionDTO = (RevisionDTO) event.getObject();
-        revisionsModel.setSelectedRevisionDTO(revisionDTO);
-        LOGGER.debug(revisionDTO.getId() + " revision selected");
+        Revision revision = (Revision) event.getObject();
+        revisionsModel.setSelectedRevision(revision);
+        LOGGER.debug(revision.getId() + " revision selected");
         redirectTo(Navigation.REVISION);
     }
 
     public String uploadApkToRevision() throws IOException, WriterException {
         UploadedFile newRevisionCleanApk = revisionsModel.getUploadCleanApk();
         UploadedFile newRevisionHackedApk = revisionsModel.getUploadHackedApk();
-        RevisionDTO updatedRevision = revisionService.updateRevisionPackages(revisionsModel.getSelectedRevisionDTO(),
+        Revision updatedRevision = revisionService.updateRevisionPackages(revisionsModel.getSelectedRevision(),
                 newRevisionCleanApk != null ? newRevisionCleanApk.getContents() : null,
                 newRevisionHackedApk != null ? newRevisionHackedApk.getContents() : null);
-        revisionsModel.setSelectedRevisionDTO(updatedRevision);
+        revisionsModel.setSelectedRevision(updatedRevision);
         updateQRCodes(updatedRevision);
         LOGGER.debug("revision updated");
         return Navigation.SAME_PAGE.getView();
     }
 
-    private void updateQRCodes(RevisionDTO revisionDTO) throws IOException, WriterException {
-        revisionsModel.setCleanApkQRCode(getQRCodeFromUrl(revisionDTO.getMainPackageUrl()));
-        revisionsModel.setHackedApkQRCode(getQRCodeFromUrl(revisionDTO.getSpecialPackageUrl()));
+    private void updateQRCodes(Revision revision) throws IOException, WriterException {
+        revisionsModel.setCleanApkQRCode(getQRCodeFromUrl(revision.getMainPackageUrl()));
+        revisionsModel.setHackedApkQRCode(getQRCodeFromUrl(revision.getSpecialPackageUrl()));
     }
 
     private StreamedContent getQRCodeFromUrl(String url) throws WriterException, IOException {

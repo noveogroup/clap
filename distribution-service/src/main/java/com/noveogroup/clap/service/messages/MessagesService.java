@@ -1,7 +1,7 @@
 package com.noveogroup.clap.service.messages;
 
-import com.noveogroup.clap.model.message.MessageDTO;
+import com.noveogroup.clap.model.message.Message;
 
 public interface MessagesService {
-    void saveMessage(long revisionTimestamp, MessageDTO messageDTO);
+    void saveMessage(long revisionTimestamp, Message message);
 }

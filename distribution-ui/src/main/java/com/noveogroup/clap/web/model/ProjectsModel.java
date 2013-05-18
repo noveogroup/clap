@@ -1,27 +1,26 @@
 package com.noveogroup.clap.web.model;
 
-import com.noveogroup.clap.model.ProjectDTO;
+import com.noveogroup.clap.model.Project;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import java.io.Serializable;
-import java.util.List;
 
 @Named
 @SessionScoped
 public class ProjectsModel implements Serializable{
 
-    private ProjectDTO newProject = new ProjectDTO();
+    private Project newProject = new Project();
 
     private ProjectsListDataModel projectsListDataModel;
 
-    private ProjectDTO selectedProject;
+    private Project selectedProject;
 
-    public ProjectDTO getNewProject() {
+    public Project getNewProject() {
         return newProject;
     }
 
-    public void setNewProject(ProjectDTO newProject) {
+    public void setNewProject(Project newProject) {
         this.newProject = newProject;
     }
 
@@ -33,11 +32,11 @@ public class ProjectsModel implements Serializable{
         this.projectsListDataModel = projectsListDataModel;
     }
 
-    public ProjectDTO getSelectedProject() {
+    public Project getSelectedProject() {
         return selectedProject;
     }
 
-    public void setSelectedProject(ProjectDTO selectedProject) {
+    public void setSelectedProject(Project selectedProject) {
         this.selectedProject = selectedProject;
     }
 }

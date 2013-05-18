@@ -1,23 +1,19 @@
 package com.noveogroup.clap.service.revision;
 
-import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.model.revision.ApplicationFile;
-import com.noveogroup.clap.model.revision.RevisionDTO;
-
-import javax.inject.Inject;
-import java.util.List;
+import com.noveogroup.clap.model.revision.Revision;
 
 /**
  * @author Mikhail Demidov
  */
 public interface RevisionService {
 
-    RevisionDTO addRevision(Long projectId, RevisionDTO revisionDTO, byte[] mainPackage, byte[] specialPackage);
+    Revision addRevision(Long projectId, Revision revision, byte[] mainPackage, byte[] specialPackage);
 
-    RevisionDTO updateRevisionPackages(RevisionDTO revisionDTO, byte[] mainPackage, byte[] specialPackage);
+    Revision updateRevisionPackages(Revision revision, byte[] mainPackage, byte[] specialPackage);
 
 
-    RevisionDTO updateRevisionPackages(Long revisionTimestamp, byte[] mainPackage, byte[] specialPackage);
+    Revision updateRevisionPackages(Long revisionTimestamp, byte[] mainPackage, byte[] specialPackage);
 
     /**
      * Change type to enum
@@ -28,8 +24,8 @@ public interface RevisionService {
      */
     ApplicationFile getApplication(Long revisionId, Integer type);
 
-    RevisionDTO getRevision(Long timestamp);
+    Revision getRevision(Long timestamp);
 
-    RevisionDTO findById(Long id);
+    Revision findById(Long id);
 
 }

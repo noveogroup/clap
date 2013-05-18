@@ -1,6 +1,6 @@
 package com.noveogroup.clap.rest;
 
-import com.noveogroup.clap.model.ProjectDTO;
+import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.service.project.ProjectService;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
@@ -22,12 +22,12 @@ public class ProjectEndpointImpl implements ProjectEndpoint {
 
 
     @Override
-    public ProjectDTO createProject(final ProjectDTO projectDTO) {
-        return projectService.createProject(projectDTO);
+    public Project createProject(final Project project) {
+        return projectService.createProject(project);
     }
 
     @Override
-    public ProjectDTO getProject(@QueryParam("id") final Long id) {
+    public Project getProject(@QueryParam("id") final Long id) {
         return projectService.findById(id);
     }
 }

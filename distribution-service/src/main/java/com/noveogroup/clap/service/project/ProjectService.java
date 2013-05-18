@@ -1,6 +1,6 @@
 package com.noveogroup.clap.service.project;
 
-import com.noveogroup.clap.model.ProjectDTO;
+import com.noveogroup.clap.model.Project;
 
 import java.util.List;
 
@@ -10,13 +10,13 @@ import java.util.List;
 public interface ProjectService {
 
 
-    ProjectDTO createProject(ProjectDTO project);
+    Project createProject(Project project);
 
-    ProjectDTO save(ProjectDTO project);
+    Project save(Project project);
 
-    ProjectDTO findById(Long id);
+    Project findById(Long id);
 
-    List<ProjectDTO> findAllProjects();
+    List<Project> findAllProjects();
 
 
 

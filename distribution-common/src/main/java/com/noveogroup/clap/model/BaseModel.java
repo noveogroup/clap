@@ -3,14 +3,14 @@ package com.noveogroup.clap.model;
 /**
  * @author Mikhail Demidov
  */
-public class BaseDTO {
+public class BaseModel {
 
     private Long id;
 
     /**
      * Constructor
      */
-    public BaseDTO() {
+    public BaseModel() {
     }
 
     public Long getId() {
