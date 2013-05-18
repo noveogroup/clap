@@ -4,7 +4,7 @@ import com.noveogroup.clap.dao.MessageDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
-import com.noveogroup.clap.interceptor.AuthenticationRequired;
+import com.noveogroup.clap.auth.AuthenticationRequired;
 import com.noveogroup.clap.interceptor.ClapMainInterceptor;
 import com.noveogroup.clap.interceptor.Transactional;
 import com.noveogroup.clap.model.Project;

@@ -1,11 +1,10 @@
-package com.noveogroup.clap.interceptor;
+package com.noveogroup.clap.interceptor.composite;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.interceptor.InvocationContext;
@@ -14,6 +13,8 @@ import java.lang.reflect.Method;
 import java.util.*;
 
 /**
+ * manages LightInterceptors
+ *
  * @author Andrey Sokolov
  */
 @ApplicationScoped
@@ -32,6 +33,7 @@ public class CompositeInterceptorHelper {
         if (lightInterceptors != null) {
             for (LightInterceptor interceptor : lightInterceptors) {
                 interceptorList.add(interceptor);
+                LOGGER.info("registered " + interceptor.getDescription() + " with priority " + interceptor.getPriority());
             }
         }
         int size = interceptorList.size();
@@ -40,12 +42,12 @@ public class CompositeInterceptorHelper {
             Collections.sort(interceptorList, new Comparator<LightInterceptor>() {
                 @Override
                 public int compare(LightInterceptor o1, LightInterceptor o2) {
+                    //TODO check
                     return o1.getPriority() - o2.getPriority();
                 }
             });
             for (; i < size; i++) {
                 final LightInterceptor currentInterceptor = interceptorList.get(i - 1);
-                LOGGER.info("registered " + currentInterceptor + " with priority " + currentInterceptor.getPriority());
                 currentInterceptor.setNextInterceptor(interceptorList.get(i));
             }
         }
@@ -131,6 +133,11 @@ public class CompositeInterceptorHelper {
         @Override
         public int getPriority() {
             return 9999;
+        }
+
+        @Override
+        public String getDescription() {
+            return "you shouldn't see this";
         }
     }
 }

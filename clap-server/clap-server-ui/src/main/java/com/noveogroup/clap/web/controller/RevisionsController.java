@@ -49,10 +49,6 @@ public class RevisionsController extends BaseController{
     @Inject
     private ProjectService projectService;
 
-    @Inject
-    private AuthenticationSystemFactory authenticationSystemFactory;
-
-
     public String saveNewRevision() throws IOException {
         LOGGER.debug("saving new revision");
         Project project = projectsModel.getSelectedProject();
@@ -75,7 +71,6 @@ public class RevisionsController extends BaseController{
     }
 
     public void prepareRevisionView() throws IOException, WriterException {
-        LOGGER.info("selected - " + authenticationSystemFactory.getAuthenticationSystem());
         Revision selectedRevision = revisionsModel.getSelectedRevision();
         if(selectedRevision != null){
             revisionsModel.setSelectedRevision(revisionService.findById(selectedRevision.getId()));

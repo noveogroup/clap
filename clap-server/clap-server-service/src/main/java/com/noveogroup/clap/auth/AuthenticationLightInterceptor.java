@@ -1,7 +1,7 @@
-package com.noveogroup.clap.interceptor;
+package com.noveogroup.clap.auth;
 
-import com.noveogroup.clap.auth.AuthenticationSystem;
-import com.noveogroup.clap.auth.AuthenticationSystemFactory;
+import com.noveogroup.clap.interceptor.composite.LightInterceptor;
+import com.noveogroup.clap.interceptor.composite.LightInterceptorQualifier;
 import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.user.User;
 import org.slf4j.Logger;
@@ -65,5 +65,10 @@ public class AuthenticationLightInterceptor implements LightInterceptor {
     @Override
     public int getPriority() {
         return 10;
+    }
+
+    @Override
+    public String getDescription() {
+        return "AuthenticationLightInterceptor";
     }
 }
