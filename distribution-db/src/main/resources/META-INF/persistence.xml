@@ -8,9 +8,9 @@
         <jta-data-source>app/jdbc/distribution</jta-data-source>
 
         <class>com.noveogroup.clap.entity.BaseEntity</class>
-        <class>com.noveogroup.clap.entity.Project</class>
-        <class>com.noveogroup.clap.entity.revision.Revision</class>
-        <class>com.noveogroup.clap.entity.message.Message</class>
+        <class>com.noveogroup.clap.entity.ProjectEntity</class>
+        <class>com.noveogroup.clap.entity.revision.RevisionEntity</class>
+        <class>com.noveogroup.clap.entity.message.MessageEntity</class>
 
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>

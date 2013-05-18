@@ -1,11 +1,10 @@
 package com.noveogroup.clap.entity.revision;
 
 import com.noveogroup.clap.entity.BaseEntity;
-import com.noveogroup.clap.entity.Project;
-import com.noveogroup.clap.entity.message.Message;
+import com.noveogroup.clap.entity.ProjectEntity;
+import com.noveogroup.clap.entity.message.MessageEntity;
 
 import javax.persistence.*;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -13,8 +12,8 @@ import java.util.List;
  */
 @Entity
 @Table(name = "revisions")
-@NamedQuery(name="getRevisionByTimestamp",query="SELECT rev FROM Revision rev WHERE rev.timestamp = :timestamp")
-public class Revision extends BaseEntity {
+@NamedQuery(name="getRevisionByTimestamp",query="SELECT rev FROM RevisionEntity rev WHERE rev.timestamp = :timestamp")
+public class RevisionEntity extends BaseEntity {
 
 
     @Column(unique = true)
@@ -35,16 +34,16 @@ public class Revision extends BaseEntity {
     private boolean specialPackageLoaded;
 
     @OneToMany(fetch = FetchType.LAZY)
-    private List<Message> messages;
+    private List<MessageEntity> messages;
 
 
     @ManyToOne
-    private Project project;
+    private ProjectEntity project;
 
     /**
      * Constructor
      */
-    public Revision() {
+    public RevisionEntity() {
     }
 
     public Long getTimestamp() {
@@ -63,12 +62,12 @@ public class Revision extends BaseEntity {
         this.revisionType = revisionType;
     }
 
-    public List<Message> getMessages() {
+    public List<MessageEntity> getMessages() {
         return messages;
     }
 
-    public void setMessages(final List<Message> messages) {
-        this.messages = messages;
+    public void setMessages(final List<MessageEntity> messageEntities) {
+        this.messages = messageEntities;
     }
 
     public byte[] getMainPackage() {
@@ -87,12 +86,12 @@ public class Revision extends BaseEntity {
         this.specialPackage = specialPackage;
     }
 
-    public Project getProject() {
+    public ProjectEntity getProject() {
         return project;
     }
 
-    public void setProject(final Project project) {
-        this.project = project;
+    public void setProject(final ProjectEntity projectEntity) {
+        this.project = projectEntity;
     }
 
     public boolean isMainPackageLoaded() {

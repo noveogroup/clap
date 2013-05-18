@@ -1,16 +1,14 @@
 package com.noveogroup.clap.service.revision;
 
-import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
-import com.noveogroup.clap.entity.Project;
-import com.noveogroup.clap.entity.revision.Revision;
+import com.noveogroup.clap.entity.ProjectEntity;
+import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.revision.RevisionType;
 import com.noveogroup.clap.interceptor.TransactionInterceptor;
 import com.noveogroup.clap.interceptor.Transactional;
 import com.noveogroup.clap.model.revision.ApplicationFile;
 import com.noveogroup.clap.model.revision.RevisionDTO;
-import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.service.url.UrlService;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
@@ -21,9 +19,7 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author Mikhail Demidov
@@ -47,53 +43,53 @@ public class RevisionServiceImpl implements RevisionService {
     @Transactional
     @Override
     public RevisionDTO addRevision(final Long projectId, final RevisionDTO revisionDTO, final byte[] mainPackage, final byte[] specialPackage) {
-        Revision revision = MAPPER.map(revisionDTO, Revision.class);
-        if (revision.getTimestamp() == null) {
-            revision.setTimestamp(new Date().getTime());
+        RevisionEntity revisionEntity = MAPPER.map(revisionDTO, RevisionEntity.class);
+        if (revisionEntity.getTimestamp() == null) {
+            revisionEntity.setTimestamp(new Date().getTime());
         }
-        if (revision.getRevisionType() == null) {
-            revision.setRevisionType(RevisionType.DEVELOP);
+        if (revisionEntity.getRevisionType() == null) {
+            revisionEntity.setRevisionType(RevisionType.DEVELOP);
         }
-        addPackages(revision,mainPackage,specialPackage);
-        Project project = projectDAO.findById(projectId);
-        revision.setProject(project);
-        project.getRevisions().add(revision);
+        addPackages(revisionEntity,mainPackage,specialPackage);
+        ProjectEntity projectEntity = projectDAO.findById(projectId);
+        revisionEntity.setProject(projectEntity);
+        projectEntity.getRevisions().add(revisionEntity);
 
-        projectDAO.persist(project);
-        revision = revisionDAO.persist(revision);
-        RevisionDTO outcomeRevision = MAPPER.map(revision, RevisionDTO.class);
+        projectDAO.persist(projectEntity);
+        revisionEntity = revisionDAO.persist(revisionEntity);
+        RevisionDTO outcomeRevision = MAPPER.map(revisionEntity, RevisionDTO.class);
         outcomeRevision.setProjectId(projectId);
-        createUrls(outcomeRevision,revision);
+        createUrls(outcomeRevision, revisionEntity);
         return outcomeRevision;
     }
 
     @Transactional
     @Override
     public RevisionDTO updateRevisionPackages(RevisionDTO revisionDTO, byte[] mainPackage, byte[] specialPackage) {
-        Revision revision = revisionDAO.findById(revisionDTO.getId());
-        return updateRevisionPackages(revision,mainPackage,specialPackage);
+        RevisionEntity revisionEntity = revisionDAO.findById(revisionDTO.getId());
+        return updateRevisionPackages(revisionEntity,mainPackage,specialPackage);
     }
 
     @Transactional
     @Override
     public RevisionDTO updateRevisionPackages(Long revisionTimestamp, byte[] mainPackage, byte[] specialPackage) {
-       Revision revision = revisionDAO.getRevisionByTimestamp(revisionTimestamp);
-       return updateRevisionPackages(revision,mainPackage,specialPackage);
+       RevisionEntity revisionEntity = revisionDAO.getRevisionByTimestamp(revisionTimestamp);
+       return updateRevisionPackages(revisionEntity,mainPackage,specialPackage);
     }
 
     @Transactional
     @Override
     public ApplicationFile getApplication(final Long revisionId, final Integer type) {
-        Revision revision = revisionDAO.findById(revisionId);
-        if (revision != null) {
+        RevisionEntity revisionEntity = revisionDAO.findById(revisionId);
+        if (revisionEntity != null) {
             ApplicationFile ret = new ApplicationFile();
             if (type == 1) {
-                ret.setContent(revision.getSpecialPackage());
-                ret.setFilename(createFileName(revision.getProject(),false));
+                ret.setContent(revisionEntity.getSpecialPackage());
+                ret.setFilename(createFileName(revisionEntity.getProject(),false));
                 return ret;
             } else if (type == 0) {
-                ret.setContent(revision.getMainPackage());
-                ret.setFilename(createFileName(revision.getProject(), true));
+                ret.setContent(revisionEntity.getMainPackage());
+                ret.setFilename(createFileName(revisionEntity.getProject(), true));
                 return ret;
             }
         }
@@ -103,50 +99,50 @@ public class RevisionServiceImpl implements RevisionService {
     @Transactional
     @Override
     public RevisionDTO getRevision(Long timestamp) {
-        Revision revisionByTimestamp = revisionDAO.getRevisionByTimestamp(timestamp);
-        RevisionDTO revisionDTO = MAPPER.map(revisionByTimestamp, RevisionDTO.class);
-        createUrls(revisionDTO,revisionByTimestamp);
+        RevisionEntity revisionEntityByTimestamp = revisionDAO.getRevisionByTimestamp(timestamp);
+        RevisionDTO revisionDTO = MAPPER.map(revisionEntityByTimestamp, RevisionDTO.class);
+        createUrls(revisionDTO, revisionEntityByTimestamp);
         return revisionDTO;
     }
 
     @Override
     public RevisionDTO findById(Long id) {
-        Revision revision = revisionDAO.findById(id);
-        RevisionDTO revisionDTO = MAPPER.map(revision, RevisionDTO.class);
-        createUrls(revisionDTO,revision);
+        RevisionEntity revisionEntity = revisionDAO.findById(id);
+        RevisionDTO revisionDTO = MAPPER.map(revisionEntity, RevisionDTO.class);
+        createUrls(revisionDTO, revisionEntity);
         return revisionDTO;
     }
 
-    private RevisionDTO updateRevisionPackages(Revision revision, byte[] mainPackage, byte[] specialPackage){
-        addPackages(revision,mainPackage,specialPackage);
-        revision = revisionDAO.persist(revision);
-        RevisionDTO outcomeRevision = MAPPER.map(revision, RevisionDTO.class);
-        createUrls(outcomeRevision,revision);
+    private RevisionDTO updateRevisionPackages(RevisionEntity revisionEntity, byte[] mainPackage, byte[] specialPackage){
+        addPackages(revisionEntity,mainPackage,specialPackage);
+        revisionEntity = revisionDAO.persist(revisionEntity);
+        RevisionDTO outcomeRevision = MAPPER.map(revisionEntity, RevisionDTO.class);
+        createUrls(outcomeRevision, revisionEntity);
         return outcomeRevision;
     }
 
-    private void addPackages(Revision revision,byte[] mainPackage, byte[] specialPackage){
+    private void addPackages(RevisionEntity revisionEntity,byte[] mainPackage, byte[] specialPackage){
         if(mainPackage != null){
-            revision.setMainPackage(mainPackage);
-            revision.setMainPackageLoaded(true);
+            revisionEntity.setMainPackage(mainPackage);
+            revisionEntity.setMainPackageLoaded(true);
         }
         if (specialPackage != null) {
-            revision.setSpecialPackage(specialPackage);
-            revision.setSpecialPackageLoaded(true);
+            revisionEntity.setSpecialPackage(specialPackage);
+            revisionEntity.setSpecialPackageLoaded(true);
         }
     }
 
-    private void createUrls(RevisionDTO outcomeRevision, Revision revision){
-        if(revision.isMainPackageLoaded()){
+    private void createUrls(RevisionDTO outcomeRevision, RevisionEntity revisionEntity){
+        if(revisionEntity.isMainPackageLoaded()){
             outcomeRevision.setMainPackageUrl(urlService.createUrl(outcomeRevision.getId(),true));
         }
-        if(revision.isSpecialPackageLoaded()){
+        if(revisionEntity.isSpecialPackageLoaded()){
             outcomeRevision.setSpecialPackageUrl(urlService.createUrl(outcomeRevision.getId(),false));
         }
     }
 
-    private String createFileName(Project project,boolean mainPackage){
-        return project.getName() + (mainPackage ? "" : "_hacked")+ ".apk" ;
+    private String createFileName(ProjectEntity projectEntity,boolean mainPackage){
+        return projectEntity.getName() + (mainPackage ? "" : "_hacked")+ ".apk" ;
     }
 
 }

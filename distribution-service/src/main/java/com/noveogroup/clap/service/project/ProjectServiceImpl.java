@@ -2,19 +2,16 @@ package com.noveogroup.clap.service.project;
 
 import com.noveogroup.clap.dao.MessageDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
-import com.noveogroup.clap.entity.Project;
-import com.noveogroup.clap.entity.revision.Revision;
-import com.noveogroup.clap.entity.revision.RevisionType;
+import com.noveogroup.clap.entity.ProjectEntity;
+import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.interceptor.TransactionInterceptor;
 import com.noveogroup.clap.interceptor.Transactional;
 import com.noveogroup.clap.model.ProjectDTO;
 import com.noveogroup.clap.model.revision.RevisionDTO;
-import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.service.url.UrlService;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
-import org.hibernate.Hibernate;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -54,31 +51,31 @@ public class ProjectServiceImpl implements ProjectService {
         if (project.getCreationDate() == null) {
             project.setCreationDate(new Date());
         }
-        Project inProject = MAPPER.map(project, Project.class);
-        return MAPPER.map(projectDAO.persist(inProject), ProjectDTO.class);
+        ProjectEntity projectEntity = MAPPER.map(project, ProjectEntity.class);
+        return MAPPER.map(projectDAO.persist(projectEntity), ProjectDTO.class);
     }
 
     @Transactional
     @Override
     public ProjectDTO save(final ProjectDTO project) {
-        Project inProject = MAPPER.map(project, Project.class);
-        return MAPPER.map(projectDAO.persist(inProject), ProjectDTO.class);
+        ProjectEntity projectEntity = MAPPER.map(project, ProjectEntity.class);
+        return MAPPER.map(projectDAO.persist(projectEntity), ProjectDTO.class);
     }
 
     @Transactional
     @Override
     public ProjectDTO findById(final Long id) {
-        Project project = projectDAO.findById(id);
-        final ProjectDTO projectDTO = MAPPER.map(project, ProjectDTO.class);
+        ProjectEntity projectEntity = projectDAO.findById(id);
+        final ProjectDTO projectDTO = MAPPER.map(projectEntity, ProjectDTO.class);
         final List<RevisionDTO> revisions = projectDTO.getRevisions();
         for (int i=0; i<revisions.size();i++) {
             RevisionDTO revision = revisions.get(i);
-            Revision revisionOrigin = project.getRevisions().get(i);
+            RevisionEntity revisionEntityOrigin = projectEntity.getRevisions().get(i);
             revision.setProjectId(projectDTO.getId());
-            if(revisionOrigin.isMainPackageLoaded()){
+            if(revisionEntityOrigin.isMainPackageLoaded()){
                 revision.setMainPackageUrl(urlService.createUrl(revision.getId(),true));
             }
-            if(revisionOrigin.isSpecialPackageLoaded()) {
+            if(revisionEntityOrigin.isSpecialPackageLoaded()) {
                 revision.setSpecialPackageUrl(urlService.createUrl(revision.getId(),false));
             }
         }
@@ -88,10 +85,10 @@ public class ProjectServiceImpl implements ProjectService {
     @Transactional
     @Override
     public List<ProjectDTO> findAllProjects() {
-        List<Project> projectList = projectDAO.selectAll();
+        List<ProjectEntity> projectEntityList = projectDAO.selectAll();
         List<ProjectDTO> projectDTOList = new ArrayList<ProjectDTO>();
-        for (Project project : projectList) {
-            projectDTOList.add(MAPPER.map(project, ProjectDTO.class));
+        for (ProjectEntity projectEntity : projectEntityList) {
+            projectDTOList.add(MAPPER.map(projectEntity, ProjectDTO.class));
         }
         return projectDTOList;
     }

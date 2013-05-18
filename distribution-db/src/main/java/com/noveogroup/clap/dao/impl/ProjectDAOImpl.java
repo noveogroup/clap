@@ -1,7 +1,7 @@
 package com.noveogroup.clap.dao.impl;
 
 import com.noveogroup.clap.dao.ProjectDAO;
-import com.noveogroup.clap.entity.Project;
+import com.noveogroup.clap.entity.ProjectEntity;
 import org.hibernate.Hibernate;
 
 import javax.ejb.Stateless;
@@ -11,25 +11,25 @@ import javax.persistence.Query;
  * @author
  */
 @Stateless
-public class ProjectDAOImpl extends GenericHibernateDAOImpl<Project, Long> implements ProjectDAO {
+public class ProjectDAOImpl extends GenericHibernateDAOImpl<ProjectEntity, Long> implements ProjectDAO {
 
     private static final String GET_PROJECT_BY_NAME = "getProjectByName";
     private static final String GET_PROJECT_BY_NAME_PARAMETER = "name";
 
     @Override
-    public Project findById(Long id) {
-        Project project = super.findById(id);
-        Hibernate.initialize(project.getRevisions());
-        return project;
+    public ProjectEntity findById(Long id) {
+        ProjectEntity projectEntity = super.findById(id);
+        Hibernate.initialize(projectEntity.getRevisions());
+        return projectEntity;
     }
 
     @Override
-    public Project findProjectByName(String name) {
+    public ProjectEntity findProjectByName(String name) {
         Query query = entityManager.createNamedQuery(GET_PROJECT_BY_NAME);
         query.setParameter(GET_PROJECT_BY_NAME_PARAMETER,name);
-        Project project = (Project) query.getSingleResult();
-        Hibernate.initialize(project.getRevisions());
-        return project;
+        ProjectEntity projectEntity = (ProjectEntity) query.getSingleResult();
+        Hibernate.initialize(projectEntity.getRevisions());
+        return projectEntity;
     }
 
 }

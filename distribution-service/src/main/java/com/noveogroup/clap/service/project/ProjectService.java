@@ -1,8 +1,6 @@
 package com.noveogroup.clap.service.project;
 
-import com.noveogroup.clap.entity.Project;
 import com.noveogroup.clap.model.ProjectDTO;
-import com.noveogroup.clap.model.revision.RevisionDTO;
 
 import java.util.List;
 

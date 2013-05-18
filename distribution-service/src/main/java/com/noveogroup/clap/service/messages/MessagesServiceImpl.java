@@ -1,11 +1,9 @@
 package com.noveogroup.clap.service.messages;
 
 import com.noveogroup.clap.dao.MessageDAO;
-import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
-import com.noveogroup.clap.entity.Project;
-import com.noveogroup.clap.entity.message.Message;
-import com.noveogroup.clap.entity.revision.Revision;
+import com.noveogroup.clap.entity.message.MessageEntity;
+import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.interceptor.TransactionInterceptor;
 import com.noveogroup.clap.interceptor.Transactional;
 import com.noveogroup.clap.model.message.MessageDTO;
@@ -36,15 +34,15 @@ public class MessagesServiceImpl implements MessagesService {
     @Transactional
     @Override
     public void saveMessage(long revisionTimestamp, MessageDTO messageDTO) {
-        Revision revision = revisionDAO.getRevisionByTimestamp(revisionTimestamp);
-        Message message = MAPPER.map(messageDTO, Message.class);
-        message = messageDAO.persist(message);
-        List<Message> messages = revision.getMessages();
-        if (messages == null) {
-            messages = new ArrayList<Message>();
-            revision.setMessages(messages);
+        RevisionEntity revisionEntity = revisionDAO.getRevisionByTimestamp(revisionTimestamp);
+        MessageEntity messageEntity = MAPPER.map(messageDTO, MessageEntity.class);
+        messageEntity = messageDAO.persist(messageEntity);
+        List<MessageEntity> messageEntities = revisionEntity.getMessages();
+        if (messageEntities == null) {
+            messageEntities = new ArrayList<MessageEntity>();
+            revisionEntity.setMessages(messageEntities);
         }
-        messages.add(message);
-        revisionDAO.persist(revision);
+        messageEntities.add(messageEntity);
+        revisionDAO.persist(revisionEntity);
     }
 }

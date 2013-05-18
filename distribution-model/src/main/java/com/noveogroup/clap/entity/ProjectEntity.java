@@ -1,6 +1,6 @@
 package com.noveogroup.clap.entity;
 
-import com.noveogroup.clap.entity.revision.Revision;
+import com.noveogroup.clap.entity.revision.RevisionEntity;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -9,8 +9,8 @@ import java.util.List;
 
 @Entity
 @Table(name = "projects")
-@NamedQuery(name="getProjectByName",query="SELECT p FROM Project p WHERE p.name = :name")
-public class Project extends BaseEntity {
+@NamedQuery(name="getProjectByName",query="SELECT p FROM ProjectEntity p WHERE p.name = :name")
+public class ProjectEntity extends BaseEntity {
 
     private static final long serialVersionUID = 8306757495649843962L;
 
@@ -23,13 +23,13 @@ public class Project extends BaseEntity {
     private Date creationDate;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
-    private List<Revision> revisions;
+    private List<RevisionEntity> revisions;
 
     /**
      * Constructor
      */
-    public Project() {
-        revisions = new ArrayList<Revision>();
+    public ProjectEntity() {
+        revisions = new ArrayList<RevisionEntity>();
     }
 
     /**
@@ -79,10 +79,10 @@ public class Project extends BaseEntity {
     /**
      * Sets new revisions.
      *
-     * @param revisions New value of revisions.
+     * @param revisionEntities New value of revisions.
      */
-    public void setRevisions(final List<Revision> revisions) {
-        this.revisions = revisions;
+    public void setRevisions(final List<RevisionEntity> revisionEntities) {
+        this.revisions = revisionEntities;
     }
 
     /**
@@ -90,7 +90,7 @@ public class Project extends BaseEntity {
      *
      * @return Value of revisions.
      */
-    public List<Revision> getRevisions() {
+    public List<RevisionEntity> getRevisions() {
         return revisions;
     }
 }

@@ -14,7 +14,7 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "messages")
-public class Message extends BaseEntity {
+public class MessageEntity extends BaseEntity {
 
 
     @Temporal(TemporalType.TIMESTAMP)
@@ -32,7 +32,7 @@ public class Message extends BaseEntity {
     /**
      * Constructor
      */
-    public Message() {
+    public MessageEntity() {
     }
 
     public Date getTimestamp() {

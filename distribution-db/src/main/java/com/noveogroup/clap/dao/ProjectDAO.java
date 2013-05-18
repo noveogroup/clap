@@ -1,11 +1,11 @@
 package com.noveogroup.clap.dao;
 
-import com.noveogroup.clap.entity.Project;
+import com.noveogroup.clap.entity.ProjectEntity;
 
 /**
  * @author
  */
-public interface ProjectDAO extends GenericDAO<Project, Long> {
+public interface ProjectDAO extends GenericDAO<ProjectEntity, Long> {
 
-    Project findProjectByName(String name);
+    ProjectEntity findProjectByName(String name);
 }

@@ -1,10 +1,10 @@
 package com.noveogroup.clap.dao;
 
-import com.noveogroup.clap.entity.revision.Revision;
+import com.noveogroup.clap.entity.revision.RevisionEntity;
 
 /**
  * @author Mikhail Demidov
  */
-public interface RevisionDAO extends GenericDAO<Revision, Long> {
-    Revision getRevisionByTimestamp(Long timestamp);
+public interface RevisionDAO extends GenericDAO<RevisionEntity, Long> {
+    RevisionEntity getRevisionByTimestamp(Long timestamp);
 }
