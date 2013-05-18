@@ -23,11 +23,13 @@ public class ProjectEndpointImpl implements ProjectEndpoint {
 
     @Override
     public Project createProject(final Project project) {
-        return projectService.createProject(project);
+        //TODO authentication
+        return projectService.createProject(null,project);
     }
 
     @Override
     public Project getProject(@QueryParam("id") final Long id) {
-        return projectService.findById(id);
+        //TODO authentication
+        return projectService.findById(null,id);
     }
 }

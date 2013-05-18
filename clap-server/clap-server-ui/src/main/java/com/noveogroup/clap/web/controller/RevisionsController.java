@@ -6,6 +6,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.noveogroup.clap.auth.AuthenticationSystemFactory;
 import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
@@ -48,6 +49,9 @@ public class RevisionsController extends BaseController{
     @Inject
     private ProjectService projectService;
 
+    @Inject
+    private AuthenticationSystemFactory authenticationSystemFactory;
+
 
     public String saveNewRevision() throws IOException {
         LOGGER.debug("saving new revision");
@@ -63,14 +67,15 @@ public class RevisionsController extends BaseController{
                 newRevisionHackedApk != null ? newRevisionHackedApk.getContents() : null);
         revisionsModel.reset();
         LOGGER.debug("revision saved");
-
-        Project updatedProject = projectService.findById(projectsModel.getSelectedProject().getId());
+        //TODO authentication
+        Project updatedProject = projectService.findById(null,projectsModel.getSelectedProject().getId());
         projectsModel.setSelectedProject(updatedProject);
         revisionsModel.setRevisionsListDataModel(new RevisionsListDataModel(updatedProject.getRevisions()));
         return Navigation.SAME_PAGE.getView();
     }
 
     public void prepareRevisionView() throws IOException, WriterException {
+        LOGGER.info("selected - " + authenticationSystemFactory.getAuthenticationSystem());
         Revision selectedRevision = revisionsModel.getSelectedRevision();
         if(selectedRevision != null){
             revisionsModel.setSelectedRevision(revisionService.findById(selectedRevision.getId()));

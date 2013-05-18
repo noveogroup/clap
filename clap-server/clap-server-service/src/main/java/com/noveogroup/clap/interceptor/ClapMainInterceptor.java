@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.Resource;
+import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
 import javax.transaction.SystemException;
@@ -11,15 +12,19 @@ import javax.transaction.UserTransaction;
 import java.lang.annotation.Annotation;
 
 /**
+ * performing transaction and execute LightInterceptors
+ *
  * @author Mikhail Demidov
  */
-public class TransactionInterceptor {
+public class ClapMainInterceptor {
 
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(TransactionInterceptor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClapMainInterceptor.class);
 
     @Resource
     private UserTransaction userTransaction;
+
+    @Inject
+    private CompositeInterceptorHelper compositeInterceptorHelper;
 
 
     @AroundInvoke
@@ -31,7 +36,7 @@ public class TransactionInterceptor {
                 if (annotation instanceof Transactional) {
                     try {
                         userTransaction.begin();
-                        result = ctx.proceed();
+                        result = compositeInterceptorHelper.execute(ctx);
                         userTransaction.commit();
                     } catch (IllegalStateException e) {
                         LOGGER.error("Transaction error " + e.getMessage(), e);
@@ -45,7 +50,7 @@ public class TransactionInterceptor {
             }
         }
         try {
-            result = ctx.proceed();
+            result = compositeInterceptorHelper.execute(ctx);
         } catch (Exception e) {
             LOGGER.error("error beyond transaction " + e.getMessage(), e);
         }

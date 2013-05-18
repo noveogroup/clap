@@ -5,7 +5,7 @@ import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.revision.RevisionType;
-import com.noveogroup.clap.interceptor.TransactionInterceptor;
+import com.noveogroup.clap.interceptor.ClapMainInterceptor;
 import com.noveogroup.clap.interceptor.Transactional;
 import com.noveogroup.clap.model.revision.ApplicationFile;
 import com.noveogroup.clap.model.revision.Revision;
@@ -25,7 +25,7 @@ import java.util.Date;
  * @author Mikhail Demidov
  */
 @Stateless
-@Interceptors({TransactionInterceptor.class})
+@Interceptors({ClapMainInterceptor.class})
 @TransactionManagement(TransactionManagementType.BEAN)
 public class RevisionServiceImpl implements RevisionService {
 

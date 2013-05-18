@@ -17,11 +17,14 @@ public class ConfigBean {
 
     private Properties properties;
 
+    private String authenticationSystemId;
+
     @PostConstruct
     protected void setup() throws IOException {
         properties = ConfigurationUtils.getPropertiesFromConfig("clap.properties");
         maxApkSize = Long.parseLong(properties.getProperty("maxApkSize"));
         downloadApkUrl = properties.getProperty("rest.apkDownload");
+        authenticationSystemId = properties.getProperty("authenticationSystemId");
     }
 
     public long getMaxApkSize() {
@@ -34,5 +37,9 @@ public class ConfigBean {
 
     public Properties getProperties() {
         return properties;
+    }
+
+    public String getAuthenticationSystemId() {
+        return authenticationSystemId;
     }
 }

@@ -1,6 +1,7 @@
 package com.noveogroup.clap.web.util.init;
 
 import com.noveogroup.clap.model.Project;
+import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.service.revision.RevisionService;
@@ -26,7 +27,8 @@ public class DBInitBean {
         Project project = new Project();
         project.setName("test_project");
         project.setCreationDate(new Date(1368308474));
-        project = projectService.createProject(project);
+        //TODO authentication
+        project = projectService.createProject(new Authentication(),project);
         Revision revision = new Revision();
         revision.setTimestamp(1368318776L);
         revisionService.addRevision(project.getId(), revision,null,null);

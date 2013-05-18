@@ -4,7 +4,7 @@ import com.noveogroup.clap.dao.MessageDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.message.MessageEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
-import com.noveogroup.clap.interceptor.TransactionInterceptor;
+import com.noveogroup.clap.interceptor.ClapMainInterceptor;
 import com.noveogroup.clap.interceptor.Transactional;
 import com.noveogroup.clap.model.message.Message;
 import org.dozer.DozerBeanMapper;
@@ -20,7 +20,7 @@ import java.util.List;
 
 @Stateless
 @TransactionManagement(TransactionManagementType.BEAN)
-@Interceptors({TransactionInterceptor.class})
+@Interceptors({ClapMainInterceptor.class})
 public class MessagesServiceImpl implements MessagesService {
 
     private static Mapper MAPPER = new DozerBeanMapper();

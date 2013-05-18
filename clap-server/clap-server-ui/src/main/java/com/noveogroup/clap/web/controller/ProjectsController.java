@@ -38,7 +38,8 @@ public class ProjectsController extends BaseController {
     public String addProject() {
         try {
             LOGGER.debug("add project : " + projectsModel.getNewProject());
-            projectService.createProject(projectsModel.getNewProject());
+            //TODO authentication
+            projectService.createProject(null,projectsModel.getNewProject());
             projectsModel.setNewProject(new Project());
             LOGGER.debug("project saved");
             return Navigation.PROJECTS.getView();
@@ -52,7 +53,8 @@ public class ProjectsController extends BaseController {
     }
 
     public void prepareProjectsListView() {
-        List<Project> projectList = projectService.findAllProjects();
+        //TODO authentication
+        List<Project> projectList = projectService.findAllProjects(null);
         projectsModel.setProjectsListDataModel(new ProjectsListDataModel(projectList));
         LOGGER.debug(projectList.size() + " projects loaded");
     }
@@ -60,7 +62,8 @@ public class ProjectsController extends BaseController {
     public void prepareProjectView(){
         Project selectedProject = projectsModel.getSelectedProject();
         if(selectedProject != null){
-            Project projectWithRevisions = projectService.findById(selectedProject.getId());
+            //TODO authentication
+            Project projectWithRevisions = projectService.findById(null,selectedProject.getId());
             projectsModel.setSelectedProject(projectWithRevisions);
             revisionsModel.setRevisionsListDataModel(new RevisionsListDataModel(projectWithRevisions.getRevisions()));
         }
