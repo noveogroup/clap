@@ -3,6 +3,7 @@ package com.noveogroup.clap.auth;
 import com.noveogroup.clap.interceptor.composite.LightInterceptor;
 import com.noveogroup.clap.interceptor.composite.LightInterceptorQualifier;
 import com.noveogroup.clap.model.auth.Authentication;
+import com.noveogroup.clap.model.auth.AuthenticationRequest;
 import com.noveogroup.clap.model.user.User;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,8 +49,15 @@ public class AuthenticationLightInterceptor implements LightInterceptor {
             LOGGER.debug("checking auth");
             Object[] parameters = context.getParameters();
             for(Object parameter : parameters){
+                boolean check = false;
+                Authentication authentication = null;
                 if(parameter instanceof Authentication){
-                    Authentication authentication = (Authentication) parameter;
+                    authentication = (Authentication) parameter;
+                    check = true;
+                } else if(parameter instanceof AuthenticationRequest) {
+                    authentication = ((AuthenticationRequest) parameter).getAuthentication();
+                }
+                if(check){
                     User user = authenticationSystem.authentifyUser(authentication);
                     if ( user == null){
                         LOGGER.error("auth fail");

@@ -17,16 +17,17 @@ public class ProjectDAOImpl extends GenericHibernateDAOImpl<ProjectEntity, Long>
     private static final String GET_PROJECT_BY_NAME_PARAMETER = "name";
 
     @Override
-    public ProjectEntity findById(Long id) {
+    public ProjectEntity findById(final Long id) {
         ProjectEntity projectEntity = super.findById(id);
         Hibernate.initialize(projectEntity.getRevisions());
         return projectEntity;
     }
 
     @Override
-    public ProjectEntity findProjectByName(String name) {
+    public ProjectEntity findProjectByExternalId(final String externalId) {
+        //TODO check if name can be external id
         Query query = entityManager.createNamedQuery(GET_PROJECT_BY_NAME);
-        query.setParameter(GET_PROJECT_BY_NAME_PARAMETER,name);
+        query.setParameter(GET_PROJECT_BY_NAME_PARAMETER,externalId);
         ProjectEntity projectEntity = (ProjectEntity) query.getSingleResult();
         Hibernate.initialize(projectEntity.getRevisions());
         return projectEntity;

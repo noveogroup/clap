@@ -6,12 +6,14 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.noveogroup.clap.auth.AuthenticationSystemFactory;
 import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.service.revision.RevisionService;
+import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
+import com.noveogroup.clap.model.request.revision.RevisionRequest;
+import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.ProjectsModel;
 import com.noveogroup.clap.web.model.RevisionsListDataModel;
@@ -57,10 +59,18 @@ public class RevisionsController extends BaseController{
         revision.setTimestamp(new Date().getTime());
         UploadedFile newRevisionCleanApk = revisionsModel.getUploadCleanApk();
         UploadedFile newRevisionHackedApk = revisionsModel.getUploadHackedApk();
-        revisionService.addRevision(project.getId(),
-                revision,
-                newRevisionCleanApk != null ? newRevisionCleanApk.getContents() : null,
-                newRevisionHackedApk != null ? newRevisionHackedApk.getContents() : null);
+
+        AddOrGetRevisionRequest request = new AddOrGetRevisionRequest();
+        request.setProjectExternalId(project.getName());
+        request.setRevision(revision);
+        if(newRevisionCleanApk != null){
+            request.setMainPackage(newRevisionCleanApk.getContents());
+        }
+        if(newRevisionHackedApk != null){
+            request.setSpecialPackage(newRevisionHackedApk.getContents());
+        }
+        revisionService.addOrGetRevision(request);
+
         revisionsModel.reset();
         LOGGER.debug("revision saved");
         //TODO authentication
@@ -73,7 +83,10 @@ public class RevisionsController extends BaseController{
     public void prepareRevisionView() throws IOException, WriterException {
         Revision selectedRevision = revisionsModel.getSelectedRevision();
         if(selectedRevision != null){
-            revisionsModel.setSelectedRevision(revisionService.findById(selectedRevision.getId()));
+            RevisionRequest request = new RevisionRequest();
+            request.setRevisionId(selectedRevision.getId());
+            //TODO authentication
+            revisionsModel.setSelectedRevision(revisionService.getRevision(request));
             updateQRCodes(revisionsModel.getSelectedRevision());
             LOGGER.debug(selectedRevision.getId() + " revision preparing finished");
         }
@@ -92,9 +105,15 @@ public class RevisionsController extends BaseController{
     public String uploadApkToRevision() throws IOException, WriterException {
         UploadedFile newRevisionCleanApk = revisionsModel.getUploadCleanApk();
         UploadedFile newRevisionHackedApk = revisionsModel.getUploadHackedApk();
-        Revision updatedRevision = revisionService.updateRevisionPackages(revisionsModel.getSelectedRevision(),
-                newRevisionCleanApk != null ? newRevisionCleanApk.getContents() : null,
-                newRevisionHackedApk != null ? newRevisionHackedApk.getContents() : null);
+        UpdateRevisionPackagesRequest request = new UpdateRevisionPackagesRequest();
+        request.setRevisionId(revisionsModel.getSelectedRevision().getId());
+        if(newRevisionCleanApk != null){
+            request.setMainPackage(newRevisionCleanApk.getContents());
+        }
+        if(newRevisionHackedApk != null){
+            request.setSpecialPackage(newRevisionHackedApk.getContents());
+        }
+        Revision updatedRevision = revisionService.updateRevisionPackages(request);
         revisionsModel.setSelectedRevision(updatedRevision);
         updateQRCodes(updatedRevision);
         LOGGER.debug("revision updated");

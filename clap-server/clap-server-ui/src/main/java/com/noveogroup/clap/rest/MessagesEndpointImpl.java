@@ -1,6 +1,6 @@
 package com.noveogroup.clap.rest;
 
-import com.noveogroup.clap.rest.model.SendMessageRequest;
+import com.noveogroup.clap.model.request.message.SendMessageRequest;
 import com.noveogroup.clap.service.messages.MessagesService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

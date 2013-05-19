@@ -1,5 +1,6 @@
 package com.noveogroup.clap.rest;
 
+import com.noveogroup.clap.model.request.revision.RevisionRequest;
 import com.noveogroup.clap.model.revision.Revision;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import com.sun.jersey.multipart.FormDataParam;
@@ -30,7 +31,7 @@ public interface RevisionEndpoint {
     @Path("updateRevisionPackages")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    Revision updateRevisionPackages(@FormDataParam("revisionTimestamp") Long revisionTimestamp,
+    Revision updateRevisionPackages(@FormDataParam("revisionTimestamp") Long revisionId,
                                        @FormDataParam("mainPackage") InputStream mainPackageInputStream,
                                        @FormDataParam("mainPackage") FormDataContentDisposition mainPackageDetail,
                                        @FormDataParam("specialPackage") InputStream specialPackageInputStream,
@@ -41,9 +42,10 @@ public interface RevisionEndpoint {
     @Produces("application/vnd.android.package-archive")
     Response downloadAPK(@PathParam("id") long id, @PathParam("type") int type);
 
-    @GET
-    @Path("getRevByTs")
+    @POST
+    @Path("getRevision")
+    @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    Revision getRevisionByTimestamp(@QueryParam("t") long timestamp);
+    Revision getRevision(RevisionRequest request);
 
 }

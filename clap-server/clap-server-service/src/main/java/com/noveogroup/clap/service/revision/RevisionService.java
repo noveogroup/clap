@@ -1,31 +1,24 @@
 package com.noveogroup.clap.service.revision;
 
+import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.revision.ApplicationFile;
 import com.noveogroup.clap.model.revision.Revision;
+import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
+import com.noveogroup.clap.model.request.revision.GetApplicationRequest;
+import com.noveogroup.clap.model.request.revision.RevisionRequest;
+import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
 
 /**
  * @author Mikhail Demidov
  */
 public interface RevisionService {
 
-    Revision addRevision(Long projectId, Revision revision, byte[] mainPackage, byte[] specialPackage);
+    Revision addOrGetRevision(AddOrGetRevisionRequest request);
 
-    Revision updateRevisionPackages(Revision revision, byte[] mainPackage, byte[] specialPackage);
+    Revision updateRevisionPackages(UpdateRevisionPackagesRequest request);
 
+    ApplicationFile getApplication(GetApplicationRequest request);
 
-    Revision updateRevisionPackages(Long revisionTimestamp, byte[] mainPackage, byte[] specialPackage);
-
-    /**
-     * Change type to enum
-     *
-     * @param revisionId
-     * @param type
-     * @return
-     */
-    ApplicationFile getApplication(Long revisionId, Integer type);
-
-    Revision getRevision(Long timestamp);
-
-    Revision findById(Long id);
+    Revision getRevision(RevisionRequest request);
 
 }

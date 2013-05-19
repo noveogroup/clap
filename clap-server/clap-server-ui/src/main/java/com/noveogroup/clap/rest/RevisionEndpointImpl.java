@@ -1,9 +1,14 @@
 package com.noveogroup.clap.rest;
 
 
+import com.noveogroup.clap.model.request.revision.GetApplicationRequest;
+import com.noveogroup.clap.model.request.revision.RevisionRequest;
 import com.noveogroup.clap.model.revision.ApplicationFile;
+import com.noveogroup.clap.model.revision.ApplicationType;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.service.revision.RevisionService;
+import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
+import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
 import com.noveogroup.clap.web.controller.ProjectsController;
 import com.sun.jersey.core.header.FormDataContentDisposition;
 import org.apache.commons.io.IOUtils;
@@ -49,11 +54,16 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
         }
         Long id = Long.parseLong(projectId);
         Revision revision = new Revision();
-        return revisionService.addRevision(id, revision, mainPackage, specialPackage);
+        AddOrGetRevisionRequest request = new AddOrGetRevisionRequest();
+        request.setProjectExternalId(projectId);
+        request.setRevision(revision);
+        request.setMainPackage(mainPackage);
+        request.setSpecialPackage(specialPackage);
+        return revisionService.addOrGetRevision(request);
     }
 
     @Override
-    public Revision updateRevisionPackages(Long revisionTimestamp,
+    public Revision updateRevisionPackages(Long revisionId,
                                               InputStream mainPackageInputStream,
                                               FormDataContentDisposition mainPackageDetail,
                                               InputStream specialPackageInputStream,
@@ -70,17 +80,25 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
         } catch (IOException e) {
             LOGGER.error("Error while uploading apk " + e.getMessage(), e);
         }
-        return revisionService.updateRevisionPackages(revisionTimestamp,mainPackage,specialPackage);
+        UpdateRevisionPackagesRequest request = new UpdateRevisionPackagesRequest();
+        request.setRevisionId(revisionId);
+        request.setMainPackage(mainPackage);
+        request.setSpecialPackage(specialPackage);
+        return revisionService.updateRevisionPackages(request);
     }
 
     @Override
     public Response downloadAPK(final long id, final int type) {
-        ApplicationFile application = revisionService.getApplication(id, type);
+        //TODO fix authentication and app type
+        GetApplicationRequest request = new GetApplicationRequest();
+        request.setRevisionId(id);
+        request.setApplicationType(type == 0 ? ApplicationType.MAIN : ApplicationType.SPECIAL);
+        ApplicationFile application = revisionService.getApplication(request);
         return Response.ok(application.getContent()).header("Content-Disposition", "attachment; filename=\""+application.getFilename()+"\"").build();
     }
 
     @Override
-    public Revision getRevisionByTimestamp(long timestamp) {
-        return revisionService.getRevision(timestamp);
+    public Revision getRevision(RevisionRequest request) {
+        return revisionService.getRevision(request);
     }
 }

@@ -5,6 +5,7 @@ import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.service.revision.RevisionService;
+import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -31,7 +32,10 @@ public class DBInitBean {
         project = projectService.createProject(new Authentication(),project);
         Revision revision = new Revision();
         revision.setTimestamp(1368318776L);
-        revisionService.addRevision(project.getId(), revision,null,null);
+        AddOrGetRevisionRequest request = new AddOrGetRevisionRequest();
+        request.setProjectExternalId("test_project");
+        request.setRevision(revision);
+        revisionService.addOrGetRevision(request);
     }
 
     public void fakeMethod(){

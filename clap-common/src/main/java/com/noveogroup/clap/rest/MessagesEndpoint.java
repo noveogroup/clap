@@ -1,6 +1,6 @@
 package com.noveogroup.clap.rest;
 
-import com.noveogroup.clap.rest.model.SendMessageRequest;
+import com.noveogroup.clap.model.request.message.SendMessageRequest;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;

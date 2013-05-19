@@ -1,5 +1,6 @@
 package com.noveogroup.clap.service.revision;
 
+import com.noveogroup.clap.auth.AuthenticationRequired;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.ProjectEntity;
@@ -7,8 +8,13 @@ import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.revision.RevisionType;
 import com.noveogroup.clap.interceptor.ClapMainInterceptor;
 import com.noveogroup.clap.interceptor.Transactional;
+import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.revision.ApplicationFile;
 import com.noveogroup.clap.model.revision.Revision;
+import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
+import com.noveogroup.clap.model.request.revision.GetApplicationRequest;
+import com.noveogroup.clap.model.request.revision.RevisionRequest;
+import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
 import com.noveogroup.clap.service.url.UrlService;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
@@ -19,6 +25,7 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -40,9 +47,11 @@ public class RevisionServiceImpl implements RevisionService {
     @Inject
     private UrlService urlService;
 
+
     @Transactional
     @Override
-    public Revision addRevision(final Long projectId, final Revision revision, final byte[] mainPackage, final byte[] specialPackage) {
+    public Revision addOrGetRevision(final @NotNull AddOrGetRevisionRequest request) {
+        Revision revision = request.getRevision();
         RevisionEntity revisionEntity = MAPPER.map(revision, RevisionEntity.class);
         if (revisionEntity.getTimestamp() == null) {
             revisionEntity.setTimestamp(new Date().getTime());
@@ -50,79 +59,70 @@ public class RevisionServiceImpl implements RevisionService {
         if (revisionEntity.getRevisionType() == null) {
             revisionEntity.setRevisionType(RevisionType.DEVELOP);
         }
-        addPackages(revisionEntity,mainPackage,specialPackage);
-        ProjectEntity projectEntity = projectDAO.findById(projectId);
+        addPackages(revisionEntity, request.getMainPackage(), request.getSpecialPackage());
+        ProjectEntity projectEntity = projectDAO.findProjectByExternalId(request.getProjectExternalId());
         revisionEntity.setProject(projectEntity);
         projectEntity.getRevisions().add(revisionEntity);
 
         projectDAO.persist(projectEntity);
         revisionEntity = revisionDAO.persist(revisionEntity);
         Revision outcomeRevision = MAPPER.map(revisionEntity, Revision.class);
-        outcomeRevision.setProjectId(projectId);
+        outcomeRevision.setProjectId(projectEntity.getId());
         createUrls(outcomeRevision, revisionEntity);
         return outcomeRevision;
     }
 
     @Transactional
     @Override
-    public Revision updateRevisionPackages(Revision revision, byte[] mainPackage, byte[] specialPackage) {
-        RevisionEntity revisionEntity = revisionDAO.findById(revision.getId());
-        return updateRevisionPackages(revisionEntity,mainPackage,specialPackage);
+    public Revision updateRevisionPackages(final @NotNull UpdateRevisionPackagesRequest request) {
+        RevisionEntity revisionEntity = revisionDAO.findById(request.getRevisionId());
+        return updateRevisionPackages(revisionEntity, request.getMainPackage(), request.getSpecialPackage());
     }
 
     @Transactional
+    @AuthenticationRequired
     @Override
-    public Revision updateRevisionPackages(Long revisionTimestamp, byte[] mainPackage, byte[] specialPackage) {
-       RevisionEntity revisionEntity = revisionDAO.getRevisionByTimestamp(revisionTimestamp);
-       return updateRevisionPackages(revisionEntity,mainPackage,specialPackage);
-    }
-
-    @Transactional
-    @Override
-    public ApplicationFile getApplication(final Long revisionId, final Integer type) {
-        RevisionEntity revisionEntity = revisionDAO.findById(revisionId);
+    public ApplicationFile getApplication(GetApplicationRequest request) {
+        RevisionEntity revisionEntity = revisionDAO.findById(request.getRevisionId());
         if (revisionEntity != null) {
             ApplicationFile ret = new ApplicationFile();
-            if (type == 1) {
-                ret.setContent(revisionEntity.getSpecialPackage());
-                ret.setFilename(createFileName(revisionEntity.getProject(),false));
-                return ret;
-            } else if (type == 0) {
-                ret.setContent(revisionEntity.getMainPackage());
-                ret.setFilename(createFileName(revisionEntity.getProject(), true));
-                return ret;
+            switch (request.getApplicationType()) {
+                case MAIN:
+                    ret.setContent(revisionEntity.getSpecialPackage());
+                    ret.setFilename(createFileName(revisionEntity.getProject(), false));
+                    return ret;
+                case SPECIAL:
+                    ret.setContent(revisionEntity.getMainPackage());
+                    ret.setFilename(createFileName(revisionEntity.getProject(), true));
+                    return ret;
+                default:
+                    throw new IllegalArgumentException("unknown application type : " + request.getApplicationType());
             }
         }
         return null;
     }
 
     @Transactional
+    @AuthenticationRequired
     @Override
-    public Revision getRevision(Long timestamp) {
-        RevisionEntity revisionEntityByTimestamp = revisionDAO.getRevisionByTimestamp(timestamp);
-        Revision revision = MAPPER.map(revisionEntityByTimestamp, Revision.class);
-        createUrls(revision, revisionEntityByTimestamp);
-        return revision;
-    }
-
-    @Override
-    public Revision findById(Long id) {
-        RevisionEntity revisionEntity = revisionDAO.findById(id);
+    public Revision getRevision(RevisionRequest request) {
+        RevisionEntity revisionEntity = revisionDAO.findById(request.getRevisionId());
         Revision revision = MAPPER.map(revisionEntity, Revision.class);
         createUrls(revision, revisionEntity);
         return revision;
     }
 
-    private Revision updateRevisionPackages(RevisionEntity revisionEntity, byte[] mainPackage, byte[] specialPackage){
-        addPackages(revisionEntity,mainPackage,specialPackage);
+
+    private Revision updateRevisionPackages(RevisionEntity revisionEntity, byte[] mainPackage, byte[] specialPackage) {
+        addPackages(revisionEntity, mainPackage, specialPackage);
         revisionEntity = revisionDAO.persist(revisionEntity);
         Revision outcomeRevision = MAPPER.map(revisionEntity, Revision.class);
         createUrls(outcomeRevision, revisionEntity);
         return outcomeRevision;
     }
 
-    private void addPackages(RevisionEntity revisionEntity,byte[] mainPackage, byte[] specialPackage){
-        if(mainPackage != null){
+    private void addPackages(RevisionEntity revisionEntity, byte[] mainPackage, byte[] specialPackage) {
+        if (mainPackage != null) {
             revisionEntity.setMainPackage(mainPackage);
             revisionEntity.setMainPackageLoaded(true);
         }
@@ -132,17 +132,17 @@ public class RevisionServiceImpl implements RevisionService {
         }
     }
 
-    private void createUrls(Revision outcomeRevision, RevisionEntity revisionEntity){
-        if(revisionEntity.isMainPackageLoaded()){
-            outcomeRevision.setMainPackageUrl(urlService.createUrl(outcomeRevision.getId(),true));
+    private void createUrls(Revision outcomeRevision, RevisionEntity revisionEntity) {
+        if (revisionEntity.isMainPackageLoaded()) {
+            outcomeRevision.setMainPackageUrl(urlService.createUrl(outcomeRevision.getId(), true));
         }
-        if(revisionEntity.isSpecialPackageLoaded()){
-            outcomeRevision.setSpecialPackageUrl(urlService.createUrl(outcomeRevision.getId(),false));
+        if (revisionEntity.isSpecialPackageLoaded()) {
+            outcomeRevision.setSpecialPackageUrl(urlService.createUrl(outcomeRevision.getId(), false));
         }
     }
 
-    private String createFileName(ProjectEntity projectEntity,boolean mainPackage){
-        return projectEntity.getName() + (mainPackage ? "" : "_hacked")+ ".apk" ;
+    private String createFileName(ProjectEntity projectEntity, boolean mainPackage) {
+        return projectEntity.getName() + (mainPackage ? "" : "_hacked") + ".apk";
     }
 
 }

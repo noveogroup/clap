@@ -1,4 +1,4 @@
-package com.noveogroup.clap.rest.model;
+package com.noveogroup.clap.model.request.message;
 
 import com.noveogroup.clap.model.message.Message;
 
