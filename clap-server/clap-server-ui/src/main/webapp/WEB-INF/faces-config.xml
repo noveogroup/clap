@@ -5,7 +5,7 @@
               version="2.0">
     <application>
         <resource-bundle>
-            <base-name>com.noveogroup.clap.web.util.locale.MessagesBundle</base-name>
+            <base-name>com.noveogroup.clap.web.util.locale.ClapMessagesBundle</base-name>
             <var>msgs</var>
         </resource-bundle>
         <locale-config>

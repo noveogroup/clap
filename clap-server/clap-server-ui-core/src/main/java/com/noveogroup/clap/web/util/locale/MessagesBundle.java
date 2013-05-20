@@ -14,19 +14,19 @@ import java.util.ResourceBundle;
 /**
  * extending messages bundles controlling to avoid neccessity in native2ascii
  */
-public class MessagesBundle extends ResourceBundle {
+public abstract class MessagesBundle extends ResourceBundle {
 
-    //refers to bundle
-    protected static final String BUNDLE_NAME = "messages";
 
     protected static final String BUNDLE_EXTENSION = "properties";
     protected static final String CHARSET = "UTF-8";
     protected static final Control UTF8_CONTROL = new UTF8Control();
 
     public MessagesBundle() {
-        setParent(ResourceBundle.getBundle(BUNDLE_NAME,
+        setParent(ResourceBundle.getBundle(getBundleName(),
                 FacesContext.getCurrentInstance().getViewRoot().getLocale(), UTF8_CONTROL));
     }
+
+    protected abstract String getBundleName();
 
     @Override
     protected Object handleGetObject(String key) {

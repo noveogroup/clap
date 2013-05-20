@@ -20,6 +20,8 @@
         <module>clap-server-model</module>
         <module>clap-server-db</module>
         <module>clap-server-service</module>
+        <module>clap-server-ui-core</module>
+        <module>clap-server-integration</module>
         <module>clap-server-ui</module>
     </modules>
 
@@ -31,6 +33,7 @@
         <domain.passwordFile>${glassfish.home}\pwdfile.txt</domain.passwordFile>
         <test.int.skip>false</test.int.skip>
         <glassfish.domain.name>${project.artifactId}</glassfish.domain.name>
+        <domain.resources.xml>${project.basedir}\clap-server-integration\src\test\resources\glassfish-clap-resources.xml</domain.resources.xml>
     </properties>
 
     <reporting>

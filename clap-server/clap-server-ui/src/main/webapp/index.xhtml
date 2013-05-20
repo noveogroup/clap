@@ -9,6 +9,9 @@
     <ui:define name="content">
         <f:event type="preRenderView" listener="#{DBInitBean.fakeMethod}"/>
         <h1>mock welcome page</h1>
+        <h:form>
+            <p:commandButton value="To Integration View" action="#{webIntegrationBean.authenticationIntegrationView.viewName}"/>
+        </h:form>
     </ui:define>
 </ui:composition>
 </html>
