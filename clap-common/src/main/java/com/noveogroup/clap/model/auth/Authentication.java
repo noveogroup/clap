@@ -1,17 +1,20 @@
 package com.noveogroup.clap.model.auth;
 
+import com.noveogroup.clap.model.user.User;
+
 /**
  * @author Andrey Sokolov
  */
 public class Authentication {
 
-    private String userName;
+    private User user;
 
-    public String getUserName() {
-        return userName;
+
+    public User getUser() {
+        return user;
     }
 
-    public void setUserName(final String userName) {
-        this.userName = userName;
+    public void setUser(User user) {
+        this.user = user;
     }
 }

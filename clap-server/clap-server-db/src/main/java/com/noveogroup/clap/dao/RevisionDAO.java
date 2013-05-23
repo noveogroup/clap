@@ -6,5 +6,5 @@ import com.noveogroup.clap.entity.revision.RevisionEntity;
  * @author Mikhail Demidov
  */
 public interface RevisionDAO extends GenericDAO<RevisionEntity, Long> {
-    RevisionEntity getRevisionByTimestamp(Long timestamp);
+    RevisionEntity getRevisionByHash(String revisionHash);
 }

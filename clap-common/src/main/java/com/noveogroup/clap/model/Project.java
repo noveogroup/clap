@@ -10,6 +10,9 @@ public class Project extends BaseModel {
 
     private String name;
 
+    //groupId:artifactId
+    private String externalId;
+
     private String description;
 
     private Date creationDate;
@@ -47,5 +50,13 @@ public class Project extends BaseModel {
 
     public void setRevisions(final List<Revision> revisions) {
         this.revisions = revisions;
+    }
+
+    public String getExternalId() {
+        return externalId;
+    }
+
+    public void setExternalId(String externalId) {
+        this.externalId = externalId;
     }
 }

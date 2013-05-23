@@ -27,6 +27,7 @@ public class DBInitBean {
     protected void initDB(){
         Project project = new Project();
         project.setName("test_project");
+        project.setExternalId("test_ext_id");
         project.setCreationDate(new Date(1368308474));
         project = projectService.createProject(project);
         final Revision revision = new Revision();

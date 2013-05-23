@@ -6,14 +6,14 @@ package com.noveogroup.clap.model.request.revision;
 public class UpdateRevisionPackagesRequest {
     private byte[] mainPackage;
     private byte[] specialPackage;
-    private Long revisionId;
+    private String revisionHash;
 
-    public Long getRevisionId() {
-        return revisionId;
+    public String getRevisionHash() {
+        return revisionHash;
     }
 
-    public void setRevisionId(final Long revisionId) {
-        this.revisionId = revisionId;
+    public void setRevisionHash(String revisionHash) {
+        this.revisionHash = revisionHash;
     }
 
     public byte[] getMainPackage() {

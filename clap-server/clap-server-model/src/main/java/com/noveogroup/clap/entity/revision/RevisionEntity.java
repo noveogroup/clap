@@ -12,14 +12,15 @@ import java.util.List;
  */
 @Entity
 @Table(name = "revisions")
-@NamedQuery(name="getRevisionByTimestamp",query="SELECT rev FROM RevisionEntity rev WHERE rev.timestamp = :timestamp")
+@NamedQuery(name="getRevisionByHash",query="SELECT rev FROM RevisionEntity rev WHERE rev.hash = :hash")
 public class RevisionEntity extends BaseEntity {
 
-
-    @Column(unique = true)
     private Long timestamp;
 
     private RevisionType revisionType;
+
+    @Column(unique = true)
+    private String hash;
 
     @Column(name = "main_package")
     @Lob
@@ -44,14 +45,6 @@ public class RevisionEntity extends BaseEntity {
      * Constructor
      */
     public RevisionEntity() {
-    }
-
-    public Long getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(final Long timestamp) {
-        this.timestamp = timestamp;
     }
 
     public RevisionType getRevisionType() {
@@ -108,5 +101,22 @@ public class RevisionEntity extends BaseEntity {
 
     public void setSpecialPackageLoaded(final boolean specialPackageLoaded) {
         this.specialPackageLoaded = specialPackageLoaded;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
+    }
+
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
     }
 }

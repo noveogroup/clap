@@ -7,7 +7,6 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.noveogroup.clap.model.Project;
-import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.service.project.ProjectService;
@@ -107,7 +106,7 @@ public class RevisionsController extends BaseController{
         final UploadedFile newRevisionCleanApk = revisionsModel.getUploadCleanApk();
         final UploadedFile newRevisionHackedApk = revisionsModel.getUploadHackedApk();
         final UpdateRevisionPackagesRequest request = new UpdateRevisionPackagesRequest();
-        request.setRevisionId(revisionsModel.getSelectedRevision().getId());
+        request.setRevisionHash(revisionsModel.getSelectedRevision().getHash());
         if(newRevisionCleanApk != null){
             request.setMainPackage(newRevisionCleanApk.getContents());
         }

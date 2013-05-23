@@ -1,12 +1,8 @@
 package com.noveogroup.clap.rest;
 
 
-import com.noveogroup.clap.model.request.revision.GetApplicationRequest;
 import com.noveogroup.clap.model.request.revision.RevisionRequest;
-import com.noveogroup.clap.model.revision.ApplicationFile;
-import com.noveogroup.clap.model.revision.ApplicationType;
 import com.noveogroup.clap.model.revision.Revision;
-import com.noveogroup.clap.rest.RevisionEndpoint;
 import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
 import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
@@ -18,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -35,11 +30,13 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
 
 
     @Override
-    public Revision createRevision(final String projectId,
-                                      final InputStream mainPackageInputStream,
-                                      final FormDataContentDisposition mainPackageDetail,
-                                      final InputStream specialPackageInputStream,
-                                      final FormDataContentDisposition specialPackageDetail) {
+    public Revision createOrUpdateRevision(final String authenticationKey,
+                                   final String projectId,
+                                   final String revisionHash,
+                                   final InputStream mainPackageInputStream,
+                                   final FormDataContentDisposition mainPackageDetail,
+                                   final InputStream specialPackageInputStream,
+                                   final FormDataContentDisposition specialPackageDetail) {
 
         byte[] mainPackage = null;
         byte[] specialPackage = null;
@@ -55,6 +52,7 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
         }
         final Long id = Long.parseLong(projectId);
         final Revision revision = new Revision();
+        revision.setHash(revisionHash);
         final AddOrGetRevisionRequest request = new AddOrGetRevisionRequest();
         request.setProjectExternalId(projectId);
         request.setRevision(revision);
@@ -64,11 +62,12 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
     }
 
     @Override
-    public Revision updateRevisionPackages(final Long revisionId,
-                                              final InputStream mainPackageInputStream,
-                                              final FormDataContentDisposition mainPackageDetail,
-                                              final InputStream specialPackageInputStream,
-                                              final FormDataContentDisposition specialPackageDetail) {
+    public Revision updateRevisionPackages(final String authenticationKey,
+                                           final String revisionHash,
+                                           final InputStream mainPackageInputStream,
+                                           final FormDataContentDisposition mainPackageDetail,
+                                           final InputStream specialPackageInputStream,
+                                           final FormDataContentDisposition specialPackageDetail) {
         byte[] mainPackage = null;
         byte[] specialPackage = null;
         try {
@@ -82,20 +81,10 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
             LOGGER.error("Error while uploading apk " + e.getMessage(), e);
         }
         final UpdateRevisionPackagesRequest request = new UpdateRevisionPackagesRequest();
-        request.setRevisionId(revisionId);
+        request.setRevisionHash(revisionHash);
         request.setMainPackage(mainPackage);
         request.setSpecialPackage(specialPackage);
         return revisionService.updateRevisionPackages(request);
-    }
-
-    @Override
-    public Response downloadAPK(final long id, final int type) {
-        //TODO fix authentication and app type
-        final GetApplicationRequest request = new GetApplicationRequest();
-        request.setRevisionId(id);
-        request.setApplicationType(type == 0 ? ApplicationType.MAIN : ApplicationType.SPECIAL);
-        final ApplicationFile application = revisionService.getApplication(request);
-        return Response.ok(application.getContent()).header("Content-Disposition", "attachment; filename=\""+application.getFilename()+"\"").build();
     }
 
     @Override

@@ -33,8 +33,8 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Transactional
     @Override
-    public void saveMessage(final long revisionTimestamp, final Message message) {
-        final RevisionEntity revisionEntity = revisionDAO.getRevisionByTimestamp(revisionTimestamp);
+    public void saveMessage(final String revisionHash, final Message message) {
+        final RevisionEntity revisionEntity = revisionDAO.getRevisionByHash(revisionHash);
         MessageEntity messageEntity = MAPPER.map(message, MessageEntity.class);
         messageEntity = messageDAO.persist(messageEntity);
         List<MessageEntity> messageEntities = revisionEntity.getMessages();

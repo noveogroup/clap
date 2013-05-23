@@ -18,6 +18,8 @@ public class Revision extends BaseModel {
 
     private Long projectId;
 
+    private String hash;
+
     private String mainPackageUrl;
 
     private String specialPackageUrl;
@@ -72,5 +74,13 @@ public class Revision extends BaseModel {
 
     public void setTimestamp(final Long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
     }
 }

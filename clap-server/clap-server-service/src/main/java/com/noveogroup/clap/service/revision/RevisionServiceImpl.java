@@ -74,7 +74,7 @@ public class RevisionServiceImpl implements RevisionService {
     @Transactional
     @Override
     public Revision updateRevisionPackages(final @NotNull UpdateRevisionPackagesRequest request) {
-        final RevisionEntity revisionEntity = revisionDAO.findById(request.getRevisionId());
+        final RevisionEntity revisionEntity = revisionDAO.getRevisionByHash(request.getRevisionHash());
         return updateRevisionPackages(revisionEntity, request.getMainPackage(), request.getSpecialPackage());
     }
 

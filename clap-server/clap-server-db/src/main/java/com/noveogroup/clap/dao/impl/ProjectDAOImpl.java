@@ -13,8 +13,8 @@ import javax.persistence.Query;
 @Stateless
 public class ProjectDAOImpl extends GenericHibernateDAOImpl<ProjectEntity, Long> implements ProjectDAO {
 
-    private static final String GET_PROJECT_BY_NAME = "getProjectByName";
-    private static final String GET_PROJECT_BY_NAME_PARAMETER = "name";
+    private static final String GET_PROJECT_BY_EXTERNAL_ID = "getProjectByExternalId";
+    private static final String GET_PROJECT_BY_EXTERNAL_ID_PARAMETER = "externalId";
 
     @Override
     public ProjectEntity findById(final Long id) {
@@ -25,11 +25,12 @@ public class ProjectDAOImpl extends GenericHibernateDAOImpl<ProjectEntity, Long>
 
     @Override
     public ProjectEntity findProjectByExternalId(final String externalId) {
-        //TODO check if name can be external id
-        final Query query = entityManager.createNamedQuery(GET_PROJECT_BY_NAME);
-        query.setParameter(GET_PROJECT_BY_NAME_PARAMETER,externalId);
+        final Query query = entityManager.createNamedQuery(GET_PROJECT_BY_EXTERNAL_ID);
+        query.setParameter(GET_PROJECT_BY_EXTERNAL_ID_PARAMETER,externalId);
         final ProjectEntity projectEntity = (ProjectEntity) query.getSingleResult();
-        Hibernate.initialize(projectEntity.getRevisions());
+        if(projectEntity != null){
+            Hibernate.initialize(projectEntity.getRevisions());
+        }
         return projectEntity;
     }
 

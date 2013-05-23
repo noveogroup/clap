@@ -6,7 +6,7 @@ public class SendMessageRequest {
 
     private Message message;
 
-    private Long revisionTimestamp;
+    private String revisionHash;
 
     public Message getMessage() {
         return message;
@@ -16,19 +16,19 @@ public class SendMessageRequest {
         this.message = message;
     }
 
-    public Long getRevisionTimestamp() {
-        return revisionTimestamp;
+    public String getRevisionHash() {
+        return revisionHash;
     }
 
-    public void setRevisionTimestamp(final Long revisionTimestamp) {
-        this.revisionTimestamp = revisionTimestamp;
+    public void setRevisionHash(final String revisionHash) {
+        this.revisionHash = revisionHash;
     }
 
     @Override
     public String toString() {
         final StringBuilder sb = new StringBuilder("SendMessageRequest{");
         sb.append("message=").append(message);
-        sb.append(", revisionTimestamp=").append(revisionTimestamp);
+        sb.append(", revisionHash=").append(revisionHash);
         sb.append('}');
         return sb.toString();
     }
