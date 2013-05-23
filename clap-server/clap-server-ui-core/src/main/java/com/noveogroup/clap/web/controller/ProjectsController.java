@@ -1,6 +1,7 @@
 package com.noveogroup.clap.web.controller;
 
 import com.noveogroup.clap.model.Project;
+import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.ProjectsListDataModel;
@@ -38,13 +39,12 @@ public class ProjectsController extends BaseController {
     public String addProject() {
         try {
             LOGGER.debug("add project : " + projectsModel.getNewProject());
-            //TODO authentication
-            projectService.createProject(null,projectsModel.getNewProject());
+            projectService.createProject(projectsModel.getNewProject());
             projectsModel.setNewProject(new Project());
             LOGGER.debug("project saved");
             return Navigation.PROJECTS.getView();
         } catch (Exception e){
-            FacesMessage message = new FacesMessage();
+            final FacesMessage message = new FacesMessage();
             message.setSeverity(FacesMessage.SEVERITY_ERROR);
             message.setSummary("Error while creating project");
             FacesContext.getCurrentInstance().addMessage(null,message);
@@ -53,17 +53,15 @@ public class ProjectsController extends BaseController {
     }
 
     public void prepareProjectsListView() {
-        //TODO authentication
-        List<Project> projectList = projectService.findAllProjects(null);
+        final List<Project> projectList = projectService.findAllProjects();
         projectsModel.setProjectsListDataModel(new ProjectsListDataModel(projectList));
         LOGGER.debug(projectList.size() + " projects loaded");
     }
 
     public void prepareProjectView(){
-        Project selectedProject = projectsModel.getSelectedProject();
+        final Project selectedProject = projectsModel.getSelectedProject();
         if(selectedProject != null){
-            //TODO authentication
-            Project projectWithRevisions = projectService.findById(null,selectedProject.getId());
+            final Project projectWithRevisions = projectService.findById(selectedProject.getId());
             projectsModel.setSelectedProject(projectWithRevisions);
             revisionsModel.setRevisionsListDataModel(new RevisionsListDataModel(projectWithRevisions.getRevisions()));
         }
@@ -73,8 +71,8 @@ public class ProjectsController extends BaseController {
     }
 
 
-    public void onProjectSelect(SelectEvent event) {
-        Project selectedProject = (Project) event.getObject();
+    public void onProjectSelect(final SelectEvent event) {
+        final Project selectedProject = (Project) event.getObject();
         projectsModel.setSelectedProject(selectedProject);
         LOGGER.debug(selectedProject.getName() + " prject selected");
         redirectTo(Navigation.PROJECT);

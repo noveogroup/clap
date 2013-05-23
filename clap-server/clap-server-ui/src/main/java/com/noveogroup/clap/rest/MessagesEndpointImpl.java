@@ -17,7 +17,7 @@ public class MessagesEndpointImpl implements MessagesEndpoint {
     private MessagesService messagesService;
 
     @Override
-    public void saveMessage(SendMessageRequest request) {
+    public void saveMessage(final SendMessageRequest request) {
         LOGGER.debug("saving message " + request);
         messagesService.saveMessage(request.getRevisionTimestamp(),request.getMessage());
         LOGGER.debug(request + "saved");

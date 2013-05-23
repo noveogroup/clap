@@ -9,7 +9,7 @@ import com.noveogroup.clap.model.auth.Authentication;
 public class AuthenticationException extends ClapException {
     private final Authentication failedAuthentication;
 
-    public AuthenticationException(Authentication failedAuthentication) {
+    public AuthenticationException(final Authentication failedAuthentication) {
         this.failedAuthentication = failedAuthentication;
     }
 

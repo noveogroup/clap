@@ -12,7 +12,7 @@ public class GetApplicationRequest extends RevisionRequest {
         return applicationType;
     }
 
-    public void setApplicationType(ApplicationType applicationType) {
+    public void setApplicationType(final ApplicationType applicationType) {
         this.applicationType = applicationType;
     }
 }

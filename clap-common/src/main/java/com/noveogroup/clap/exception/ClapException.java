@@ -14,31 +14,31 @@ public class ClapException extends WebApplicationException {
     public ClapException() {
     }
 
-    public ClapException(Response response) {
+    public ClapException(final Response response) {
         super(response);
     }
 
-    public ClapException(int status) {
+    public ClapException(final int status) {
         super(status);
     }
 
-    public ClapException(Response.Status status) {
+    public ClapException(final Response.Status status) {
         super(status);
     }
 
-    public ClapException(Throwable cause) {
+    public ClapException(final Throwable cause) {
         super(cause);
     }
 
-    public ClapException(Throwable cause, Response response) {
+    public ClapException(final Throwable cause, final Response response) {
         super(cause, response);
     }
 
-    public ClapException(Throwable cause, int status) {
+    public ClapException(final Throwable cause, final int status) {
         super(cause, status);
     }
 
-    public ClapException(Throwable cause, Response.Status status) throws IllegalArgumentException {
+    public ClapException(final Throwable cause, final Response.Status status) throws IllegalArgumentException {
         super(cause, status);
     }
 }

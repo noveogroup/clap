@@ -12,7 +12,7 @@ public class RevisionRequest extends BaseRequest{
         return revisionId;
     }
 
-    public void setRevisionId(Long revisionId) {
+    public void setRevisionId(final Long revisionId) {
         this.revisionId = revisionId;
     }
 }

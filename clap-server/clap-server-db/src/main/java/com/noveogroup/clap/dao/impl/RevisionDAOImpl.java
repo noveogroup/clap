@@ -17,18 +17,18 @@ public class RevisionDAOImpl extends GenericHibernateDAOImpl<RevisionEntity, Lon
     private static final String REVISION_BY_TIMESTAMP_PARAMETER = "timestamp";
 
     @Override
-    public RevisionEntity getRevisionByTimestamp(Long timestamp) {
-        Query query = entityManager.createNamedQuery(REVISION_BY_TIMESTAMP);
+    public RevisionEntity getRevisionByTimestamp(final Long timestamp) {
+        final Query query = entityManager.createNamedQuery(REVISION_BY_TIMESTAMP);
 
         query.setParameter(REVISION_BY_TIMESTAMP_PARAMETER, timestamp);
-        RevisionEntity revisionEntity = (RevisionEntity) query.getSingleResult();
+        final RevisionEntity revisionEntity = (RevisionEntity) query.getSingleResult();
         Hibernate.initialize(revisionEntity.getMessages());
         return revisionEntity;
     }
 
     @Override
-    public RevisionEntity findById(Long aLong) {
-        RevisionEntity revisionEntity = super.findById(aLong);
+    public RevisionEntity findById(final Long aLong) {
+        final RevisionEntity revisionEntity = super.findById(aLong);
         Hibernate.initialize(revisionEntity.getMessages());
         return revisionEntity;
     }

@@ -47,15 +47,15 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
             if (mainPackageInputStream != null) {
                 mainPackage = IOUtils.toByteArray(mainPackageInputStream);
             }
-            if (specialPackage != null) {
+            if (specialPackageInputStream != null) {
                 specialPackage = IOUtils.toByteArray(specialPackageInputStream);
             }
         } catch (IOException e) {
             LOGGER.error("Error while uploading apk " + e.getMessage(), e);
         }
-        Long id = Long.parseLong(projectId);
-        Revision revision = new Revision();
-        AddOrGetRevisionRequest request = new AddOrGetRevisionRequest();
+        final Long id = Long.parseLong(projectId);
+        final Revision revision = new Revision();
+        final AddOrGetRevisionRequest request = new AddOrGetRevisionRequest();
         request.setProjectExternalId(projectId);
         request.setRevision(revision);
         request.setMainPackage(mainPackage);
@@ -64,24 +64,24 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
     }
 
     @Override
-    public Revision updateRevisionPackages(Long revisionId,
-                                              InputStream mainPackageInputStream,
-                                              FormDataContentDisposition mainPackageDetail,
-                                              InputStream specialPackageInputStream,
-                                              FormDataContentDisposition specialPackageDetail) {
+    public Revision updateRevisionPackages(final Long revisionId,
+                                              final InputStream mainPackageInputStream,
+                                              final FormDataContentDisposition mainPackageDetail,
+                                              final InputStream specialPackageInputStream,
+                                              final FormDataContentDisposition specialPackageDetail) {
         byte[] mainPackage = null;
         byte[] specialPackage = null;
         try {
             if (mainPackageInputStream != null) {
                 mainPackage = IOUtils.toByteArray(mainPackageInputStream);
             }
-            if (specialPackage != null) {
+            if (specialPackageInputStream != null) {
                 specialPackage = IOUtils.toByteArray(specialPackageInputStream);
             }
         } catch (IOException e) {
             LOGGER.error("Error while uploading apk " + e.getMessage(), e);
         }
-        UpdateRevisionPackagesRequest request = new UpdateRevisionPackagesRequest();
+        final UpdateRevisionPackagesRequest request = new UpdateRevisionPackagesRequest();
         request.setRevisionId(revisionId);
         request.setMainPackage(mainPackage);
         request.setSpecialPackage(specialPackage);
@@ -91,15 +91,15 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
     @Override
     public Response downloadAPK(final long id, final int type) {
         //TODO fix authentication and app type
-        GetApplicationRequest request = new GetApplicationRequest();
+        final GetApplicationRequest request = new GetApplicationRequest();
         request.setRevisionId(id);
         request.setApplicationType(type == 0 ? ApplicationType.MAIN : ApplicationType.SPECIAL);
-        ApplicationFile application = revisionService.getApplication(request);
+        final ApplicationFile application = revisionService.getApplication(request);
         return Response.ok(application.getContent()).header("Content-Disposition", "attachment; filename=\""+application.getFilename()+"\"").build();
     }
 
     @Override
-    public Revision getRevision(RevisionRequest request) {
+    public Revision getRevision(final RevisionRequest request) {
         return revisionService.getRevision(request);
     }
 }

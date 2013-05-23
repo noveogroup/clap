@@ -8,14 +8,14 @@ import java.util.Date;
 public class TimestampConverter implements Converter {
 
     @Override
-    public Object getAsObject(FacesContext facesContext, UIComponent uiComponent, String s) {
+    public Object getAsObject(final FacesContext facesContext, final UIComponent uiComponent, final String s) {
         //support only for output
         return null;
     }
 
     @Override
-    public String getAsString(FacesContext facesContext, UIComponent uiComponent, Object o) {
-        Long timestamp = (Long) o;
+    public String getAsString(final FacesContext facesContext, final UIComponent uiComponent, final Object o) {
+        final Long timestamp = (Long) o;
         return new Date(timestamp).toString();
     }
 }

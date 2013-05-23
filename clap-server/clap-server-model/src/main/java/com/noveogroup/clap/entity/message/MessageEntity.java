@@ -39,7 +39,7 @@ public class MessageEntity extends BaseEntity {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(final Date timestamp) {
         this.timestamp = timestamp;
     }
 

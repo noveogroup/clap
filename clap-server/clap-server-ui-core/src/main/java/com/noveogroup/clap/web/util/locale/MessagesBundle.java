@@ -29,7 +29,7 @@ public abstract class MessagesBundle extends ResourceBundle {
     protected abstract String getBundleName();
 
     @Override
-    protected Object handleGetObject(String key) {
+    protected Object handleGetObject(final String key) {
         return parent.getObject(key);
     }
 
@@ -40,19 +40,19 @@ public abstract class MessagesBundle extends ResourceBundle {
 
     protected static class UTF8Control extends Control {
         public ResourceBundle newBundle
-                (String baseName, Locale locale, String format, ClassLoader loader, boolean reload)
+                (final String baseName, final Locale locale, final String format, final ClassLoader loader, final boolean reload)
                 throws IllegalAccessException, InstantiationException, IOException
         {
             // The below code is copied from default Control#newBundle() implementation.
             // Only the PropertyResourceBundle line is changed to read the file as UTF-8.
-            String bundleName = toBundleName(baseName, locale);
-            String resourceName = toResourceName(bundleName, BUNDLE_EXTENSION);
+            final String bundleName = toBundleName(baseName, locale);
+            final String resourceName = toResourceName(bundleName, BUNDLE_EXTENSION);
             ResourceBundle bundle = null;
             InputStream stream = null;
             if (reload) {
-                URL url = loader.getResource(resourceName);
+                final URL url = loader.getResource(resourceName);
                 if (url != null) {
-                    URLConnection connection = url.openConnection();
+                    final URLConnection connection = url.openConnection();
                     if (connection != null) {
                         connection.setUseCaches(false);
                         stream = connection.getInputStream();

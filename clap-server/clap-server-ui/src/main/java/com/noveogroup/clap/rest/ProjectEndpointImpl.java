@@ -16,7 +16,7 @@ import javax.ws.rs.QueryParam;
 @ApplicationScoped
 public class ProjectEndpointImpl implements ProjectEndpoint {
 
-    private static Mapper MAPPER = new DozerBeanMapper();
+    private static final Mapper MAPPER = new DozerBeanMapper();
 
     @Inject
     private ProjectService projectService;
@@ -24,13 +24,11 @@ public class ProjectEndpointImpl implements ProjectEndpoint {
 
     @Override
     public Project createProject(final Project project) {
-        //TODO authentication
-        return projectService.createProject(null,project);
+        return projectService.createProject(project);
     }
 
     @Override
     public Project getProject(@QueryParam("id") final Long id) {
-        //TODO authentication
-        return projectService.findById(null,id);
+        return projectService.findById(id);
     }
 }

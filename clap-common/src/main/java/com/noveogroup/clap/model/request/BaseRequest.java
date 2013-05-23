@@ -17,7 +17,7 @@ public class BaseRequest implements AuthenticationRequest {
         return authentication;
     }
 
-    public void setAuthentication(Authentication authentication) {
+    public void setAuthentication(final Authentication authentication) {
         this.authentication = authentication;
     }
 }

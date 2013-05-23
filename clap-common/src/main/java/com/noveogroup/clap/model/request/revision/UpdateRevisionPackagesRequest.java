@@ -12,7 +12,7 @@ public class UpdateRevisionPackagesRequest {
         return revisionId;
     }
 
-    public void setRevisionId(Long revisionId) {
+    public void setRevisionId(final Long revisionId) {
         this.revisionId = revisionId;
     }
 
@@ -20,7 +20,7 @@ public class UpdateRevisionPackagesRequest {
         return mainPackage;
     }
 
-    public void setMainPackage(byte[] mainPackage) {
+    public void setMainPackage(final byte[] mainPackage) {
         this.mainPackage = mainPackage;
     }
 
@@ -28,7 +28,7 @@ public class UpdateRevisionPackagesRequest {
         return specialPackage;
     }
 
-    public void setSpecialPackage(byte[] specialPackage) {
+    public void setSpecialPackage(final byte[] specialPackage) {
         this.specialPackage = specialPackage;
     }
 }

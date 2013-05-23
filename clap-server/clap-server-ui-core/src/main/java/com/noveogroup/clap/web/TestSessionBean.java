@@ -17,7 +17,7 @@ public class TestSessionBean implements Serializable {
         return counter;
     }
 
-    public void setCounter(int counter) {
+    public void setCounter(final int counter) {
         this.counter = counter;
     }
 

@@ -11,20 +11,20 @@ public class RevisionsListDataModel extends ListDataModel<Revision> implements S
     public RevisionsListDataModel() {
     }
 
-    public RevisionsListDataModel(List<Revision> revisions) {
+    public RevisionsListDataModel(final List<Revision> revisions) {
         super(revisions);
     }
 
     @Override
-    public Object getRowKey(Revision revision) {
+    public Object getRowKey(final Revision revision) {
         return revision.getId();
     }
 
     @Override
-    public Revision getRowData(String rowKey) {
+    public Revision getRowData(final String rowKey) {
         final long id = Long.parseLong(rowKey);
-        List<Revision> revisions = (List<Revision>) getWrappedData();
-        for (Revision revision : revisions) {
+        final List<Revision> revisions = (List<Revision>) getWrappedData();
+        for (final Revision revision : revisions) {
             if (id == revision.getId()) {
                 return revision;
             }

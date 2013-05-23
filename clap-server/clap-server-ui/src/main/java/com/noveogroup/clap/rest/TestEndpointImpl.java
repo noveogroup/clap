@@ -13,21 +13,21 @@ import javax.inject.Inject;
 @ApplicationScoped
 public class TestEndpointImpl implements TestEndpoint {
 
-    private static Mapper MAPPER = new DozerBeanMapper();
+    private static final Mapper MAPPER = new DozerBeanMapper();
 
     @Inject
     private ProjectService projectService;
 
     @Override
-    public String echo(String original) {
-        ProjectEntity projectEntity = new ProjectEntity();
+    public String echo(final String original) {
+        final ProjectEntity projectEntity = new ProjectEntity();
         projectEntity.setName("Name");
 //        projectService.save(project);
         return MAPPER.map(projectEntity, Project.class).getName();
     }
 
     @Override
-    public Project getTestModifyProject(Project project) {
+    public Project getTestModifyProject(final Project project) {
         project.setName(project.getName() + "_ololo");
         return project;
     }

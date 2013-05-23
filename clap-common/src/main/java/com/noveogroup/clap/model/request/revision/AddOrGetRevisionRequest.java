@@ -21,7 +21,7 @@ public class AddOrGetRevisionRequest {
         return projectExternalId;
     }
 
-    public void setProjectExternalId(String projectExternalId) {
+    public void setProjectExternalId(final String projectExternalId) {
         this.projectExternalId = projectExternalId;
     }
 
@@ -29,7 +29,7 @@ public class AddOrGetRevisionRequest {
         return revision;
     }
 
-    public void setRevision(Revision revision) {
+    public void setRevision(final Revision revision) {
         this.revision = revision;
     }
 
@@ -37,7 +37,7 @@ public class AddOrGetRevisionRequest {
         return mainPackage;
     }
 
-    public void setMainPackage(byte[] mainPackage) {
+    public void setMainPackage(final byte[] mainPackage) {
         this.mainPackage = mainPackage;
     }
 
@@ -45,7 +45,7 @@ public class AddOrGetRevisionRequest {
         return specialPackage;
     }
 
-    public void setSpecialPackage(byte[] specialPackage) {
+    public void setSpecialPackage(final byte[] specialPackage) {
         this.specialPackage = specialPackage;
     }
 }

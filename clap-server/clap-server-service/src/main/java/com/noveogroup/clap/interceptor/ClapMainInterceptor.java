@@ -1,6 +1,8 @@
 package com.noveogroup.clap.interceptor;
 
 import com.noveogroup.clap.interceptor.composite.CompositeInterceptorHelper;
+import com.noveogroup.clap.interceptor.composite.RequestHelperFactory;
+import com.noveogroup.clap.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,41 +23,21 @@ public class ClapMainInterceptor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClapMainInterceptor.class);
 
-    @Resource
-    private UserTransaction userTransaction;
 
     @Inject
     private CompositeInterceptorHelper compositeInterceptorHelper;
 
+    @Inject
+    private RequestHelperFactory requestHelperFactory;
 
     @AroundInvoke
-    public Object businessIntercept(InvocationContext ctx) throws SystemException {
-        Object result = null;
-        Annotation[] methodAnnotations = ctx.getMethod().getDeclaredAnnotations();
-        if (methodAnnotations.length > 0) {
-            for (Annotation annotation : methodAnnotations) {
-                if (annotation instanceof Transactional) {
-                    try {
-                        userTransaction.begin();
-                        result = compositeInterceptorHelper.execute(ctx);
-                        userTransaction.commit();
-                    } catch (IllegalStateException e) {
-                        LOGGER.error("Transaction error " + e.getMessage(), e);
-                        userTransaction.rollback();
-                    } catch (Exception e) {
-                        LOGGER.error("Transaction error " + e.getMessage(), e);
-                        userTransaction.rollback();
-                    }
-                    return result;
-                }
-            }
-        }
+    public Object businessIntercept(final InvocationContext ctx) throws SystemException {
         try {
-            result = compositeInterceptorHelper.execute(ctx);
+            return compositeInterceptorHelper.execute(ctx, requestHelperFactory);
         } catch (Exception e) {
-            LOGGER.error("error beyond transaction " + e.getMessage(), e);
+            LOGGER.error("error in intercepted method : ", e);
+            return null;
         }
-        return result;
     }
 
 }

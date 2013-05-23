@@ -20,7 +20,7 @@ public class ProjectsModel implements Serializable{
         return newProject;
     }
 
-    public void setNewProject(Project newProject) {
+    public void setNewProject(final Project newProject) {
         this.newProject = newProject;
     }
 
@@ -28,7 +28,7 @@ public class ProjectsModel implements Serializable{
         return projectsListDataModel;
     }
 
-    public void setProjectsListDataModel(ProjectsListDataModel projectsListDataModel) {
+    public void setProjectsListDataModel(final ProjectsListDataModel projectsListDataModel) {
         this.projectsListDataModel = projectsListDataModel;
     }
 
@@ -36,7 +36,7 @@ public class ProjectsModel implements Serializable{
         return selectedProject;
     }
 
-    public void setSelectedProject(Project selectedProject) {
+    public void setSelectedProject(final Project selectedProject) {
         this.selectedProject = selectedProject;
     }
 }

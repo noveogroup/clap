@@ -50,7 +50,7 @@ public class RevisionEntity extends BaseEntity {
         return timestamp;
     }
 
-    public void setTimestamp(Long timestamp) {
+    public void setTimestamp(final Long timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -98,7 +98,7 @@ public class RevisionEntity extends BaseEntity {
         return mainPackageLoaded;
     }
 
-    public void setMainPackageLoaded(boolean mainPackageLoaded) {
+    public void setMainPackageLoaded(final boolean mainPackageLoaded) {
         this.mainPackageLoaded = mainPackageLoaded;
     }
 
@@ -106,7 +106,7 @@ public class RevisionEntity extends BaseEntity {
         return specialPackageLoaded;
     }
 
-    public void setSpecialPackageLoaded(boolean specialPackageLoaded) {
+    public void setSpecialPackageLoaded(final boolean specialPackageLoaded) {
         this.specialPackageLoaded = specialPackageLoaded;
     }
 }

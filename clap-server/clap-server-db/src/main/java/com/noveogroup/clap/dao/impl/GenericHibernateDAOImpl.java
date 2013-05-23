@@ -40,25 +40,25 @@ public abstract class GenericHibernateDAOImpl<T, ID extends Serializable> implem
     }
 
     @Override
-    public T persist(T entity) {
+    public T persist(final T entity) {
         entityManager.persist(entity);
         return entity;
     }
 
     @Override
-    public void remove(T entity) {
+    public void remove(final T entity) {
         entityManager.remove(entity);
     }
 
     @Override
-    public void removeById(ID id) {
-        T obj = entityManager.find(persistentClass, id);
+    public void removeById(final ID id) {
+        final T obj = entityManager.find(persistentClass, id);
         entityManager.remove(obj);
     }
 
 
     @Override
-    public T findById(ID id) {
+    public T findById(final ID id) {
         return entityManager.find(persistentClass, id);
     }
 
@@ -69,11 +69,11 @@ public abstract class GenericHibernateDAOImpl<T, ID extends Serializable> implem
 
     @Override
     public List<T> selectAll() {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<T> cq = cb.createQuery(persistentClass);
-        Root<T> rc = cq.from(persistentClass);
+        final CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        final CriteriaQuery<T> cq = cb.createQuery(persistentClass);
+        final Root<T> rc = cq.from(persistentClass);
         cq.select(rc);
-        TypedQuery<T> query = entityManager.createQuery(cq);
+        final TypedQuery<T> query = entityManager.createQuery(cq);
         return query.getResultList();
     }
 }

@@ -11,20 +11,20 @@ public class ProjectsListDataModel extends ListDataModel<Project> implements Sel
     public ProjectsListDataModel() {
     }
 
-    public ProjectsListDataModel(List<Project> projects) {
+    public ProjectsListDataModel(final List<Project> projects) {
         super(projects);
     }
 
     @Override
-    public Object getRowKey(Project project) {
+    public Object getRowKey(final Project project) {
         return project.getId();
     }
 
     @Override
-    public Project getRowData(String s) {
+    public Project getRowData(final String s) {
         final long id = Long.parseLong(s);
-        List<Project> projects = (List<Project>) getWrappedData();
-        for (Project project : projects) {
+        final List<Project> projects = (List<Project>) getWrappedData();
+        for (final Project project : projects) {
             if (id == project.getId()) {
                 return project;
             }

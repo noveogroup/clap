@@ -6,9 +6,8 @@ import com.noveogroup.clap.entity.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.auth.AuthenticationRequired;
 import com.noveogroup.clap.interceptor.ClapMainInterceptor;
-import com.noveogroup.clap.interceptor.Transactional;
+import com.noveogroup.clap.transaction.Transactional;
 import com.noveogroup.clap.model.Project;
-import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.service.url.UrlService;
@@ -33,7 +32,7 @@ import java.util.List;
 @Interceptors({ClapMainInterceptor.class})
 public class ProjectServiceImpl implements ProjectService {
 
-    private static Mapper MAPPER = new DozerBeanMapper();
+    private static final Mapper MAPPER = new DozerBeanMapper();
 
     @EJB
     private ProjectDAO projectDAO;
@@ -50,32 +49,32 @@ public class ProjectServiceImpl implements ProjectService {
     @AuthenticationRequired
     @Transactional
     @Override
-    public Project createProject(final Authentication authentication,final Project project) {
+    public Project createProject(final Project project) {
         if (project.getCreationDate() == null) {
             project.setCreationDate(new Date());
         }
-        ProjectEntity projectEntity = MAPPER.map(project, ProjectEntity.class);
+        final ProjectEntity projectEntity = MAPPER.map(project, ProjectEntity.class);
         return MAPPER.map(projectDAO.persist(projectEntity), Project.class);
     }
 
     @AuthenticationRequired
     @Transactional
     @Override
-    public Project save(final Authentication authentication,final Project project) {
-        ProjectEntity projectEntity = MAPPER.map(project, ProjectEntity.class);
+    public Project save(final Project project) {
+        final ProjectEntity projectEntity = MAPPER.map(project, ProjectEntity.class);
         return MAPPER.map(projectDAO.persist(projectEntity), Project.class);
     }
 
     @AuthenticationRequired
     @Transactional
     @Override
-    public Project findById(final Authentication authentication,final Long id) {
-        ProjectEntity projectEntity = projectDAO.findById(id);
+    public Project findById(final Long id) {
+        final ProjectEntity projectEntity = projectDAO.findById(id);
         final Project project = MAPPER.map(projectEntity, Project.class);
         final List<Revision> revisions = project.getRevisions();
         for (int i=0; i<revisions.size();i++) {
-            Revision revision = revisions.get(i);
-            RevisionEntity revisionEntityOrigin = projectEntity.getRevisions().get(i);
+            final Revision revision = revisions.get(i);
+            final RevisionEntity revisionEntityOrigin = projectEntity.getRevisions().get(i);
             revision.setProjectId(project.getId());
             if(revisionEntityOrigin.isMainPackageLoaded()){
                 revision.setMainPackageUrl(urlService.createUrl(revision.getId(),true));
@@ -90,10 +89,10 @@ public class ProjectServiceImpl implements ProjectService {
     @AuthenticationRequired
     @Transactional
     @Override
-    public List<Project> findAllProjects(final Authentication authentication) {
-        List<ProjectEntity> projectEntityList = projectDAO.selectAll();
-        List<Project> projectList = new ArrayList<Project>();
-        for (ProjectEntity projectEntity : projectEntityList) {
+    public List<Project> findAllProjects() {
+        final List<ProjectEntity> projectEntityList = projectDAO.selectAll();
+        final List<Project> projectList = new ArrayList<Project>();
+        for (final ProjectEntity projectEntity : projectEntityList) {
             projectList.add(MAPPER.map(projectEntity, Project.class));
         }
         return projectList;

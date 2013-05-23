@@ -1,10 +1,10 @@
 package com.noveogroup.clap.auth;
 
+import com.noveogroup.clap.integration.auth.AuthenticationRequestHelper;
+import com.noveogroup.clap.integration.auth.AuthenticationSystem;
 import com.noveogroup.clap.interceptor.composite.LightInterceptor;
 import com.noveogroup.clap.interceptor.composite.LightInterceptorQualifier;
-import com.noveogroup.clap.model.auth.Authentication;
-import com.noveogroup.clap.model.auth.AuthenticationRequest;
-import com.noveogroup.clap.model.user.User;
+import com.noveogroup.clap.interceptor.composite.RequestHelperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -44,35 +44,18 @@ public class AuthenticationLightInterceptor implements LightInterceptor {
 
     @Override
     public Object proceed(final InvocationContext context,
+                          final RequestHelperFactory requestHelperFactory,
                           final Map<Class<? extends Annotation>, Annotation> annotationMap) throws Exception {
         if(annotationMap.containsKey(AuthenticationRequired.class)){
-            LOGGER.debug("checking auth");
-            Object[] parameters = context.getParameters();
-            for(Object parameter : parameters){
-                boolean check = false;
-                Authentication authentication = null;
-                if(parameter instanceof Authentication){
-                    authentication = (Authentication) parameter;
-                    check = true;
-                } else if(parameter instanceof AuthenticationRequest) {
-                    authentication = ((AuthenticationRequest) parameter).getAuthentication();
-                }
-                if(check){
-                    User user = authenticationSystem.authentifyUser(authentication);
-                    if ( user == null){
-                        LOGGER.error("auth fail");
-                        //throw new AuthenticationException(authentication);
-                    }
-                }
-            }
-            //TODO finish method
+            final AuthenticationRequestHelper helper = requestHelperFactory.getRequestHelper(AuthenticationRequestHelper.class);
+            authenticationSystem.authentifyUser(helper);
         }
-        return nextInterceptor.proceed(context, annotationMap);
+        return nextInterceptor.proceed(context,requestHelperFactory, annotationMap);
     }
 
     @Override
     public int getPriority() {
-        return 10;
+        return 100;
     }
 
     @Override

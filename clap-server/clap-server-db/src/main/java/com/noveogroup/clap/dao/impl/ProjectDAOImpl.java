@@ -18,7 +18,7 @@ public class ProjectDAOImpl extends GenericHibernateDAOImpl<ProjectEntity, Long>
 
     @Override
     public ProjectEntity findById(final Long id) {
-        ProjectEntity projectEntity = super.findById(id);
+        final ProjectEntity projectEntity = super.findById(id);
         Hibernate.initialize(projectEntity.getRevisions());
         return projectEntity;
     }
@@ -26,9 +26,9 @@ public class ProjectDAOImpl extends GenericHibernateDAOImpl<ProjectEntity, Long>
     @Override
     public ProjectEntity findProjectByExternalId(final String externalId) {
         //TODO check if name can be external id
-        Query query = entityManager.createNamedQuery(GET_PROJECT_BY_NAME);
+        final Query query = entityManager.createNamedQuery(GET_PROJECT_BY_NAME);
         query.setParameter(GET_PROJECT_BY_NAME_PARAMETER,externalId);
-        ProjectEntity projectEntity = (ProjectEntity) query.getSingleResult();
+        final ProjectEntity projectEntity = (ProjectEntity) query.getSingleResult();
         Hibernate.initialize(projectEntity.getRevisions());
         return projectEntity;
     }

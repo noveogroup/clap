@@ -13,7 +13,7 @@ public class VariablableProperties extends Properties {
     private static final String END_DELIMITER = "}";
 
     @Override
-    public String getProperty(String key) {
+    public String getProperty(final String key) {
         String value = super.getProperty(key);
 
         if (value != null) {
@@ -22,7 +22,7 @@ public class VariablableProperties extends Properties {
             while ( (startIndex = value.indexOf(START_DELIMITER, endIndex)) >= 0
                     && (endIndex = value.indexOf(END_DELIMITER, startIndex) ) >= 0) {
 
-                String variableName = value.substring(startIndex + START_DELIMITER.length(), endIndex);
+                final String variableName = value.substring(startIndex + START_DELIMITER.length(), endIndex);
                 // now call getProperty recursively to have this looked up
                 String variableValue = null;
 

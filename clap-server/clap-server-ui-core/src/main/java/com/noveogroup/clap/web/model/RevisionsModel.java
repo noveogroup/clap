@@ -31,7 +31,7 @@ public class RevisionsModel implements Serializable{
         return uploadCleanApk;
     }
 
-    public void setUploadCleanApk(UploadedFile uploadCleanApk) {
+    public void setUploadCleanApk(final UploadedFile uploadCleanApk) {
         this.uploadCleanApk = uploadCleanApk;
     }
 
@@ -39,7 +39,7 @@ public class RevisionsModel implements Serializable{
         return uploadHackedApk;
     }
 
-    public void setUploadHackedApk(UploadedFile uploadHackedApk) {
+    public void setUploadHackedApk(final UploadedFile uploadHackedApk) {
         this.uploadHackedApk = uploadHackedApk;
     }
 
@@ -47,7 +47,7 @@ public class RevisionsModel implements Serializable{
         return revisionsListDataModel;
     }
 
-    public void setRevisionsListDataModel(RevisionsListDataModel revisionsListDataModel) {
+    public void setRevisionsListDataModel(final RevisionsListDataModel revisionsListDataModel) {
         this.revisionsListDataModel = revisionsListDataModel;
     }
 
@@ -55,7 +55,7 @@ public class RevisionsModel implements Serializable{
         return selectedRevision;
     }
 
-    public void setSelectedRevision(Revision selectedRevision) {
+    public void setSelectedRevision(final Revision selectedRevision) {
         this.selectedRevision = selectedRevision;
     }
 
@@ -63,7 +63,7 @@ public class RevisionsModel implements Serializable{
         return cleanApkQRCode;
     }
 
-    public void setCleanApkQRCode(StreamedContent cleanApkQRCode) {
+    public void setCleanApkQRCode(final StreamedContent cleanApkQRCode) {
         this.cleanApkQRCode = cleanApkQRCode;
     }
 
@@ -71,7 +71,7 @@ public class RevisionsModel implements Serializable{
         return hackedApkQRCode;
     }
 
-    public void setHackedApkQRCode(StreamedContent hackedApkQRCode) {
+    public void setHackedApkQRCode(final StreamedContent hackedApkQRCode) {
         this.hackedApkQRCode = hackedApkQRCode;
     }
 }

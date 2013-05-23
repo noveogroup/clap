@@ -31,19 +31,19 @@ public class CompositeInterceptorHelper {
     @PostConstruct
     protected void init() {
         if (lightInterceptors != null) {
-            for (LightInterceptor interceptor : lightInterceptors) {
+            for (final LightInterceptor interceptor : lightInterceptors) {
                 interceptorList.add(interceptor);
                 LOGGER.info("registered " + interceptor.getDescription() + " with priority " + interceptor.getPriority());
             }
         }
-        int size = interceptorList.size();
+        final int size = interceptorList.size();
         int i = 1;
         if (size > 1) {
             Collections.sort(interceptorList, new Comparator<LightInterceptor>() {
                 @Override
-                public int compare(LightInterceptor o1, LightInterceptor o2) {
+                public int compare(final LightInterceptor o1, final LightInterceptor o2) {
                     //TODO check
-                    return o1.getPriority() - o2.getPriority();
+                    return o2.getPriority() - o1.getPriority();
                 }
             });
             for (; i < size; i++) {
@@ -53,12 +53,13 @@ public class CompositeInterceptorHelper {
         }
     }
 
-    public Object execute(InvocationContext ctx) throws Exception {
-        Map<Class<? extends Annotation>, Annotation> annotationMap = new HashMap<Class<? extends Annotation>, Annotation>();
-        Annotation[] methodAnnotations = ctx.getMethod().getDeclaredAnnotations();
+    public Object execute(final InvocationContext ctx,
+                          final RequestHelperFactory requestHelperFactory) throws Exception {
+        final Map<Class<? extends Annotation>, Annotation> annotationMap = new HashMap<Class<? extends Annotation>, Annotation>();
+        final Annotation[] methodAnnotations = ctx.getMethod().getDeclaredAnnotations();
         if (methodAnnotations.length > 0) {
-            for (Annotation annotation : methodAnnotations) {
-                Class<? extends Annotation> annotationClass = annotation.annotationType();
+            for (final Annotation annotation : methodAnnotations) {
+                final Class<? extends Annotation> annotationClass = annotation.annotationType();
                 if (!annotationMap.containsKey(annotationClass)) {
                     annotationMap.put(annotationClass, annotation);
                 } else {
@@ -67,13 +68,13 @@ public class CompositeInterceptorHelper {
                 }
             }
         }
-        int size = interceptorList.size();
+        final int size = interceptorList.size();
         if (size > 0) {
-            ChainedInvocatinoContext chainedInvocatinoContext = new ChainedInvocatinoContext(ctx);
+            final ChainedInvocatinoContext chainedInvocatinoContext = new ChainedInvocatinoContext(ctx);
             interceptorList.get(size - 1).setNextInterceptor(chainedInvocatinoContext);
-            return interceptorList.get(0).proceed(chainedInvocatinoContext, annotationMap);
+            return interceptorList.get(0).proceed(chainedInvocatinoContext, requestHelperFactory,annotationMap);
         } else {
-            return new ChainedInvocatinoContext(ctx).proceed(ctx, annotationMap);
+            return new ChainedInvocatinoContext(ctx).proceed(ctx, requestHelperFactory, annotationMap);
         }
     }
 
@@ -81,7 +82,7 @@ public class CompositeInterceptorHelper {
 
         private final InvocationContext wrappedContext;
 
-        private ChainedInvocatinoContext(InvocationContext wrappedContext) {
+        private ChainedInvocatinoContext(final InvocationContext wrappedContext) {
             this.wrappedContext = wrappedContext;
         }
 
@@ -106,7 +107,7 @@ public class CompositeInterceptorHelper {
         }
 
         @Override
-        public void setParameters(Object[] objects) {
+        public void setParameters(final Object[] objects) {
             wrappedContext.setParameters(objects);
         }
 
@@ -121,18 +122,18 @@ public class CompositeInterceptorHelper {
         }
 
         @Override
-        public void setNextInterceptor(LightInterceptor nextInterceptor) {
+        public void setNextInterceptor(final LightInterceptor nextInterceptor) {
             throw new IllegalArgumentException(nextInterceptor + " has too low priority - " + nextInterceptor.getPriority());
         }
 
         @Override
-        public Object proceed(InvocationContext context, Map<Class<? extends Annotation>, Annotation> annotationMap) throws Exception {
+        public Object proceed(final InvocationContext context, final RequestHelperFactory requestHelperFactory, final Map<Class<? extends Annotation>, Annotation> annotationMap) throws Exception {
             return wrappedContext.proceed();
         }
 
         @Override
         public int getPriority() {
-            return 9999;
+            return 0;
         }
 
         @Override

@@ -4,9 +4,10 @@ public enum Navigation {
     REVISION("revision", true),
     PROJECT("project", true),
     PROJECTS("projects", true),
+    DEFAULT_LOGIN_PAGE("auth/default_login",true),
     SAME_PAGE("", false);
 
-    private Navigation(String view, boolean facesRedirect) {
+    private Navigation(final String view, final boolean facesRedirect) {
         this.view = view;
         this.facesRedirect = facesRedirect;
     }

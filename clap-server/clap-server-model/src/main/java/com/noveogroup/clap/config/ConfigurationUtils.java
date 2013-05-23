@@ -5,16 +5,16 @@ import java.util.Properties;
 
 public final class ConfigurationUtils {
     // Glassfish Instance Root folder system variable
-    private static String glassfishInstanceRootPropertyName = "com.sun.aas.instanceRoot";
+    private static final String glassfishInstanceRootPropertyName = "com.sun.aas.instanceRoot";
     // "config" sub-folder name
-    private static String glassfishDomainConfigurationFolderName = "config";
+    private static final String glassfishDomainConfigurationFolderName = "config";
 
     private ConfigurationUtils() {
         throw new UnsupportedOperationException("instantiate util class");
     }
 
     public static Properties getPropertiesFromConfig(final String configFileName) throws IOException {
-        Properties properties = new VariablableProperties();
+        final Properties properties = new VariablableProperties();
         properties.load(readFileFromGlassfishDomainConfigFolder(configFileName));
         return properties;
     }
@@ -27,8 +27,8 @@ public final class ConfigurationUtils {
             throw new FileNotFoundException("Cannot find Glassfish instanceRoot. Is the com.sun.aas.instanceRoot system property set?");
         }
         // Instance Root + /config folder
-        File configurationFolder = new File(instanceRoot + File.separator + glassfishDomainConfigurationFolderName);
-        File configFile = new File(configurationFolder, fileName);
+        final File configurationFolder = new File(instanceRoot + File.separator + glassfishDomainConfigurationFolderName);
+        final File configFile = new File(configurationFolder, fileName);
         // return the given file
         return new FileInputStream(configFile);
     }

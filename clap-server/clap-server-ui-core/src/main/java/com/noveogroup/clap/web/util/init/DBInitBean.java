@@ -28,11 +28,10 @@ public class DBInitBean {
         Project project = new Project();
         project.setName("test_project");
         project.setCreationDate(new Date(1368308474));
-        //TODO authentication
-        project = projectService.createProject(new Authentication(),project);
-        Revision revision = new Revision();
+        project = projectService.createProject(project);
+        final Revision revision = new Revision();
         revision.setTimestamp(1368318776L);
-        AddOrGetRevisionRequest request = new AddOrGetRevisionRequest();
+        final AddOrGetRevisionRequest request = new AddOrGetRevisionRequest();
         request.setProjectExternalId("test_project");
         request.setRevision(revision);
         revisionService.addOrGetRevision(request);

@@ -12,7 +12,7 @@ public class SendMessageRequest {
         return message;
     }
 
-    public void setMessage(Message message) {
+    public void setMessage(final Message message) {
         this.message = message;
     }
 
@@ -20,7 +20,7 @@ public class SendMessageRequest {
         return revisionTimestamp;
     }
 
-    public void setRevisionTimestamp(Long revisionTimestamp) {
+    public void setRevisionTimestamp(final Long revisionTimestamp) {
         this.revisionTimestamp = revisionTimestamp;
     }
 

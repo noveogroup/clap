@@ -11,13 +11,13 @@ import java.util.List;
 public interface ProjectService {
 
 
-    Project createProject(Authentication authentication,Project project);
+    Project createProject(Project project);
 
-    Project save(Authentication authentication,Project project);
+    Project save(Project project);
 
-    Project findById(Authentication authentication,Long id);
+    Project findById(Long id);
 
-    List<Project> findAllProjects(Authentication authentication);
+    List<Project> findAllProjects();
 
 
 

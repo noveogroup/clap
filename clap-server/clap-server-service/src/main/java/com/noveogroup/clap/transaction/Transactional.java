@@ -1,4 +1,4 @@
-package com.noveogroup.clap.interceptor;
+package com.noveogroup.clap.transaction;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

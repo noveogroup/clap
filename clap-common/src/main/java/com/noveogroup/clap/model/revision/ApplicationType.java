@@ -11,5 +11,5 @@ public enum ApplicationType {
     /**
      * with weaved clap-library
      */
-    SPECIAL;
+    SPECIAL
 }

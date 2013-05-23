@@ -26,17 +26,17 @@ public class HelloBean {
     @Inject
     private ConfigBean configBean;
 
-    private StreamedContent QRCode;
+    private final StreamedContent QRCode;
 
     public HelloBean() throws IOException, WriterException {
-        ByteArrayOutputStream buf = new ByteArrayOutputStream();
-        Writer writer = new QRCodeWriter();
+        final ByteArrayOutputStream buf = new ByteArrayOutputStream();
+        final Writer writer = new QRCodeWriter();
         //151 chars
-        BitMatrix matrix = writer.encode("123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890_",
+        final BitMatrix matrix = writer.encode("123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890_",
                 BarcodeFormat.QR_CODE, 100, 100);
         MatrixToImageWriter.writeToStream(matrix, "PNG", buf);
         //422 bytes
-        byte[] bytes = buf.toByteArray();
+        final byte[] bytes = buf.toByteArray();
         QRCode = new DefaultStreamedContent(new ByteArrayInputStream(bytes), "image/png");
     }
 

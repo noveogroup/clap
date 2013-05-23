@@ -9,7 +9,7 @@ public class ApplicationFile {
         return filename;
     }
 
-    public void setFilename(String filename) {
+    public void setFilename(final String filename) {
         this.filename = filename;
     }
 
@@ -17,7 +17,7 @@ public class ApplicationFile {
         return content;
     }
 
-    public void setContent(byte[] content) {
+    public void setContent(final byte[] content) {
         this.content = content;
     }
 }

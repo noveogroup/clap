@@ -70,7 +70,7 @@ public class Revision extends BaseModel {
         return timestamp;
     }
 
-    public void setTimestamp(Long timestamp) {
+    public void setTimestamp(final Long timestamp) {
         this.timestamp = timestamp;
     }
 }
