@@ -33,7 +33,7 @@ public class DBInitBean {
         final Revision revision = new Revision();
         revision.setTimestamp(1368318776L);
         final AddOrGetRevisionRequest request = new AddOrGetRevisionRequest();
-        request.setProjectExternalId("test_project");
+        request.setProjectExternalId("test_ext_id");
         request.setRevision(revision);
         revisionService.addOrGetRevision(request);
     }

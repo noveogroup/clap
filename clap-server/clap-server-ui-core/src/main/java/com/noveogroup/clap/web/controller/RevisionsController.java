@@ -61,7 +61,7 @@ public class RevisionsController extends BaseController{
         final UploadedFile newRevisionHackedApk = revisionsModel.getUploadHackedApk();
 
         final AddOrGetRevisionRequest request = new AddOrGetRevisionRequest();
-        request.setProjectExternalId(project.getName());
+        request.setProjectExternalId(project.getExternalId());
         request.setRevision(revision);
         if(newRevisionCleanApk != null){
             request.setMainPackage(newRevisionCleanApk.getContents());
@@ -73,7 +73,6 @@ public class RevisionsController extends BaseController{
 
         revisionsModel.reset();
         LOGGER.debug("revision saved");
-        //TODO authentication
         final Project updatedProject = projectService.findById(projectsModel.getSelectedProject().getId());
         projectsModel.setSelectedProject(updatedProject);
         revisionsModel.setRevisionsListDataModel(new RevisionsListDataModel(updatedProject.getRevisions()));
@@ -85,7 +84,6 @@ public class RevisionsController extends BaseController{
         if(selectedRevision != null){
             final RevisionRequest request = new RevisionRequest();
             request.setRevisionId(selectedRevision.getId());
-            //TODO authentication
             revisionsModel.setSelectedRevision(revisionService.getRevision(request));
             updateQRCodes(revisionsModel.getSelectedRevision());
             LOGGER.debug(selectedRevision.getId() + " revision preparing finished");

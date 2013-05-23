@@ -22,7 +22,9 @@ public class RevisionDAOImpl extends GenericHibernateDAOImpl<RevisionEntity, Lon
 
         query.setParameter(REVISION_BY_HASH_PARAMETER, revisionHash);
         final RevisionEntity revisionEntity = (RevisionEntity) query.getSingleResult();
-        Hibernate.initialize(revisionEntity.getMessages());
+        if (revisionEntity != null){
+            Hibernate.initialize(revisionEntity.getMessages());
+        }
         return revisionEntity;
     }
 
