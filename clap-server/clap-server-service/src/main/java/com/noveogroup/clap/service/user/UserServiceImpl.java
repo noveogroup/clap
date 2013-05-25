@@ -19,6 +19,7 @@ import javax.interceptor.Interceptors;
  * @author Andrey Sokolov
  */
 @Stateless
+@Interceptors(ClapMainInterceptor.class)
 @TransactionManagement(TransactionManagementType.BEAN)
 public class UserServiceImpl implements UserService {
 
@@ -48,8 +49,8 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Interceptors(ClapMainInterceptor.class)
     @Transactional
+    @Override
     public User createUser(final User user){
         UserEntity userEntity = MAPPER.map(user,UserEntity.class);
         userEntity = userDAO.persist(userEntity);

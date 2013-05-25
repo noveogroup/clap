@@ -55,4 +55,16 @@ public class Message extends BaseModel {
     public void setActivityTraceLog(final String activityTraceLog) {
         this.activityTraceLog = activityTraceLog;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Message{");
+        sb.append("timestamp=").append(timestamp);
+        sb.append(", deviceInfo='").append(deviceInfo).append('\'');
+        sb.append(", stackTraceInfo='").append(stackTraceInfo).append('\'');
+        sb.append(", logCat='").append(logCat).append('\'');
+        sb.append(", activityTraceLog='").append(activityTraceLog).append('\'');
+        sb.append('}');
+        return sb.toString();
+    }
 }

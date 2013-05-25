@@ -9,6 +9,8 @@ import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
 import com.noveogroup.clap.service.user.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -19,6 +21,8 @@ import java.util.Date;
 @Named
 @ApplicationScoped
 public class DBInitBean {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(DBInitBean.class);
 
     @Inject
     private ProjectService projectService;
@@ -35,10 +39,11 @@ public class DBInitBean {
     @PostConstruct
     protected void initDB(){
 
-        final User user = new User();
+        User user = new User();
         user.setLogin("test");
         user.setPassword("123");
-        userService.createUser(user);
+        user = userService.createUser(user);
+        LOGGER.debug("user created = " + user);
 
         final Authentication authentication = new Authentication();
         authentication.setUser(user);
@@ -49,13 +54,17 @@ public class DBInitBean {
         project.setExternalId("test_ext_id");
         project.setCreationDate(new Date(1368308474));
         project = projectService.createProject(project);
-        final Revision revision = new Revision();
+
+        LOGGER.debug("project created : " + project);
+
+        Revision revision = new Revision();
         revision.setTimestamp(1368318776L);
         final AddOrGetRevisionRequest request = new AddOrGetRevisionRequest();
-        request.setProjectExternalId("test_ext_id");
+        request.setProjectExternalId(project.getExternalId());
         request.setRevision(revision);
-        revisionService.addOrGetRevision(request);
+        revision = revisionService.addOrGetRevision(request);
 
+        LOGGER.debug("revision created : " + revision);
     }
 
     public void fakeMethod(){

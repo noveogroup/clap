@@ -1,5 +1,7 @@
 package com.noveogroup.clap.model.request.revision;
 
+import java.util.Arrays;
+
 /**
  * @author Andrey Sokolov
  */
@@ -30,5 +32,15 @@ public class UpdateRevisionPackagesRequest {
 
     public void setSpecialPackage(final byte[] specialPackage) {
         this.specialPackage = specialPackage;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("UpdateRevisionPackagesRequest{");
+        sb.append("mainPackage=").append(mainPackage != null ? mainPackage.length : "null");
+        sb.append(", specialPackage=").append(specialPackage != null ? specialPackage.length : "null");
+        sb.append(", revisionHash='").append(revisionHash).append('\'');
+        sb.append('}');
+        return sb.toString();
     }
 }

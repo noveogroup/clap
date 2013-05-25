@@ -2,6 +2,7 @@ package com.noveogroup.clap.model.revision;
 
 import com.noveogroup.clap.model.BaseModel;
 import com.noveogroup.clap.model.message.Message;
+import com.noveogroup.clap.model.user.User;
 
 import java.util.List;
 
@@ -23,6 +24,8 @@ public class Revision extends BaseModel {
     private String mainPackageUrl;
 
     private String specialPackageUrl;
+
+    private User uploadedBy;
 
 
     public Revision() {
@@ -82,5 +85,28 @@ public class Revision extends BaseModel {
 
     public void setHash(String hash) {
         this.hash = hash;
+    }
+
+    public User getUploadedBy() {
+        return uploadedBy;
+    }
+
+    public void setUploadedBy(User uploadedBy) {
+        this.uploadedBy = uploadedBy;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Revision{");
+        sb.append("timestamp=").append(timestamp);
+        sb.append(", revisionType=").append(revisionType);
+        sb.append(", messages=").append(messages);
+        sb.append(", projectId=").append(projectId);
+        sb.append(", hash='").append(hash).append('\'');
+        sb.append(", mainPackageUrl='").append(mainPackageUrl).append('\'');
+        sb.append(", specialPackageUrl='").append(specialPackageUrl).append('\'');
+        sb.append(", uploadedBy=").append(uploadedBy);
+        sb.append('}');
+        return sb.toString();
     }
 }

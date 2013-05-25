@@ -2,6 +2,7 @@ package com.noveogroup.clap.integration.auth;
 
 import com.noveogroup.clap.auth.AuthenticationSystemFactory;
 import com.noveogroup.clap.model.user.User;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,16 +19,16 @@ public class DefaultAuthenticationSystem implements AuthenticationSystem {
     @Override
     public boolean authentifyUser(final AuthenticationRequestHelper authenticationHelper) {
         final User user = authenticationHelper.getUserRequestData();
-        if(user != null){
+        if (user != null) {
             LOGGER.debug("user : " + user);
             final User userPersistedData = authenticationHelper.getUserPersistedData();
 
             //TODO finish it, implement auth by authKey, hashing password and a lot of stuff....
-            if(user.getPassword() != userPersistedData.getPassword()){
+            if (StringUtils.equals(user.getPassword(), userPersistedData.getPassword())) {
+                return true;
+            } else {
                 authenticationHelper.onLoginFailed();
                 return false;
-            }else {
-                return true;
             }
         } else {
             LOGGER.debug(" user == null");
