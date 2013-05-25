@@ -16,13 +16,23 @@ public class DefaultAuthenticationSystem implements AuthenticationSystem {
     private static final Logger LOGGER = LoggerFactory.getLogger(DefaultAuthenticationSystem.class);
 
     @Override
-    public void authentifyUser(final AuthenticationRequestHelper authenticationHelper) {
-        final User user = authenticationHelper.getUserData();
+    public boolean authentifyUser(final AuthenticationRequestHelper authenticationHelper) {
+        final User user = authenticationHelper.getUserRequestData();
         if(user != null){
             LOGGER.debug("user : " + user);
+            final User userPersistedData = authenticationHelper.getUserPersistedData();
+
+            //TODO finish it, implement auth by authKey, hashing password and a lot of stuff....
+            if(user.getPassword() != userPersistedData.getPassword()){
+                authenticationHelper.onLoginFailed();
+                return false;
+            }else {
+                return true;
+            }
         } else {
             LOGGER.debug(" user == null");
-            //authenticationHelper.onLoginRequired();
+            authenticationHelper.onLoginRequired();
+            return false;
         }
     }
 

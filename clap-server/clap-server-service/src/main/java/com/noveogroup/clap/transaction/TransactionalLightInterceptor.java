@@ -57,7 +57,7 @@ public class TransactionalLightInterceptor implements LightInterceptor {
 
     @Override
     public int getPriority() {
-        return 50;
+        return 150;
     }
 
     @Override

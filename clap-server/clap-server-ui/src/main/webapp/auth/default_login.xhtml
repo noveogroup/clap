@@ -11,12 +11,22 @@
     <title>CLAP</title>
 </h:head>
 <h:body>
-    <form method="POST" action="j_security_check">
-        <h:outputLabel for="j_username" value="#{msgs['common.form.label.login']}"/>
-        <p:inputText id="j_username" required="true" value=""/>
-        <h:outputLabel for="j_password" value="#{msgs['common.form.label.password']}"/>
-        <p:password id="j_password" required="true" value="" feedback="false" minLength="0"/>
-        <h:commandButton value="#{msgs['common.form.label.submit']}" type="submit"/>
-    </form>
+    <h:form id="loginForm">
+        <h:outputLabel
+                for="login"
+                value="#{msgs['common.form.label.login']}"/>
+        <p:inputText
+                id="login"
+                required="true"/>
+        <h:outputLabel
+                for="password"
+                value="#{msgs['common.form.label.password']}"/>
+        <p:password
+                id="password"
+                required="true"
+                feedback="false"
+                minLength="0"/>
+        <h:commandButton value="#{msgs['common.form.label.submit']}" action="#{authenticationController.authentify}"/>
+    </h:form>
 </h:body>
 </html>

@@ -2,26 +2,29 @@ package com.noveogroup.clap.entity.user;
 
 import com.noveogroup.clap.entity.BaseEntity;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * @author Andrey Sokolov
  */
 @Entity
 @Table(name = "clapUsers")
-@NamedQuery(name = "getUserByAuthenticationKey", query = "SELECT u FROM UserEntity u WHERE u.authenticationKey = :authenticationKey")
-public class UserEntity extends BaseEntity{
+@NamedQueries({
+        @NamedQuery(name = "getUserByAuthenticationKey",
+                query = "SELECT u FROM UserEntity u WHERE u.authenticationKey = :authenticationKey"),
+        @NamedQuery(name = "getUserByLogin",
+                query = "SELECT u FROM UserEntity u WHERE u.login = :login")
+})
+public class UserEntity extends BaseEntity {
 
     private String fullName;
 
+    @Column(unique = true, nullable = false)
     private String login;
 
     private String password;
 
-    @Column(unique = true,nullable = true)
+    @Column(unique = true, nullable = true)
     private String authenticationKey;
 
 
