@@ -54,16 +54,20 @@ public class ProjectsController extends BaseController {
 
     public void prepareProjectsListView() {
         final List<Project> projectList = projectService.findAllProjects();
-        projectsModel.setProjectsListDataModel(new ProjectsListDataModel(projectList));
-        LOGGER.debug(projectList.size() + " projects loaded");
+        if(projectList != null){
+            projectsModel.setProjectsListDataModel(new ProjectsListDataModel(projectList));
+            LOGGER.debug(projectList.size() + " projects loaded");
+        }
     }
 
     public void prepareProjectView(){
         final Project selectedProject = projectsModel.getSelectedProject();
         if(selectedProject != null){
             final Project projectWithRevisions = projectService.findById(selectedProject.getId());
-            projectsModel.setSelectedProject(projectWithRevisions);
-            revisionsModel.setRevisionsListDataModel(new RevisionsListDataModel(projectWithRevisions.getRevisions()));
+            if (projectWithRevisions != null){
+                projectsModel.setSelectedProject(projectWithRevisions);
+                revisionsModel.setRevisionsListDataModel(new RevisionsListDataModel(projectWithRevisions.getRevisions()));
+            }
         }
         else {
             LOGGER.error("project not selected");

@@ -87,7 +87,6 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @AuthenticationRequired
-    @Transactional
     @Override
     public List<Project> findAllProjects() {
         final List<ProjectEntity> projectEntityList = projectDAO.selectAll();

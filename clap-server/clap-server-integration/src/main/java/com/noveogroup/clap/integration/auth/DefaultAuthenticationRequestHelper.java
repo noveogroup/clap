@@ -37,6 +37,7 @@ public class DefaultAuthenticationRequestHelper implements AuthenticationRequest
     @PostConstruct
     protected void init(){
         context = FacesContext.getCurrentInstance();
+        userRequestData = userSessionData.getUser();
     }
 
     @Override

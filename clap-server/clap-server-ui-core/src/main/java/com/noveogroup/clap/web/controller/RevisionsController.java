@@ -36,7 +36,7 @@ import java.util.Date;
 
 @Named
 @RequestScoped
-public class RevisionsController extends BaseController{
+public class RevisionsController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RevisionsController.class);
     @Inject
@@ -63,10 +63,10 @@ public class RevisionsController extends BaseController{
         final AddOrGetRevisionRequest request = new AddOrGetRevisionRequest();
         request.setProjectExternalId(project.getExternalId());
         request.setRevision(revision);
-        if(newRevisionCleanApk != null){
+        if (newRevisionCleanApk != null) {
             request.setMainPackage(newRevisionCleanApk.getContents());
         }
-        if(newRevisionHackedApk != null){
+        if (newRevisionHackedApk != null) {
             request.setSpecialPackage(newRevisionHackedApk.getContents());
         }
         revisionService.addOrGetRevision(request);
@@ -74,26 +74,27 @@ public class RevisionsController extends BaseController{
         revisionsModel.reset();
         LOGGER.debug("revision saved");
         final Project updatedProject = projectService.findById(projectsModel.getSelectedProject().getId());
-        projectsModel.setSelectedProject(updatedProject);
-        revisionsModel.setRevisionsListDataModel(new RevisionsListDataModel(updatedProject.getRevisions()));
+        if (updatedProject != null) {
+            projectsModel.setSelectedProject(updatedProject);
+            revisionsModel.setRevisionsListDataModel(new RevisionsListDataModel(updatedProject.getRevisions()));
+        }
         return Navigation.SAME_PAGE.getView();
     }
 
     public void prepareRevisionView() throws IOException, WriterException {
         final Revision selectedRevision = revisionsModel.getSelectedRevision();
-        if(selectedRevision != null){
+        if (selectedRevision != null) {
             final RevisionRequest request = new RevisionRequest();
             request.setRevisionId(selectedRevision.getId());
             revisionsModel.setSelectedRevision(revisionService.getRevision(request));
             updateQRCodes(revisionsModel.getSelectedRevision());
             LOGGER.debug(selectedRevision.getId() + " revision preparing finished");
-        }
-        else {
+        } else {
             LOGGER.error("revision not selected");
         }
     }
 
-    public void onRevisionSelected(final SelectEvent event){
+    public void onRevisionSelected(final SelectEvent event) {
         final Revision revision = (Revision) event.getObject();
         revisionsModel.setSelectedRevision(revision);
         LOGGER.debug(revision.getId() + " revision selected");
@@ -105,10 +106,10 @@ public class RevisionsController extends BaseController{
         final UploadedFile newRevisionHackedApk = revisionsModel.getUploadHackedApk();
         final UpdateRevisionPackagesRequest request = new UpdateRevisionPackagesRequest();
         request.setRevisionHash(revisionsModel.getSelectedRevision().getHash());
-        if(newRevisionCleanApk != null){
+        if (newRevisionCleanApk != null) {
             request.setMainPackage(newRevisionCleanApk.getContents());
         }
-        if(newRevisionHackedApk != null){
+        if (newRevisionHackedApk != null) {
             request.setSpecialPackage(newRevisionHackedApk.getContents());
         }
         final Revision updatedRevision = revisionService.updateRevisionPackages(request);
@@ -119,8 +120,10 @@ public class RevisionsController extends BaseController{
     }
 
     private void updateQRCodes(final Revision revision) throws IOException, WriterException {
-        revisionsModel.setCleanApkQRCode(getQRCodeFromUrl(revision.getMainPackageUrl()));
-        revisionsModel.setHackedApkQRCode(getQRCodeFromUrl(revision.getSpecialPackageUrl()));
+        if (revision != null) {
+            revisionsModel.setCleanApkQRCode(getQRCodeFromUrl(revision.getMainPackageUrl()));
+            revisionsModel.setHackedApkQRCode(getQRCodeFromUrl(revision.getSpecialPackageUrl()));
+        }
     }
 
     private StreamedContent getQRCodeFromUrl(final String url) throws WriterException, IOException {

@@ -33,7 +33,7 @@
         <domain.passwordFile>${glassfish.home}\pwdfile.txt</domain.passwordFile>
         <test.int.skip>false</test.int.skip>
         <glassfish.domain.name>${project.artifactId}</glassfish.domain.name>
-        <domain.resources.xml>${project.basedir}\clap-server-integration\src\test\resources\glassfish-clap-resources.xml</domain.resources.xml>
+        <domain.resources.xml>${project.basedir}\..\clap-server-integration\src\test\resources\glassfish-clap-resources.xml</domain.resources.xml>
     </properties>
 
     <reporting>
@@ -122,7 +122,7 @@
                     <artifactId>maven-glassfish-plugin</artifactId>
                     <version>${maven-glassfish-plugin.version}</version>
                     <configuration>
-                        <glassfishDirectory>${glassfish.home}</glassfishDirectory>
+                        <glassfishDirectory>${glassfish.home}/glassfish</glassfishDirectory>
                         <user>${domain.username}</user>
                         <passwordFile>${domain.passwordFile}</passwordFile>
                         <autoCreate>true</autoCreate>

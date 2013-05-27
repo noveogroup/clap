@@ -50,6 +50,8 @@ public class AuthenticationLightInterceptor implements LightInterceptor {
             final AuthenticationRequestHelper helper = requestHelperFactory.getRequestHelper(AuthenticationRequestHelper.class);
             if(!authenticationSystem.authentifyUser(helper)){
                 return null;
+            } else {
+                LOGGER.debug("authentication accepted");
             }
         }
         return nextInterceptor.proceed(context,requestHelperFactory, annotationMap);

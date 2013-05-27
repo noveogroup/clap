@@ -8,7 +8,7 @@
             pool-resize-quantity="1"
             max-pool-size="5"
             steady-pool-size="0"
-            non-transactional-connections="on"
+            non-transactional-connections="true"
             statement-timeout-in-seconds="30">
         <property name="User" value="root"></property>
         <property name="Password" value="123456"></property>

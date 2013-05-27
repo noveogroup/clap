@@ -22,9 +22,6 @@ public class AuthenticationController {
     private static final String FORM_ID_PASSWORD = "loginForm:password";
 
     @Inject
-    private AuthenticationRequestHelper authenticationRequestHelper;
-
-    @Inject
     private UserSessionData userSessionData;
 
     public String authentify(){
@@ -37,7 +34,7 @@ public class AuthenticationController {
         user.setLogin(login);
         user.setPassword(password);
         authentication.setUser(user);
-        authenticationRequestHelper.applyAuthentication(authentication);
+        userSessionData.setUser(user);
         return userSessionData.getRequestedView()+"?faces-redirect=true";
     }
 }
