@@ -3,11 +3,14 @@ package com.noveogroup.clap.model.revision;
 import com.noveogroup.clap.model.BaseModel;
 import com.noveogroup.clap.model.message.Message;
 
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 /**
  * @author Mikhail Demidov
  */
+@XmlRootElement
 public class Revision extends BaseModel {
 
     private Long timestamp;
@@ -28,6 +31,7 @@ public class Revision extends BaseModel {
     public Revision() {
     }
 
+    @XmlElement
     public RevisionType getRevisionType() {
         return revisionType;
     }
@@ -36,6 +40,7 @@ public class Revision extends BaseModel {
         this.revisionType = revisionType;
     }
 
+    @XmlElement
     public List<Message> getMessages() {
         return messages;
     }
@@ -44,6 +49,7 @@ public class Revision extends BaseModel {
         this.messages = messages;
     }
 
+    @XmlElement
     public Long getProjectId() {
         return projectId;
     }
@@ -52,6 +58,7 @@ public class Revision extends BaseModel {
         this.projectId = projectId;
     }
 
+    @XmlElement
     public String getMainPackageUrl() {
         return mainPackageUrl;
     }
@@ -60,6 +67,7 @@ public class Revision extends BaseModel {
         this.mainPackageUrl = mainPackageUrl;
     }
 
+    @XmlElement
     public String getSpecialPackageUrl() {
         return specialPackageUrl;
     }
@@ -68,6 +76,7 @@ public class Revision extends BaseModel {
         this.specialPackageUrl = specialPackageUrl;
     }
 
+    @XmlElement
     public Long getTimestamp() {
         return timestamp;
     }
@@ -76,6 +85,7 @@ public class Revision extends BaseModel {
         this.timestamp = timestamp;
     }
 
+    @XmlElement
     public String getHash() {
         return hash;
     }

@@ -28,12 +28,14 @@
 
     <properties>
         <!-- glassfish configuration-->
-        <glassfish.home>R:\glassfish3</glassfish.home>
+        <glassfish.home>/home/mihaildemidoff/applicaitons/glassfish3/</glassfish.home>
         <domain.username>root</domain.username>
-        <domain.passwordFile>${glassfish.home}\pwdfile.txt</domain.passwordFile>
+        <domain.passwordFile>${glassfish.home}/pwdfile.txt</domain.passwordFile>
         <test.int.skip>false</test.int.skip>
         <glassfish.domain.name>${project.artifactId}</glassfish.domain.name>
-        <domain.resources.xml>${project.basedir}\clap-server-integration\src\test\resources\glassfish-clap-resources.xml</domain.resources.xml>
+        <domain.resources.xml>
+            ${project.basedir}/../clap-server-integration/src/test/resources/glassfish-clap-resources.xml
+        </domain.resources.xml>
     </properties>
 
     <reporting>

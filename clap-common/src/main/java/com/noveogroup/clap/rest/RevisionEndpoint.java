@@ -2,12 +2,15 @@ package com.noveogroup.clap.rest;
 
 import com.noveogroup.clap.model.request.revision.RevisionRequest;
 import com.noveogroup.clap.model.revision.Revision;
-import com.sun.jersey.core.header.FormDataContentDisposition;
-import com.sun.jersey.multipart.FormDataParam;
+import com.noveogroup.clap.model.test.TestMultipart;
+import org.jboss.resteasy.annotations.providers.jaxb.json.BadgerFish;
+import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
-import java.io.InputStream;
 
 /**
  * @author Mikhail Demidov
@@ -15,29 +18,35 @@ import java.io.InputStream;
 @Path("/revision")
 public interface RevisionEndpoint {
 
-
     @POST
-    @Path("createRevision")
-    @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    Revision createOrUpdateRevision(@FormDataParam("authenticationKey") String authenticationKey,
-                            @FormDataParam("projectExternalId") String projectExternalId,
-                            @FormDataParam("revisionHash") String revisionHash,
-                            @FormDataParam("mainPackage") InputStream mainPackageInputStream,
-                            @FormDataParam("mainPackage") FormDataContentDisposition mainPackageDetail,
-                            @FormDataParam("specialPackage") InputStream specialPackageInputStream,
-                            @FormDataParam("specialPackage") FormDataContentDisposition specialPackageDetail);
+    @Produces(MediaType.APPLICATION_JSON)
+    @BadgerFish
+    Revision createOrUpdateRevision(@MultipartForm TestMultipart testMultipart);
 
-    @POST
-    @Path("updateRevisionPackages")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    Revision updateRevisionPackages(@FormDataParam("authenticationKey") String authenticationKey,
-                                    @FormDataParam("revisionHash") String revisionHash,
-                                    @FormDataParam("mainPackage") InputStream mainPackageInputStream,
-                                    @FormDataParam("mainPackage") FormDataContentDisposition mainPackageDetail,
-                                    @FormDataParam("specialPackage") InputStream specialPackageInputStream,
-                                    @FormDataParam("specialPackage") FormDataContentDisposition specialPackageDetail);
+
+//    @POST
+//    @Path("createRevision")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Consumes(MediaType.MULTIPART_FORM_DATA)
+//    Revision createOrUpdateRevision(@FormDataParam("authenticationKey") String authenticationKey,
+//                            @FormDataParam("projectExternalId") String projectExternalId,
+//                            @FormDataParam("revisionHash") String revisionHash,
+//                            @FormDataParam("mainPackage") InputStream mainPackageInputStream,
+//                            @FormDataParam("mainPackage") FormDataContentDisposition mainPackageDetail,
+//                            @FormDataParam("specialPackage") InputStream specialPackageInputStream,
+//                            @FormDataParam("specialPackage") FormDataContentDisposition specialPackageDetail);
+//
+//    @POST
+//    @Path("updateRevisionPackages")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @Consumes(MediaType.MULTIPART_FORM_DATA)
+//    Revision updateRevisionPackages(@FormDataParam("authenticationKey") String authenticationKey,
+//                                    @FormDataParam("revisionHash") String revisionHash,
+//                                    @FormDataParam("mainPackage") InputStream mainPackageInputStream,
+//                                    @FormDataParam("mainPackage") FormDataContentDisposition mainPackageDetail,
+//                                    @FormDataParam("specialPackage") InputStream specialPackageInputStream,
+//                                    @FormDataParam("specialPackage") FormDataContentDisposition specialPackageDetail);
 
 
     @POST
