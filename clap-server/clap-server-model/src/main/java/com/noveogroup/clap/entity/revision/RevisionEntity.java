@@ -108,7 +108,7 @@ public class RevisionEntity extends BaseEntity {
         return hash;
     }
 
-    public void setHash(String hash) {
+    public void setHash(final String hash) {
         this.hash = hash;
     }
 
@@ -117,7 +117,7 @@ public class RevisionEntity extends BaseEntity {
         return timestamp;
     }
 
-    public void setTimestamp(Long timestamp) {
+    public void setTimestamp(final Long timestamp) {
         this.timestamp = timestamp;
     }
 

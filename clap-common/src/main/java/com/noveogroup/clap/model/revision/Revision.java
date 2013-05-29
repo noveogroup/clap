@@ -83,7 +83,7 @@ public class Revision extends BaseModel {
         return hash;
     }
 
-    public void setHash(String hash) {
+    public void setHash(final String hash) {
         this.hash = hash;
     }
 
@@ -91,7 +91,7 @@ public class Revision extends BaseModel {
         return uploadedBy;
     }
 
-    public void setUploadedBy(User uploadedBy) {
+    public void setUploadedBy(final User uploadedBy) {
         this.uploadedBy = uploadedBy;
     }
 

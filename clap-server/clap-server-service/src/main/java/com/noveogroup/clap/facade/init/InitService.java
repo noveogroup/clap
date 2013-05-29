@@ -1,4 +1,4 @@
-package com.noveogroup.clap.service.init;
+package com.noveogroup.clap.facade.init;
 
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
@@ -7,11 +7,6 @@ import com.noveogroup.clap.entity.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.interceptor.ClapMainInterceptor;
-import com.noveogroup.clap.model.Project;
-import com.noveogroup.clap.model.auth.Authentication;
-import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
-import com.noveogroup.clap.model.revision.Revision;
-import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -14,7 +14,7 @@ public class UpdateRevisionPackagesRequest {
         return revisionHash;
     }
 
-    public void setRevisionHash(String revisionHash) {
+    public void setRevisionHash(final String revisionHash) {
         this.revisionHash = revisionHash;
     }
 

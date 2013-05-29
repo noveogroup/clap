@@ -56,7 +56,7 @@ public class Project extends BaseModel {
         return externalId;
     }
 
-    public void setExternalId(String externalId) {
+    public void setExternalId(final String externalId) {
         this.externalId = externalId;
     }
 

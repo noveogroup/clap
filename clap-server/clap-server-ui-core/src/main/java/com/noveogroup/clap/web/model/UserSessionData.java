@@ -19,7 +19,7 @@ public class UserSessionData implements Serializable{
         return requestedView;
     }
 
-    public void setRequestedView(String requestedView) {
+    public void setRequestedView(final String requestedView) {
         this.requestedView = requestedView;
     }
 
@@ -27,7 +27,7 @@ public class UserSessionData implements Serializable{
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(final User user) {
         this.user = user;
     }
 }

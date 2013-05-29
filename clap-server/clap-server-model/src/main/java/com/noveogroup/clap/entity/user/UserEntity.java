@@ -32,7 +32,7 @@ public class UserEntity extends BaseEntity {
         return authenticationKey;
     }
 
-    public void setAuthenticationKey(String authenticationKey) {
+    public void setAuthenticationKey(final String authenticationKey) {
         this.authenticationKey = authenticationKey;
     }
 
@@ -40,7 +40,7 @@ public class UserEntity extends BaseEntity {
         return login;
     }
 
-    public void setLogin(String login) {
+    public void setLogin(final String login) {
         this.login = login;
     }
 
@@ -48,7 +48,7 @@ public class UserEntity extends BaseEntity {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 
@@ -56,7 +56,7 @@ public class UserEntity extends BaseEntity {
         return fullName;
     }
 
-    public void setFullName(String fullName) {
+    public void setFullName(final String fullName) {
         this.fullName = fullName;
     }
 

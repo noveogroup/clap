@@ -19,8 +19,6 @@ import javax.interceptor.Interceptors;
  * @author Andrey Sokolov
  */
 @Stateless
-@Interceptors(ClapMainInterceptor.class)
-@TransactionManagement(TransactionManagementType.BEAN)
 public class UserServiceImpl implements UserService {
 
     private static final Mapper MAPPER = new DozerBeanMapper();
@@ -49,7 +47,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    @Transactional
     @Override
     public User createUser(final User user){
         UserEntity userEntity = MAPPER.map(user,UserEntity.class);

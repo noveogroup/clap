@@ -1,8 +1,7 @@
 package com.noveogroup.clap.rest;
 
+import com.noveogroup.clap.facade.ProjectsFacade;
 import com.noveogroup.clap.model.Project;
-import com.noveogroup.clap.rest.ProjectEndpoint;
-import com.noveogroup.clap.service.project.ProjectService;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
@@ -19,16 +18,16 @@ public class ProjectEndpointImpl implements ProjectEndpoint {
     private static final Mapper MAPPER = new DozerBeanMapper();
 
     @Inject
-    private ProjectService projectService;
+    private ProjectsFacade projectsFacade;
 
 
     @Override
     public Project createProject(final Project project) {
-        return projectService.createProject(project);
+        return projectsFacade.createProject(project);
     }
 
     @Override
     public Project getProject(@QueryParam("id") final Long id) {
-        return projectService.findById(id);
+        return projectsFacade.findById(id);
     }
 }

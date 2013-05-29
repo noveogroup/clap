@@ -31,8 +31,6 @@ import java.util.Date;
  * @author Mikhail Demidov
  */
 @Stateless
-@Interceptors({ClapMainInterceptor.class})
-@TransactionManagement(TransactionManagementType.BEAN)
 public class RevisionServiceImpl implements RevisionService {
 
     private static final Mapper MAPPER = new DozerBeanMapper();
@@ -47,7 +45,6 @@ public class RevisionServiceImpl implements RevisionService {
     private UrlService urlService;
 
 
-    @Transactional
     @Override
     public Revision addOrGetRevision(final @NotNull AddOrGetRevisionRequest request) {
         final Revision revision = request.getRevision();
@@ -71,15 +68,12 @@ public class RevisionServiceImpl implements RevisionService {
         return outcomeRevision;
     }
 
-    @Transactional
     @Override
     public Revision updateRevisionPackages(final @NotNull UpdateRevisionPackagesRequest request) {
         final RevisionEntity revisionEntity = revisionDAO.getRevisionByHash(request.getRevisionHash());
         return updateRevisionPackages(revisionEntity, request.getMainPackage(), request.getSpecialPackage());
     }
 
-    @Transactional
-    @AuthenticationRequired
     @Override
     public ApplicationFile getApplication(final GetApplicationRequest request) {
         final RevisionEntity revisionEntity = revisionDAO.findById(request.getRevisionId());
@@ -101,8 +95,6 @@ public class RevisionServiceImpl implements RevisionService {
         return null;
     }
 
-    @Transactional
-    @AuthenticationRequired
     @Override
     public Revision getRevision(final RevisionRequest request) {
         final RevisionEntity revisionEntity = revisionDAO.findById(request.getRevisionId());

@@ -1,9 +1,9 @@
 package com.noveogroup.clap.rest;
 
 
+import com.noveogroup.clap.facade.RevisionsFacade;
 import com.noveogroup.clap.model.request.revision.RevisionRequest;
 import com.noveogroup.clap.model.revision.Revision;
-import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
 import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
 import com.noveogroup.clap.web.controller.ProjectsController;
@@ -26,7 +26,7 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProjectsController.class);
 
     @Inject
-    private RevisionService revisionService;
+    private RevisionsFacade revisionsFacade;
 
 
     @Override
@@ -58,7 +58,7 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
         request.setRevision(revision);
         request.setMainPackage(mainPackage);
         request.setSpecialPackage(specialPackage);
-        return revisionService.addOrGetRevision(request);
+        return revisionsFacade.addOrGetRevision(request);
     }
 
     @Override
@@ -84,11 +84,11 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
         request.setRevisionHash(revisionHash);
         request.setMainPackage(mainPackage);
         request.setSpecialPackage(specialPackage);
-        return revisionService.updateRevisionPackages(request);
+        return revisionsFacade.updateRevisionPackages(request);
     }
 
     @Override
     public Revision getRevision(final RevisionRequest request) {
-        return revisionService.getRevision(request);
+        return revisionsFacade.getRevision(request);
     }
 }

@@ -14,7 +14,7 @@ public class User {
         return authenticationKey;
     }
 
-    public void setAuthenticationKey(String authenticationKey) {
+    public void setAuthenticationKey(final String authenticationKey) {
         this.authenticationKey = authenticationKey;
     }
 
@@ -22,7 +22,7 @@ public class User {
         return login;
     }
 
-    public void setLogin(String login) {
+    public void setLogin(final String login) {
         this.login = login;
     }
 
@@ -30,7 +30,7 @@ public class User {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 
@@ -38,7 +38,7 @@ public class User {
         return fullName;
     }
 
-    public void setFullName(String fullName) {
+    public void setFullName(final String fullName) {
         this.fullName = fullName;
     }
 

@@ -27,7 +27,7 @@ public class UserDAOImpl extends GenericHibernateDAOImpl<UserEntity, Long> imple
     }
 
     @Override
-    public UserEntity getUserByLogin(String login) {
+    public UserEntity getUserByLogin(final String login) {
         final Query query = entityManager.createNamedQuery(GET_USER_BY_LOGIN);
         query.setParameter(GET_USER_BY_LOGIN_PARAMETER, login);
         final UserEntity userEntity = (UserEntity) query.getSingleResult();

@@ -19,8 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
-@TransactionManagement(TransactionManagementType.BEAN)
-@Interceptors({ClapMainInterceptor.class})
 public class MessagesServiceImpl implements MessagesService {
 
     private static final Mapper MAPPER = new DozerBeanMapper();
@@ -31,7 +29,6 @@ public class MessagesServiceImpl implements MessagesService {
     @EJB
     private MessageDAO messageDAO;
 
-    @Transactional
     @Override
     public void saveMessage(final String revisionHash, final Message message) {
         final RevisionEntity revisionEntity = revisionDAO.getRevisionByHash(revisionHash);

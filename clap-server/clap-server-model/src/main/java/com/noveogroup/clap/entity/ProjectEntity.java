@@ -69,7 +69,7 @@ public class ProjectEntity extends BaseEntity {
         return externalId;
     }
 
-    public void setExternalId(String externalId) {
+    public void setExternalId(final String externalId) {
         this.externalId = externalId;
     }
 

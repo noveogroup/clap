@@ -28,8 +28,6 @@ import java.util.List;
  * @author Mikhail Demidov
  */
 @Stateless
-@TransactionManagement(TransactionManagementType.BEAN)
-@Interceptors({ClapMainInterceptor.class})
 public class ProjectServiceImpl implements ProjectService {
 
     private static final Mapper MAPPER = new DozerBeanMapper();
@@ -46,8 +44,6 @@ public class ProjectServiceImpl implements ProjectService {
     @Inject
     private UrlService urlService;
 
-    @AuthenticationRequired
-    @Transactional
     @Override
     public Project createProject(final Project project) {
         if (project.getCreationDate() == null) {
@@ -57,16 +53,12 @@ public class ProjectServiceImpl implements ProjectService {
         return MAPPER.map(projectDAO.persist(projectEntity), Project.class);
     }
 
-    @AuthenticationRequired
-    @Transactional
     @Override
     public Project save(final Project project) {
         final ProjectEntity projectEntity = MAPPER.map(project, ProjectEntity.class);
         return MAPPER.map(projectDAO.persist(projectEntity), Project.class);
     }
 
-    @AuthenticationRequired
-    @Transactional
     @Override
     public Project findById(final Long id) {
         final ProjectEntity projectEntity = projectDAO.findById(id);
@@ -86,7 +78,6 @@ public class ProjectServiceImpl implements ProjectService {
         return project;
     }
 
-    @AuthenticationRequired
     @Override
     public List<Project> findAllProjects() {
         final List<ProjectEntity> projectEntityList = projectDAO.selectAll();

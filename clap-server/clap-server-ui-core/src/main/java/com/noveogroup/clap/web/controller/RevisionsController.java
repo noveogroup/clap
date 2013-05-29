@@ -6,11 +6,11 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
+import com.noveogroup.clap.facade.ProjectsFacade;
+import com.noveogroup.clap.facade.RevisionsFacade;
 import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
-import com.noveogroup.clap.service.project.ProjectService;
-import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
 import com.noveogroup.clap.model.request.revision.RevisionRequest;
 import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
@@ -46,10 +46,10 @@ public class RevisionsController extends BaseController {
     private RevisionsModel revisionsModel;
 
     @Inject
-    private RevisionService revisionService;
+    private RevisionsFacade revisionsFacade;
 
     @Inject
-    private ProjectService projectService;
+    private ProjectsFacade projectsFacade;
 
     public String saveNewRevision() throws IOException {
         LOGGER.debug("saving new revision");
@@ -69,11 +69,11 @@ public class RevisionsController extends BaseController {
         if (newRevisionHackedApk != null) {
             request.setSpecialPackage(newRevisionHackedApk.getContents());
         }
-        revisionService.addOrGetRevision(request);
+        revisionsFacade.addOrGetRevision(request);
 
         revisionsModel.reset();
         LOGGER.debug("revision saved");
-        final Project updatedProject = projectService.findById(projectsModel.getSelectedProject().getId());
+        final Project updatedProject = projectsFacade.findById(projectsModel.getSelectedProject().getId());
         if (updatedProject != null) {
             projectsModel.setSelectedProject(updatedProject);
             revisionsModel.setRevisionsListDataModel(new RevisionsListDataModel(updatedProject.getRevisions()));
@@ -86,7 +86,7 @@ public class RevisionsController extends BaseController {
         if (selectedRevision != null) {
             final RevisionRequest request = new RevisionRequest();
             request.setRevisionId(selectedRevision.getId());
-            revisionsModel.setSelectedRevision(revisionService.getRevision(request));
+            revisionsModel.setSelectedRevision(revisionsFacade.getRevision(request));
             updateQRCodes(revisionsModel.getSelectedRevision());
             LOGGER.debug(selectedRevision.getId() + " revision preparing finished");
         } else {
@@ -112,7 +112,7 @@ public class RevisionsController extends BaseController {
         if (newRevisionHackedApk != null) {
             request.setSpecialPackage(newRevisionHackedApk.getContents());
         }
-        final Revision updatedRevision = revisionService.updateRevisionPackages(request);
+        final Revision updatedRevision = revisionsFacade.updateRevisionPackages(request);
         revisionsModel.setSelectedRevision(updatedRevision);
         updateQRCodes(updatedRevision);
         LOGGER.debug("revision updated");
