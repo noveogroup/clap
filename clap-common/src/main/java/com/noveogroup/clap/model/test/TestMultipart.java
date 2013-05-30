@@ -9,7 +9,8 @@ import javax.ws.rs.FormParam;
  */
 public class TestMultipart {
 
-
+    @FormParam("filedata")
+    @PartType("application/octet-stream")
     private byte[] data;
 
     public TestMultipart() {
@@ -19,8 +20,6 @@ public class TestMultipart {
         return data;
     }
 
-    @FormParam("filedata")
-    @PartType("application/octet-stream")
     public void setData(final byte[] data) {
         this.data = data;
     }

@@ -84,7 +84,7 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
 //    }
 
     @Override
-    public Revision createOrUpdateRevision(@MultipartForm final TestMultipart testMultipart) {
+    public Revision createOrUpdateRevision(final TestMultipart testMultipart) {
         Revision revision = new Revision();
         if (testMultipart.getData() != null) {
             revision.setHash("111");
