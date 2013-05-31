@@ -5,6 +5,7 @@ import com.noveogroup.clap.entity.ProjectEntity;
 import org.hibernate.Hibernate;
 
 import javax.ejb.Stateless;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 
 /**
@@ -29,9 +30,18 @@ public class ProjectDAOImpl extends GenericHibernateDAOImpl<ProjectEntity, Long>
     public ProjectEntity findProjectByExternalId(final String externalId) {
         final Query query = entityManager.createNamedQuery(GET_PROJECT_BY_EXTERNAL_ID);
         query.setParameter(GET_PROJECT_BY_EXTERNAL_ID_PARAMETER, externalId);
-        final ProjectEntity projectEntity = (ProjectEntity) query.getSingleResult();
-        if (projectEntity != null) {
-            Hibernate.initialize(projectEntity.getRevisions());
+        ProjectEntity projectEntity = null;
+        try {
+            projectEntity = (ProjectEntity) query.getSingleResult();
+            if (projectEntity != null) {
+                Hibernate.initialize(projectEntity.getRevisions());
+            } else {
+                projectEntity = new ProjectEntity();
+                projectEntity.setExternalId(externalId);
+                entityManager.persist(projectEntity);
+            }
+        } catch (NoResultException e) {
+
         }
         return projectEntity;
     }

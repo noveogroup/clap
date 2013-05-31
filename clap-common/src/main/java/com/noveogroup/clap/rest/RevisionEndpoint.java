@@ -1,8 +1,8 @@
 package com.noveogroup.clap.rest;
 
 import com.noveogroup.clap.model.request.revision.RevisionRequest;
+import com.noveogroup.clap.model.revision.CreateOrUpdateRevisionRequest;
 import com.noveogroup.clap.model.revision.Revision;
-import com.noveogroup.clap.model.test.TestMultipart;
 import org.jboss.resteasy.annotations.providers.jaxb.json.BadgerFish;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
@@ -22,7 +22,9 @@ public interface RevisionEndpoint {
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     @BadgerFish
-    Revision createOrUpdateRevision(@MultipartForm TestMultipart testMultipart);
+    Revision createOrUpdateRevision(@MultipartForm CreateOrUpdateRevisionRequest request);
+
+
 
 
 //    @POST

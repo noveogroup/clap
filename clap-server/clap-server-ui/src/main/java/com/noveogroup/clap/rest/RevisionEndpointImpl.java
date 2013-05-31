@@ -1,12 +1,12 @@
 package com.noveogroup.clap.rest;
 
 
+import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
 import com.noveogroup.clap.model.request.revision.RevisionRequest;
+import com.noveogroup.clap.model.revision.CreateOrUpdateRevisionRequest;
 import com.noveogroup.clap.model.revision.Revision;
-import com.noveogroup.clap.model.test.TestMultipart;
 import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.web.controller.ProjectsController;
-import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -84,14 +84,23 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
 //    }
 
     @Override
-    public Revision createOrUpdateRevision(final TestMultipart testMultipart) {
-        Revision revision = new Revision();
-        if (testMultipart.getData() != null) {
-            revision.setHash("111");
-        } else {
-            revision.setHash("222");
+    public Revision createOrUpdateRevision(final CreateOrUpdateRevisionRequest request) {
+        final Revision revision = new Revision();
+        revision.setHash(request.getRevisionHash());
+        final AddOrGetRevisionRequest addOrGetRevisionRequest = new AddOrGetRevisionRequest();
+        addOrGetRevisionRequest.setProjectExternalId(request.getProjectExternalId());
+        addOrGetRevisionRequest.setRevision(revision);
+        if (request.getMainPackage() != null) {
+            addOrGetRevisionRequest.setMainPackage(request.getMainPackage());
         }
-        return revision;
+        if (request.getSpecialPackage() != null) {
+            addOrGetRevisionRequest.setSpecialPackage(request.getSpecialPackage());
+        }
+        if (revisionService == null) {
+            throw new RuntimeException("Empty revisionService");
+        }
+        return revisionService.addOrGetRevision(addOrGetRevisionRequest);
+
     }
 
     @Override
