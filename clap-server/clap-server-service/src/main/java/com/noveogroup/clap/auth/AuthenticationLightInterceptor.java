@@ -47,7 +47,8 @@ public class AuthenticationLightInterceptor implements LightInterceptor {
                           final RequestHelperFactory requestHelperFactory,
                           final Map<Class<? extends Annotation>, Annotation> annotationMap) throws Exception {
         if(annotationMap.containsKey(AuthenticationRequired.class)){
-            final AuthenticationRequestHelper helper = requestHelperFactory.getRequestHelper(AuthenticationRequestHelper.class);
+            final AuthenticationRequestHelper helper = requestHelperFactory
+                    .getRequestHelper(AuthenticationRequestHelper.class);
             if(!authenticationSystem.authentifyUser(helper)){
                 return null;
             } else {

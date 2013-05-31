@@ -3,7 +3,6 @@ package com.noveogroup.clap.validation;
 import com.noveogroup.clap.interceptor.composite.LightInterceptor;
 import com.noveogroup.clap.interceptor.composite.LightInterceptorQualifier;
 import com.noveogroup.clap.interceptor.composite.RequestHelperFactory;
-import org.apache.commons.collections.CollectionUtils;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -38,12 +37,14 @@ public class ValidationLightInterceptor implements LightInterceptor {
     }
 
     @Override
-    public Object proceed(final InvocationContext context, final RequestHelperFactory requestHelperFactory, final Map<Class<? extends Annotation>, Annotation> annotationMap) throws Exception {
-        Object[] parameters = context.getParameters();
+    public Object proceed(final InvocationContext context,
+                          final RequestHelperFactory requestHelperFactory,
+                          final Map<Class<? extends Annotation>, Annotation> annotationMap) throws Exception {
+        final Object[] parameters = context.getParameters();
         if (parameters != null) {
-            Validator validator = validatorFactory.getValidator();
-            for (Object parameter : parameters) {
-                Set<ConstraintViolation<Object>> violations = validator.validate(parameter);
+            final Validator validator = validatorFactory.getValidator();
+            for (final Object parameter : parameters) {
+                final Set<ConstraintViolation<Object>> violations = validator.validate(parameter);
                 if (!violations.isEmpty()) {
                     //TODO somehow exception isn't building message =/
                     throw new ConstraintViolationException(violations);

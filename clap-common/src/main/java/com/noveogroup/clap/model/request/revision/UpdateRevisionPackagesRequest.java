@@ -1,6 +1,5 @@
 package com.noveogroup.clap.model.request.revision;
 
-import java.util.Arrays;
 
 /**
  * @author Andrey Sokolov

@@ -3,8 +3,6 @@ package com.noveogroup.clap.rest;
 import com.noveogroup.clap.entity.ProjectEntity;
 import com.noveogroup.clap.facade.ProjectsFacade;
 import com.noveogroup.clap.model.Project;
-import com.noveogroup.clap.rest.TestEndpoint;
-import com.noveogroup.clap.service.project.ProjectService;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 

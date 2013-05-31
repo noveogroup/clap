@@ -16,7 +16,9 @@ import org.primefaces.model.StreamedContent;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * @author
@@ -37,7 +39,9 @@ public class HelloBean {
         final ByteArrayOutputStream buf = new ByteArrayOutputStream();
         final Writer writer = new QRCodeWriter();
         //151 chars
-        final BitMatrix matrix = writer.encode("123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890_",
+        final BitMatrix matrix = writer.encode("123456789012345678901234567890123456789012345678901" +
+                "234567890123456789012345678901234567890123456789012345678" +
+                "901234567890123456789012345678901234567890_",
                 BarcodeFormat.QR_CODE, 100, 100);
         MatrixToImageWriter.writeToStream(matrix, "PNG", buf);
         //422 bytes

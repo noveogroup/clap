@@ -48,7 +48,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public Project getCreateUpdateProject(Project project) {
+    public Project getCreateUpdateProject(final Project project) {
         ProjectEntity projectEntity = null;
         try {
             projectEntity = projectDAO.findProjectByExternalId(project.getExternalId());

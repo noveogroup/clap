@@ -65,10 +65,10 @@ public class ProjectsController extends BaseController {
             final Project projectWithRevisions = projectsFacade.findById(selectedProject.getId());
             if (projectWithRevisions != null){
                 projectsModel.setSelectedProject(projectWithRevisions);
-                revisionsModel.setRevisionsListDataModel(new RevisionsListDataModel(projectWithRevisions.getRevisions()));
+                revisionsModel.setRevisionsListDataModel(
+                        new RevisionsListDataModel(projectWithRevisions.getRevisions()));
             }
-        }
-        else {
+        } else {
             LOGGER.error("project not selected");
         }
     }

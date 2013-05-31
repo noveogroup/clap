@@ -1,6 +1,5 @@
 package com.noveogroup.clap.service.revision;
 
-import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.revision.ApplicationFile;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;

@@ -2,7 +2,11 @@ package com.noveogroup.clap.entity.user;
 
 import com.noveogroup.clap.entity.BaseEntity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 /**
  * @author Andrey Sokolov

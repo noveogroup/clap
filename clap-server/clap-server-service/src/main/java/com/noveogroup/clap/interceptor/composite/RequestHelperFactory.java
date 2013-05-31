@@ -18,7 +18,8 @@ public class RequestHelperFactory {
     @Any
     private Instance<RequestHelper> requestHelpers;
 
-    private final Map<Class<? extends RequestHelper>,RequestHelper> requestHelperMap = new HashMap<Class<? extends RequestHelper>, RequestHelper>();
+    private final Map<Class<? extends RequestHelper>,RequestHelper> requestHelperMap
+            = new HashMap<Class<? extends RequestHelper>, RequestHelper>();
 
 
     @PostConstruct

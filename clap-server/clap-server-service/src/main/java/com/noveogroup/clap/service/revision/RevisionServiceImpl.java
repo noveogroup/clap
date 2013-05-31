@@ -1,13 +1,10 @@
 package com.noveogroup.clap.service.revision;
 
-import com.noveogroup.clap.auth.AuthenticationRequired;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.revision.RevisionType;
-import com.noveogroup.clap.interceptor.ClapMainInterceptor;
-import com.noveogroup.clap.transaction.Transactional;
 import com.noveogroup.clap.model.revision.ApplicationFile;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
@@ -20,10 +17,7 @@ import org.dozer.Mapper;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
-import javax.interceptor.Interceptors;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -104,7 +98,9 @@ public class RevisionServiceImpl implements RevisionService {
     }
 
 
-    private Revision updateRevisionPackages(RevisionEntity revisionEntity, final byte[] mainPackage, final byte[] specialPackage) {
+    private Revision updateRevisionPackages(RevisionEntity revisionEntity,
+                                            final byte[] mainPackage,
+                                            final byte[] specialPackage) {
         addPackages(revisionEntity, mainPackage, specialPackage);
         revisionEntity = revisionDAO.persist(revisionEntity);
         final Revision outcomeRevision = MAPPER.map(revisionEntity, Revision.class);
@@ -112,7 +108,9 @@ public class RevisionServiceImpl implements RevisionService {
         return outcomeRevision;
     }
 
-    private void addPackages(final RevisionEntity revisionEntity, final byte[] mainPackage, final byte[] specialPackage) {
+    private void addPackages(final RevisionEntity revisionEntity,
+                             final byte[] mainPackage,
+                             final byte[] specialPackage) {
         if (mainPackage != null) {
             revisionEntity.setMainPackage(mainPackage);
             revisionEntity.setMainPackageLoaded(true);

@@ -6,8 +6,6 @@ import com.noveogroup.clap.integration.DAOIntegration;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -21,13 +19,12 @@ import java.util.List;
  */
 public abstract class GenericHibernateDAOImpl<T, ID extends Serializable> implements GenericDAO<T, ID> {
 
-
-    private Class<T> persistentClass;
-
     protected EntityManager entityManager;
 
     @Inject
     protected DAOIntegration daoIntegration;
+
+    private Class<T> persistentClass;
 
     public GenericHibernateDAOImpl() {
 
@@ -36,7 +33,8 @@ public abstract class GenericHibernateDAOImpl<T, ID extends Serializable> implem
     @PostConstruct
     public void setup() {
         entityManager = daoIntegration.getClapEntityManager();
-        persistentClass = (Class<T>) ((ParameterizedType) getClass().getGenericSuperclass()).getActualTypeArguments()[0];
+        persistentClass = (Class<T>) ((ParameterizedType) getClass()
+                .getGenericSuperclass()).getActualTypeArguments()[0];
     }
 
     @Override

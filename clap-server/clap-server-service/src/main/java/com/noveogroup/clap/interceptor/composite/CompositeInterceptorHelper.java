@@ -10,7 +10,12 @@ import javax.inject.Inject;
 import javax.interceptor.InvocationContext;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * manages LightInterceptors
@@ -33,7 +38,8 @@ public class CompositeInterceptorHelper {
         if (lightInterceptors != null) {
             for (final LightInterceptor interceptor : lightInterceptors) {
                 interceptorList.add(interceptor);
-                LOGGER.info("registered " + interceptor.getDescription() + " with priority " + interceptor.getPriority());
+                LOGGER.info("registered " + interceptor.getDescription()
+                        + " with priority " + interceptor.getPriority());
             }
         }
         final int size = interceptorList.size();
@@ -55,7 +61,8 @@ public class CompositeInterceptorHelper {
 
     public Object execute(final InvocationContext ctx,
                           final RequestHelperFactory requestHelperFactory) throws Exception {
-        final Map<Class<? extends Annotation>, Annotation> annotationMap = new HashMap<Class<? extends Annotation>, Annotation>();
+        final Map<Class<? extends Annotation>, Annotation> annotationMap
+                = new HashMap<Class<? extends Annotation>, Annotation>();
         final Annotation[] methodAnnotations = ctx.getMethod().getDeclaredAnnotations();
         if (methodAnnotations.length > 0) {
             for (final Annotation annotation : methodAnnotations) {
@@ -123,11 +130,14 @@ public class CompositeInterceptorHelper {
 
         @Override
         public void setNextInterceptor(final LightInterceptor nextInterceptor) {
-            throw new IllegalArgumentException(nextInterceptor + " has too low priority - " + nextInterceptor.getPriority());
+            throw new IllegalArgumentException(nextInterceptor
+                    + " has too low priority - " + nextInterceptor.getPriority());
         }
 
         @Override
-        public Object proceed(final InvocationContext context, final RequestHelperFactory requestHelperFactory, final Map<Class<? extends Annotation>, Annotation> annotationMap) throws Exception {
+        public Object proceed(final InvocationContext context,
+                              final RequestHelperFactory requestHelperFactory,
+                              final Map<Class<? extends Annotation>, Annotation> annotationMap) throws Exception {
             return wrappedContext.proceed();
         }
 

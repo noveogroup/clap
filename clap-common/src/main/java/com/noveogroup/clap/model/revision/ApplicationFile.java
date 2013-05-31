@@ -1,7 +1,5 @@
 package com.noveogroup.clap.model.revision;
 
-import java.util.Arrays;
-
 public class ApplicationFile {
 
     private String filename;

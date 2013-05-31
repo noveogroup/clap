@@ -53,6 +53,7 @@
     <properties>
         <!-- versions -->
         <maven-compiler-plugin.version>3.0</maven-compiler-plugin.version>
+        <maven-checkstyle-plugin.version>2.9.1</maven-checkstyle-plugin.version>
         <junit.version>4.11</junit.version>
         <maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
         <maven-surefire-plugin.version>2.14</maven-surefire-plugin.version>
@@ -264,4 +265,34 @@
         </dependencies>
     </dependencyManagement>
 
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${maven-checkstyle-plugin.version}</version>
+                    <dependencies>
+                        <dependency>
+                            <groupId>com.noveogroup.clap</groupId>
+                            <artifactId>clap-common</artifactId>
+                            <version>${project.version}</version>
+                        </dependency>
+                    </dependencies>
+                    <configuration>
+                        <configLocation>checkstyle.xml</configLocation>
+                        <consoleOutput>true</consoleOutput>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <phase>package</phase>
+                            <goals>
+                                <goal>check</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>

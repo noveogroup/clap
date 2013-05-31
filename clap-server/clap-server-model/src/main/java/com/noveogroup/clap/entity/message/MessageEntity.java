@@ -2,7 +2,11 @@ package com.noveogroup.clap.entity.message;
 
 import com.noveogroup.clap.entity.BaseEntity;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.util.Date;
 
 /**
@@ -15,18 +19,18 @@ import java.util.Date;
 @Entity
 @Table(name = "messages")
 public class MessageEntity extends BaseEntity {
-
+    private static final int COLUMN_LENGTH = 16777215;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
 
-    @Column(length = 16777215)
+    @Column(length = COLUMN_LENGTH)
     private String deviceInfo;
-    @Column(length = 16777215)
+    @Column(length = COLUMN_LENGTH)
     private String stackTraceInfo;
-    @Column(length = 16777215)
+    @Column(length = COLUMN_LENGTH)
     private String logCat;
-    @Column(length = 16777215)
+    @Column(length = COLUMN_LENGTH)
     private String activityTraceLog;
 
     /**
