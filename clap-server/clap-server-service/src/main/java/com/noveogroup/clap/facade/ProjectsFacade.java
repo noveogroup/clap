@@ -32,6 +32,12 @@ public class ProjectsFacade {
 
     @AuthenticationRequired
     @Transactional
+    public Project getCreateUpdateProject(final Project project){
+        return projectService.getCreateUpdateProject(project);
+    }
+
+    @AuthenticationRequired
+    @Transactional
     public Project save(final Project project){
         return projectService.save(project);
     }

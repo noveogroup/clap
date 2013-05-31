@@ -8,6 +8,8 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 import com.noveogroup.clap.config.ConfigBean;
+import com.noveogroup.clap.facade.ProjectsFacade;
+import com.noveogroup.clap.model.Project;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
@@ -22,6 +24,9 @@ import java.io.*;
 @Named
 @RequestScoped
 public class HelloBean {
+
+    @Inject
+    private ProjectsFacade projectsFacade;
 
     @Inject
     private ConfigBean configBean;
@@ -42,5 +47,10 @@ public class HelloBean {
 
     public StreamedContent getQRCode() {
         return QRCode;
+    }
+
+    public String testValidation(){
+        projectsFacade.getCreateUpdateProject(new Project());
+        return Navigation.PROJECTS.getView();
     }
 }

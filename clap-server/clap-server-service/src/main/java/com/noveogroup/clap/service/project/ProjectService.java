@@ -10,9 +10,25 @@ import java.util.List;
  */
 public interface ProjectService {
 
-
+    /**
+     * creates project, throws exceptions if can't create
+     *
+     * @param project initial project data
+     * @return persisted model
+     */
     Project createProject(Project project);
 
+    /**
+     * find and returns project by provided model(uses externalId)
+     * if project not exists - creates it
+     * if project exists updates its data using provided model(null fields ignored)
+     *
+     * @param project criteria
+     * @return persisted model
+     */
+    Project getCreateUpdateProject(Project project);
+
+    //TODO check if needed
     Project save(Project project);
 
     Project findById(Long id);
