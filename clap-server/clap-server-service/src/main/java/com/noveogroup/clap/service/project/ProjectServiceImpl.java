@@ -51,7 +51,7 @@ public class ProjectServiceImpl implements ProjectService {
     public Project getCreateUpdateProject(final Project project) {
         ProjectEntity projectEntity = null;
         try {
-            projectEntity = projectDAO.findProjectByExternalId(project.getExternalId());
+            projectEntity = projectDAO.findProjectByExternalIdOrReturnNull(project.getExternalId());
         } catch (Exception e){
             projectEntity = MAPPER.map(project,ProjectEntity.class);
         }

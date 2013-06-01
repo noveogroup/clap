@@ -108,7 +108,9 @@ public class RevisionServiceImpl implements RevisionService {
     }
 
 
-    private Revision updateRevisionPackages(RevisionEntity revisionEntity, final byte[] mainPackage, final byte[] specialPackage) {
+    private Revision updateRevisionPackages(RevisionEntity revisionEntity, final byte[] mainPackage
+            , final byte[] specialPackage) {
+
         addPackages(revisionEntity, mainPackage, specialPackage);
         revisionEntity = revisionDAO.persist(revisionEntity);
         final Revision outcomeRevision = MAPPER.map(revisionEntity, Revision.class);
@@ -116,7 +118,8 @@ public class RevisionServiceImpl implements RevisionService {
         return outcomeRevision;
     }
 
-    private void addPackages(final RevisionEntity revisionEntity, final byte[] mainPackage, final byte[] specialPackage) {
+    private void addPackages(final RevisionEntity revisionEntity, final byte[] mainPackage
+            , final byte[] specialPackage) {
         if (mainPackage != null) {
             revisionEntity.setMainPackage(mainPackage);
             revisionEntity.setMainPackageLoaded(true);

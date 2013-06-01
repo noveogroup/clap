@@ -5,7 +5,6 @@ import com.noveogroup.clap.entity.ProjectEntity;
 import org.hibernate.Hibernate;
 
 import javax.ejb.Stateless;
-import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 import java.util.List;
