@@ -1,5 +1,6 @@
-package com.noveogroup.clap.model.revision;
+package com.noveogroup.clap.model.request.revision;
 
+import com.noveogroup.clap.model.user.User;
 import org.jboss.resteasy.annotations.providers.multipart.PartType;
 
 import javax.ws.rs.FormParam;
@@ -21,6 +22,10 @@ public class CreateOrUpdateRevisionRequest {
     @FormParam("revisionHash")
     @PartType("multipart/form-data")
     private String revisionHash;
+
+    @FormParam("user")
+    @PartType("application/json")
+    private User user;
 
     @FormParam("mainPackage")
     @PartType("application/octet-stream")
@@ -60,5 +65,13 @@ public class CreateOrUpdateRevisionRequest {
 
     public void setSpecialPackage(final byte[] specialPackage) {
         this.specialPackage = specialPackage;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(final User user) {
+        this.user = user;
     }
 }

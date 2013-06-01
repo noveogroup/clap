@@ -9,6 +9,8 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
+    <name>CLAP server UI core module </name>
+
     <artifactId>clap-server-ui-core</artifactId>
 
     <dependencies>

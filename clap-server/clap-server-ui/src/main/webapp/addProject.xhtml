@@ -16,6 +16,13 @@
                              validatorMessage="#{msgs['project.add.message.name']}">
                     <f:validateLength minimum="5" maximum="20"/>
                 </p:inputText>
+                <h:outputLabel for="externalId"
+                               value="#{msgs['project.add.label.externalId']}"/>
+                <p:inputText id="externalId"
+                             validatorMessage="#{msgs['project.add.message.externalId']}"
+                             value="#{projectsModel.newProject.externalId}">
+                    <f:validateLength minimum="3" maximum="40"/>
+                </p:inputText>
                 <h:outputLabel for="description"
                                value="#{msgs['project.add.label.description']}"/>
                 <p:inputText id="description"

@@ -15,4 +15,12 @@ public class RevisionRequest extends BaseRequest{
     public void setRevisionId(final Long revisionId) {
         this.revisionId = revisionId;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("RevisionRequest{");
+        sb.append("revisionId=").append(revisionId);
+        sb.append('}');
+        return sb.toString();
+    }
 }

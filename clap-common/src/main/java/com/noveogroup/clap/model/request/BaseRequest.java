@@ -20,4 +20,12 @@ public class BaseRequest implements AuthenticationRequest {
     public void setAuthentication(final Authentication authentication) {
         this.authentication = authentication;
     }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("BaseRequest{");
+        sb.append("authentication=").append(authentication);
+        sb.append('}');
+        return sb.toString();
+    }
 }

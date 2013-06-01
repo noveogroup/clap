@@ -7,5 +7,6 @@ import com.noveogroup.clap.entity.ProjectEntity;
  */
 public interface ProjectDAO extends GenericDAO<ProjectEntity, Long> {
 
-    ProjectEntity findProjectByExternalId(String externalId);
+    ProjectEntity findProjectByExternalIdOrReturnNull(String externalId);
+
 }

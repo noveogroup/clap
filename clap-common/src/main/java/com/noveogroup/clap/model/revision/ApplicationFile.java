@@ -1,5 +1,7 @@
 package com.noveogroup.clap.model.revision;
 
+import java.util.Arrays;
+
 public class ApplicationFile {
 
     private String filename;
@@ -19,5 +21,14 @@ public class ApplicationFile {
 
     public void setContent(final byte[] content) {
         this.content = content;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("ApplicationFile{");
+        sb.append("filename='").append(filename).append('\'');
+        sb.append(", content=").append(content != null ? content.length : "null");
+        sb.append('}');
+        return sb.toString();
     }
 }

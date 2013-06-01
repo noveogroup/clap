@@ -3,6 +3,7 @@ package com.noveogroup.clap.model.request.revision;
 import com.noveogroup.clap.model.revision.Revision;
 
 import javax.validation.constraints.NotNull;
+import java.util.Arrays;
 
 /**
  * @author Andrey Sokolov
@@ -47,5 +48,16 @@ public class AddOrGetRevisionRequest {
 
     public void setSpecialPackage(final byte[] specialPackage) {
         this.specialPackage = specialPackage;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("AddOrGetRevisionRequest{");
+        sb.append("projectExternalId='").append(projectExternalId).append('\'');
+        sb.append(", revision=").append(revision);
+        sb.append(", mainPackage=").append(Arrays.toString(mainPackage));
+        sb.append(", specialPackage=").append(Arrays.toString(specialPackage));
+        sb.append('}');
+        return sb.toString();
     }
 }

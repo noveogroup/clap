@@ -14,7 +14,15 @@ public class Authentication {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(final User user) {
         this.user = user;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Authentication{");
+        sb.append("user=").append(user);
+        sb.append('}');
+        return sb.toString();
     }
 }

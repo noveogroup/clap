@@ -1,12 +1,10 @@
 package com.noveogroup.clap.service.revision;
 
-import com.noveogroup.clap.auth.AuthenticationRequired;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.revision.RevisionType;
-import com.noveogroup.clap.interceptor.ClapMainInterceptor;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
 import com.noveogroup.clap.model.request.revision.GetApplicationRequest;
 import com.noveogroup.clap.model.request.revision.RevisionRequest;
@@ -14,17 +12,12 @@ import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
 import com.noveogroup.clap.model.revision.ApplicationFile;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.service.url.UrlService;
-import com.noveogroup.clap.transaction.Transactional;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
-import javax.interceptor.Interceptors;
-import javax.persistence.NoResultException;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
@@ -32,8 +25,6 @@ import java.util.Date;
  * @author Mikhail Demidov
  */
 @Stateless
-@Interceptors({ClapMainInterceptor.class})
-@TransactionManagement(TransactionManagementType.BEAN)
 public class RevisionServiceImpl implements RevisionService {
 
     private static final Mapper MAPPER = new DozerBeanMapper();
@@ -48,7 +39,6 @@ public class RevisionServiceImpl implements RevisionService {
     private UrlService urlService;
 
 
-    @Transactional
     @Override
     public Revision addOrGetRevision(final @NotNull AddOrGetRevisionRequest request) {
         final Revision revision = request.getRevision();
@@ -61,14 +51,14 @@ public class RevisionServiceImpl implements RevisionService {
         }
         addPackages(revisionEntity, request.getMainPackage(), request.getSpecialPackage());
         ProjectEntity projectEntity = null;
-        try {
-            projectEntity = projectDAO.findProjectByExternalId(request.getProjectExternalId());
-        } catch (NoResultException e) {
 
-        }
+        projectEntity = projectDAO.findProjectByExternalIdOrReturnNull(request.getProjectExternalId());
         if (projectEntity == null) {
             projectEntity = new ProjectEntity();
             projectEntity.setExternalId(request.getProjectExternalId());
+            projectEntity.setName("Name");
+            projectEntity.setDescription("Description");
+            projectEntity.setCreationDate(new Date());
             projectEntity = projectDAO.persist(projectEntity);
         }
         revisionEntity.setProject(projectEntity);
@@ -82,15 +72,12 @@ public class RevisionServiceImpl implements RevisionService {
         return outcomeRevision;
     }
 
-    @Transactional
     @Override
     public Revision updateRevisionPackages(final @NotNull UpdateRevisionPackagesRequest request) {
         final RevisionEntity revisionEntity = revisionDAO.getRevisionByHash(request.getRevisionHash());
         return updateRevisionPackages(revisionEntity, request.getMainPackage(), request.getSpecialPackage());
     }
 
-    @Transactional
-    @AuthenticationRequired
     @Override
     public ApplicationFile getApplication(final GetApplicationRequest request) {
         final RevisionEntity revisionEntity = revisionDAO.findById(request.getRevisionId());
@@ -112,8 +99,6 @@ public class RevisionServiceImpl implements RevisionService {
         return null;
     }
 
-    @Transactional
-    @AuthenticationRequired
     @Override
     public Revision getRevision(final RevisionRequest request) {
         final RevisionEntity revisionEntity = revisionDAO.findById(request.getRevisionId());

@@ -6,7 +6,9 @@ import org.hibernate.Hibernate;
 
 import javax.ejb.Stateless;
 import javax.persistence.NoResultException;
+import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
+import java.util.List;
 
 /**
  * @author
@@ -27,23 +29,18 @@ public class ProjectDAOImpl extends GenericHibernateDAOImpl<ProjectEntity, Long>
     }
 
     @Override
-    public ProjectEntity findProjectByExternalId(final String externalId) {
+    public ProjectEntity findProjectByExternalIdOrReturnNull(final String externalId) {
         final Query query = entityManager.createNamedQuery(GET_PROJECT_BY_EXTERNAL_ID);
         query.setParameter(GET_PROJECT_BY_EXTERNAL_ID_PARAMETER, externalId);
-        ProjectEntity projectEntity = null;
-        try {
-            projectEntity = (ProjectEntity) query.getSingleResult();
-            if (projectEntity != null) {
-                Hibernate.initialize(projectEntity.getRevisions());
-            } else {
-                projectEntity = new ProjectEntity();
-                projectEntity.setExternalId(externalId);
-                entityManager.persist(projectEntity);
-            }
-        } catch (NoResultException e) {
-
+        List results = query.getResultList();
+        if (results.isEmpty()) {
+            return null;
+        } else if (results.size() == 1) {
+            return (ProjectEntity) results.get(0);
+        } else {
+            throw new NonUniqueResultException();
         }
-        return projectEntity;
+
     }
 
 }

@@ -1,8 +1,7 @@
 package com.noveogroup.clap.web.controller;
 
+import com.noveogroup.clap.facade.ProjectsFacade;
 import com.noveogroup.clap.model.Project;
-import com.noveogroup.clap.model.auth.Authentication;
-import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.ProjectsListDataModel;
 import com.noveogroup.clap.web.model.ProjectsModel;
@@ -28,7 +27,7 @@ public class ProjectsController extends BaseController {
     private long projectId;
 
     @Inject
-    private ProjectService projectService;
+    private ProjectsFacade projectsFacade;
 
     @Inject
     private ProjectsModel projectsModel;
@@ -39,7 +38,7 @@ public class ProjectsController extends BaseController {
     public String addProject() {
         try {
             LOGGER.debug("add project : " + projectsModel.getNewProject());
-            projectService.createProject(projectsModel.getNewProject());
+            projectsFacade.createProject(projectsModel.getNewProject());
             projectsModel.setNewProject(new Project());
             LOGGER.debug("project saved");
             return Navigation.PROJECTS.getView();
@@ -53,17 +52,21 @@ public class ProjectsController extends BaseController {
     }
 
     public void prepareProjectsListView() {
-        final List<Project> projectList = projectService.findAllProjects();
-        projectsModel.setProjectsListDataModel(new ProjectsListDataModel(projectList));
-        LOGGER.debug(projectList.size() + " projects loaded");
+        final List<Project> projectList = projectsFacade.findAllProjects();
+        if(projectList != null){
+            projectsModel.setProjectsListDataModel(new ProjectsListDataModel(projectList));
+            LOGGER.debug(projectList.size() + " projects loaded");
+        }
     }
 
     public void prepareProjectView(){
         final Project selectedProject = projectsModel.getSelectedProject();
         if(selectedProject != null){
-            final Project projectWithRevisions = projectService.findById(selectedProject.getId());
-            projectsModel.setSelectedProject(projectWithRevisions);
-            revisionsModel.setRevisionsListDataModel(new RevisionsListDataModel(projectWithRevisions.getRevisions()));
+            final Project projectWithRevisions = projectsFacade.findById(selectedProject.getId());
+            if (projectWithRevisions != null){
+                projectsModel.setSelectedProject(projectWithRevisions);
+                revisionsModel.setRevisionsListDataModel(new RevisionsListDataModel(projectWithRevisions.getRevisions()));
+            }
         }
         else {
             LOGGER.error("project not selected");

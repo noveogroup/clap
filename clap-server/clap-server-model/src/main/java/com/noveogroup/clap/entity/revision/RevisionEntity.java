@@ -5,6 +5,7 @@ import com.noveogroup.clap.entity.ProjectEntity;
 import com.noveogroup.clap.entity.message.MessageEntity;
 
 import javax.persistence.*;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -107,7 +108,7 @@ public class RevisionEntity extends BaseEntity {
         return hash;
     }
 
-    public void setHash(String hash) {
+    public void setHash(final String hash) {
         this.hash = hash;
     }
 
@@ -116,7 +117,23 @@ public class RevisionEntity extends BaseEntity {
         return timestamp;
     }
 
-    public void setTimestamp(Long timestamp) {
+    public void setTimestamp(final Long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("RevisionEntity{");
+        sb.append("timestamp=").append(timestamp);
+        sb.append(", revisionType=").append(revisionType);
+        sb.append(", hash='").append(hash).append('\'');
+        sb.append(", mainPackage=").append(Arrays.toString(mainPackage));
+        sb.append(", specialPackage=").append(Arrays.toString(specialPackage));
+        sb.append(", mainPackageLoaded=").append(mainPackageLoaded);
+        sb.append(", specialPackageLoaded=").append(specialPackageLoaded);
+        sb.append(", messages=").append(messages);
+        sb.append(", project=").append(project);
+        sb.append('}');
+        return sb.toString();
     }
 }

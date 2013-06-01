@@ -28,7 +28,7 @@
 
     <properties>
         <!-- glassfish configuration-->
-        <glassfish.home>/home/mdemidov/glassfish3/</glassfish.home>
+        <glassfish.home>/home/mihaildemidoff/applicaitons/glassfish3/</glassfish.home>
         <domain.username>root</domain.username>
         <domain.passwordFile>${glassfish.home}/pwdfile.txt</domain.passwordFile>
         <test.int.skip>false</test.int.skip>
@@ -124,7 +124,7 @@
                     <artifactId>maven-glassfish-plugin</artifactId>
                     <version>${maven-glassfish-plugin.version}</version>
                     <configuration>
-                        <glassfishDirectory>${glassfish.home}</glassfishDirectory>
+                        <glassfishDirectory>${glassfish.home}/glassfish</glassfishDirectory>
                         <user>${domain.username}</user>
                         <passwordFile>${domain.passwordFile}</passwordFile>
                         <autoCreate>true</autoCreate>

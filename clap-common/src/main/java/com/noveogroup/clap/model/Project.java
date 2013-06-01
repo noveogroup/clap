@@ -56,7 +56,19 @@ public class Project extends BaseModel {
         return externalId;
     }
 
-    public void setExternalId(String externalId) {
+    public void setExternalId(final String externalId) {
         this.externalId = externalId;
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder("Project{");
+        sb.append("name='").append(name).append('\'');
+        sb.append(", externalId='").append(externalId).append('\'');
+        sb.append(", description='").append(description).append('\'');
+        sb.append(", creationDate=").append(creationDate);
+        sb.append(", revisions=").append(revisions);
+        sb.append('}');
+        return sb.toString();
     }
 }
