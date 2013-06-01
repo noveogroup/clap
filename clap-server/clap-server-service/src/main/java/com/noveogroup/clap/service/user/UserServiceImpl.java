@@ -2,18 +2,13 @@ package com.noveogroup.clap.service.user;
 
 import com.noveogroup.clap.dao.UserDAO;
 import com.noveogroup.clap.entity.user.UserEntity;
-import com.noveogroup.clap.interceptor.ClapMainInterceptor;
 import com.noveogroup.clap.model.user.User;
-import com.noveogroup.clap.transaction.Transactional;
 import org.apache.commons.lang3.StringUtils;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-import javax.interceptor.Interceptors;
 
 /**
  * @author Andrey Sokolov

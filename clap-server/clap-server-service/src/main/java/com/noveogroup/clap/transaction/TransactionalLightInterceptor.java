@@ -29,10 +29,13 @@ public class TransactionalLightInterceptor implements LightInterceptor {
     }
 
     @Override
-    public Object proceed(final InvocationContext context, final RequestHelperFactory requestHelperFactory, final Map<Class<? extends Annotation>, Annotation> annotationMap) throws Exception {
+    public Object proceed(final InvocationContext context,
+                          final RequestHelperFactory requestHelperFactory,
+                          final Map<Class<? extends Annotation>, Annotation> annotationMap) throws Exception {
         Object result = null;
         if (annotationMap.containsKey(Transactional.class)) {
-            final TransactionRequestHelper requestHelper = requestHelperFactory.getRequestHelper(TransactionRequestHelper.class);
+            final TransactionRequestHelper requestHelper = requestHelperFactory
+                    .getRequestHelper(TransactionRequestHelper.class);
             final UserTransaction userTransaction = requestHelper.getUserTransaction();
             try {
                 userTransaction.begin();

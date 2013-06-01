@@ -4,7 +4,7 @@ package com.noveogroup.clap.config;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
-import java.io.*;
+import java.io.IOException;
 import java.util.Properties;
 
 @Named

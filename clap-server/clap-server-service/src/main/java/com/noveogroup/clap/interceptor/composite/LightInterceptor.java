@@ -27,7 +27,9 @@ public interface LightInterceptor {
      */
     void setNextInterceptor(LightInterceptor nextInterceptor);
 
-    Object proceed(InvocationContext context,RequestHelperFactory requestHelperFactory, Map<Class<? extends Annotation>,Annotation> annotationMap) throws Exception;
+    Object proceed(InvocationContext context,
+                   RequestHelperFactory requestHelperFactory,
+                   Map<Class<? extends Annotation>,Annotation> annotationMap) throws Exception;
 
     /**
      * returns priority needed to sort LightInterceptors implementations

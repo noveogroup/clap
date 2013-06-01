@@ -64,8 +64,9 @@ public class DefaultAuthenticationRequestHelper implements AuthenticationRequest
     public void onLoginRequired() {
         if(context != null){
             userSessionData.setRequestedView(context.getViewRoot().getViewId());
-            final ConfigurableNavigationHandler configurableNavigationHandler = (ConfigurableNavigationHandler) context.getApplication().getNavigationHandler();
-            configurableNavigationHandler.performNavigation(Navigation.DEFAULT_LOGIN_PAGE.getView());
+            final ConfigurableNavigationHandler navigationHandler = (ConfigurableNavigationHandler) context
+                    .getApplication().getNavigationHandler();
+            navigationHandler.performNavigation(Navigation.DEFAULT_LOGIN_PAGE.getView());
         } else {
             throw new AuthenticationException(authentication);
         }

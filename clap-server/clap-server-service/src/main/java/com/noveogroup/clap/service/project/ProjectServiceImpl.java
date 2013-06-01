@@ -4,9 +4,6 @@ import com.noveogroup.clap.dao.MessageDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
-import com.noveogroup.clap.auth.AuthenticationRequired;
-import com.noveogroup.clap.interceptor.ClapMainInterceptor;
-import com.noveogroup.clap.transaction.Transactional;
 import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.dao.ProjectDAO;
@@ -16,10 +13,7 @@ import org.dozer.Mapper;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
-import javax.interceptor.Interceptors;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -51,6 +45,19 @@ public class ProjectServiceImpl implements ProjectService {
         }
         final ProjectEntity projectEntity = MAPPER.map(project, ProjectEntity.class);
         return MAPPER.map(projectDAO.persist(projectEntity), Project.class);
+    }
+
+    @Override
+    public Project getCreateUpdateProject(final Project project) {
+        ProjectEntity projectEntity = null;
+        try {
+            projectEntity = projectDAO.findProjectByExternalId(project.getExternalId());
+        } catch (Exception e){
+            projectEntity = MAPPER.map(project,ProjectEntity.class);
+        }
+        //TODO check null fields
+        projectEntity = projectDAO.persist(projectEntity);
+        return MAPPER.map(projectEntity,Project.class);
     }
 
     @Override

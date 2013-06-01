@@ -3,7 +3,6 @@ package com.noveogroup.clap.interceptor;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.RequestScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
 
 /**
  * @author Andrey Sokolov

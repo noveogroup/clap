@@ -39,8 +39,11 @@ public abstract class MessagesBundle extends ResourceBundle {
     }
 
     protected static class UTF8Control extends Control {
-        public ResourceBundle newBundle
-                (final String baseName, final Locale locale, final String format, final ClassLoader loader, final boolean reload)
+        public ResourceBundle newBundle(final String baseName,
+                                        final Locale locale,
+                                        final String format,
+                                        final ClassLoader loader,
+                                        final boolean reload)
                 throws IllegalAccessException, InstantiationException, IOException
         {
             // The below code is copied from default Control#newBundle() implementation.

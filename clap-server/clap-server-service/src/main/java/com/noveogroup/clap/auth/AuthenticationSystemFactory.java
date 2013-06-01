@@ -17,9 +17,9 @@ import javax.inject.Inject;
  */
 @ApplicationScoped
 public class AuthenticationSystemFactory {
-    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationSystemFactory.class);
-
     public static final String DEFAULT_SYSTEM_ID = "DEFAULT";
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthenticationSystemFactory.class);
 
     @Inject
     private ConfigBean configBean;

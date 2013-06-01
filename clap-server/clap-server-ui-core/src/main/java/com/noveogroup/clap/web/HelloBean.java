@@ -8,13 +8,17 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 
 import com.noveogroup.clap.config.ConfigBean;
+import com.noveogroup.clap.facade.ProjectsFacade;
+import com.noveogroup.clap.model.Project;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * @author
@@ -22,6 +26,9 @@ import java.io.*;
 @Named
 @RequestScoped
 public class HelloBean {
+
+    @Inject
+    private ProjectsFacade projectsFacade;
 
     @Inject
     private ConfigBean configBean;
@@ -32,7 +39,9 @@ public class HelloBean {
         final ByteArrayOutputStream buf = new ByteArrayOutputStream();
         final Writer writer = new QRCodeWriter();
         //151 chars
-        final BitMatrix matrix = writer.encode("123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890_",
+        final BitMatrix matrix = writer.encode("123456789012345678901234567890123456789012345678901" +
+                "234567890123456789012345678901234567890123456789012345678" +
+                "901234567890123456789012345678901234567890_",
                 BarcodeFormat.QR_CODE, 100, 100);
         MatrixToImageWriter.writeToStream(matrix, "PNG", buf);
         //422 bytes
@@ -42,5 +51,10 @@ public class HelloBean {
 
     public StreamedContent getQRCode() {
         return QRCode;
+    }
+
+    public String testValidation(){
+        projectsFacade.getCreateUpdateProject(new Project());
+        return Navigation.PROJECTS.getView();
     }
 }

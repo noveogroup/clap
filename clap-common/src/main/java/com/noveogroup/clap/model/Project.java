@@ -2,6 +2,7 @@ package com.noveogroup.clap.model;
 
 import com.noveogroup.clap.model.revision.Revision;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,7 @@ public class Project extends BaseModel {
     private String name;
 
     //groupId:artifactId
+    @NotNull
     private String externalId;
 
     private String description;
