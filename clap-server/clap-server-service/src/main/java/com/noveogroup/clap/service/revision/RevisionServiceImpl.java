@@ -42,7 +42,10 @@ public class RevisionServiceImpl implements RevisionService {
     @Override
     public Revision addOrGetRevision(final @NotNull AddOrGetRevisionRequest request) {
         final Revision revision = request.getRevision();
-        RevisionEntity revisionEntity = MAPPER.map(revision, RevisionEntity.class);
+        RevisionEntity revisionEntity = revisionDAO.getRevisionByHashOrNull(request.getRevision().getHash());
+        if (revisionEntity == null) {
+            revisionEntity = MAPPER.map(revision, RevisionEntity.class);
+        }
         if (revisionEntity.getTimestamp() == null) {
             revisionEntity.setTimestamp(new Date().getTime());
         }
