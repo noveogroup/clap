@@ -46,8 +46,12 @@ public class ValidationLightInterceptor implements LightInterceptor {
             for (final Object parameter : parameters) {
                 final Set<ConstraintViolation<Object>> violations = validator.validate(parameter);
                 if (!violations.isEmpty()) {
+                    String message = "";
+                    for (ConstraintViolation constraintViolation : violations) {
+                        message += " ; " + constraintViolation.getMessage();
+                    }
                     //TODO somehow exception isn't building message =/
-                    throw new ConstraintViolationException(violations);
+                    throw new ConstraintViolationException(message, violations);
                 }
             }
         }

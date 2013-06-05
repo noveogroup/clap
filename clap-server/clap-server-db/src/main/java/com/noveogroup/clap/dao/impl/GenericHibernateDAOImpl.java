@@ -6,6 +6,8 @@ import com.noveogroup.clap.integration.DAOIntegration;
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NonUniqueResultException;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -73,5 +75,17 @@ public abstract class GenericHibernateDAOImpl<T, ID extends Serializable> implem
         cq.select(rc);
         final TypedQuery<T> query = entityManager.createQuery(cq);
         return query.getResultList();
+    }
+
+
+    protected T getSingleResultOrNull(Query query){
+        List results = query.getResultList();
+        if (results.size() == 0) {
+            return null;
+        } else if (results.size() == 1) {
+            return (T) results.get(0);
+        } else {
+            throw new NonUniqueResultException();
+        }
     }
 }

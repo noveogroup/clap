@@ -9,11 +9,12 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.noveogroup.clap.facade.ProjectsFacade;
 import com.noveogroup.clap.facade.RevisionsFacade;
 import com.noveogroup.clap.model.Project;
-import com.noveogroup.clap.model.revision.Revision;
-import com.noveogroup.clap.model.revision.RevisionType;
+import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
 import com.noveogroup.clap.model.request.revision.RevisionRequest;
 import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
+import com.noveogroup.clap.model.revision.Revision;
+import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.ProjectsModel;
 import com.noveogroup.clap.web.model.RevisionsListDataModel;
@@ -85,6 +86,7 @@ public class RevisionsController extends BaseController {
         final Revision selectedRevision = revisionsModel.getSelectedRevision();
         if (selectedRevision != null) {
             final RevisionRequest request = new RevisionRequest();
+            request.setAuthentication(new Authentication());
             request.setRevisionId(selectedRevision.getId());
             revisionsModel.setSelectedRevision(revisionsFacade.getRevision(request));
             updateQRCodes(revisionsModel.getSelectedRevision());
