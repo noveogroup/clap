@@ -5,9 +5,7 @@ import com.noveogroup.clap.entity.ProjectEntity;
 import org.hibernate.Hibernate;
 
 import javax.ejb.Stateless;
-import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
-import java.util.List;
 
 /**
  * @author
@@ -31,15 +29,7 @@ public class ProjectDAOImpl extends GenericHibernateDAOImpl<ProjectEntity, Long>
     public ProjectEntity findProjectByExternalIdOrReturnNull(final String externalId) {
         final Query query = entityManager.createNamedQuery(GET_PROJECT_BY_EXTERNAL_ID);
         query.setParameter(GET_PROJECT_BY_EXTERNAL_ID_PARAMETER, externalId);
-        List results = query.getResultList();
-        if (results.isEmpty()) {
-            return null;
-        } else if (results.size() == 1) {
-            return (ProjectEntity) results.get(0);
-        } else {
-            throw new NonUniqueResultException();
-        }
-
+        return getSingleResultOrNull(query);
     }
 
 }
