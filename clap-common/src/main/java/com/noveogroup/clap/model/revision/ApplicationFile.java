@@ -1,9 +1,14 @@
 package com.noveogroup.clap.model.revision;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
+
+import java.io.File;
+
 public class ApplicationFile {
 
     private String filename;
-    private byte[] content;
+
+    private File content;
 
     public String getFilename() {
         return filename;
@@ -13,20 +18,19 @@ public class ApplicationFile {
         this.filename = filename;
     }
 
-    public byte[] getContent() {
+    public File getContent() {
         return content;
     }
 
-    public void setContent(final byte[] content) {
+    public void setContent(File content) {
         this.content = content;
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("ApplicationFile{");
-        sb.append("filename='").append(filename).append('\'');
-        sb.append(", content=").append(content != null ? content.length : "null");
-        sb.append('}');
-        return sb.toString();
+        return new ToStringBuilder(this)
+                .append("filename", filename)
+                .append("content", content)
+                .toString();
     }
 }

@@ -1,28 +1,28 @@
 package com.noveogroup.clap.model.auth;
 
-import com.noveogroup.clap.model.user.User;
+import com.noveogroup.clap.model.user.UserWithAuthentication;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * @author Andrey Sokolov
  */
 public class Authentication {
 
-    private User user;
+    private UserWithAuthentication user;
 
 
-    public User getUser() {
+    public UserWithAuthentication getUser() {
         return user;
     }
 
-    public void setUser(final User user) {
+    public void setUser(final UserWithAuthentication user) {
         this.user = user;
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Authentication{");
-        sb.append("user=").append(user);
-        sb.append('}');
-        return sb.toString();
+        return new ToStringBuilder(this)
+                .append("user", user)
+                .toString();
     }
 }

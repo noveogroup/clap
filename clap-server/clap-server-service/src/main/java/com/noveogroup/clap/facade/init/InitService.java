@@ -52,6 +52,7 @@ public class InitService {
         LOGGER.debug("project created : " + project);
         RevisionEntity revision = new RevisionEntity();
         revision.setTimestamp(1368318776L);
+        revision.setHash("test_hash");
         revision.setProject(project);
         revision = revisionDAO.persist(revision);
         LOGGER.debug("revision created : " + revision);

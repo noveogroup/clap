@@ -57,39 +57,39 @@
                     </h:form>
                 </h:panelGroup>
             </p:panel>
-
-            <p:dataTable var="message"
-                         value="#{revisionsModel.selectedRevision.messages}"
-                         paginator="true" rows="10"
-                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         rowsPerPageTemplate="5,10,15">
-
-                <p:column style="width:2%">
-                    <p:rowToggler/>
-                </p:column>
-                <p:column headerText="#{msgs['message.label.time']}">
-                    <h:outputText value="#{message.timestamp}"/>
-                </p:column>
-
-                <p:rowExpansion>
-                    <p:panelGrid columns="2">
-                        <h:outputText value="#{msgs['message.label.deviceInfo']}"/>
-                        <h:inputTextarea disabled="true" rows="6" cols="50" value="#{message.deviceInfo}"/>
-
-                        <h:outputText value="#{msgs['message.label.activityTraceLog']}"/>
-                        <h:inputTextarea disabled="true" rows="6" cols="50" value="#{message.activityTraceLog}"/>
-
-                        <h:outputText value="#{msgs['message.label.logCat']}"/>
-                        <h:inputTextarea disabled="true" rows="6" cols="50" value="#{message.logCat}"/>
-
-                        <h:outputText value="#{msgs['message.label.stackTraceInfo']}"/>
-                        <h:inputTextarea disabled="true" rows="6" cols="50" value="#{message.stackTraceInfo}"/>
-                    </p:panelGrid>
-
-                </p:rowExpansion>
-
-            </p:dataTable>
         </p:panelGrid>
+
+        <p:dataTable var="message"
+                     value="#{revisionsModel.selectedRevision.messages}"
+                     paginator="true" rows="10"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     rowsPerPageTemplate="5,10,15">
+
+            <p:column style="width:2%">
+                <p:rowToggler/>
+            </p:column>
+            <p:column headerText="#{msgs['message.label.time']}">
+                <h:outputText value="#{message.timestamp}"/>
+            </p:column>
+
+            <p:rowExpansion>
+                <p:panelGrid columns="2">
+                    <h:outputText value="#{msgs['message.label.deviceInfo']}"/>
+                    <h:inputTextarea disabled="true" rows="6" cols="50" value="#{message.deviceInfo}"/>
+
+                    <h:outputText value="#{msgs['message.label.activityTraceLog']}"/>
+                    <h:inputTextarea disabled="true" rows="6" cols="50" value="#{message.activityTraceLog}"/>
+
+                    <h:outputText value="#{msgs['message.label.logCat']}"/>
+                    <h:inputTextarea disabled="true" rows="6" cols="50" value="#{message.logCat}"/>
+
+                    <h:outputText value="#{msgs['message.label.stackTraceInfo']}"/>
+                    <h:inputTextarea disabled="true" rows="6" cols="50" value="#{message.stackTraceInfo}"/>
+                </p:panelGrid>
+
+            </p:rowExpansion>
+
+        </p:dataTable>
     </ui:define>
 </ui:composition>
 </html>

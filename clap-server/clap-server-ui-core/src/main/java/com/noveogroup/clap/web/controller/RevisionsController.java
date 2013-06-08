@@ -12,9 +12,11 @@ import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
 import com.noveogroup.clap.model.request.revision.RevisionRequest;
+import com.noveogroup.clap.model.request.revision.StreamedPackage;
 import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
+import com.noveogroup.clap.service.apk.ApkInfoExtractorFactory;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.ProjectsModel;
 import com.noveogroup.clap.web.model.RevisionsListDataModel;
@@ -32,6 +34,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 
@@ -65,10 +68,16 @@ public class RevisionsController extends BaseController {
         request.setProjectExternalId(project.getExternalId());
         request.setRevision(revision);
         if (newRevisionCleanApk != null) {
-            request.setMainPackage(newRevisionCleanApk.getContents());
+            request.setMainPackage(
+                    new StreamedPackage(
+                            newRevisionCleanApk.getInputstream(),
+                            newRevisionCleanApk.getSize()));
         }
         if (newRevisionHackedApk != null) {
-            request.setSpecialPackage(newRevisionHackedApk.getContents());
+            request.setSpecialPackage(
+                    new StreamedPackage(
+                            newRevisionHackedApk.getInputstream(),
+                            newRevisionHackedApk.getSize()));
         }
         revisionsFacade.addOrGetRevision(request);
 
@@ -109,10 +118,16 @@ public class RevisionsController extends BaseController {
         final UpdateRevisionPackagesRequest request = new UpdateRevisionPackagesRequest();
         request.setRevisionHash(revisionsModel.getSelectedRevision().getHash());
         if (newRevisionCleanApk != null) {
-            request.setMainPackage(newRevisionCleanApk.getContents());
+            request.setMainPackage(
+                    new StreamedPackage(
+                            newRevisionCleanApk.getInputstream(),
+                            newRevisionCleanApk.getSize()));
         }
         if (newRevisionHackedApk != null) {
-            request.setSpecialPackage(newRevisionHackedApk.getContents());
+            request.setSpecialPackage(
+                    new StreamedPackage(
+                            newRevisionHackedApk.getInputstream(),
+                            newRevisionHackedApk.getSize()));
         }
         final Revision updatedRevision = revisionsFacade.updateRevisionPackages(request);
         revisionsModel.setSelectedRevision(updatedRevision);
@@ -141,6 +156,17 @@ public class RevisionsController extends BaseController {
         } else {
             LOGGER.debug("empty url");
             return null;
+        }
+    }
+
+    private void test(byte[] apk) {
+        if (apk != null) {
+            try {
+                ApkInfoExtractorFactory apkInfoExtractorFactory = ApkInfoExtractorFactory.getInstance(apk);
+                apkInfoExtractorFactory.createIconExtractor().getIcon();
+            } catch (FileNotFoundException e) {
+                LOGGER.error("", e);
+            }
         }
     }
 }

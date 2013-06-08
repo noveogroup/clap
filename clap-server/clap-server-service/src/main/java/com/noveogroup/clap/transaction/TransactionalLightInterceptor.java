@@ -41,9 +41,6 @@ public class TransactionalLightInterceptor implements LightInterceptor {
                 userTransaction.begin();
                 result = nextInterceptor.proceed(context, requestHelperFactory, annotationMap);
                 userTransaction.commit();
-            } catch (IllegalStateException e) {
-                LOGGER.error("Transaction error " + e.getMessage(), e);
-                userTransaction.rollback();
             } catch (Exception e) {
                 LOGGER.error("Transaction error " + e.getMessage(), e);
                 userTransaction.rollback();

@@ -29,10 +29,12 @@ public class CreateOrUpdateRevisionRequest {
 
     @FormParam("mainPackage")
     @PartType("application/octet-stream")
+    //FIXME: byte[] IS SOOOOOOOO BAD!
     private byte[] mainPackage;
 
     @FormParam("specialPackage")
     @PartType("application/octet-stream")
+    //FIXME: byte[] IS SOOOOOOOO BAD!
     private byte[] specialPackage;
 
     public String getProjectExternalId() {

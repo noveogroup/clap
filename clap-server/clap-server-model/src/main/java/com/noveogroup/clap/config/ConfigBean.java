@@ -4,6 +4,7 @@ package com.noveogroup.clap.config;
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
+import java.io.File;
 import java.io.IOException;
 import java.util.Properties;
 
@@ -21,6 +22,10 @@ public class ConfigBean {
 
     private String persistenceUnitName;
 
+    private String tempFilesDir;
+
+    private long tempFilesCleanInterval;
+
     @PostConstruct
     protected void setup() throws IOException {
         properties = ConfigurationUtils.getPropertiesFromConfig("clap.properties");
@@ -28,6 +33,9 @@ public class ConfigBean {
         downloadApkUrl = properties.getProperty("rest.apkDownload");
         authenticationSystemId = properties.getProperty("authenticationSystemId");
         persistenceUnitName = properties.getProperty("persistence.context");
+        tempFilesDir = properties.getProperty("temp.files.directory");
+        checkIfDir(tempFilesDir);
+        tempFilesCleanInterval = Long.parseLong(properties.getProperty("temp.files.clean.interval"));
     }
 
     public long getMaxApkSize() {
@@ -48,5 +56,19 @@ public class ConfigBean {
 
     public String getPersistenceUnitName() {
         return persistenceUnitName;
+    }
+
+    public String getTempFilesDir() {
+        return tempFilesDir;
+    }
+
+    public long getTempFilesCleanInterval() {
+        return tempFilesCleanInterval;
+    }
+
+    private void checkIfDir(final String dirPath) {
+        if (!new File(dirPath).isDirectory()) {
+            throw new IllegalArgumentException("Configured "+dirPath+" directory is not directory");
+        }
     }
 }

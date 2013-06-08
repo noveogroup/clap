@@ -32,8 +32,9 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
         final AddOrGetRevisionRequest addOrGetRevisionRequest = new AddOrGetRevisionRequest();
         addOrGetRevisionRequest.setProjectExternalId(request.getProjectExternalId());
         addOrGetRevisionRequest.setRevision(revision);
-        addOrGetRevisionRequest.setMainPackage(request.getMainPackage());
-        addOrGetRevisionRequest.setSpecialPackage(request.getSpecialPackage());
+        //FIXME: byte[] IS SOOOOOOOO BAD!
+        //addOrGetRevisionRequest.setMainPackage(request.getMainPackage());
+        //addOrGetRevisionRequest.setSpecialPackage(request.getSpecialPackage());
         return revisionsFacade.addOrGetRevision(addOrGetRevisionRequest);
 
     }

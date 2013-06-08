@@ -3,6 +3,8 @@ package com.noveogroup.clap.entity.revision;
 import com.noveogroup.clap.entity.BaseEntity;
 import com.noveogroup.clap.entity.ProjectEntity;
 import com.noveogroup.clap.entity.message.MessageEntity;
+import com.noveogroup.clap.model.revision.RevisionType;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.sql.Blob;
 import java.util.Arrays;
 import java.util.List;
 
@@ -32,11 +35,11 @@ public class RevisionEntity extends BaseEntity {
 
     @Column(name = "main_package")
     @Lob
-    private byte[] mainPackage;
+    private Blob mainPackage;
 
     @Column(name = "special_package")
     @Lob
-    private byte[] specialPackage;
+    private Blob specialPackage;
 
     private boolean mainPackageLoaded;
 
@@ -69,22 +72,6 @@ public class RevisionEntity extends BaseEntity {
 
     public void setMessages(final List<MessageEntity> messageEntities) {
         this.messages = messageEntities;
-    }
-
-    public byte[] getMainPackage() {
-        return mainPackage;
-    }
-
-    public void setMainPackage(final byte[] mainPackage) {
-        this.mainPackage = mainPackage;
-    }
-
-    public byte[] getSpecialPackage() {
-        return specialPackage;
-    }
-
-    public void setSpecialPackage(final byte[] specialPackage) {
-        this.specialPackage = specialPackage;
     }
 
     public ProjectEntity getProject() {
@@ -128,19 +115,32 @@ public class RevisionEntity extends BaseEntity {
         this.timestamp = timestamp;
     }
 
+    public Blob getMainPackage() {
+        return mainPackage;
+    }
+
+    public void setMainPackage(Blob mainPackage) {
+        this.mainPackage = mainPackage;
+    }
+
+    public Blob getSpecialPackage() {
+        return specialPackage;
+    }
+
+    public void setSpecialPackage(Blob specialPackage) {
+        this.specialPackage = specialPackage;
+    }
+
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("RevisionEntity{");
-        sb.append("timestamp=").append(timestamp);
-        sb.append(", revisionType=").append(revisionType);
-        sb.append(", hash='").append(hash).append('\'');
-        sb.append(", mainPackage=").append(Arrays.toString(mainPackage));
-        sb.append(", specialPackage=").append(Arrays.toString(specialPackage));
-        sb.append(", mainPackageLoaded=").append(mainPackageLoaded);
-        sb.append(", specialPackageLoaded=").append(specialPackageLoaded);
-        sb.append(", messages=").append(messages);
-        sb.append(", project=").append(project);
-        sb.append('}');
-        return sb.toString();
+        return new ToStringBuilder(this)
+                .append("timestamp", timestamp)
+                .append("revisionType", revisionType)
+                .append("hash", hash)
+                .append("mainPackageLoaded", mainPackageLoaded)
+                .append("specialPackageLoaded", specialPackageLoaded)
+                .append("messages", messages)
+                .append("project", project)
+                .toString();
     }
 }

@@ -1,6 +1,7 @@
 package com.noveogroup.clap.service.user;
 
 import com.noveogroup.clap.model.user.User;
+import com.noveogroup.clap.model.user.UserWithAuthentication;
 
 /**
  * @author Andrey Sokolov
@@ -13,7 +14,7 @@ public interface UserService {
      * @param user non full model
      * @return filled model, not null
      */
-    User updateUserData(User user);
+    User updateUserData(UserWithAuthentication user);
 
     User createUser(User user);
 }

@@ -1,6 +1,7 @@
 package com.noveogroup.clap.rest;
 
 import com.noveogroup.clap.facade.RevisionsFacade;
+import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.request.revision.GetApplicationRequest;
 import com.noveogroup.clap.model.revision.ApplicationFile;
 import com.noveogroup.clap.model.revision.ApplicationType;
@@ -23,6 +24,7 @@ public class PackageEndpointImpl implements PackageEndpoint {
         final GetApplicationRequest request = new GetApplicationRequest();
         request.setRevisionId(id);
         request.setApplicationType(type == 0 ? ApplicationType.MAIN : ApplicationType.SPECIAL);
+        request.setAuthentication(new Authentication());
         final ApplicationFile application = revisionsFacade.getApplication(request);
         return Response.ok(application.getContent()).header("Content-Disposition",
                 "attachment; filename=\""+application.getFilename()+"\"").build();

@@ -4,6 +4,7 @@ import com.noveogroup.clap.exception.AuthenticationException;
 import com.noveogroup.clap.integration.RequestHelper;
 import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.user.User;
+import com.noveogroup.clap.model.user.UserWithAuthentication;
 import com.noveogroup.clap.service.user.UserService;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.UserSessionData;
@@ -23,7 +24,7 @@ public class DefaultAuthenticationRequestHelper implements AuthenticationRequest
     @Inject
     private UserService userService;
 
-    private User userRequestData;
+    private UserWithAuthentication userRequestData;
 
     @Inject
     private UserSessionData userSessionData;
@@ -41,7 +42,7 @@ public class DefaultAuthenticationRequestHelper implements AuthenticationRequest
     }
 
     @Override
-    public User getUserRequestData() {
+    public UserWithAuthentication getUserRequestData() {
         return userRequestData;
     }
 

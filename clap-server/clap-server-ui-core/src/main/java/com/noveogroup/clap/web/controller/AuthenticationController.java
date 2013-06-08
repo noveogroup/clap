@@ -2,6 +2,7 @@ package com.noveogroup.clap.web.controller;
 
 import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.user.User;
+import com.noveogroup.clap.model.user.UserWithAuthentication;
 import com.noveogroup.clap.web.model.UserSessionData;
 
 import javax.enterprise.context.RequestScoped;
@@ -28,11 +29,9 @@ public class AuthenticationController {
         final Map<String,String> requestParametersMap = context.getExternalContext().getRequestParameterMap();
         final String login = requestParametersMap.get(FORM_ID_LOGIN);
         final String password = requestParametersMap.get(FORM_ID_PASSWORD);
-        final Authentication authentication = new Authentication();
-        final User user = new User();
+        final UserWithAuthentication user = new UserWithAuthentication();
         user.setLogin(login);
         user.setPassword(password);
-        authentication.setUser(user);
         userSessionData.setUser(user);
         return userSessionData.getRequestedView()+"?faces-redirect=true";
     }
