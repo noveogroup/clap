@@ -3,6 +3,7 @@ package com.noveogroup.clap.facade;
 import com.noveogroup.clap.auth.AuthenticationRequired;
 import com.noveogroup.clap.interceptor.ClapMainInterceptor;
 import com.noveogroup.clap.model.Project;
+import com.noveogroup.clap.model.project.ImagedProject;
 import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.transaction.Transactional;
 
@@ -49,7 +50,18 @@ public class ProjectsFacade {
     }
 
     @AuthenticationRequired
+    @Transactional
+    public ImagedProject findByIdWithImage(final Long id){
+        return projectService.findByIdWithImage(id);
+    }
+
+    @AuthenticationRequired
     public List<Project> findAllProjects(){
         return projectService.findAllProjects();
+    }
+
+    @AuthenticationRequired
+    public List<ImagedProject> findAllImagedProjects(){
+       return projectService.findAllImagedProjects();
     }
 }

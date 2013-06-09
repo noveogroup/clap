@@ -1,6 +1,7 @@
 package com.noveogroup.clap.service.project;
 
 import com.noveogroup.clap.model.Project;
+import com.noveogroup.clap.model.project.ImagedProject;
 
 import java.util.List;
 
@@ -32,8 +33,19 @@ public interface ProjectService {
 
     Project findById(Long id);
 
+    /**
+     *
+     * @param id
+     * @return the same entity as findById() but with iconFile mapped field
+     */
+    ImagedProject findByIdWithImage(Long id);
+
     List<Project> findAllProjects();
 
+    /**
+     * @return the same entity collection as findAllProjects() but with iconFile mapped fields
+     */
+    List<ImagedProject> findAllImagedProjects();
 
 
 

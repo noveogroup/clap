@@ -6,25 +6,25 @@ import org.primefaces.model.SelectableDataModel;
 import javax.faces.model.ListDataModel;
 import java.util.List;
 
-public class ProjectsListDataModel extends ListDataModel<Project> implements SelectableDataModel<Project> {
+public class ProjectsListDataModel extends ListDataModel<StreamedImagedProject> implements SelectableDataModel<StreamedImagedProject> {
 
     public ProjectsListDataModel() {
     }
 
-    public ProjectsListDataModel(final List<Project> projects) {
+    public ProjectsListDataModel(final List<StreamedImagedProject> projects) {
         super(projects);
     }
 
     @Override
-    public Object getRowKey(final Project project) {
+    public Object getRowKey(final StreamedImagedProject project) {
         return project.getId();
     }
 
     @Override
-    public Project getRowData(final String s) {
+    public StreamedImagedProject getRowData(final String s) {
         final long id = Long.parseLong(s);
-        final List<Project> projects = (List<Project>) getWrappedData();
-        for (final Project project : projects) {
+        final List<StreamedImagedProject> projects = (List<StreamedImagedProject>) getWrappedData();
+        for (final StreamedImagedProject project : projects) {
             if (id == project.getId()) {
                 return project;
             }

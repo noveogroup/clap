@@ -11,6 +11,7 @@
         <h:panelGroup rendered="#{not empty projectsModel.selectedProject}">
 
             <p:panel id="projectSummary" header="#{projectsModel.selectedProject.name}">
+                <p:graphicImage value="#{projectsModel.selectedProject.streamedIconFile}"/>
                 <h:outputText value="#{projectsModel.selectedProject.description}"/>
             </p:panel>
 

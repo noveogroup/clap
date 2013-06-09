@@ -2,11 +2,13 @@ package com.noveogroup.clap.web.controller;
 
 import com.noveogroup.clap.facade.ProjectsFacade;
 import com.noveogroup.clap.model.Project;
+import com.noveogroup.clap.model.project.ImagedProject;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.ProjectsListDataModel;
 import com.noveogroup.clap.web.model.ProjectsModel;
 import com.noveogroup.clap.web.model.RevisionsListDataModel;
 import com.noveogroup.clap.web.model.RevisionsModel;
+import com.noveogroup.clap.web.model.StreamedImagedProject;
 import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +18,7 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.util.ArrayList;
 import java.util.List;
 
 @Named
@@ -52,9 +55,13 @@ public class ProjectsController extends BaseController {
     }
 
     public void prepareProjectsListView() {
-        final List<Project> projectList = projectsFacade.findAllProjects();
+        final List<ImagedProject> projectList = projectsFacade.findAllImagedProjects();
         if(projectList != null){
-            projectsModel.setProjectsListDataModel(new ProjectsListDataModel(projectList));
+            final List<StreamedImagedProject> streamedImagedProjects = new ArrayList<StreamedImagedProject>();
+            for(final ImagedProject project : projectList){
+                streamedImagedProjects.add(new StreamedImagedProject(project));
+            }
+            projectsModel.setProjectsListDataModel(new ProjectsListDataModel(streamedImagedProjects));
             LOGGER.debug(projectList.size() + " projects loaded");
         }
     }
@@ -62,9 +69,9 @@ public class ProjectsController extends BaseController {
     public void prepareProjectView(){
         final Project selectedProject = projectsModel.getSelectedProject();
         if(selectedProject != null){
-            final Project projectWithRevisions = projectsFacade.findById(selectedProject.getId());
+            final ImagedProject projectWithRevisions = projectsFacade.findByIdWithImage(selectedProject.getId());
             if (projectWithRevisions != null){
-                projectsModel.setSelectedProject(projectWithRevisions);
+                projectsModel.setSelectedProject(new StreamedImagedProject(projectWithRevisions));
                 revisionsModel.setRevisionsListDataModel(
                         new RevisionsListDataModel(projectWithRevisions.getRevisions()));
             }
@@ -75,7 +82,7 @@ public class ProjectsController extends BaseController {
 
 
     public void onProjectSelect(final SelectEvent event) {
-        final Project selectedProject = (Project) event.getObject();
+        final StreamedImagedProject selectedProject = (StreamedImagedProject) event.getObject();
         projectsModel.setSelectedProject(selectedProject);
         LOGGER.debug(selectedProject.getName() + " prject selected");
         redirectTo(Navigation.PROJECT);

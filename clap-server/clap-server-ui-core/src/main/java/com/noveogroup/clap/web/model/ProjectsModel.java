@@ -1,20 +1,25 @@
 package com.noveogroup.clap.web.model;
 
 import com.noveogroup.clap.model.Project;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.context.FacesContext;
+import javax.faces.event.PhaseId;
 import javax.inject.Named;
+import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 
 @Named
 @SessionScoped
-public class ProjectsModel implements Serializable{
+public class ProjectsModel implements Serializable {
 
     private Project newProject = new Project();
 
     private ProjectsListDataModel projectsListDataModel;
 
-    private Project selectedProject;
+    private StreamedImagedProject selectedProject;
 
     public Project getNewProject() {
         return newProject;
@@ -32,11 +37,23 @@ public class ProjectsModel implements Serializable{
         this.projectsListDataModel = projectsListDataModel;
     }
 
-    public Project getSelectedProject() {
+    public StreamedImagedProject getSelectedProject() {
         return selectedProject;
     }
 
-    public void setSelectedProject(final Project selectedProject) {
+    public void setSelectedProject(final StreamedImagedProject selectedProject) {
         this.selectedProject = selectedProject;
+    }
+
+    public StreamedContent getProjectIcon() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
+            // So, we're rendering the view. Return a stub StreamedContent so that it will generate right URL.
+            return new DefaultStreamedContent();
+        } else {
+            HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+            String projectID = (String) request.getParameter("projectID");
+            return projectsListDataModel.getRowData(projectID).getStreamedIconFile();
+        }
     }
 }

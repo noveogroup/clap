@@ -10,6 +10,7 @@ import com.noveogroup.clap.facade.ProjectsFacade;
 import com.noveogroup.clap.facade.RevisionsFacade;
 import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.model.auth.Authentication;
+import com.noveogroup.clap.model.project.ImagedProject;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
 import com.noveogroup.clap.model.request.revision.RevisionRequest;
 import com.noveogroup.clap.model.request.revision.StreamedPackage;
@@ -21,6 +22,7 @@ import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.ProjectsModel;
 import com.noveogroup.clap.web.model.RevisionsListDataModel;
 import com.noveogroup.clap.web.model.RevisionsModel;
+import com.noveogroup.clap.web.model.StreamedImagedProject;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultStreamedContent;
@@ -83,9 +85,9 @@ public class RevisionsController extends BaseController {
 
         revisionsModel.reset();
         LOGGER.debug("revision saved");
-        final Project updatedProject = projectsFacade.findById(projectsModel.getSelectedProject().getId());
+        final ImagedProject updatedProject = projectsFacade.findByIdWithImage(projectsModel.getSelectedProject().getId());
         if (updatedProject != null) {
-            projectsModel.setSelectedProject(updatedProject);
+            projectsModel.setSelectedProject(new StreamedImagedProject(updatedProject));
             revisionsModel.setRevisionsListDataModel(new RevisionsListDataModel(updatedProject.getRevisions()));
         }
         return Navigation.SAME_PAGE.getView();

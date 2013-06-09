@@ -7,10 +7,14 @@ public class BaseModel {
 
     private Long id;
 
-    /**
-     * Constructor
-     */
     public BaseModel() {
+    }
+
+    /**
+     * soft copy constructor
+     */
+    public BaseModel(final BaseModel baseModel) {
+        this.id = baseModel.id;
     }
 
     public Long getId() {

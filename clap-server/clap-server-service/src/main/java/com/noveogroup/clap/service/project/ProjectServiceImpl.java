@@ -5,6 +5,7 @@ import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.model.Project;
+import com.noveogroup.clap.model.project.ImagedProject;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.service.url.UrlService;
@@ -68,8 +69,37 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Override
     public Project findById(final Long id) {
+        return findById(id,Project.class);
+    }
+
+    @Override
+    public ImagedProject findByIdWithImage(Long id) {
+        return findById(id,ImagedProject.class);
+    }
+
+    @Override
+    public List<Project> findAllProjects() {
+        return findAllProjects(Project.class);
+    }
+
+    @Override
+    public List<ImagedProject> findAllImagedProjects() {
+        return findAllProjects(ImagedProject.class);
+    }
+
+    private <T extends Project> List<T> findAllProjects(final Class<? extends T> retClass){
+        final List<ProjectEntity> projectEntityList = projectDAO.selectAll();
+        final List<T> projectList = new ArrayList<T>();
+        for (final ProjectEntity projectEntity : projectEntityList) {
+            projectList.add(MAPPER.map(projectEntity, retClass));
+        }
+        return projectList;
+    }
+
+
+    private <T extends Project> T findById(final Long id,final  Class<? extends T> retClass){
         final ProjectEntity projectEntity = projectDAO.findById(id);
-        final Project project = MAPPER.map(projectEntity, Project.class);
+        final T project = MAPPER.map(projectEntity, retClass);
         final List<Revision> revisions = project.getRevisions();
         for (int i=0; i<revisions.size();i++) {
             final Revision revision = revisions.get(i);
@@ -84,16 +114,5 @@ public class ProjectServiceImpl implements ProjectService {
         }
         return project;
     }
-
-    @Override
-    public List<Project> findAllProjects() {
-        final List<ProjectEntity> projectEntityList = projectDAO.selectAll();
-        final List<Project> projectList = new ArrayList<Project>();
-        for (final ProjectEntity projectEntity : projectEntityList) {
-            projectList.add(MAPPER.map(projectEntity, Project.class));
-        }
-        return projectList;
-    }
-
 
 }

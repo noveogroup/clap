@@ -17,6 +17,11 @@
 
             <p:ajax event="rowSelect" listener="#{projectsController.onProjectSelect}"/>
 
+            <p:column>
+                <p:graphicImage value="#{projectsModel.projectIcon}">
+                    <f:param name="projectID" value="#{project.id}" />
+                </p:graphicImage>
+            </p:column>
             <p:column headerText="#{msgs['project.label.name']}">
                 <h:outputText value="#{project.name}"/>
             </p:column>

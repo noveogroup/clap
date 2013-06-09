@@ -21,6 +21,22 @@ public class Project extends BaseModel {
 
     private List<Revision> revisions;
 
+    public Project() {
+    }
+
+
+    /**
+     * soft copy constructor
+     */
+    public Project(final Project project) {
+        super(project);
+        this.name = project.name;
+        this.externalId = project.externalId;
+        this.description = project.description;
+        this.creationDate = project.creationDate;
+        this.revisions = project.revisions;
+    }
+
 
     public String getName() {
         return name;
