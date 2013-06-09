@@ -14,6 +14,7 @@ import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
 import com.noveogroup.clap.model.revision.ApplicationFile;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
+import com.noveogroup.clap.service.apk.ApkInfoExtractorFactory;
 import com.noveogroup.clap.service.tempfiles.TempFileService;
 import com.noveogroup.clap.service.url.UrlService;
 import org.slf4j.Logger;
@@ -151,24 +152,32 @@ public class RevisionServiceImpl implements RevisionService {
      */
     private void processPackages(final RevisionEntity revisionEntity, final BaseRevisionPackagesRequest request) {
         final StreamedPackage mainPackage = request.getMainPackage();
+        boolean extractIcon = true;
         if (mainPackage != null) {
-            processStreamedPackage(mainPackage);
+            extractIcon = !processStreamedPackage(revisionEntity.getProject(),mainPackage,extractIcon);
             revisionEntity.setMainPackageLoaded(true);
         }
         final StreamedPackage specialPackage = request.getSpecialPackage();
         if (specialPackage != null) {
-            processStreamedPackage(specialPackage);
+            processStreamedPackage(revisionEntity.getProject(),specialPackage,extractIcon);
             revisionEntity.setSpecialPackageLoaded(true);
         }
     }
 
-    private void processStreamedPackage(final StreamedPackage streamedPackage) {
+    private boolean processStreamedPackage(final ProjectEntity projectEntity, final StreamedPackage streamedPackage, final boolean extractIcon) {
+        boolean ret = false;
         try {
             final File file = tempFileService.createTempFile(streamedPackage.getStream());
+            if(extractIcon){
+                final ApkInfoExtractorFactory factory = new ApkInfoExtractorFactory(file);
+                projectEntity.setIconFile(factory.createIconExtractor().getIcon());
+                ret = true;
+            }
             streamedPackage.setStream(new FileInputStream(file));
         } catch (IOException e) {
             LOGGER.error("error while processing: "+streamedPackage,e);
         }
+        return ret;
     }
 
     private void createUrls(final Revision outcomeRevision, final RevisionEntity revisionEntity) {

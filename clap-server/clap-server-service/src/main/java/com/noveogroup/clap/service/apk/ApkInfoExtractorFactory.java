@@ -4,6 +4,9 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.zip.ZipInputStream;
 
 /**
@@ -11,24 +14,19 @@ import java.util.zip.ZipInputStream;
  */
 public class ApkInfoExtractorFactory {
 
-    public static final ApkInfoExtractorFactory getInstance(byte[] apkFile) throws FileNotFoundException {
-        //ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(apkFile));
-        ZipInputStream zipInputStream = new ZipInputStream(new ByteArrayInputStream(apkFile));
-        return new ApkInfoExtractorFactory(zipInputStream);
+    private final File apkFile;
+
+    public ApkInfoExtractorFactory(final File apkFile){
+        this.apkFile = apkFile;
     }
 
-    private final ZipInputStream zipInputStream;
-
-    private ApkInfoExtractorFactory(ZipInputStream zipInputStream){
-        this.zipInputStream = zipInputStream;
-    }
-
-    public IconExtractor createIconExtractor(){
-        return new IconExtractor(zipInputStream);
+    public IconExtractor createIconExtractor() throws FileNotFoundException {
+        return new IconExtractor(apkFile);
     }
 
     public ManifestInfoExtractor createManifestInfoExtractor(){
         //TODO
         return null;
     }
+
 }

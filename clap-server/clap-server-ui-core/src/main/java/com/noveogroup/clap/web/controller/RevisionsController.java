@@ -158,15 +158,4 @@ public class RevisionsController extends BaseController {
             return null;
         }
     }
-
-    private void test(byte[] apk) {
-        if (apk != null) {
-            try {
-                ApkInfoExtractorFactory apkInfoExtractorFactory = ApkInfoExtractorFactory.getInstance(apk);
-                apkInfoExtractorFactory.createIconExtractor().getIcon();
-            } catch (FileNotFoundException e) {
-                LOGGER.error("", e);
-            }
-        }
-    }
 }
