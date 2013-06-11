@@ -3,6 +3,7 @@ package com.noveogroup.clap.web.model;
 
 import com.noveogroup.clap.model.revision.Revision;
 import org.primefaces.model.StreamedContent;
+import org.primefaces.model.TreeNode;
 import org.primefaces.model.UploadedFile;
 
 import javax.enterprise.context.SessionScoped;
@@ -15,6 +16,7 @@ public class RevisionsModel implements Serializable{
 
     private RevisionsListDataModel revisionsListDataModel;
     private Revision selectedRevision;
+    private TreeNode selectedRevisionApkStructure;
 
     private StreamedContent cleanApkQRCode;
     private StreamedContent hackedApkQRCode;
@@ -73,5 +75,13 @@ public class RevisionsModel implements Serializable{
 
     public void setHackedApkQRCode(final StreamedContent hackedApkQRCode) {
         this.hackedApkQRCode = hackedApkQRCode;
+    }
+
+    public TreeNode getSelectedRevisionApkStructure() {
+        return selectedRevisionApkStructure;
+    }
+
+    public void setSelectedRevisionApkStructure(final TreeNode selectedRevisionApkStructure) {
+        this.selectedRevisionApkStructure = selectedRevisionApkStructure;
     }
 }

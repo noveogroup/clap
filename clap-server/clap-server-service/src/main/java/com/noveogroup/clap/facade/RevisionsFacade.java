@@ -8,6 +8,7 @@ import com.noveogroup.clap.model.request.revision.RevisionRequest;
 import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
 import com.noveogroup.clap.model.revision.ApplicationFile;
 import com.noveogroup.clap.model.revision.Revision;
+import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
 import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.transaction.Transactional;
 
@@ -48,5 +49,11 @@ public class RevisionsFacade {
     @AuthenticationRequired
     public Revision getRevision(final RevisionRequest request){
         return revisionService.getRevision(request);
+    }
+
+    @Transactional
+    @AuthenticationRequired
+    public RevisionWithApkStructure getRevisionWithApkStructure(final RevisionRequest request){
+        return revisionService.getRevisionWithApkStructure(request);
     }
 }

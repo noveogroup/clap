@@ -82,6 +82,7 @@
         <commons-collections.version>3.2.1</commons-collections.version>
         <commons-lang.version>2.6</commons-lang.version>
         <resteasy.version>2.3.6.Final</resteasy.version>
+        <gson.version>2.2.4</gson.version>
     </properties>
 
 
@@ -284,6 +285,11 @@
                 <version>${commons-lang.version}</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${gson.version}</version>
+            </dependency>
 
         </dependencies>
     </dependencyManagement>

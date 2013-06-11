@@ -12,6 +12,7 @@ import java.util.zip.ZipInputStream;
 /**
  * @author Andrey Sokolov
  */
+//TODO refactor extractors to reuse structure
 public class ApkInfoExtractorFactory {
 
     private final File apkFile;
@@ -20,13 +21,17 @@ public class ApkInfoExtractorFactory {
         this.apkFile = apkFile;
     }
 
-    public IconExtractor createIconExtractor() throws FileNotFoundException {
+    public IconExtractor createIconExtractor() {
         return new IconExtractor(apkFile);
     }
 
     public ManifestInfoExtractor createManifestInfoExtractor(){
         //TODO
         return null;
+    }
+
+    public StructureExtractor createStructureExtractor() {
+        return new StructureExtractor(apkFile);
     }
 
 }

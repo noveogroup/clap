@@ -1,5 +1,6 @@
 package com.noveogroup.clap.service.revision;
 
+import com.google.gson.Gson;
 import com.noveogroup.clap.converter.RevisionConverter;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
@@ -11,9 +12,7 @@ import com.noveogroup.clap.model.request.revision.GetApplicationRequest;
 import com.noveogroup.clap.model.request.revision.RevisionRequest;
 import com.noveogroup.clap.model.request.revision.StreamedPackage;
 import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
-import com.noveogroup.clap.model.revision.ApplicationFile;
-import com.noveogroup.clap.model.revision.Revision;
-import com.noveogroup.clap.model.revision.RevisionType;
+import com.noveogroup.clap.model.revision.*;
 import com.noveogroup.clap.service.apk.ApkInfoExtractorFactory;
 import com.noveogroup.clap.service.tempfiles.TempFileService;
 import com.noveogroup.clap.service.url.UrlService;
@@ -132,9 +131,15 @@ public class RevisionServiceImpl implements RevisionService {
         return revision;
     }
 
+    @Override
+    public RevisionWithApkStructure getRevisionWithApkStructure(final RevisionRequest request) {
+        final RevisionEntity revisionEntity = revisionDAO.findById(request.getRevisionId());
+        final RevisionWithApkStructure revision = revisionConverter.mapWithApkStructure(revisionEntity);
+        createUrls(revision, revisionEntity);
+        return revision;
+    }
 
     private Revision updateRevisionPackages(RevisionEntity revisionEntity, final BaseRevisionPackagesRequest request) {
-
         processPackages(revisionEntity, request);
         revisionEntity = revisionDAO.persist(revisionEntity,request.getMainPackage(),request.getSpecialPackage());
         final Revision outcomeRevision = revisionConverter.map(revisionEntity);
@@ -152,25 +157,34 @@ public class RevisionServiceImpl implements RevisionService {
      */
     private void processPackages(final RevisionEntity revisionEntity, final BaseRevisionPackagesRequest request) {
         final StreamedPackage mainPackage = request.getMainPackage();
-        boolean extractIcon = true;
+        boolean extractInfo = true;
         if (mainPackage != null) {
-            extractIcon = !processStreamedPackage(revisionEntity.getProject(),mainPackage,extractIcon);
+            extractInfo = !processStreamedPackage(revisionEntity,mainPackage,extractInfo);
             revisionEntity.setMainPackageLoaded(true);
         }
         final StreamedPackage specialPackage = request.getSpecialPackage();
         if (specialPackage != null) {
-            processStreamedPackage(revisionEntity.getProject(),specialPackage,extractIcon);
+            processStreamedPackage(revisionEntity,specialPackage,extractInfo);
             revisionEntity.setSpecialPackageLoaded(true);
         }
     }
 
-    private boolean processStreamedPackage(final ProjectEntity projectEntity, final StreamedPackage streamedPackage, final boolean extractIcon) {
+    /**
+     *
+     * @param revisionEntity
+     * @param streamedPackage
+     * @param extractInfo true if need to extract apk info (icon, structure, etc)
+     * @return true if info was extracted
+     */
+    private boolean processStreamedPackage(final RevisionEntity revisionEntity, final StreamedPackage streamedPackage, final boolean extractInfo) {
         boolean ret = false;
         try {
             final File file = tempFileService.createTempFile(streamedPackage.getStream());
-            if(extractIcon){
+            if(extractInfo){
                 final ApkInfoExtractorFactory factory = new ApkInfoExtractorFactory(file);
-                projectEntity.setIconFile(factory.createIconExtractor().getIcon());
+                revisionEntity.getProject().setIconFile(factory.createIconExtractor().getIcon());
+                final ApkStructure apkStructure = factory.createStructureExtractor().getStructure();
+                revisionEntity.setApkStructureJSON(new Gson().toJson(apkStructure,ApkStructure.class));
                 ret = true;
             }
             streamedPackage.setStream(new FileInputStream(file));

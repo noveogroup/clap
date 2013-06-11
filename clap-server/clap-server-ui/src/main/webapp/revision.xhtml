@@ -59,6 +59,14 @@
             </p:panel>
         </p:panelGrid>
 
+        <p:panel rendered="#{not empty revisionsModel.selectedRevisionApkStructure}">
+            <p:tree value="#{revisionsModel.selectedRevisionApkStructure}" var="node" id="tree">
+                <p:treeNode id="treeNode">
+                    <h:outputText value="#{node.entryName}" id="lblNode"/>
+                </p:treeNode>
+            </p:tree>
+        </p:panel>
+
         <p:dataTable var="message"
                      value="#{revisionsModel.selectedRevision.messages}"
                      paginator="true" rows="10"

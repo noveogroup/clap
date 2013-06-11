@@ -15,7 +15,6 @@ import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import java.sql.Blob;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -25,6 +24,8 @@ import java.util.List;
 @Table(name = "revisions")
 @NamedQuery(name="getRevisionByHash",query="SELECT rev FROM RevisionEntity rev WHERE rev.hash = :hash")
 public class RevisionEntity extends BaseEntity {
+
+    private static final int COLUMN_LENGTH = 16777215;
 
     private Long timestamp;
 
@@ -48,8 +49,10 @@ public class RevisionEntity extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY)
     private List<MessageEntity> messages;
 
+    @Column(length = COLUMN_LENGTH)
+    private String apkStructureJSON;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private ProjectEntity project;
 
     /**
@@ -131,6 +134,14 @@ public class RevisionEntity extends BaseEntity {
         this.specialPackage = specialPackage;
     }
 
+    public String getApkStructureJSON() {
+        return apkStructureJSON;
+    }
+
+    public void setApkStructureJSON(String apkStructureJSON) {
+        this.apkStructureJSON = apkStructureJSON;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
@@ -141,6 +152,7 @@ public class RevisionEntity extends BaseEntity {
                 .append("specialPackageLoaded", specialPackageLoaded)
                 .append("messages", messages)
                 .append("project", project)
+                .append("apkStructureJSON", apkStructureJSON)
                 .toString();
     }
 }

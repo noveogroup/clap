@@ -15,9 +15,10 @@ import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
 import com.noveogroup.clap.model.request.revision.RevisionRequest;
 import com.noveogroup.clap.model.request.revision.StreamedPackage;
 import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
+import com.noveogroup.clap.model.revision.ApkEntry;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
-import com.noveogroup.clap.service.apk.ApkInfoExtractorFactory;
+import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.ProjectsModel;
 import com.noveogroup.clap.web.model.RevisionsListDataModel;
@@ -25,9 +26,7 @@ import com.noveogroup.clap.web.model.RevisionsModel;
 import com.noveogroup.clap.web.model.StreamedImagedProject;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
-import org.primefaces.model.UploadedFile;
+import org.primefaces.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +38,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 
 @Named
 @RequestScoped
@@ -99,12 +99,28 @@ public class RevisionsController extends BaseController {
             final RevisionRequest request = new RevisionRequest();
             request.setAuthentication(new Authentication());
             request.setRevisionId(selectedRevision.getId());
-            revisionsModel.setSelectedRevision(revisionsFacade.getRevision(request));
+            final RevisionWithApkStructure revisionWithApkStructure = revisionsFacade.getRevisionWithApkStructure(request);
+            revisionsModel.setSelectedRevision(revisionWithApkStructure);
+            if(revisionWithApkStructure.getApkStructure() != null){
+                revisionsModel.setSelectedRevisionApkStructure(
+                        createApkStructureTree(null,revisionWithApkStructure.getApkStructure().getRootEntry()));
+            }
             updateQRCodes(revisionsModel.getSelectedRevision());
             LOGGER.debug(selectedRevision.getId() + " revision preparing finished");
         } else {
             LOGGER.error("revision not selected");
         }
+    }
+
+    private TreeNode createApkStructureTree(final TreeNode root, final ApkEntry apkEntry) {
+        final TreeNode ret = new DefaultTreeNode(apkEntry,root);
+        final List<ApkEntry> innerEntries = apkEntry.getInnerEntries();
+        if(innerEntries != null){
+            for (ApkEntry innerEntry : innerEntries){
+                createApkStructureTree(ret,innerEntry);
+            }
+        }
+        return ret;
     }
 
     public void onRevisionSelected(final SelectEvent event) {

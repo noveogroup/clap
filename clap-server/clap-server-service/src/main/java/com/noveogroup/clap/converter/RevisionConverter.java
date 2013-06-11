@@ -1,10 +1,13 @@
 package com.noveogroup.clap.converter;
 
+import com.google.gson.Gson;
 import com.noveogroup.clap.entity.ProjectEntity;
 import com.noveogroup.clap.entity.message.MessageEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.model.message.Message;
+import com.noveogroup.clap.model.revision.ApkStructure;
 import com.noveogroup.clap.model.revision.Revision;
+import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
@@ -21,20 +24,32 @@ public class RevisionConverter {
         return MAPPER.map(revision, RevisionEntity.class);
     }
 
-    public Revision map(RevisionEntity revision) {
+    public Revision map(final RevisionEntity revision) {
         final Revision ret = new Revision();
-        ret.setId(revision.getId());
-        ret.setHash(revision.getHash());
-        ret.setMessages(new ArrayList<Message>());
+        map(ret,revision);
+        return ret;
+    }
+
+    public RevisionWithApkStructure mapWithApkStructure(final RevisionEntity revision) {
+        final RevisionWithApkStructure ret = new RevisionWithApkStructure();
+        map(ret, revision);
+        ret.setApkStructure(new Gson().fromJson(revision.getApkStructureJSON(), ApkStructure.class));
+        return ret;
+    }
+
+
+    private void map(final Revision toMap, final RevisionEntity revision) {
+        toMap.setId(revision.getId());
+        toMap.setHash(revision.getHash());
+        toMap.setMessages(new ArrayList<Message>());
         for (MessageEntity message : revision.getMessages()) {
-            ret.getMessages().add(MAPPER.map(message, Message.class));
+            toMap.getMessages().add(MAPPER.map(message, Message.class));
         }
         final ProjectEntity project = revision.getProject();
         if(project != null){
-            ret.setProjectId(project.getId());
+            toMap.setProjectId(project.getId());
         }
-        ret.setRevisionType(revision.getRevisionType());
-        ret.setTimestamp(revision.getTimestamp());
-        return ret;
+        toMap.setRevisionType(revision.getRevisionType());
+        toMap.setTimestamp(revision.getTimestamp());
     }
 }

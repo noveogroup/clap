@@ -6,6 +6,7 @@ import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
 import com.noveogroup.clap.model.request.revision.GetApplicationRequest;
 import com.noveogroup.clap.model.request.revision.RevisionRequest;
 import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
+import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
 
 /**
  * @author Mikhail Demidov
@@ -19,5 +20,7 @@ public interface RevisionService {
     ApplicationFile getApplication(GetApplicationRequest request);
 
     Revision getRevision(RevisionRequest request);
+
+    RevisionWithApkStructure getRevisionWithApkStructure(RevisionRequest request);
 
 }
