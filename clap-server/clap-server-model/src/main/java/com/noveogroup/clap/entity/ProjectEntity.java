@@ -88,7 +88,7 @@ public class ProjectEntity extends BaseEntity {
         return iconFile;
     }
 
-    public void setIconFile(byte[] iconFile) {
+    public void setIconFile(final byte[] iconFile) {
         this.iconFile = iconFile;
     }
 

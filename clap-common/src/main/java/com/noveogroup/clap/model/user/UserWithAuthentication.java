@@ -14,7 +14,7 @@ public class UserWithAuthentication extends BaseUser {
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(final String password) {
         this.password = password;
     }
 
@@ -22,7 +22,7 @@ public class UserWithAuthentication extends BaseUser {
         return authenticationKey;
     }
 
-    public void setAuthenticationKey(String authenticationKey) {
+    public void setAuthenticationKey(final String authenticationKey) {
         this.authenticationKey = authenticationKey;
     }
 

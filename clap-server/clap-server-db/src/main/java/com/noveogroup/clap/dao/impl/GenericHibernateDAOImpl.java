@@ -78,8 +78,8 @@ public abstract class GenericHibernateDAOImpl<T, ID extends Serializable> implem
     }
 
 
-    protected T getSingleResultOrNull(Query query){
-        List results = query.getResultList();
+    protected T getSingleResultOrNull(final Query query){
+        final List results = query.getResultList();
         if (results.size() == 0) {
             return null;
         } else if (results.size() == 1) {

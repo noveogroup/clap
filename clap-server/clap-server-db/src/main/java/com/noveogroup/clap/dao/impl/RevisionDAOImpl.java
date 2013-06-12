@@ -48,7 +48,7 @@ public class RevisionDAOImpl extends GenericHibernateDAOImpl<RevisionEntity, Lon
     }
 
     @Override
-    public RevisionEntity persist(RevisionEntity entity, StreamedPackage mainPackage, StreamedPackage specialPackage) {
+    public RevisionEntity persist(final RevisionEntity entity, final StreamedPackage mainPackage, final StreamedPackage specialPackage) {
         final HibernateEntityManager hibernateEntityManager = entityManager.unwrap(HibernateEntityManager.class);
         final LobCreator lobCreator = Hibernate.getLobCreator(hibernateEntityManager.getSession());
         if (mainPackage != null) {

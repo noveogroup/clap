@@ -13,7 +13,7 @@ public class ApkStructure {
         return rootEntry;
     }
 
-    public void setRootEntry(ApkEntry rootEntry) {
+    public void setRootEntry(final ApkEntry rootEntry) {
         this.rootEntry = rootEntry;
     }
 

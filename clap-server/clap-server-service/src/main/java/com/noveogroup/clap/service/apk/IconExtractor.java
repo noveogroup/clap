@@ -59,7 +59,7 @@ public class IconExtractor {
         ZipEntry zipentry = zipInputStream.getNextEntry();
         while (zipentry != null) {
             final String entryName = zipentry.getName();
-            long zipentrySize = zipentry.getSize();
+            final long zipentrySize = zipentry.getSize();
             LOGGER.debug("reading entry: " + entryName);
             for (int newPriority = foundIconPriority + 1;
                  newPriority <= ICONS_PATH_MAX_PRIORITY;
@@ -90,7 +90,7 @@ public class IconExtractor {
             final String entryName = zipentry.getName();
             LOGGER.debug("reading entry: " + entryName);
             if (StringUtils.equals(entryName, foundIconEntryName)) {
-                byte[] iconBytes = new byte[foundIconEntrySize];
+                final byte[] iconBytes = new byte[foundIconEntrySize];
                 zipInputStream.read(iconBytes, 0, foundIconEntrySize);
                 zipInputStream.close();
                 return iconBytes;
@@ -108,7 +108,7 @@ public class IconExtractor {
         private final String qualificator;
         private final int priority;
 
-        public IconPathTemplate(String qualificator, int priority) {
+        public IconPathTemplate(final String qualificator, final int priority) {
             this.qualificator = qualificator;
             this.priority = priority;
         }

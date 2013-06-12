@@ -12,7 +12,7 @@ public class RevisionWithApkStructure extends Revision {
         return apkStructure;
     }
 
-    public void setApkStructure(ApkStructure apkStructure) {
+    public void setApkStructure(final ApkStructure apkStructure) {
         this.apkStructure = apkStructure;
     }
 

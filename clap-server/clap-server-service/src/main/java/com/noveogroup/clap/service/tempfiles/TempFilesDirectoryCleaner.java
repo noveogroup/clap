@@ -43,14 +43,14 @@ public class TempFilesDirectoryCleaner {
     public void timeout(final Timer timer) {
         LOGGER.debug("deleting temp files");
         final File tempFilesDir = new File(tempFilesDirectoryPath);
-        for (File tempFile : tempFilesDir.listFiles()) {
+        for (final File tempFile : tempFilesDir.listFiles()) {
             delete(tempFile);
         }
     }
 
     private void delete(final File file) {
         if (file.isDirectory()) {
-            for (File innerFile : file.listFiles()) {
+            for (final File innerFile : file.listFiles()) {
                 delete(innerFile);
             }
         }

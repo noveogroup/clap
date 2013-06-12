@@ -19,7 +19,7 @@
 
             <p:column>
                 <p:graphicImage value="#{project.streamedIconFile}">
-                    <f:param name="imageEL" value="projectsModel.projectsListDataModel.getRowData(#{project.id}).streamedIconFile" />
+                    <f:param name="contentEL" value="projectsModel.projectsListDataModel.getRowData(#{project.id}).streamedIconFile" />
                 </p:graphicImage>
             </p:column>
             <p:column headerText="#{msgs['project.label.name']}">

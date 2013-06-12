@@ -73,7 +73,7 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @Override
-    public ImagedProject findByIdWithImage(Long id) {
+    public ImagedProject findByIdWithImage(final Long id) {
         return findById(id,ImagedProject.class);
     }
 

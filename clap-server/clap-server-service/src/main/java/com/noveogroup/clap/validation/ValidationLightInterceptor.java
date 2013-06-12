@@ -1,7 +1,6 @@
 package com.noveogroup.clap.validation;
 
 import com.noveogroup.clap.interceptor.composite.LightInterceptor;
-import com.noveogroup.clap.interceptor.composite.LightInterceptorQualifier;
 import com.noveogroup.clap.interceptor.composite.RequestHelperFactory;
 
 import javax.annotation.PostConstruct;
@@ -19,7 +18,6 @@ import java.util.Set;
 /**
  * @author Andrey Sokolov
  */
-@LightInterceptorQualifier
 @ApplicationScoped
 public class ValidationLightInterceptor implements LightInterceptor {
 
@@ -47,7 +45,7 @@ public class ValidationLightInterceptor implements LightInterceptor {
                 final Set<ConstraintViolation<Object>> violations = validator.validate(parameter);
                 if (!violations.isEmpty()) {
                     String message = "";
-                    for (ConstraintViolation constraintViolation : violations) {
+                    for (final ConstraintViolation constraintViolation : violations) {
                         message += " ; " + constraintViolation.getMessage();
                     }
                     //TODO somehow exception isn't building message =/

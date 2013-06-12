@@ -24,7 +24,7 @@ public class ImagedProject extends Project {
         return iconFile;
     }
 
-    public void setIconFile(byte[] iconFile) {
+    public void setIconFile(final byte[] iconFile) {
         this.iconFile = iconFile;
     }
 }

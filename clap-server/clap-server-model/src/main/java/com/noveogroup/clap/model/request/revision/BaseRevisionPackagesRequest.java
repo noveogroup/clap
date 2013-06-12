@@ -13,7 +13,7 @@ public class BaseRevisionPackagesRequest {
         return mainPackage;
     }
 
-    public void setMainPackage(StreamedPackage mainPackage) {
+    public void setMainPackage(final StreamedPackage mainPackage) {
         this.mainPackage = mainPackage;
     }
 
@@ -21,7 +21,7 @@ public class BaseRevisionPackagesRequest {
         return specialPackage;
     }
 
-    public void setSpecialPackage(StreamedPackage specialPackage) {
+    public void setSpecialPackage(final StreamedPackage specialPackage) {
         this.specialPackage = specialPackage;
     }
 }

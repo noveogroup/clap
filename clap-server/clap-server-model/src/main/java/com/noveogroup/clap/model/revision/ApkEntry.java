@@ -27,7 +27,7 @@ public class ApkEntry {
         return innerEntries;
     }
 
-    public void setInnerEntries(List<ApkEntry> innerEntries) {
+    public void setInnerEntries(final List<ApkEntry> innerEntries) {
         this.innerEntries = innerEntries;
     }
 
@@ -35,7 +35,7 @@ public class ApkEntry {
         return fileName;
     }
 
-    public void setFileName(String fileName) {
+    public void setFileName(final String fileName) {
         this.fileName = fileName;
     }
 
@@ -43,7 +43,7 @@ public class ApkEntry {
         return entryName;
     }
 
-    public void setEntryName(String entryName) {
+    public void setEntryName(final String entryName) {
         this.entryName = entryName;
     }
 
@@ -56,7 +56,7 @@ public class ApkEntry {
      *
      * @param directory
      */
-    public void setDirectory(boolean directory) {
+    public void setDirectory(final boolean directory) {
         this.directory = directory;
     }
 

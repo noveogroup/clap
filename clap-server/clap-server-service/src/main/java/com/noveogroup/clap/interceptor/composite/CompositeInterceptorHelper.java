@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
+import javax.enterprise.inject.Any;
 import javax.enterprise.inject.Instance;
 import javax.inject.Inject;
 import javax.interceptor.InvocationContext;
@@ -28,7 +29,7 @@ public class CompositeInterceptorHelper {
     private static final Logger LOGGER = LoggerFactory.getLogger(CompositeInterceptorHelper.class);
 
     @Inject
-    @LightInterceptorQualifier
+    @Any
     private Instance<LightInterceptor> lightInterceptors;
 
     private final List<LightInterceptor> interceptorList = new ArrayList<LightInterceptor>();
@@ -48,7 +49,6 @@ public class CompositeInterceptorHelper {
             Collections.sort(interceptorList, new Comparator<LightInterceptor>() {
                 @Override
                 public int compare(final LightInterceptor o1, final LightInterceptor o2) {
-                    //TODO check
                     return o2.getPriority() - o1.getPriority();
                 }
             });
@@ -77,19 +77,19 @@ public class CompositeInterceptorHelper {
         }
         final int size = interceptorList.size();
         if (size > 0) {
-            final ChainedInvocatinoContext chainedInvocatinoContext = new ChainedInvocatinoContext(ctx);
-            interceptorList.get(size - 1).setNextInterceptor(chainedInvocatinoContext);
-            return interceptorList.get(0).proceed(chainedInvocatinoContext, requestHelperFactory,annotationMap);
+            final ChainedInvocationContext chainedInvocationContext = new ChainedInvocationContext(ctx);
+            interceptorList.get(size - 1).setNextInterceptor(chainedInvocationContext);
+            return interceptorList.get(0).proceed(chainedInvocationContext, requestHelperFactory,annotationMap);
         } else {
-            return new ChainedInvocatinoContext(ctx).proceed(ctx, requestHelperFactory, annotationMap);
+            return ctx.proceed();
         }
     }
 
-    private final static class ChainedInvocatinoContext implements InvocationContext, LightInterceptor {
+    private final static class ChainedInvocationContext implements InvocationContext, LightInterceptor {
 
         private final InvocationContext wrappedContext;
 
-        private ChainedInvocatinoContext(final InvocationContext wrappedContext) {
+        private ChainedInvocationContext(final InvocationContext wrappedContext) {
             this.wrappedContext = wrappedContext;
         }
 
@@ -130,8 +130,7 @@ public class CompositeInterceptorHelper {
 
         @Override
         public void setNextInterceptor(final LightInterceptor nextInterceptor) {
-            throw new IllegalArgumentException(nextInterceptor
-                    + " has too low priority - " + nextInterceptor.getPriority());
+            throw new IllegalStateException("this metod shoudn't be invoked");
         }
 
         @Override
@@ -143,12 +142,12 @@ public class CompositeInterceptorHelper {
 
         @Override
         public int getPriority() {
-            return 0;
+            throw new IllegalStateException("this metod shoudn't be invoked");
         }
 
         @Override
         public String getDescription() {
-            return "you shouldn't see this";
+            throw new IllegalStateException("this metod shoudn't be invoked");
         }
     }
 }

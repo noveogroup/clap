@@ -20,7 +20,7 @@ public class RevisionConverter {
 
     private static final Mapper MAPPER = new DozerBeanMapper();
 
-    public RevisionEntity map(Revision revision) {
+    public RevisionEntity map(final Revision revision) {
         return MAPPER.map(revision, RevisionEntity.class);
     }
 
@@ -42,7 +42,7 @@ public class RevisionConverter {
         toMap.setId(revision.getId());
         toMap.setHash(revision.getHash());
         toMap.setMessages(new ArrayList<Message>());
-        for (MessageEntity message : revision.getMessages()) {
+        for (final MessageEntity message : revision.getMessages()) {
             toMap.getMessages().add(MAPPER.map(message, Message.class));
         }
         final ProjectEntity project = revision.getProject();

@@ -12,7 +12,7 @@ public class StreamedPackage {
     private InputStream stream;
     private long length;
 
-    public StreamedPackage(InputStream stream, long length) {
+    public StreamedPackage(final InputStream stream, final long length) {
         this.stream = stream;
         this.length = length;
     }
@@ -21,7 +21,7 @@ public class StreamedPackage {
         return stream;
     }
 
-    public void setStream(InputStream stream) {
+    public void setStream(final InputStream stream) {
         this.stream = stream;
     }
 
@@ -29,7 +29,7 @@ public class StreamedPackage {
         return length;
     }
 
-    public void setLength(long length) {
+    public void setLength(final long length) {
         this.length = length;
     }
 

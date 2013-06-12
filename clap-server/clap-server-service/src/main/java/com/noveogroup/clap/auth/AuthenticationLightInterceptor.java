@@ -3,7 +3,6 @@ package com.noveogroup.clap.auth;
 import com.noveogroup.clap.integration.auth.AuthenticationRequestHelper;
 import com.noveogroup.clap.integration.auth.AuthenticationSystem;
 import com.noveogroup.clap.interceptor.composite.LightInterceptor;
-import com.noveogroup.clap.interceptor.composite.LightInterceptorQualifier;
 import com.noveogroup.clap.interceptor.composite.RequestHelperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,7 +17,6 @@ import java.util.Map;
 /**
  * @author Andrey Sokolov
  */
-@LightInterceptorQualifier
 @ApplicationScoped
 public class AuthenticationLightInterceptor implements LightInterceptor {
 

@@ -1,4 +1,4 @@
-package com.noveogroup.clap.web.component;
+package com.noveogroup.clap.web.resource;
 
 import org.primefaces.model.StreamedContent;
 
@@ -13,15 +13,18 @@ import java.io.InputStream;
 import java.util.Map;
 
 /**
+ *  Resource handler for to allow using dynamic StreamedContent from
+ *  composite components and data tables
+ *
  * @author Andrey Sokolov
  */
-public class ELImageResourceHandler extends ResourceHandlerWrapper {
+public class ELStreamedContentResourceHandler extends ResourceHandlerWrapper {
 
-    public static final String EL_PARAM_KEY = "imageEL";
+    public static final String EL_PARAM_KEY = "contentEL";
 
-    private ResourceHandler wrapped;
+    private final ResourceHandler wrapped;
 
-    public ELImageResourceHandler(ResourceHandler original) {
+    public ELStreamedContentResourceHandler(final ResourceHandler original) {
         this.wrapped = original;
     }
 

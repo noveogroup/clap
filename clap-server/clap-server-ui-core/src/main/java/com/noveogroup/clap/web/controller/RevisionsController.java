@@ -68,7 +68,7 @@ public class RevisionsController extends BaseController {
         LOGGER.debug("saving new revision");
         final Project project = projectsModel.getSelectedProject();
         final Revision revision = new Revision();
-        long timestamp = new Date().getTime();
+        final long timestamp = new Date().getTime();
         revision.setTimestamp(timestamp);
         revision.setHash("mock_hash_"+timestamp);
         final UploadedFile newRevisionCleanApk = revisionsModel.getCleanPackageModel().getUploadApk();
@@ -125,7 +125,7 @@ public class RevisionsController extends BaseController {
         final TreeNode ret = new DefaultTreeNode(apkEntry,root);
         final List<ApkEntry> innerEntries = apkEntry.getInnerEntries();
         if(innerEntries != null){
-            for (ApkEntry innerEntry : innerEntries){
+            for (final ApkEntry innerEntry : innerEntries){
                 createApkStructureTree(ret,innerEntry);
             }
         }

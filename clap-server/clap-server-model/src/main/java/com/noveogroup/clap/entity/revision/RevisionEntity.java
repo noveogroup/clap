@@ -122,7 +122,7 @@ public class RevisionEntity extends BaseEntity {
         return mainPackage;
     }
 
-    public void setMainPackage(Blob mainPackage) {
+    public void setMainPackage(final Blob mainPackage) {
         this.mainPackage = mainPackage;
     }
 
@@ -130,7 +130,7 @@ public class RevisionEntity extends BaseEntity {
         return specialPackage;
     }
 
-    public void setSpecialPackage(Blob specialPackage) {
+    public void setSpecialPackage(final Blob specialPackage) {
         this.specialPackage = specialPackage;
     }
 
@@ -138,7 +138,7 @@ public class RevisionEntity extends BaseEntity {
         return apkStructureJSON;
     }
 
-    public void setApkStructureJSON(String apkStructureJSON) {
+    public void setApkStructureJSON(final String apkStructureJSON) {
         this.apkStructureJSON = apkStructureJSON;
     }
 

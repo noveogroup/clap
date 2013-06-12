@@ -15,7 +15,7 @@ public class RevisionPackageModel {
         return apkQRCode;
     }
 
-    public void setApkQRCode(StreamedContent apkQRCode) {
+    public void setApkQRCode(final StreamedContent apkQRCode) {
         this.apkQRCode = apkQRCode;
     }
 
@@ -23,7 +23,7 @@ public class RevisionPackageModel {
         return uploadApk;
     }
 
-    public void setUploadApk(UploadedFile uploadApk) {
+    public void setUploadApk(final UploadedFile uploadApk) {
         this.uploadApk = uploadApk;
     }
 }

@@ -72,7 +72,7 @@ public class StructureExtractor {
                     currentPathEntry.setDirectory(true);
                     directoriesMap.put(currentPathEntryName,currentPathEntry);
                 }
-                ApkEntry currentPathEntryParent;
+                final ApkEntry currentPathEntryParent;
                 if(i>0){
                     currentPathEntryParent = directoriesMap.get(StringUtils.join(path,ZIP_ARCHIVE_DELIMITER,0,i));
                 } else {

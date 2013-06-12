@@ -22,7 +22,7 @@ public class ApplicationFile {
         return content;
     }
 
-    public void setContent(File content) {
+    public void setContent(final File content) {
         this.content = content;
     }
 
