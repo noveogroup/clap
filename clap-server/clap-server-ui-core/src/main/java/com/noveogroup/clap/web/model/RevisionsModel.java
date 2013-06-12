@@ -12,38 +12,22 @@ import java.io.Serializable;
 
 @Named
 @SessionScoped
-public class RevisionsModel implements Serializable{
+public class RevisionsModel implements Serializable {
 
     private RevisionsListDataModel revisionsListDataModel;
     private Revision selectedRevision;
     private TreeNode selectedRevisionApkStructure;
 
-    private StreamedContent cleanApkQRCode;
-    private StreamedContent hackedApkQRCode;
+    private RevisionPackageModel cleanPackageModel = new RevisionPackageModel();
+    private RevisionPackageModel hackedPackageModel = new RevisionPackageModel();
 
-    private UploadedFile uploadCleanApk;
-    private UploadedFile uploadHackedApk;
 
-    public void reset(){
-        uploadCleanApk = null;
-        uploadHackedApk = null;
+    public void reset() {
+        cleanPackageModel = new RevisionPackageModel();
+        hackedPackageModel = new RevisionPackageModel();
+        selectedRevisionApkStructure = null;
     }
 
-    public UploadedFile getUploadCleanApk() {
-        return uploadCleanApk;
-    }
-
-    public void setUploadCleanApk(final UploadedFile uploadCleanApk) {
-        this.uploadCleanApk = uploadCleanApk;
-    }
-
-    public UploadedFile getUploadHackedApk() {
-        return uploadHackedApk;
-    }
-
-    public void setUploadHackedApk(final UploadedFile uploadHackedApk) {
-        this.uploadHackedApk = uploadHackedApk;
-    }
 
     public RevisionsListDataModel getRevisionsListDataModel() {
         return revisionsListDataModel;
@@ -61,22 +45,6 @@ public class RevisionsModel implements Serializable{
         this.selectedRevision = selectedRevision;
     }
 
-    public StreamedContent getCleanApkQRCode() {
-        return cleanApkQRCode;
-    }
-
-    public void setCleanApkQRCode(final StreamedContent cleanApkQRCode) {
-        this.cleanApkQRCode = cleanApkQRCode;
-    }
-
-    public StreamedContent getHackedApkQRCode() {
-        return hackedApkQRCode;
-    }
-
-    public void setHackedApkQRCode(final StreamedContent hackedApkQRCode) {
-        this.hackedApkQRCode = hackedApkQRCode;
-    }
-
     public TreeNode getSelectedRevisionApkStructure() {
         return selectedRevisionApkStructure;
     }
@@ -84,4 +52,13 @@ public class RevisionsModel implements Serializable{
     public void setSelectedRevisionApkStructure(final TreeNode selectedRevisionApkStructure) {
         this.selectedRevisionApkStructure = selectedRevisionApkStructure;
     }
+
+    public RevisionPackageModel getCleanPackageModel() {
+        return cleanPackageModel;
+    }
+
+    public RevisionPackageModel getHackedPackageModel() {
+        return hackedPackageModel;
+    }
+
 }

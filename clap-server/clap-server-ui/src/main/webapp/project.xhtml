@@ -48,7 +48,7 @@
                                 mode="simple"
                                 id="cleanApkFileUpload"
                                 sizeLimit="#{configBean.maxApkSize}"
-                                value="#{revisionsModel.uploadCleanApk}"/>
+                                value="#{revisionsModel.cleanPackageModel.uploadApk}"/>
 
                         <h:outputText value="#{msgs['project.view.uploadRevision.hackedApk']}"/>
 
@@ -56,7 +56,7 @@
                                 mode="simple"
                                 id="hackedApkFileUpload"
                                 sizeLimit="#{configBean.maxApkSize}"
-                                value="#{revisionsModel.uploadHackedApk}"/>
+                                value="#{revisionsModel.hackedPackageModel.uploadApk}"/>
 
                         <f:facet name="footer">
                             <p:commandButton value="#{msgs['common.form.label.add']}"

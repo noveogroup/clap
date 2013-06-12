@@ -21,6 +21,7 @@ import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.ProjectsModel;
+import com.noveogroup.clap.web.model.RevisionPackageModel;
 import com.noveogroup.clap.web.model.RevisionsListDataModel;
 import com.noveogroup.clap.web.model.RevisionsModel;
 import com.noveogroup.clap.web.model.StreamedImagedProject;
@@ -57,14 +58,21 @@ public class RevisionsController extends BaseController {
     @Inject
     private ProjectsFacade projectsFacade;
 
+    /**
+     * adding revision via web-interface functionality will be removed
+     *
+     * @return view name
+     * @throws IOException
+     */
     public String saveNewRevision() throws IOException {
         LOGGER.debug("saving new revision");
         final Project project = projectsModel.getSelectedProject();
         final Revision revision = new Revision();
-        revision.setRevisionType(RevisionType.DEVELOP);
-        revision.setTimestamp(new Date().getTime());
-        final UploadedFile newRevisionCleanApk = revisionsModel.getUploadCleanApk();
-        final UploadedFile newRevisionHackedApk = revisionsModel.getUploadHackedApk();
+        long timestamp = new Date().getTime();
+        revision.setTimestamp(timestamp);
+        revision.setHash("mock_hash_"+timestamp);
+        final UploadedFile newRevisionCleanApk = revisionsModel.getCleanPackageModel().getUploadApk();
+        final UploadedFile newRevisionHackedApk = revisionsModel.getHackedPackageModel().getUploadApk();
 
         final AddOrGetRevisionRequest request = new AddOrGetRevisionRequest();
         request.setProjectExternalId(project.getExternalId());
@@ -94,6 +102,7 @@ public class RevisionsController extends BaseController {
     }
 
     public void prepareRevisionView() throws IOException, WriterException {
+        revisionsModel.reset();
         final Revision selectedRevision = revisionsModel.getSelectedRevision();
         if (selectedRevision != null) {
             final RevisionRequest request = new RevisionRequest();
@@ -131,8 +140,8 @@ public class RevisionsController extends BaseController {
     }
 
     public String uploadApkToRevision() throws IOException, WriterException {
-        final UploadedFile newRevisionCleanApk = revisionsModel.getUploadCleanApk();
-        final UploadedFile newRevisionHackedApk = revisionsModel.getUploadHackedApk();
+        final UploadedFile newRevisionCleanApk = revisionsModel.getCleanPackageModel().getUploadApk();
+        final UploadedFile newRevisionHackedApk = revisionsModel.getHackedPackageModel().getUploadApk();
         final UpdateRevisionPackagesRequest request = new UpdateRevisionPackagesRequest();
         request.setRevisionHash(revisionsModel.getSelectedRevision().getHash());
         if (newRevisionCleanApk != null) {
@@ -156,8 +165,8 @@ public class RevisionsController extends BaseController {
 
     private void updateQRCodes(final Revision revision) throws IOException, WriterException {
         if (revision != null) {
-            revisionsModel.setCleanApkQRCode(getQRCodeFromUrl(revision.getMainPackageUrl()));
-            revisionsModel.setHackedApkQRCode(getQRCodeFromUrl(revision.getSpecialPackageUrl()));
+            revisionsModel.getCleanPackageModel().setApkQRCode(getQRCodeFromUrl(revision.getMainPackageUrl()));
+            revisionsModel.getHackedPackageModel().setApkQRCode(getQRCodeFromUrl(revision.getSpecialPackageUrl()));
         }
     }
 

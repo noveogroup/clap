@@ -4,6 +4,7 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:clp="http://java.sun.com/jsf/composite/clapcc"
       xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/template.xhtml">
     <ui:define name="menuItems">
@@ -13,50 +14,18 @@
         <f:event type="preRenderView" listener="#{revisionsController.prepareRevisionView}"/>
 
         <p:panelGrid id="revisionDetails" columns="2" rendered="#{not empty revisionsModel.selectedRevision}">
-            <p:panel header="#{msgs['revision.label.exp.clean']}">
-                <h:panelGroup rendered="#{not empty revisionsModel.selectedRevision.mainPackageUrl}">
-                    <div>
-                        <a href="#{revisionsModel.selectedRevision.mainPackageUrl}">#{msgs['common.form.label.download']}</a>
-                    </div>
-                    <div>
-                        <p:graphicImage value="#{revisionsModel.cleanApkQRCode}"/>
-                    </div>
-                </h:panelGroup>
-                <h:panelGroup rendered="#{empty revisionsModel.selectedRevision.mainPackageUrl}">
-                    <h:form enctype="multipart/form-data">
-                        <p:fileUpload
-                                mode="simple"
-                                id="cleanApkFileUpload"
-                                sizeLimit="#{configBean.maxApkSize}"
-                                value="#{revisionsModel.uploadCleanApk}"/>
-                        <p:commandButton value="#{msgs['common.form.label.add']}"
-                                         ajax="false"
-                                         action="#{revisionsController.uploadApkToRevision}"/>
-                    </h:form>
-                </h:panelGroup>
-            </p:panel>
-            <p:panel header="#{msgs['revision.label.exp.hacked']}">
-                <h:panelGroup rendered="#{not empty revisionsModel.selectedRevision.specialPackageUrl}">
-                    <div>
-                        <a href="#{revisionsModel.selectedRevision.specialPackageUrl}">#{msgs['common.form.label.download']}</a>
-                    </div>
-                    <div>
-                        <p:graphicImage value="#{revisionsModel.hackedApkQRCode}"/>
-                    </div>
-                </h:panelGroup>
-                <h:panelGroup rendered="#{empty revisionsModel.selectedRevision.specialPackageUrl}">
-                    <h:form enctype="multipart/form-data">
-                        <p:fileUpload
-                                mode="simple"
-                                id="hackedApkFileUpload"
-                                sizeLimit="#{configBean.maxApkSize}"
-                                value="#{revisionsModel.uploadHackedApk}"/>
-                        <p:commandButton value="#{msgs['common.form.label.add']}"
-                                         ajax="false"
-                                         action="#{revisionsController.uploadApkToRevision}"/>
-                    </h:form>
-                </h:panelGroup>
-            </p:panel>
+            <clp:packageForm
+                    id="clean"
+                    packageUrl="#{revisionsModel.selectedRevision.mainPackageUrl}"
+                    packageModel="#{revisionsModel.cleanPackageModel}"
+                    packageModelEL="revisionsModel.cleanPackageModel"
+                    header="#{msgs['revision.label.exp.clean']}" />
+            <clp:packageForm
+                    id="hacked"
+                    packageUrl="#{revisionsModel.selectedRevision.specialPackageUrl}"
+                    packageModel="#{revisionsModel.hackedPackageModel}"
+                    packageModelEL="revisionsModel.hackedPackageModel"
+                    header="#{msgs['revision.label.exp.hacked']}" />
         </p:panelGrid>
 
         <p:panel rendered="#{not empty revisionsModel.selectedRevisionApkStructure}">

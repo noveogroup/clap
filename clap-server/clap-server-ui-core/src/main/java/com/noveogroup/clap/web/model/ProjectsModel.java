@@ -45,15 +45,4 @@ public class ProjectsModel implements Serializable {
         this.selectedProject = selectedProject;
     }
 
-    public StreamedContent getProjectIcon() {
-        FacesContext context = FacesContext.getCurrentInstance();
-        if (context.getCurrentPhaseId() == PhaseId.RENDER_RESPONSE) {
-            // So, we're rendering the view. Return a stub StreamedContent so that it will generate right URL.
-            return new DefaultStreamedContent();
-        } else {
-            HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
-            String projectID = (String) request.getParameter("projectID");
-            return projectsListDataModel.getRowData(projectID).getStreamedIconFile();
-        }
-    }
 }

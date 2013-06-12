@@ -13,6 +13,8 @@
             <supported-locale>en</supported-locale>
         </locale-config>
 
+        <resource-handler>com.noveogroup.clap.web.component.ELImageResourceHandler</resource-handler>
+
     </application>
     <converter>
         <converter-id>TimestampConverter</converter-id>

@@ -1,0 +1,37 @@
+<html xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:r="http://r.com/primefaces"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+<cc:interface>
+    <cc:attribute name="header" />
+    <cc:attribute name="packageUrl"/>
+    <cc:attribute name="packageModel" type="com.noveogroup.clap.web.model.RevisionPackageModel"/>
+    <cc:attribute name="packageModelEL"/>
+</cc:interface>
+<cc:implementation>
+    <p:panel header="#{cc.attrs.header}">
+        <h:panelGroup rendered="#{not empty cc.attrs.packageUrl}">
+            <div>
+                <a href="#{cc.attrs.packageUrl}">#{msgs['common.form.label.download']}</a>
+            </div>
+            <div>
+                <p:graphicImage value="#{cc.attrs.packageModel.apkQRCode}">
+                    <f:param name="imageEL" value="#{cc.attrs.packageModelEL}.apkQRCode"/>
+                </p:graphicImage>
+            </div>
+        </h:panelGroup>
+        <h:panelGroup rendered="#{empty cc.attrs.packageUrl}">
+            <h:form enctype="multipart/form-data">
+                <p:fileUpload
+                        mode="simple"
+                        id="apkFileUpload"
+                        sizeLimit="#{configBean.maxApkSize}"
+                        value="#{cc.attrs.packageModel.uploadApk}"/>
+                <p:commandButton value="#{msgs['common.form.label.add']}"
+                                 ajax="false"
+                                 action="#{revisionsController.uploadApkToRevision}"/>
+            </h:form>
+        </h:panelGroup>
+    </p:panel>
+</cc:implementation>
+</html>

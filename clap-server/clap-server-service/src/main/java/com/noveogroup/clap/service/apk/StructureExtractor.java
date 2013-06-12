@@ -46,33 +46,35 @@ public class StructureExtractor {
             processEntry(rootEntry, zipentry);
             zipentry = zipInputStream.getNextEntry();
         }
+        LOGGER.debug("apk structure : " + ret);
         zipInputStream.close();
         return ret;
     }
 
     private void processEntry(final ApkEntry rootEntry, final ZipEntry zipEntry){
         final String entryName = zipEntry.getName();
-        final ApkEntry apkEntry = new ApkEntry();
         final String[] path = StringUtils.split(entryName, ZIP_ARCHIVE_DELIMITER);
-        if(path != null){
-            ApkEntry toAdd = rootEntry;
-            if(path.length > 1){
-            }
-            apkEntry.setEntryName(entryName);
+        if(path != null && path.length > 0){
+            addEntry(rootEntry,entryName,path);
         } else {
-            throw new IllegalStateException("shoudn't be null");
+            throw new IllegalStateException("shoudn't be null or empty");
         }
     }
 
-    private ApkEntry findParent(final ApkEntry rootEntry, final String entryName, final String[] path){
-        for (int i=0; i < path.length -1; i++){
-            final String currentPathEntryName = StringUtils.join(path,ZIP_ARCHIVE_DELIMITER,0,i);
+    private void addEntry(final ApkEntry rootEntry, final String entryName, final String[] path){
+        for (int i=0; i < path.length; i++){
+            final String currentPathEntryName = StringUtils.join(path,ZIP_ARCHIVE_DELIMITER,0,i+1);
             ApkEntry currentPathEntry = directoriesMap.get(currentPathEntryName);
             if(currentPathEntry == null){
                 currentPathEntry = new ApkEntry();
+                currentPathEntry.setEntryName(currentPathEntryName);
+                if(i < path.length -1){
+                    currentPathEntry.setDirectory(true);
+                    directoriesMap.put(currentPathEntryName,currentPathEntry);
+                }
                 ApkEntry currentPathEntryParent;
                 if(i>0){
-                    currentPathEntryParent = directoriesMap.get(StringUtils.join(path,ZIP_ARCHIVE_DELIMITER,0,i-1));
+                    currentPathEntryParent = directoriesMap.get(StringUtils.join(path,ZIP_ARCHIVE_DELIMITER,0,i));
                 } else {
                     currentPathEntryParent = rootEntry;
                 }
@@ -84,5 +86,6 @@ public class StructureExtractor {
                 currentPathEntryParentInnerEntries.add(currentPathEntry);
             }
         }
+
     }
 }
