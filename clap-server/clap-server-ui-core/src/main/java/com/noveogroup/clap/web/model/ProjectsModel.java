@@ -1,14 +1,9 @@
 package com.noveogroup.clap.web.model;
 
 import com.noveogroup.clap.model.Project;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 
 import javax.enterprise.context.SessionScoped;
-import javax.faces.context.FacesContext;
-import javax.faces.event.PhaseId;
 import javax.inject.Named;
-import javax.servlet.http.HttpServletRequest;
 import java.io.Serializable;
 
 @Named

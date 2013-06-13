@@ -4,18 +4,13 @@ import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.model.request.revision.StreamedPackage;
 import org.hibernate.Hibernate;
-import org.hibernate.SessionFactory;
 import org.hibernate.ejb.HibernateEntityManager;
 import org.hibernate.engine.jdbc.LobCreator;
-import org.hibernate.engine.spi.SessionImplementor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.ejb.Stateless;
-import javax.inject.Inject;
 import javax.persistence.Query;
-import java.io.IOException;
-import java.io.InputStream;
 import java.sql.SQLException;
 
 /**
@@ -48,7 +43,9 @@ public class RevisionDAOImpl extends GenericHibernateDAOImpl<RevisionEntity, Lon
     }
 
     @Override
-    public RevisionEntity persist(final RevisionEntity entity, final StreamedPackage mainPackage, final StreamedPackage specialPackage) {
+    public RevisionEntity persist(final RevisionEntity entity,
+                                  final StreamedPackage mainPackage,
+                                  final StreamedPackage specialPackage) {
         final HibernateEntityManager hibernateEntityManager = entityManager.unwrap(HibernateEntityManager.class);
         final LobCreator lobCreator = Hibernate.getLobCreator(hibernateEntityManager.getSession());
         if (mainPackage != null) {

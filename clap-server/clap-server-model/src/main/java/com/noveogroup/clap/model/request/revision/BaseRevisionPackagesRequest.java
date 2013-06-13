@@ -1,6 +1,5 @@
 package com.noveogroup.clap.model.request.revision;
 
-import java.io.InputStream;
 
 /**
  * @author Andrey Sokolov

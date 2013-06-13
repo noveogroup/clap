@@ -2,9 +2,7 @@ package com.noveogroup.clap.web.model;
 
 
 import com.noveogroup.clap.model.revision.Revision;
-import org.primefaces.model.StreamedContent;
 import org.primefaces.model.TreeNode;
-import org.primefaces.model.UploadedFile;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;

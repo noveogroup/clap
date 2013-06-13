@@ -12,7 +12,11 @@ import com.noveogroup.clap.model.request.revision.GetApplicationRequest;
 import com.noveogroup.clap.model.request.revision.RevisionRequest;
 import com.noveogroup.clap.model.request.revision.StreamedPackage;
 import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
-import com.noveogroup.clap.model.revision.*;
+import com.noveogroup.clap.model.revision.ApkStructure;
+import com.noveogroup.clap.model.revision.ApplicationFile;
+import com.noveogroup.clap.model.revision.Revision;
+import com.noveogroup.clap.model.revision.RevisionType;
+import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
 import com.noveogroup.clap.service.apk.ApkInfoExtractorFactory;
 import com.noveogroup.clap.service.tempfiles.TempFileService;
 import com.noveogroup.clap.service.url.UrlService;
@@ -176,7 +180,9 @@ public class RevisionServiceImpl implements RevisionService {
      * @param extractInfo true if need to extract apk info (icon, structure, etc)
      * @return true if info was extracted
      */
-    private boolean processStreamedPackage(final RevisionEntity revisionEntity, final StreamedPackage streamedPackage, final boolean extractInfo) {
+    private boolean processStreamedPackage(final RevisionEntity revisionEntity,
+                                           final StreamedPackage streamedPackage,
+                                           final boolean extractInfo) {
         boolean ret = false;
         try {
             final File file = tempFileService.createTempFile(streamedPackage.getStream());

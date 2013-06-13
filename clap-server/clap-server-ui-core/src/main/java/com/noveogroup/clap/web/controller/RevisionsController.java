@@ -17,17 +17,19 @@ import com.noveogroup.clap.model.request.revision.StreamedPackage;
 import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
 import com.noveogroup.clap.model.revision.ApkEntry;
 import com.noveogroup.clap.model.revision.Revision;
-import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.ProjectsModel;
-import com.noveogroup.clap.web.model.RevisionPackageModel;
 import com.noveogroup.clap.web.model.RevisionsListDataModel;
 import com.noveogroup.clap.web.model.RevisionsModel;
 import com.noveogroup.clap.web.model.StreamedImagedProject;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.event.SelectEvent;
-import org.primefaces.model.*;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.DefaultTreeNode;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.TreeNode;
+import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,7 +38,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
@@ -93,7 +94,7 @@ public class RevisionsController extends BaseController {
 
         revisionsModel.reset();
         LOGGER.debug("revision saved");
-        final ImagedProject updatedProject = projectsFacade.findByIdWithImage(projectsModel.getSelectedProject().getId());
+        final ImagedProject updatedProject = projectsFacade.findByIdWithImage(project.getId());
         if (updatedProject != null) {
             projectsModel.setSelectedProject(new StreamedImagedProject(updatedProject));
             revisionsModel.setRevisionsListDataModel(new RevisionsListDataModel(updatedProject.getRevisions()));
@@ -108,11 +109,11 @@ public class RevisionsController extends BaseController {
             final RevisionRequest request = new RevisionRequest();
             request.setAuthentication(new Authentication());
             request.setRevisionId(selectedRevision.getId());
-            final RevisionWithApkStructure revisionWithApkStructure = revisionsFacade.getRevisionWithApkStructure(request);
-            revisionsModel.setSelectedRevision(revisionWithApkStructure);
-            if(revisionWithApkStructure.getApkStructure() != null){
+            final RevisionWithApkStructure revWithApkStructure = revisionsFacade.getRevisionWithApkStructure(request);
+            revisionsModel.setSelectedRevision(revWithApkStructure);
+            if(revWithApkStructure.getApkStructure() != null){
                 revisionsModel.setSelectedRevisionApkStructure(
-                        createApkStructureTree(null,revisionWithApkStructure.getApkStructure().getRootEntry()));
+                        createApkStructureTree(null,revWithApkStructure.getApkStructure().getRootEntry()));
             }
             updateQRCodes(revisionsModel.getSelectedRevision());
             LOGGER.debug(selectedRevision.getId() + " revision preparing finished");

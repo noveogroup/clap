@@ -1,6 +1,5 @@
 package com.noveogroup.clap.web.model;
 
-import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.model.user.UserWithAuthentication;
 
 import javax.enterprise.context.SessionScoped;

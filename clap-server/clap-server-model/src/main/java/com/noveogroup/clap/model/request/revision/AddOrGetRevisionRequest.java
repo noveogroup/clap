@@ -4,8 +4,6 @@ import com.noveogroup.clap.model.revision.Revision;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.validation.constraints.NotNull;
-import java.io.InputStream;
-import java.util.Arrays;
 
 /**
  * @author Andrey Sokolov

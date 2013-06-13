@@ -3,7 +3,6 @@ package com.noveogroup.clap.model.request.revision;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import java.io.InputStream;
 
 /**
  * @author Andrey Sokolov

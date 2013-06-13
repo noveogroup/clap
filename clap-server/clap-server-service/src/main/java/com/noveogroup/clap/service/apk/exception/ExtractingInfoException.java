@@ -19,7 +19,10 @@ public class ExtractingInfoException extends RuntimeException {
         super(cause);
     }
 
-    public ExtractingInfoException(final String message, final Throwable cause, final boolean enableSuppression, final boolean writableStackTrace) {
+    public ExtractingInfoException(final String message,
+                                   final Throwable cause,
+                                   final boolean enableSuppression,
+                                   final boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

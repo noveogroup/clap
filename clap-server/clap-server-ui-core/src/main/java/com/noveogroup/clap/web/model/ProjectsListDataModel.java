@@ -1,12 +1,12 @@
 package com.noveogroup.clap.web.model;
 
-import com.noveogroup.clap.model.Project;
 import org.primefaces.model.SelectableDataModel;
 
 import javax.faces.model.ListDataModel;
 import java.util.List;
 
-public class ProjectsListDataModel extends ListDataModel<StreamedImagedProject> implements SelectableDataModel<StreamedImagedProject> {
+public class ProjectsListDataModel extends ListDataModel<StreamedImagedProject>
+        implements SelectableDataModel<StreamedImagedProject> {
 
     public ProjectsListDataModel() {
     }
