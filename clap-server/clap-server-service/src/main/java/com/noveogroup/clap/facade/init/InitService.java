@@ -11,19 +11,22 @@ import com.noveogroup.clap.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
+import javax.ejb.Singleton;
+import javax.ejb.Startup;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.enterprise.context.ApplicationScoped;
 import javax.interceptor.Interceptors;
 import java.util.Date;
 
 /**
  * @author Andrey Sokolov
  */
-@Stateless
-@TransactionManagement(TransactionManagementType.BEAN)
-@Interceptors(ClapMainInterceptor.class)
+@Singleton
+@Startup
 public class InitService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InitService.class);
@@ -37,7 +40,7 @@ public class InitService {
     @EJB
     private RevisionDAO revisionDAO;
 
-    @Transactional
+    @PostConstruct
     public void initDB(){
         UserEntity user = new UserEntity();
         user.setLogin("test");

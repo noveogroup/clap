@@ -27,13 +27,8 @@ public class ClapMainInterceptor {
     private RequestHelperFactory requestHelperFactory;
 
     @AroundInvoke
-    public Object businessIntercept(final InvocationContext ctx) throws SystemException {
-        try {
-            return compositeInterceptorHelper.execute(ctx, requestHelperFactory);
-        } catch (Exception e) {
-            LOGGER.error("error in intercepted method : ", e);
-            return null;
-        }
+    public Object businessIntercept(final InvocationContext ctx) throws Exception {
+        return compositeInterceptorHelper.execute(ctx, requestHelperFactory);
     }
 
 }

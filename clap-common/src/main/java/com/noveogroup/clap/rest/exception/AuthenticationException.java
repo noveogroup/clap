@@ -1,4 +1,4 @@
-package com.noveogroup.clap.exception;
+package com.noveogroup.clap.rest.exception;
 
 
 import com.noveogroup.clap.model.auth.Authentication;

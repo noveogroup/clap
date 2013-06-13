@@ -1,10 +1,12 @@
 package com.noveogroup.clap.transaction;
 
+import com.noveogroup.clap.interceptor.composite.AbstractLightInterceptor;
 import com.noveogroup.clap.interceptor.composite.LightInterceptor;
 import com.noveogroup.clap.interceptor.composite.RequestHelperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.interceptor.InvocationContext;
 import javax.transaction.UserTransaction;
@@ -15,16 +17,9 @@ import java.util.Map;
  * @author Andrey Sokolov
  */
 @ApplicationScoped
-public class TransactionalLightInterceptor implements LightInterceptor {
+public class TransactionalLightInterceptor extends AbstractLightInterceptor implements LightInterceptor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TransactionalLightInterceptor.class);
-
-    private LightInterceptor nextInterceptor;
-
-    @Override
-    public void setNextInterceptor(final LightInterceptor nextInterceptor) {
-        this.nextInterceptor = nextInterceptor;
-    }
 
     @Override
     public Object proceed(final InvocationContext context,
@@ -39,11 +34,12 @@ public class TransactionalLightInterceptor implements LightInterceptor {
                 userTransaction.begin();
                 result = nextInterceptor.proceed(context, requestHelperFactory, annotationMap);
                 userTransaction.commit();
+                return result;
             } catch (Exception e) {
                 LOGGER.error("Transaction error " + e.getMessage(), e);
                 userTransaction.rollback();
+                throw e;
             }
-            return result;
         }
         try {
             result = nextInterceptor.proceed(context, requestHelperFactory, annotationMap);

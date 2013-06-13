@@ -1,6 +1,7 @@
 package com.noveogroup.clap.facade;
 
 import com.noveogroup.clap.auth.AuthenticationRequired;
+import com.noveogroup.clap.exception.ClapException;
 import com.noveogroup.clap.interceptor.ClapMainInterceptor;
 import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.model.project.ImagedProject;
@@ -27,19 +28,19 @@ public class ProjectsFacade {
 
     @AuthenticationRequired
     @Transactional
-    public Project createProject(final Project project){
+    public Project createProject(final Project project) throws ClapException {
         return projectService.createProject(project);
     }
 
     @AuthenticationRequired
     @Transactional
-    public Project getCreateUpdateProject(final Project project){
+    public Project getCreateUpdateProject(final Project project) throws ClapException {
         return projectService.getCreateUpdateProject(project);
     }
 
     @AuthenticationRequired
     @Transactional
-    public Project save(final Project project){
+    public Project save(final Project project) throws ClapException {
         return projectService.save(project);
     }
 

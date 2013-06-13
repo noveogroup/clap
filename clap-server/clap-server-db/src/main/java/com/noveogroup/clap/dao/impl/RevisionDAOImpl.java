@@ -60,7 +60,7 @@ public class RevisionDAOImpl extends GenericHibernateDAOImpl<RevisionEntity, Lon
                             specialPackage.getStream(),
                             specialPackage.getLength()));
         }
-        entityManager.persist(entity);
+        super.persist(entity);
         entityManager.flush();
         try {
             if (entity.getMainPackage() != null) {

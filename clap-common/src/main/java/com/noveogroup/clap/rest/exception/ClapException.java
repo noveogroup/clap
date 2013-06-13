@@ -1,4 +1,4 @@
-package com.noveogroup.clap.exception;
+package com.noveogroup.clap.rest.exception;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;

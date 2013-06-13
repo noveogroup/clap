@@ -1,7 +1,9 @@
 package com.noveogroup.clap.dao.impl;
 
 import com.noveogroup.clap.dao.GenericDAO;
+import com.noveogroup.clap.exception.ClapPersistenceException;
 import com.noveogroup.clap.integration.DAOIntegration;
+import org.hibernate.exception.ConstraintViolationException;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
@@ -78,7 +80,7 @@ public abstract class GenericHibernateDAOImpl<T, ID extends Serializable> implem
     }
 
 
-    protected T getSingleResultOrNull(final Query query){
+    protected T getSingleResultOrNull(final Query query) {
         final List results = query.getResultList();
         if (results.size() == 0) {
             return null;

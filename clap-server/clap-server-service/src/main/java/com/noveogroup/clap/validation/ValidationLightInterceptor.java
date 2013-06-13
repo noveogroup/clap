@@ -1,9 +1,11 @@
 package com.noveogroup.clap.validation;
 
+import com.noveogroup.clap.interceptor.composite.AbstractLightInterceptor;
 import com.noveogroup.clap.interceptor.composite.LightInterceptor;
 import com.noveogroup.clap.interceptor.composite.RequestHelperFactory;
 
 import javax.annotation.PostConstruct;
+import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.interceptor.InvocationContext;
 import javax.validation.ConstraintViolation;
@@ -19,19 +21,13 @@ import java.util.Set;
  * @author Andrey Sokolov
  */
 @ApplicationScoped
-public class ValidationLightInterceptor implements LightInterceptor {
+public class ValidationLightInterceptor extends AbstractLightInterceptor implements LightInterceptor {
 
-    private LightInterceptor nextInterceptor;
     private ValidatorFactory validatorFactory;
 
     @PostConstruct
     protected void setup() {
         validatorFactory = Validation.buildDefaultValidatorFactory();
-    }
-
-    @Override
-    public void setNextInterceptor(final LightInterceptor nextInterceptor) {
-        this.nextInterceptor = nextInterceptor;
     }
 
     @Override
