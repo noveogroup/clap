@@ -1,8 +1,5 @@
 package com.noveogroup.clap.interceptor.composite;
 
-import javax.interceptor.InvocationContext;
-import java.lang.annotation.Annotation;
-import java.util.Map;
 
 /**
  * @author Andrey Sokolov

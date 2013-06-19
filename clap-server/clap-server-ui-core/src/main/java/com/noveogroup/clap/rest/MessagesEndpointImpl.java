@@ -1,7 +1,7 @@
 package com.noveogroup.clap.rest;
 
-import com.noveogroup.clap.facade.MessagesFacade;
 import com.noveogroup.clap.model.request.message.SendMessageRequest;
+import com.noveogroup.clap.service.messages.MessagesService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -14,7 +14,7 @@ public class MessagesEndpointImpl implements MessagesEndpoint {
     private static final Logger LOGGER = LoggerFactory.getLogger(MessagesEndpointImpl.class);
 
     @Inject
-    private MessagesFacade messagesFacade;
+    private MessagesService messagesFacade;
 
     @Override
     public void saveMessage(final SendMessageRequest request) {

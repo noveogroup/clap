@@ -11,19 +11,22 @@ public class ClapPersistenceException extends ClapException {
     public ClapPersistenceException() {
     }
 
-    public ClapPersistenceException(String message) {
+    public ClapPersistenceException(final String message) {
         super(message);
     }
 
-    public ClapPersistenceException(String message, Throwable cause) {
+    public ClapPersistenceException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public ClapPersistenceException(Throwable cause) {
+    public ClapPersistenceException(final Throwable cause) {
         super(cause);
     }
 
-    public ClapPersistenceException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public ClapPersistenceException(final String message,
+                                    final Throwable cause,
+                                    final boolean enableSuppression,
+                                    final boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

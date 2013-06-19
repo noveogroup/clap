@@ -64,7 +64,7 @@ public class ELStreamedContentResourceHandler extends ResourceHandlerWrapper {
 
                 int length;
                 final InputStream inputStream = streamedContent.getStream();
-                while ((length = (inputStream.read(buffer))) >= 0) {
+                while ((length = (inputStream.read(buffer))) > 0) {
                     externalContext.getResponseOutputStream().write(buffer, 0, length);
                 }
             } else {
@@ -79,7 +79,7 @@ public class ELStreamedContentResourceHandler extends ResourceHandlerWrapper {
     }
 
     private boolean isELAllowed(final String el) {
-        for (String allowedPrefix : ALLOWED_EL_PREFIXES){
+        for (final String allowedPrefix : ALLOWED_EL_PREFIXES){
             if (StringUtils.startsWith(el,allowedPrefix)){
                 return true;
             }

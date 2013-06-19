@@ -8,7 +8,6 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
-import javax.transaction.SystemException;
 
 /**
  * performing transaction and execute LightInterceptors

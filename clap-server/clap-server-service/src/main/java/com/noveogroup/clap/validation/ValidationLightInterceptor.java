@@ -5,7 +5,6 @@ import com.noveogroup.clap.interceptor.composite.LightInterceptor;
 import com.noveogroup.clap.interceptor.composite.RequestHelperFactory;
 
 import javax.annotation.PostConstruct;
-import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.interceptor.InvocationContext;
 import javax.validation.ConstraintViolation;

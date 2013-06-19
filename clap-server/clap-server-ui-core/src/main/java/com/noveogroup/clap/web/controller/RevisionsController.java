@@ -6,8 +6,6 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.noveogroup.clap.facade.ProjectsFacade;
-import com.noveogroup.clap.facade.RevisionsFacade;
 import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.project.ImagedProject;
@@ -18,6 +16,8 @@ import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
 import com.noveogroup.clap.model.revision.ApkEntry;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
+import com.noveogroup.clap.service.project.ProjectService;
+import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.ProjectsModel;
 import com.noveogroup.clap.web.model.RevisionsListDataModel;
@@ -54,10 +54,10 @@ public class RevisionsController extends BaseController {
     private RevisionsModel revisionsModel;
 
     @Inject
-    private RevisionsFacade revisionsFacade;
+    private RevisionService revisionsFacade;
 
     @Inject
-    private ProjectsFacade projectsFacade;
+    private ProjectService projectsFacade;
 
     /**
      * adding revision via web-interface functionality will be removed

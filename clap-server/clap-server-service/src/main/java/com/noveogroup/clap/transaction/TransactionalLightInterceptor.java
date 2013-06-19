@@ -6,7 +6,6 @@ import com.noveogroup.clap.interceptor.composite.RequestHelperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.ejb.Stateless;
 import javax.enterprise.context.ApplicationScoped;
 import javax.interceptor.InvocationContext;
 import javax.transaction.UserTransaction;
@@ -45,6 +44,7 @@ public class TransactionalLightInterceptor extends AbstractLightInterceptor impl
             result = nextInterceptor.proceed(context, requestHelperFactory, annotationMap);
         } catch (Exception e) {
             LOGGER.error("error beyond transaction " + e.getMessage(), e);
+            throw e;
         }
         return result;
     }

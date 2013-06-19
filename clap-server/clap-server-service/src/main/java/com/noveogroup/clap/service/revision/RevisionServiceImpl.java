@@ -1,11 +1,14 @@
 package com.noveogroup.clap.service.revision;
 
 import com.google.gson.Gson;
+import com.noveogroup.clap.auth.AuthenticationRequired;
 import com.noveogroup.clap.converter.RevisionConverter;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
+import com.noveogroup.clap.exception.WrapException;
+import com.noveogroup.clap.interceptor.ClapMainInterceptor;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
 import com.noveogroup.clap.model.request.revision.BaseRevisionPackagesRequest;
 import com.noveogroup.clap.model.request.revision.GetApplicationRequest;
@@ -25,7 +28,10 @@ import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.FileInputStream;
@@ -37,6 +43,8 @@ import java.util.Date;
  * @author Mikhail Demidov
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.CONTAINER)
+@Interceptors({ClapMainInterceptor.class})
 public class RevisionServiceImpl implements RevisionService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RevisionServiceImpl.class);
@@ -56,6 +64,8 @@ public class RevisionServiceImpl implements RevisionService {
     @Inject
     private TempFileService tempFileService;
 
+    @WrapException
+    @AuthenticationRequired
     @Override
     public Revision addOrGetRevision(final @NotNull AddOrGetRevisionRequest request) {
         final Revision revision = request.getRevision();
@@ -92,6 +102,8 @@ public class RevisionServiceImpl implements RevisionService {
         return outcomeRevision;
     }
 
+    @WrapException
+    @AuthenticationRequired
     @Override
     public Revision updateRevisionPackages(final @NotNull UpdateRevisionPackagesRequest request) {
         final RevisionEntity revisionEntity = revisionDAO.getRevisionByHash(request.getRevisionHash());

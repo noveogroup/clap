@@ -1,7 +1,10 @@
 package com.noveogroup.clap.service.user;
 
+import com.noveogroup.clap.auth.AuthenticationRequired;
 import com.noveogroup.clap.dao.UserDAO;
 import com.noveogroup.clap.entity.user.UserEntity;
+import com.noveogroup.clap.exception.WrapException;
+import com.noveogroup.clap.interceptor.ClapMainInterceptor;
 import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.model.user.UserWithAuthentication;
 import org.apache.commons.lang3.StringUtils;
@@ -10,11 +13,16 @@ import org.dozer.Mapper;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+import javax.interceptor.Interceptors;
 
 /**
  * @author Andrey Sokolov
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.CONTAINER)
+@Interceptors({ClapMainInterceptor.class})
 public class UserServiceImpl implements UserService {
 
     private static final Mapper MAPPER = new DozerBeanMapper();
@@ -22,6 +30,8 @@ public class UserServiceImpl implements UserService {
     @EJB
     private UserDAO userDAO;
 
+    @AuthenticationRequired
+    @WrapException
     @Override
     public User updateUserData(final UserWithAuthentication user) {
         if(user == null){
@@ -43,6 +53,8 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    @AuthenticationRequired
+    @WrapException
     @Override
     public User createUser(final User user){
         UserEntity userEntity = MAPPER.map(user,UserEntity.class);

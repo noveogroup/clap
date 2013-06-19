@@ -8,19 +8,22 @@ public abstract class ClapException extends Exception {
     public ClapException() {
     }
 
-    public ClapException(String message) {
+    public ClapException(final String message) {
         super(message);
     }
 
-    public ClapException(String message, Throwable cause) {
+    public ClapException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public ClapException(Throwable cause) {
+    public ClapException(final Throwable cause) {
         super(cause);
     }
 
-    public ClapException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+    public ClapException(final String message,
+                         final Throwable cause,
+                         final boolean enableSuppression,
+                         final boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

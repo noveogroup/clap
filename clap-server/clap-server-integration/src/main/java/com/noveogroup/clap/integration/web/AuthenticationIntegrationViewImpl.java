@@ -8,6 +8,6 @@ import com.noveogroup.clap.web.integration.AuthenticationIntegrationView;
 public class AuthenticationIntegrationViewImpl implements AuthenticationIntegrationView {
     @Override
     public String viewName() {
-        return "customIntegrationView?faces-redirect=true";
+        return "customIntegrationView123?faces-redirect=true";
     }
 }

@@ -2,10 +2,10 @@ package com.noveogroup.clap.rest;
 
 
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
-import com.noveogroup.clap.facade.RevisionsFacade;
 import com.noveogroup.clap.model.request.revision.RevisionRequest;
 import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
 import com.noveogroup.clap.model.revision.Revision;
+import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.web.controller.ProjectsController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +22,7 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProjectsController.class);
 
     @Inject
-    private RevisionsFacade revisionsFacade;
+    private RevisionService revisionsFacade;
 
 
     @Override

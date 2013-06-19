@@ -1,9 +1,12 @@
 package com.noveogroup.clap.service.project;
 
+import com.noveogroup.clap.auth.AuthenticationRequired;
 import com.noveogroup.clap.dao.MessageDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
+import com.noveogroup.clap.exception.WrapException;
+import com.noveogroup.clap.interceptor.ClapMainInterceptor;
 import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.model.project.ImagedProject;
 import com.noveogroup.clap.model.revision.Revision;
@@ -14,7 +17,10 @@ import org.dozer.Mapper;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
+import javax.interceptor.Interceptors;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -23,6 +29,8 @@ import java.util.List;
  * @author Mikhail Demidov
  */
 @Stateless
+@TransactionManagement(TransactionManagementType.CONTAINER)
+@Interceptors({ClapMainInterceptor.class})
 public class ProjectServiceImpl implements ProjectService {
 
     private static final Mapper MAPPER = new DozerBeanMapper();
@@ -39,6 +47,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Inject
     private UrlService urlService;
 
+    @WrapException
+    @AuthenticationRequired
     @Override
     public Project createProject(final Project project) {
         if (project.getCreationDate() == null) {
@@ -48,6 +58,8 @@ public class ProjectServiceImpl implements ProjectService {
         return MAPPER.map(projectDAO.persist(projectEntity), Project.class);
     }
 
+    @WrapException
+    @AuthenticationRequired
     @Override
     public Project getCreateUpdateProject(final Project project) {
         ProjectEntity projectEntity = null;
@@ -61,27 +73,33 @@ public class ProjectServiceImpl implements ProjectService {
         return MAPPER.map(projectEntity,Project.class);
     }
 
+    @WrapException
+    @AuthenticationRequired
     @Override
     public Project save(final Project project) {
         final ProjectEntity projectEntity = MAPPER.map(project, ProjectEntity.class);
         return MAPPER.map(projectDAO.persist(projectEntity), Project.class);
     }
 
+    @AuthenticationRequired
     @Override
     public Project findById(final Long id) {
         return findById(id,Project.class);
     }
 
+    @AuthenticationRequired
     @Override
     public ImagedProject findByIdWithImage(final Long id) {
         return findById(id,ImagedProject.class);
     }
 
+    @AuthenticationRequired
     @Override
     public List<Project> findAllProjects() {
         return findAllProjects(Project.class);
     }
 
+    @AuthenticationRequired
     @Override
     public List<ImagedProject> findAllImagedProjects() {
         return findAllProjects(ImagedProject.class);

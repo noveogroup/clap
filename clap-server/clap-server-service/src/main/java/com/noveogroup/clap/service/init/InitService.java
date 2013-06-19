@@ -1,4 +1,4 @@
-package com.noveogroup.clap.facade.init;
+package com.noveogroup.clap.service.init;
 
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
@@ -6,8 +6,6 @@ import com.noveogroup.clap.dao.UserDAO;
 import com.noveogroup.clap.entity.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
-import com.noveogroup.clap.interceptor.ClapMainInterceptor;
-import com.noveogroup.clap.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,17 +13,15 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.ejb.Startup;
-import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import javax.enterprise.context.ApplicationScoped;
-import javax.interceptor.Interceptors;
 import java.util.Date;
 
 /**
  * @author Andrey Sokolov
  */
 @Singleton
+@TransactionManagement(TransactionManagementType.CONTAINER)
 @Startup
 public class InitService {
 

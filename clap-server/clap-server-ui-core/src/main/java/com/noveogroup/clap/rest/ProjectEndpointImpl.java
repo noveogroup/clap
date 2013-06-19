@@ -1,8 +1,7 @@
 package com.noveogroup.clap.rest;
 
-import com.noveogroup.clap.exception.ClapException;
-import com.noveogroup.clap.facade.ProjectsFacade;
 import com.noveogroup.clap.model.Project;
+import com.noveogroup.clap.service.project.ProjectService;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
@@ -19,17 +18,12 @@ public class ProjectEndpointImpl implements ProjectEndpoint {
     private static final Mapper MAPPER = new DozerBeanMapper();
 
     @Inject
-    private ProjectsFacade projectsFacade;
+    private ProjectService projectsFacade;
 
 
     @Override
     public Project createProject(final Project project) {
-        try {
-            return projectsFacade.createProject(project);
-        } catch (ClapException e) {
-            e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
-            return null;
-        }
+        return projectsFacade.createProject(project);
     }
 
     @Override

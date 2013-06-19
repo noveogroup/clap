@@ -1,8 +1,8 @@
 package com.noveogroup.clap.web.controller;
 
-import com.noveogroup.clap.facade.ProjectsFacade;
 import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.model.project.ImagedProject;
+import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.ProjectsListDataModel;
 import com.noveogroup.clap.web.model.ProjectsModel;
@@ -30,7 +30,7 @@ public class ProjectsController extends BaseController {
     private long projectId;
 
     @Inject
-    private ProjectsFacade projectsFacade;
+    private ProjectService projectsFacade;
 
     @Inject
     private ProjectsModel projectsModel;

@@ -9,8 +9,8 @@ import com.google.zxing.qrcode.QRCodeWriter;
 
 import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.exception.ClapException;
-import com.noveogroup.clap.facade.ProjectsFacade;
 import com.noveogroup.clap.model.Project;
+import com.noveogroup.clap.service.project.ProjectService;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
@@ -29,7 +29,7 @@ import java.io.IOException;
 public class HelloBean {
 
     @Inject
-    private ProjectsFacade projectsFacade;
+    private ProjectService projectsFacade;
 
     @Inject
     private ConfigBean configBean;
