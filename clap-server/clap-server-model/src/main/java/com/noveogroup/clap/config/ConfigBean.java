@@ -20,8 +20,6 @@ public class ConfigBean {
 
     private String authenticationSystemId;
 
-    private String persistenceUnitName;
-
     private String tempFilesDir;
 
     private long tempFilesCleanInterval;
@@ -32,7 +30,6 @@ public class ConfigBean {
         maxApkSize = Long.parseLong(properties.getProperty("maxApkSize"));
         downloadApkUrl = properties.getProperty("rest.apkDownload");
         authenticationSystemId = properties.getProperty("authenticationSystemId");
-        persistenceUnitName = properties.getProperty("persistence.context");
         tempFilesDir = properties.getProperty("temp.files.directory");
         checkIfDir(tempFilesDir);
         tempFilesCleanInterval = Long.parseLong(properties.getProperty("temp.files.clean.interval"));
@@ -52,10 +49,6 @@ public class ConfigBean {
 
     public String getAuthenticationSystemId() {
         return authenticationSystemId;
-    }
-
-    public String getPersistenceUnitName() {
-        return persistenceUnitName;
     }
 
     public String getTempFilesDir() {
