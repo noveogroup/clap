@@ -26,7 +26,7 @@ public interface RevisionEndpoint {
 
 
     @POST
-    @Path("getRevision")
+    @Path("/get")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     Revision getRevision(RevisionRequest request);

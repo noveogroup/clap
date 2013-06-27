@@ -15,13 +15,13 @@ public class TestEndpointImpl implements TestEndpoint {
     private static final Mapper MAPPER = new DozerBeanMapper();
 
     @Inject
-    private ProjectService projectsFacade;
+    private ProjectService projectService;
 
     @Override
     public String echo(final String original) {
         final ProjectEntity projectEntity = new ProjectEntity();
         projectEntity.setName("Name");
-//        projectsFacade.save(project);
+//        projectService.save(project);
         return MAPPER.map(projectEntity, Project.class).getName();
     }
 

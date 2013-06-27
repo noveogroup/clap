@@ -9,11 +9,11 @@ import javax.ws.rs.core.Response;
 /**
  * @author Andrey Sokolov
  */
-@Path("/downloadAPK")
+@Path("/apk")
 public interface PackageEndpoint {
 
     @GET
-    @Path("{id}/{type}")
+    @Path("/{id}/{type}")
     @Produces("application/vnd.android.package-archive")
     Response downloadAPK(@PathParam("id") long id, @PathParam("type") int type);
 }

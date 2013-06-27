@@ -17,6 +17,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Stack;
 
 /**
  * manages LightInterceptors
@@ -49,13 +50,9 @@ public class CompositeInterceptorHelper {
             Collections.sort(interceptorList, new Comparator<LightInterceptor>() {
                 @Override
                 public int compare(final LightInterceptor o1, final LightInterceptor o2) {
-                    return o2.getPriority() - o1.getPriority();
+                    return o1.getPriority() - o2.getPriority();
                 }
             });
-            for (; i < size; i++) {
-                final LightInterceptor currentInterceptor = interceptorList.get(i - 1);
-                currentInterceptor.setNextInterceptor(interceptorList.get(i));
-            }
         }
     }
 
@@ -77,9 +74,13 @@ public class CompositeInterceptorHelper {
         }
         final int size = interceptorList.size();
         if (size > 0) {
+            final Stack<LightInterceptor> chain = new Stack<LightInterceptor>();
             final ChainedInvocationContext chainedInvocationContext = new ChainedInvocationContext(ctx);
-            interceptorList.get(size - 1).setNextInterceptor(chainedInvocationContext);
-            return interceptorList.get(0).proceed(chainedInvocationContext, requestHelperFactory,annotationMap);
+            chain.push(chainedInvocationContext);
+            for (LightInterceptor interceptor : interceptorList){
+                chain.push(interceptor);
+            }
+            return chain.pop().proceed(chainedInvocationContext, chain, requestHelperFactory, annotationMap);
         } else {
             return ctx.proceed();
         }
@@ -129,12 +130,8 @@ public class CompositeInterceptorHelper {
         }
 
         @Override
-        public void setNextInterceptor(final LightInterceptor nextInterceptor) {
-            throw new IllegalStateException("this metod shoudn't be invoked");
-        }
-
-        @Override
         public Object proceed(final InvocationContext context,
+                              final Stack<LightInterceptor> chain,
                               final RequestHelperFactory requestHelperFactory,
                               final Map<Class<? extends Annotation>, Annotation> annotationMap) throws Exception {
             return wrappedContext.proceed();
@@ -147,7 +144,7 @@ public class CompositeInterceptorHelper {
 
         @Override
         public String getDescription() {
-            throw new IllegalStateException("this metod shoudn't be invoked");
+            return "chained invocation context";
         }
     }
 }

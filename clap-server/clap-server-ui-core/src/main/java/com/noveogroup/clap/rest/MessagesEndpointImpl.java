@@ -14,12 +14,12 @@ public class MessagesEndpointImpl implements MessagesEndpoint {
     private static final Logger LOGGER = LoggerFactory.getLogger(MessagesEndpointImpl.class);
 
     @Inject
-    private MessagesService messagesFacade;
+    private MessagesService messagesService;
 
     @Override
     public void saveMessage(final SendMessageRequest request) {
         LOGGER.debug("saving message " + request);
-        messagesFacade.saveMessage(request.getRevisionHash(), request.getMessage());
+        messagesService.saveMessage(request.getRevisionHash(), request.getMessage());
         LOGGER.debug(request + "saved");
     }
 }

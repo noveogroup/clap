@@ -1,5 +1,8 @@
 package com.noveogroup.clap.web.exception;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.faces.FacesException;
 import javax.faces.application.NavigationHandler;
 import javax.faces.context.ExceptionHandler;
@@ -16,6 +19,7 @@ import java.util.Iterator;
 public class DelegatingExceptionHandler extends ExceptionHandlerWrapper{
 
     private final ExceptionHandler wrapped;
+    private static final Logger LOGGER = LoggerFactory.getLogger(DelegatingExceptionHandler.class);
 
     public DelegatingExceptionHandler(final ExceptionHandler wrapped,
                                       final AbstractViewExpiredExceptionHandlerDelegate viewExpiredDelegate,
@@ -42,13 +46,14 @@ public class DelegatingExceptionHandler extends ExceptionHandlerWrapper{
             FacesContext fc = FacesContext.getCurrentInstance();
             Throwable rootCause = getRootCause(throwable);
             try {
+                //TODO  fix it! fix it! fix it!
                 Flash flash = fc.getExternalContext().getFlash();
 
                 // Put the exception in the flash scope to be displayed in the error
                 // page if necessary ...
                 flash.put("errorDetails", throwable.getMessage());
 
-                System.out.println("the error is put in the flash: " + throwable.getMessage());
+                LOGGER.error("the error is put in the flash: " + throwable.getMessage());
 
                 NavigationHandler navigationHandler = fc.getApplication().getNavigationHandler();
 

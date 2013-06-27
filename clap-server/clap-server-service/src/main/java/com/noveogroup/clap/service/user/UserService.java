@@ -14,7 +14,7 @@ public interface UserService {
      * @param user non full model
      * @return filled model, not null
      */
-    User updateUserData(UserWithAuthentication user);
+    User getUserData(UserWithAuthentication user);
 
     User createUser(User user);
 }

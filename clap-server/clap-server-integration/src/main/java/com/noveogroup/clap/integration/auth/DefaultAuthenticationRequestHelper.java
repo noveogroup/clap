@@ -49,7 +49,7 @@ public class DefaultAuthenticationRequestHelper implements AuthenticationRequest
     @Override
     public User getUserPersistedData() {
         if(userRequestData != null){
-            return userService.updateUserData(userRequestData);
+            return userService.getUserData(userRequestData);
         } else {
             return null;
         }

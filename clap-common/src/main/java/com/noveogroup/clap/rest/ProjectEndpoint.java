@@ -18,13 +18,13 @@ public interface ProjectEndpoint {
 
 
     @POST
-    @Path("createProject")
+    @Path("/add")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Project createProject(Project project);
 
     @GET
-    @Path("getProject")
+    @Path("/get")
     @Produces(MediaType.APPLICATION_JSON)
     Project getProject(@QueryParam("id") Long id);
 

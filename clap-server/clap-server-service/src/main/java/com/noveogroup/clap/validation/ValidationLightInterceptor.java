@@ -1,11 +1,12 @@
 package com.noveogroup.clap.validation;
 
-import com.noveogroup.clap.interceptor.composite.AbstractLightInterceptor;
 import com.noveogroup.clap.interceptor.composite.LightInterceptor;
 import com.noveogroup.clap.interceptor.composite.RequestHelperFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
-import javax.enterprise.context.ApplicationScoped;
+import javax.ejb.Stateless;
 import javax.interceptor.InvocationContext;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -15,13 +16,15 @@ import javax.validation.ValidatorFactory;
 import java.lang.annotation.Annotation;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 /**
  * @author Andrey Sokolov
  */
-@ApplicationScoped
-public class ValidationLightInterceptor extends AbstractLightInterceptor implements LightInterceptor {
+@Stateless
+public class ValidationLightInterceptor implements LightInterceptor {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ValidationLightInterceptor.class);
     private ValidatorFactory validatorFactory;
 
     @PostConstruct
@@ -31,6 +34,7 @@ public class ValidationLightInterceptor extends AbstractLightInterceptor impleme
 
     @Override
     public Object proceed(final InvocationContext context,
+                          final Stack<LightInterceptor> chain,
                           final RequestHelperFactory requestHelperFactory,
                           final Map<Class<? extends Annotation>, Annotation> annotationMap) throws Exception {
         final Object[] parameters = context.getParameters();
@@ -43,12 +47,13 @@ public class ValidationLightInterceptor extends AbstractLightInterceptor impleme
                     for (final ConstraintViolation constraintViolation : violations) {
                         message += " ; " + constraintViolation.getMessage();
                     }
+                    LOGGER.debug("validation failed: "+violations);
                     //TODO somehow exception isn't building message =/
                     throw new ConstraintViolationException(message, violations);
                 }
             }
         }
-        return nextInterceptor.proceed(context, requestHelperFactory, annotationMap);
+        return chain.pop().proceed(context, chain, requestHelperFactory, annotationMap);
     }
 
     @Override

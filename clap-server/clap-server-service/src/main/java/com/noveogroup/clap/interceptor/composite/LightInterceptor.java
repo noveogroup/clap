@@ -3,6 +3,7 @@ package com.noveogroup.clap.interceptor.composite;
 import javax.interceptor.InvocationContext;
 import java.lang.annotation.Annotation;
 import java.util.Map;
+import java.util.Stack;
 
 /**
  * interface to declare light intercepting components
@@ -19,15 +20,8 @@ import java.util.Map;
  */
 public interface LightInterceptor {
 
-    /**
-     * you should store this instance and invoke it's proceed() method during
-     * execution of your proceed() instead of InvocationContext#proceed()
-     *
-     * @param nextInterceptor
-     */
-    void setNextInterceptor(LightInterceptor nextInterceptor);
-
     Object proceed(InvocationContext context,
+                   Stack<LightInterceptor> chain,
                    RequestHelperFactory requestHelperFactory,
                    Map<Class<? extends Annotation>,Annotation> annotationMap) throws Exception;
 

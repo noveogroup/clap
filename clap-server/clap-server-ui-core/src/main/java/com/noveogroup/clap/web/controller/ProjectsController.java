@@ -1,5 +1,6 @@
 package com.noveogroup.clap.web.controller;
 
+import com.noveogroup.clap.exception.ClapPersistenceException;
 import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.model.project.ImagedProject;
 import com.noveogroup.clap.service.project.ProjectService;
@@ -30,7 +31,7 @@ public class ProjectsController extends BaseController {
     private long projectId;
 
     @Inject
-    private ProjectService projectsFacade;
+    private ProjectService projectService;
 
     @Inject
     private ProjectsModel projectsModel;
@@ -41,11 +42,11 @@ public class ProjectsController extends BaseController {
     public String addProject() {
         try {
             LOGGER.debug("add project : " + projectsModel.getNewProject());
-            projectsFacade.createProject(projectsModel.getNewProject());
+            projectService.createProject(projectsModel.getNewProject());
             projectsModel.setNewProject(new Project());
             LOGGER.debug("project saved");
             return Navigation.PROJECTS.getView();
-        } catch (Exception e){
+        } catch (ClapPersistenceException e){
             final FacesMessage message = new FacesMessage();
             message.setSeverity(FacesMessage.SEVERITY_ERROR);
             message.setSummary("Error while creating project");
@@ -55,7 +56,9 @@ public class ProjectsController extends BaseController {
     }
 
     public void prepareProjectsListView() {
-        final List<ImagedProject> projectList = projectsFacade.findAllImagedProjects();
+        LOGGER.debug("call project service");
+        final List<ImagedProject> projectList = projectService.findAllImagedProjects();
+        LOGGER.debug("project service ret " + projectList);
         if(projectList != null){
             final List<StreamedImagedProject> streamedImagedProjects = new ArrayList<StreamedImagedProject>();
             for(final ImagedProject project : projectList){
@@ -69,7 +72,7 @@ public class ProjectsController extends BaseController {
     public void prepareProjectView(){
         final Project selectedProject = projectsModel.getSelectedProject();
         if(selectedProject != null){
-            final ImagedProject projectWithRevisions = projectsFacade.findByIdWithImage(selectedProject.getId());
+            final ImagedProject projectWithRevisions = projectService.findByIdWithImage(selectedProject.getId());
             if (projectWithRevisions != null){
                 projectsModel.setSelectedProject(new StreamedImagedProject(projectWithRevisions));
                 revisionsModel.setRevisionsListDataModel(

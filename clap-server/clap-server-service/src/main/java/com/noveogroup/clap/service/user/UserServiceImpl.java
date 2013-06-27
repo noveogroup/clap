@@ -10,6 +10,8 @@ import com.noveogroup.clap.model.user.UserWithAuthentication;
 import org.apache.commons.lang3.StringUtils;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -26,14 +28,15 @@ import javax.interceptor.Interceptors;
 public class UserServiceImpl implements UserService {
 
     private static final Mapper MAPPER = new DozerBeanMapper();
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
     @EJB
     private UserDAO userDAO;
 
-    @AuthenticationRequired
     @WrapException
     @Override
-    public User updateUserData(final UserWithAuthentication user) {
+    public User getUserData(final UserWithAuthentication user) {
+        LOGGER.debug("user service impl call get user data");
         if(user == null){
             throw new IllegalArgumentException("user == null");
         }

@@ -15,11 +15,15 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
 
 import javax.enterprise.context.RequestScoped;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * @author
@@ -35,6 +39,8 @@ public class HelloBean {
     private ConfigBean configBean;
 
     private final StreamedContent QRCode;
+
+    private String testValue;
 
     public HelloBean() throws IOException, WriterException {
         final ByteArrayOutputStream buf = new ByteArrayOutputStream();
@@ -57,5 +63,23 @@ public class HelloBean {
     public String testValidation() throws ClapException {
         projectsFacade.getCreateUpdateProject(new Project());
         return Navigation.PROJECTS.getView();
+    }
+
+
+    public Collection<SelectItem> autocompleteMethod(){
+        List<SelectItem> ret = new ArrayList<SelectItem>();
+        ret.add(new SelectItem(1,"111"));
+        ret.add(new SelectItem(2,"222"));
+        ret.add(new SelectItem(3,"333"));
+        ret.add(new SelectItem(4,"444"));
+        return  ret;
+    }
+
+    public String getTestValue() {
+        return testValue;
+    }
+
+    public void setTestValue(String testValue) {
+        this.testValue = testValue;
     }
 }

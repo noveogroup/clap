@@ -3,7 +3,7 @@ package com.noveogroup.clap.exception;
 /**
  * @author Andrey Sokolov
  */
-public abstract class ClapException extends Exception {
+public abstract class ClapException extends RuntimeException {
 
     public ClapException() {
     }

@@ -14,6 +14,8 @@ import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.service.url.UrlService;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -34,6 +36,7 @@ import java.util.List;
 public class ProjectServiceImpl implements ProjectService {
 
     private static final Mapper MAPPER = new DozerBeanMapper();
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProjectServiceImpl.class);
 
     @EJB
     private ProjectDAO projectDAO;
@@ -102,7 +105,10 @@ public class ProjectServiceImpl implements ProjectService {
     @AuthenticationRequired
     @Override
     public List<ImagedProject> findAllImagedProjects() {
-        return findAllProjects(ImagedProject.class);
+        LOGGER.debug("findAllProject_start");
+        final List<ImagedProject> allProjects = findAllProjects(ImagedProject.class);
+        LOGGER.debug("findAllProject_end");
+        return allProjects;
     }
 
     private <T extends Project> List<T> findAllProjects(final Class<? extends T> retClass){

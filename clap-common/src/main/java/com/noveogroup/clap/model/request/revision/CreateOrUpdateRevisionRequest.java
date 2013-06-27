@@ -4,6 +4,7 @@ import com.noveogroup.clap.model.user.User;
 import org.jboss.resteasy.annotations.providers.multipart.PartType;
 
 import javax.ws.rs.FormParam;
+import java.io.InputStream;
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,13 +30,11 @@ public class CreateOrUpdateRevisionRequest {
 
     @FormParam("mainPackage")
     @PartType("application/octet-stream")
-    //FIXME: byte[] IS SOOOOOOOO BAD!
-    private byte[] mainPackage;
+    private InputStream mainPackage;
 
     @FormParam("specialPackage")
     @PartType("application/octet-stream")
-    //FIXME: byte[] IS SOOOOOOOO BAD!
-    private byte[] specialPackage;
+    private InputStream specialPackage;
 
     public String getProjectExternalId() {
         return projectExternalId;
@@ -53,19 +52,19 @@ public class CreateOrUpdateRevisionRequest {
         this.revisionHash = revisionHash;
     }
 
-    public byte[] getMainPackage() {
+    public InputStream getMainPackage() {
         return mainPackage;
     }
 
-    public void setMainPackage(final byte[] mainPackage) {
+    public void setMainPackage(InputStream mainPackage) {
         this.mainPackage = mainPackage;
     }
 
-    public byte[] getSpecialPackage() {
+    public InputStream getSpecialPackage() {
         return specialPackage;
     }
 
-    public void setSpecialPackage(final byte[] specialPackage) {
+    public void setSpecialPackage(InputStream specialPackage) {
         this.specialPackage = specialPackage;
     }
 

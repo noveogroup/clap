@@ -11,7 +11,7 @@ import javax.ws.rs.core.MediaType;
 public interface MessagesEndpoint {
 
     @POST
-    @Path("sendMessage")
+    @Path("/add")
     @Consumes(MediaType.APPLICATION_JSON)
     void saveMessage(SendMessageRequest request);
 }

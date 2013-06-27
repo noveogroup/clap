@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 public class PackageEndpointImpl implements PackageEndpoint {
 
     @Inject
-    private RevisionService revisionsFacade;
+    private RevisionService revisionService;
 
     @Override
     public Response downloadAPK(final long id, final int type) {
@@ -25,7 +25,7 @@ public class PackageEndpointImpl implements PackageEndpoint {
         request.setRevisionId(id);
         request.setApplicationType(type == 0 ? ApplicationType.MAIN : ApplicationType.SPECIAL);
         request.setAuthentication(new Authentication());
-        final ApplicationFile application = revisionsFacade.getApplication(request);
+        final ApplicationFile application = revisionService.getApplication(request);
         return Response.ok(application.getContent()).header("Content-Disposition",
                 "attachment; filename=\""+application.getFilename()+"\"").build();
     }

@@ -5,6 +5,7 @@ import com.noveogroup.clap.interceptor.composite.RequestHelperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.interceptor.AroundInvoke;
 import javax.interceptor.InvocationContext;
@@ -14,6 +15,7 @@ import javax.interceptor.InvocationContext;
  *
  * @author Mikhail Demidov
  */
+@Stateless
 public class ClapMainInterceptor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ClapMainInterceptor.class);

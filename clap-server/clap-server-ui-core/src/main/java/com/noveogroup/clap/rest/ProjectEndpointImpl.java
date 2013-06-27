@@ -18,16 +18,16 @@ public class ProjectEndpointImpl implements ProjectEndpoint {
     private static final Mapper MAPPER = new DozerBeanMapper();
 
     @Inject
-    private ProjectService projectsFacade;
+    private ProjectService projectService;
 
 
     @Override
     public Project createProject(final Project project) {
-        return projectsFacade.createProject(project);
+        return projectService.createProject(project);
     }
 
     @Override
     public Project getProject(@QueryParam("id") final Long id) {
-        return projectsFacade.findById(id);
+        return projectService.findById(id);
     }
 }

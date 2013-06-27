@@ -54,10 +54,10 @@ public class RevisionsController extends BaseController {
     private RevisionsModel revisionsModel;
 
     @Inject
-    private RevisionService revisionsFacade;
+    private RevisionService revisionService;
 
     @Inject
-    private ProjectService projectsFacade;
+    private ProjectService projectService;
 
     /**
      * adding revision via web-interface functionality will be removed
@@ -90,11 +90,11 @@ public class RevisionsController extends BaseController {
                             newRevisionHackedApk.getInputstream(),
                             newRevisionHackedApk.getSize()));
         }
-        revisionsFacade.addOrGetRevision(request);
+        revisionService.addOrGetRevision(request);
 
         revisionsModel.reset();
         LOGGER.debug("revision saved");
-        final ImagedProject updatedProject = projectsFacade.findByIdWithImage(project.getId());
+        final ImagedProject updatedProject = projectService.findByIdWithImage(project.getId());
         if (updatedProject != null) {
             projectsModel.setSelectedProject(new StreamedImagedProject(updatedProject));
             revisionsModel.setRevisionsListDataModel(new RevisionsListDataModel(updatedProject.getRevisions()));
@@ -109,7 +109,7 @@ public class RevisionsController extends BaseController {
             final RevisionRequest request = new RevisionRequest();
             request.setAuthentication(new Authentication());
             request.setRevisionId(selectedRevision.getId());
-            final RevisionWithApkStructure revWithApkStructure = revisionsFacade.getRevisionWithApkStructure(request);
+            final RevisionWithApkStructure revWithApkStructure = revisionService.getRevisionWithApkStructure(request);
             revisionsModel.setSelectedRevision(revWithApkStructure);
             if(revWithApkStructure.getApkStructure() != null){
                 revisionsModel.setSelectedRevisionApkStructure(
@@ -157,7 +157,7 @@ public class RevisionsController extends BaseController {
                             newRevisionHackedApk.getInputstream(),
                             newRevisionHackedApk.getSize()));
         }
-        final Revision updatedRevision = revisionsFacade.updateRevisionPackages(request);
+        final Revision updatedRevision = revisionService.updateRevisionPackages(request);
         revisionsModel.setSelectedRevision(updatedRevision);
         updateQRCodes(updatedRevision);
         LOGGER.debug("revision updated");
