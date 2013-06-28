@@ -45,7 +45,7 @@ public class CompositeInterceptorHelper {
             }
         }
         final int size = interceptorList.size();
-        int i = 1;
+        final int i = 1;
         if (size > 1) {
             Collections.sort(interceptorList, new Comparator<LightInterceptor>() {
                 @Override
@@ -77,7 +77,7 @@ public class CompositeInterceptorHelper {
             final Stack<LightInterceptor> chain = new Stack<LightInterceptor>();
             final ChainedInvocationContext chainedInvocationContext = new ChainedInvocationContext(ctx);
             chain.push(chainedInvocationContext);
-            for (LightInterceptor interceptor : interceptorList){
+            for (final LightInterceptor interceptor : interceptorList){
                 chain.push(interceptor);
             }
             return chain.pop().proceed(chainedInvocationContext, chain, requestHelperFactory, annotationMap);

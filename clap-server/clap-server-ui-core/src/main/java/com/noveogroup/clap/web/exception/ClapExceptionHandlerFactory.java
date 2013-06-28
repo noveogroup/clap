@@ -1,10 +1,7 @@
 package com.noveogroup.clap.web.exception;
 
-import javax.faces.application.ViewExpiredException;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerFactory;
-import javax.faces.context.FacesContext;
-import java.io.IOException;
 
 /**
  * @author Andrey Sokolov
@@ -12,20 +9,14 @@ import java.io.IOException;
 public class ClapExceptionHandlerFactory extends ExceptionHandlerFactory {
 
 
-    private ExceptionHandlerFactory parent;
+    private final ExceptionHandlerFactory parent;
 
-    public ClapExceptionHandlerFactory(ExceptionHandlerFactory parent) {
+    public ClapExceptionHandlerFactory(final ExceptionHandlerFactory parent) {
         this.parent = parent;
     }
 
     @Override
     public ExceptionHandler getExceptionHandler() {
-        return new DelegatingExceptionHandler(parent.getExceptionHandler(),
-                new AbstractViewExpiredExceptionHandlerDelegate() {
-            @Override
-            public boolean handle(FacesContext context, ViewExpiredException e) throws IOException {
-                return false;
-            }
-        });
+        return new DelegatingExceptionHandler(parent.getExceptionHandler());
     }
 }

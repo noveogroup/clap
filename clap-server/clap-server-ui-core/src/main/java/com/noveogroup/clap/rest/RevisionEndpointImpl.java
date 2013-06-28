@@ -47,12 +47,12 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
 
     }
 
-    private StreamedPackage createStreamedPackage(InputStream stream) {
+    private StreamedPackage createStreamedPackage(final InputStream stream) {
         if (stream != null) {
             try {
-                File tempFile = tempFileService.createTempFile(stream);
+                final File tempFile = tempFileService.createTempFile(stream);
                 final long length = tempFile.length();
-                StreamedPackage streamedPackage = new StreamedPackage(new FileInputStream(tempFile), length);
+                final StreamedPackage streamedPackage = new StreamedPackage(new FileInputStream(tempFile), length);
                 LOGGER.debug("Retrieved package: " + tempFile.getName() + "; length: " + length);
                 return streamedPackage;
             } catch (IOException e) {

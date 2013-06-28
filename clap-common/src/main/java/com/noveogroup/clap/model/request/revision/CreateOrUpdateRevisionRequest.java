@@ -56,7 +56,7 @@ public class CreateOrUpdateRevisionRequest {
         return mainPackage;
     }
 
-    public void setMainPackage(InputStream mainPackage) {
+    public void setMainPackage(final InputStream mainPackage) {
         this.mainPackage = mainPackage;
     }
 
@@ -64,7 +64,7 @@ public class CreateOrUpdateRevisionRequest {
         return specialPackage;
     }
 
-    public void setSpecialPackage(InputStream specialPackage) {
+    public void setSpecialPackage(final InputStream specialPackage) {
         this.specialPackage = specialPackage;
     }
 

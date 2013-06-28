@@ -29,7 +29,7 @@ public abstract class AbstractDAOImplTest<T extends GenericHibernateDAOImpl> {
     protected Class getEntityClass(){
         return (Class<T>) ((ParameterizedType) getDAOImpl().getClass()
                 .getGenericSuperclass()).getActualTypeArguments()[0];
-    };
+    }
 
     @Before
     public void setUp() throws Exception {
@@ -41,7 +41,7 @@ public abstract class AbstractDAOImplTest<T extends GenericHibernateDAOImpl> {
 
     @Test
     public void testFindById() throws Exception {
-        Object o = getEntityClass().newInstance();
+        final Object o = getEntityClass().newInstance();
         when(entityManager.find(getEntityClass(), null)).thenReturn(o);
         //assertEquals(o,getDAOImpl().findById(null));
     }

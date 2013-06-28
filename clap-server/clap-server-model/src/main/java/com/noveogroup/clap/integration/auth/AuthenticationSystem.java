@@ -1,14 +1,17 @@
 package com.noveogroup.clap.integration.auth;
 
 
+import com.noveogroup.clap.exception.ClapException;
+
 /**
  * @author Andrey Sokolov
  */
 public interface AuthenticationSystem {
+
     /**
      * @param helper
-     * @return true if user authentified and accepted
+     * @throws ClapException in case of auth not procceed
      */
-    boolean authentifyUser(AuthenticationRequestHelper helper);
+    void authentifyUser(AuthenticationRequestHelper helper) throws ClapException;
     String getSystemId();
 }

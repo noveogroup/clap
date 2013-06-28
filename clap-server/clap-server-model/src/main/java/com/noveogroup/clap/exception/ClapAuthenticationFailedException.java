@@ -1,28 +1,31 @@
 package com.noveogroup.clap.exception;
 
+import javax.ejb.ApplicationException;
+
 /**
  * @author Andrey Sokolov
  */
+@ApplicationException
 public class ClapAuthenticationFailedException extends ClapException {
     public ClapAuthenticationFailedException() {
     }
 
-    public ClapAuthenticationFailedException(String message) {
+    public ClapAuthenticationFailedException(final String message) {
         super(message);
     }
 
-    public ClapAuthenticationFailedException(String message, Throwable cause) {
+    public ClapAuthenticationFailedException(final String message, final Throwable cause) {
         super(message, cause);
     }
 
-    public ClapAuthenticationFailedException(Throwable cause) {
+    public ClapAuthenticationFailedException(final Throwable cause) {
         super(cause);
     }
 
-    public ClapAuthenticationFailedException(String message,
-                                             Throwable cause,
-                                             boolean enableSuppression,
-                                             boolean writableStackTrace) {
+    public ClapAuthenticationFailedException(final String message,
+                                             final Throwable cause,
+                                             final boolean enableSuppression,
+                                             final boolean writableStackTrace) {
         super(message, cause, enableSuppression, writableStackTrace);
     }
 }

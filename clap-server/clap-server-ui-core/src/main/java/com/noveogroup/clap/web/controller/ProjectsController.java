@@ -10,13 +10,12 @@ import com.noveogroup.clap.web.model.ProjectsModel;
 import com.noveogroup.clap.web.model.RevisionsListDataModel;
 import com.noveogroup.clap.web.model.RevisionsModel;
 import com.noveogroup.clap.web.model.StreamedImagedProject;
+import com.noveogroup.clap.web.util.message.MessageSupport;
 import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.RequestScoped;
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.ArrayList;
@@ -31,6 +30,9 @@ public class ProjectsController extends BaseController {
     private long projectId;
 
     @Inject
+    private MessageSupport messageSupport;
+
+    @Inject
     private ProjectService projectService;
 
     @Inject
@@ -40,28 +42,24 @@ public class ProjectsController extends BaseController {
     private RevisionsModel revisionsModel;
 
     public String addProject() {
+        LOGGER.debug("add project : " + projectsModel.getNewProject());
         try {
-            LOGGER.debug("add project : " + projectsModel.getNewProject());
             projectService.createProject(projectsModel.getNewProject());
-            projectsModel.setNewProject(new Project());
-            LOGGER.debug("project saved");
-            return Navigation.PROJECTS.getView();
         } catch (ClapPersistenceException e){
-            final FacesMessage message = new FacesMessage();
-            message.setSeverity(FacesMessage.SEVERITY_ERROR);
-            message.setSummary("Error while creating project");
-            FacesContext.getCurrentInstance().addMessage(null,message);
-            return Navigation.SAME_PAGE.getView();
+            throw new ClapPersistenceException(messageSupport.getMessage("project.add.message.exists"),e.getCause());
         }
+        projectsModel.setNewProject(new Project());
+        LOGGER.debug("project saved");
+        return Navigation.PROJECTS.getView();
     }
 
     public void prepareProjectsListView() {
         LOGGER.debug("call project service");
         final List<ImagedProject> projectList = projectService.findAllImagedProjects();
         LOGGER.debug("project service ret " + projectList);
-        if(projectList != null){
+        if (projectList != null) {
             final List<StreamedImagedProject> streamedImagedProjects = new ArrayList<StreamedImagedProject>();
-            for(final ImagedProject project : projectList){
+            for (final ImagedProject project : projectList) {
                 streamedImagedProjects.add(new StreamedImagedProject(project));
             }
             projectsModel.setProjectsListDataModel(new ProjectsListDataModel(streamedImagedProjects));
@@ -69,11 +67,11 @@ public class ProjectsController extends BaseController {
         }
     }
 
-    public void prepareProjectView(){
+    public void prepareProjectView() {
         final Project selectedProject = projectsModel.getSelectedProject();
-        if(selectedProject != null){
+        if (selectedProject != null) {
             final ImagedProject projectWithRevisions = projectService.findByIdWithImage(selectedProject.getId());
-            if (projectWithRevisions != null){
+            if (projectWithRevisions != null) {
                 projectsModel.setSelectedProject(new StreamedImagedProject(projectWithRevisions));
                 revisionsModel.setRevisionsListDataModel(
                         new RevisionsListDataModel(projectWithRevisions.getRevisions()));

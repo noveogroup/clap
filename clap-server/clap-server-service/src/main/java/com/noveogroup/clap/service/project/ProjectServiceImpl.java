@@ -105,10 +105,7 @@ public class ProjectServiceImpl implements ProjectService {
     @AuthenticationRequired
     @Override
     public List<ImagedProject> findAllImagedProjects() {
-        LOGGER.debug("findAllProject_start");
-        final List<ImagedProject> allProjects = findAllProjects(ImagedProject.class);
-        LOGGER.debug("findAllProject_end");
-        return allProjects;
+        return findAllProjects(ImagedProject.class);
     }
 
     private <T extends Project> List<T> findAllProjects(final Class<? extends T> retClass){

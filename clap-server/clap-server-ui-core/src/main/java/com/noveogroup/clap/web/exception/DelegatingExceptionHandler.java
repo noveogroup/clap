@@ -3,27 +3,27 @@ package com.noveogroup.clap.web.exception;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.el.ValueExpression;
 import javax.faces.FacesException;
-import javax.faces.application.NavigationHandler;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerWrapper;
 import javax.faces.context.FacesContext;
-import javax.faces.context.Flash;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
+import java.io.IOException;
 import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author Andrey Sokolov
  */
-public class DelegatingExceptionHandler extends ExceptionHandlerWrapper{
+public class DelegatingExceptionHandler extends ExceptionHandlerWrapper {
 
-    private final ExceptionHandler wrapped;
     private static final Logger LOGGER = LoggerFactory.getLogger(DelegatingExceptionHandler.class);
 
-    public DelegatingExceptionHandler(final ExceptionHandler wrapped,
-                                      final AbstractViewExpiredExceptionHandlerDelegate viewExpiredDelegate,
-                                      final ExceptionHandlerDelegate... delegates) {
+    private final ExceptionHandler wrapped;
+
+    public DelegatingExceptionHandler(final ExceptionHandler wrapped) {
         this.wrapped = wrapped;
     }
 
@@ -35,37 +35,48 @@ public class DelegatingExceptionHandler extends ExceptionHandlerWrapper{
 
     @Override
     public void handle() throws FacesException {
-        Iterator iterator = getUnhandledExceptionQueuedEvents().iterator();
-
+        final Iterator iterator = getUnhandledExceptionQueuedEvents().iterator();
         while (iterator.hasNext()) {
-            ExceptionQueuedEvent event = (ExceptionQueuedEvent) iterator.next();
-            ExceptionQueuedEventContext context = (ExceptionQueuedEventContext)event.getSource();
-
-            Throwable throwable = context.getException();
-
-            FacesContext fc = FacesContext.getCurrentInstance();
-            Throwable rootCause = getRootCause(throwable);
+            final ExceptionQueuedEvent event = (ExceptionQueuedEvent) iterator.next();
+            final ExceptionQueuedEventContext context = (ExceptionQueuedEventContext) event.getSource();
+            final Throwable throwable = context.getException();
+            final FacesContext fc = FacesContext.getCurrentInstance();
+            final ValueExpression valueExpression = fc.getApplication().getExpressionFactory()
+                    .createValueExpression(fc.getELContext(), "#{delegatesInjector}", DelegatesInjector.class);
+            final DelegatesInjector delegatesInjector = (DelegatesInjector) valueExpression.getValue(fc.getELContext());
+            final Map<Class, ExceptionHandlerDelegate> delegatesMap = delegatesInjector.getDelegatesMap();
             try {
-                //TODO  fix it! fix it! fix it!
-                Flash flash = fc.getExternalContext().getFlash();
-
-                // Put the exception in the flash scope to be displayed in the error
-                // page if necessary ...
-                flash.put("errorDetails", throwable.getMessage());
-
-                LOGGER.error("the error is put in the flash: " + throwable.getMessage());
-
-                NavigationHandler navigationHandler = fc.getApplication().getNavigationHandler();
-
-                navigationHandler.handleNavigation(fc, null, "error?faces-redirect=true");
-
-                fc.renderResponse();
-            } finally {
-                iterator.remove();
+                if (delegateHandling(throwable, delegatesMap, fc)) {
+                    iterator.remove();
+                } else {
+                    getWrapped().handle();
+                }
+            } catch (IOException e) {
+                LOGGER.error("error while handling exception: " + throwable, e);
+                getWrapped().handle();
             }
         }
-
-        // Let the parent handle the rest
-        getWrapped().handle();
     }
+
+    private boolean delegateHandling(final Throwable e,
+                                     final Map<Class, ExceptionHandlerDelegate> delegatesMap,
+                                     final FacesContext context) throws IOException {
+        Throwable cause = e;
+        while (cause != null) {
+            Class exceptionClass = cause.getClass();
+            while (!exceptionClass.equals(Throwable.class)) {
+                final ExceptionHandlerDelegate delegate = delegatesMap.get(exceptionClass);
+                if (delegate != null) {
+                    if (delegate.handle(context, cause)) {
+                        return true;
+                    }
+                }
+                exceptionClass = exceptionClass.getSuperclass();
+            }
+            cause = cause.getCause();
+        }
+        LOGGER.debug("exception not handled: " + e);
+        return false;
+    }
+
 }

@@ -67,7 +67,7 @@ public class HelloBean {
 
 
     public Collection<SelectItem> autocompleteMethod(){
-        List<SelectItem> ret = new ArrayList<SelectItem>();
+        final List<SelectItem> ret = new ArrayList<SelectItem>();
         ret.add(new SelectItem(1,"111"));
         ret.add(new SelectItem(2,"222"));
         ret.add(new SelectItem(3,"333"));
@@ -79,7 +79,7 @@ public class HelloBean {
         return testValue;
     }
 
-    public void setTestValue(String testValue) {
+    public void setTestValue(final String testValue) {
         this.testValue = testValue;
     }
 }

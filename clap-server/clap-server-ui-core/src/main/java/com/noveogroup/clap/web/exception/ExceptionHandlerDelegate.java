@@ -2,11 +2,14 @@ package com.noveogroup.clap.web.exception;
 
 import javax.faces.context.FacesContext;
 import java.io.IOException;
+import java.io.Serializable;
 
 /**
+ * interface for exception handler delegates, should be application scoped
+ *
  * @author Andrey Sokolov
  */
-public interface ExceptionHandlerDelegate<T extends Throwable> {
+public interface ExceptionHandlerDelegate<T extends Throwable> extends Serializable{
 
     /**
      * @param context context of thrown exception

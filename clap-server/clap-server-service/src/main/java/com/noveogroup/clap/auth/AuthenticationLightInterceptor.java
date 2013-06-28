@@ -1,6 +1,5 @@
 package com.noveogroup.clap.auth;
 
-import com.noveogroup.clap.exception.ClapAuthenticationFailedException;
 import com.noveogroup.clap.integration.auth.AuthenticationRequestHelper;
 import com.noveogroup.clap.integration.auth.AuthenticationSystem;
 import com.noveogroup.clap.interceptor.composite.LightInterceptor;
@@ -42,12 +41,8 @@ public class AuthenticationLightInterceptor implements LightInterceptor {
         if(annotationMap.containsKey(AuthenticationRequired.class)){
             final AuthenticationRequestHelper helper = requestHelperFactory
                     .getRequestHelper(AuthenticationRequestHelper.class);
-            if(!authenticationSystem.authentifyUser(helper)){
-                LOGGER.debug("authentication failed");
-                throw new ClapAuthenticationFailedException();
-            } else {
-                LOGGER.debug("authentication accepted");
-            }
+            authenticationSystem.authentifyUser(helper);
+            LOGGER.debug("authentication accepted");
         }
         return chain.pop().proceed(context, chain, requestHelperFactory, annotationMap);
     }
