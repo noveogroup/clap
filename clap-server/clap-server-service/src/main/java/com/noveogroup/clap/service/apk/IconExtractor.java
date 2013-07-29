@@ -1,34 +1,30 @@
 package com.noveogroup.clap.service.apk;
 
-import com.noveogroup.clap.service.apk.exception.ExtractingInfoException;
+import com.noveogroup.clap.model.revision.ApkAndroidManifest;
+import com.noveogroup.clap.model.revision.ApkEntry;
+import com.noveogroup.clap.model.revision.ApkStructure;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 /**
  * @author Andrey Sokolov
  */
-public class IconExtractor {
+public class IconExtractor implements InfoExtractor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(IconExtractor.class);
 
     private static final int ICONS_PATH_MAX_PRIORITY = 5;
     private final Map<Integer, IconPathTemplate> iconsPathPriorityMap;
-    private final File apkFile;
     private String foundIconEntryName;
-    private int foundIconEntrySize;
     private int foundIconPriority;
+    private byte[] icon;
 
-    IconExtractor(final File apkFile) {
-        this.apkFile = apkFile;
+    public IconExtractor() {
         iconsPathPriorityMap = new HashMap<Integer, IconPathTemplate>();
         iconsPathPriorityMap.put(1, new IconPathTemplate("", 1));
         iconsPathPriorityMap.put(2, new IconPathTemplate("ldpi", 2));
@@ -37,69 +33,60 @@ public class IconExtractor {
         iconsPathPriorityMap.put(5, new IconPathTemplate("xhdpi", 5));
     }
 
-    /**
-     * Extracts icon file
-     *
-     * @return icons byte[], null if no icon
-     * @throws ExtractingInfoException in case of error
-     */
     public byte[] getIcon() {
-        try {
-            foundIconEntryName = null;
-            foundIconPriority = 0;
-            findBestIcon();
-            return getFoundIcon();
-        } catch (IOException e) {
-            throw new ExtractingInfoException("icon extracting error", e);
-        }
+        return icon;
     }
 
-    private void findBestIcon() throws IOException {
-        final ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(apkFile));
-        ZipEntry zipentry = zipInputStream.getNextEntry();
-        while (zipentry != null) {
-            final String entryName = zipentry.getName();
-            final long zipentrySize = zipentry.getSize();
-            LOGGER.debug("reading entry: " + entryName);
-            for (int newPriority = foundIconPriority + 1;
-                 newPriority <= ICONS_PATH_MAX_PRIORITY;
-                 newPriority++) {
-                final IconPathTemplate template = iconsPathPriorityMap.get(newPriority);
-                if (template != null) {
-                    if (template.checkPath(entryName)) {
-                        foundIconEntryName = entryName;
-                        foundIconPriority = newPriority;
-                        if (zipentrySize > Integer.MAX_VALUE) {
-                            throw new IllegalStateException("size of that icon is too damn high: " + zipentrySize);
-                        } else {
-                            foundIconEntrySize = (int) zipentrySize;
+    private void findBestIcon(final ApkStructure structure, final ApkAndroidManifest androidManifest){
+        final ApkEntry rootEntry = structure.getRootEntry();
+        foundIconEntryName = null;
+        foundIconPriority = 0;
+        for(final IconPathTemplate template : iconsPathPriorityMap.values()){
+            //TODO fix
+            template.setIconName(androidManifest.getIconPath());
+        }
+        searchIcon(rootEntry);
+    }
+
+    private void searchIcon(final ApkEntry apkEntry){
+        if(apkEntry != null){
+            if(apkEntry.isDirectory()){
+                for (final ApkEntry innerEntry : apkEntry.getInnerEntries()){
+                    searchIcon(innerEntry);
+                }
+            } else {
+                for (int newPriority = foundIconPriority + 1;
+                     newPriority <= ICONS_PATH_MAX_PRIORITY;
+                     newPriority++) {
+                    final IconPathTemplate template = iconsPathPriorityMap.get(newPriority);
+                    if (template != null) {
+                        if (template.checkPath(apkEntry.getEntryName())) {
+                            foundIconEntryName = apkEntry.getEntryName();
+                            foundIconPriority = newPriority;
+                            break;
                         }
-                        break;
                     }
                 }
             }
-            zipentry = zipInputStream.getNextEntry();
         }
-        zipInputStream.close();
     }
 
-    private byte[] getFoundIcon() throws IOException {
-        final ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(apkFile));
-        ZipEntry zipentry = zipInputStream.getNextEntry();
-        while (zipentry != null) {
-            final String entryName = zipentry.getName();
-            LOGGER.debug("reading entry: " + entryName);
-            if (StringUtils.equals(entryName, foundIconEntryName)) {
-                final byte[] iconBytes = new byte[foundIconEntrySize];
-                zipInputStream.read(iconBytes, 0, foundIconEntrySize);
-                zipInputStream.close();
-                return iconBytes;
-            }
-            zipentry = zipInputStream.getNextEntry();
+    @Override
+    public boolean isEntryInterested(final ZipEntry entry,
+                                     final ApkStructure structure,
+                                     final ApkAndroidManifest androidManifest) {
+        if (foundIconEntryName == null){
+            findBestIcon(structure,androidManifest);
         }
-        zipInputStream.close();
-        LOGGER.debug("no icon found");
-        return null;
+        return StringUtils.equals(entry.getName(),foundIconEntryName);
+    }
+
+    @Override
+    public void processEntry(final byte[] entryContent,
+                             final ZipEntry apkEntry,
+                             final ApkStructure structure,
+                             final ApkAndroidManifest androidManifest) {
+        icon = entryContent;
     }
 
     private static class IconPathTemplate {
@@ -107,6 +94,7 @@ public class IconExtractor {
         private static final String ICON_NAME = "/icon.";
         private final String qualificator;
         private final int priority;
+        private String iconName;
 
         public IconPathTemplate(final String qualificator, final int priority) {
             this.qualificator = qualificator;
@@ -121,11 +109,19 @@ public class IconExtractor {
             return priority;
         }
 
+        public String getIconName() {
+            return iconName;
+        }
+
+        public void setIconName(final String iconName) {
+            this.iconName = iconName;
+        }
+
         public boolean checkPath(final String path) {
             //TODO check if this enough
             return StringUtils.startsWith(path, STARTS_WITH)
                     && StringUtils.contains(path, qualificator)
-                    && StringUtils.contains(path, ICON_NAME);
+                    && StringUtils.contains(path, StringUtils.isNotBlank(iconName) ? iconName : ICON_NAME);
         }
 
     }

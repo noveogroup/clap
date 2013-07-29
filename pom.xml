@@ -49,6 +49,42 @@
         </license>
     </licenses>
 
+    <distributionManagement>
+        <repository>
+            <id>release</id>
+            <url>http://ec2-54-218-97-98.us-west-2.compute.amazonaws.com:8081/nexus/content/repositories/releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshot</id>
+            <url>http://ec2-54-218-97-98.us-west-2.compute.amazonaws.com:8081/nexus/content/repositories/snapshots/</url>
+        </snapshotRepository>
+    </distributionManagement>
+
+    <repositories>
+        <repository>
+            <id>snapshot</id>
+            <name>Snapshots</name>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <url>http://ec2-54-218-97-98.us-west-2.compute.amazonaws.com:8081/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>release</id>
+            <name>Releases</name>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <url>http://ec2-54-218-97-98.us-west-2.compute.amazonaws.com:8081/nexus/content/repositories/releases/</url>
+        </repository>
+    </repositories>
+
 
     <properties>
         <!-- versions -->

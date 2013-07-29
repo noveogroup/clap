@@ -20,7 +20,8 @@ import com.noveogroup.clap.model.revision.ApplicationFile;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
-import com.noveogroup.clap.service.apk.ApkInfoExtractorFactory;
+import com.noveogroup.clap.service.apk.ApkInfoMainExtractor;
+import com.noveogroup.clap.service.apk.IconExtractor;
 import com.noveogroup.clap.service.tempfiles.TempFileService;
 import com.noveogroup.clap.service.url.UrlService;
 import org.slf4j.Logger;
@@ -199,9 +200,12 @@ public class RevisionServiceImpl implements RevisionService {
         try {
             final File file = tempFileService.createTempFile(streamedPackage.getStream());
             if(extractInfo){
-                final ApkInfoExtractorFactory factory = new ApkInfoExtractorFactory(file);
-                revisionEntity.getProject().setIconFile(factory.createIconExtractor().getIcon());
-                final ApkStructure apkStructure = factory.createStructureExtractor().getStructure();
+                final ApkInfoMainExtractor mainExtractor = new ApkInfoMainExtractor(file);
+                final IconExtractor iconExtractor = new IconExtractor();
+                mainExtractor.addInfoExtractor(iconExtractor);
+                mainExtractor.processApk();
+                revisionEntity.getProject().setIconFile(iconExtractor.getIcon());
+                final ApkStructure apkStructure = mainExtractor.getStructure();
                 revisionEntity.setApkStructureJSON(new Gson().toJson(apkStructure,ApkStructure.class));
                 ret = true;
             }
