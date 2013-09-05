@@ -5,25 +5,18 @@ package com.noveogroup.clap.exception;
  */
 public abstract class ClapException extends RuntimeException {
 
-    public ClapException() {
+    protected ClapException() {
     }
 
-    public ClapException(final String message) {
+    protected ClapException(String message) {
         super(message);
     }
 
-    public ClapException(final String message, final Throwable cause) {
+    protected ClapException(String message, Throwable cause) {
         super(message, cause);
     }
 
-    public ClapException(final Throwable cause) {
+    protected ClapException(Throwable cause) {
         super(cause);
-    }
-
-    public ClapException(final String message,
-                         final Throwable cause,
-                         final boolean enableSuppression,
-                         final boolean writableStackTrace) {
-        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

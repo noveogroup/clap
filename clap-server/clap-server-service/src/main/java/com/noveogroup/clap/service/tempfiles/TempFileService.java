@@ -3,7 +3,6 @@ package com.noveogroup.clap.service.tempfiles;
 import com.noveogroup.clap.config.ConfigBean;
 import org.apache.commons.io.IOUtils;
 
-import javax.annotation.PostConstruct;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import java.io.File;
@@ -20,15 +19,9 @@ public class TempFileService {
 
     @Inject
     private ConfigBean configBean;
-    private String tempFilesDir;
-
-    @PostConstruct
-    protected void setup(){
-        tempFilesDir = configBean.getTempFilesDir();
-    }
 
     public File createTempFile() throws IOException {
-        return File.createTempFile("clap_","",new File(tempFilesDir));
+        return File.createTempFile("clap_","",new File(configBean.getTempFilesDir()));
     }
 
     public File createTempFile(final InputStream content) throws IOException {

@@ -30,19 +30,16 @@ public class TempFilesDirectoryCleaner {
     @Resource
     private TimerService timerService;
 
-    private String tempFilesDirectoryPath;
-
     @PostConstruct
     public void createTimer() {
         LOGGER.debug("Creating TempFilesDirectoryCleaner timer");
-        tempFilesDirectoryPath = configBean.getTempFilesDir();
         timerService.createIntervalTimer(0, configBean.getTempFilesCleanInterval(), new TimerConfig(null, false));
     }
 
     @Timeout
     public void timeout(final Timer timer) {
         LOGGER.debug("deleting temp files");
-        final File tempFilesDir = new File(tempFilesDirectoryPath);
+        final File tempFilesDir = new File(configBean.getTempFilesDir());
         for (final File tempFile : tempFilesDir.listFiles()) {
             delete(tempFile);
         }
