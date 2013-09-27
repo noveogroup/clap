@@ -1,5 +1,6 @@
 package com.noveogroup.clap.model.user;
 
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -11,6 +12,7 @@ public class BaseUser {
     private String login;
 
 
+    @XmlElement
     public String getLogin() {
         return login;
     }

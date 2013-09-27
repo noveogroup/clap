@@ -1,6 +1,6 @@
 package com.noveogroup.clap.model.request.revision;
 
-import com.noveogroup.clap.model.user.User;
+import com.noveogroup.clap.model.user.UserWithAuthentication;
 import org.jboss.resteasy.annotations.providers.multipart.PartType;
 
 import javax.ws.rs.FormParam;
@@ -17,16 +17,16 @@ import java.io.InputStream;
 public class CreateOrUpdateRevisionRequest {
 
     @FormParam("projectExternalId")
-    @PartType("multipart/form-data")
+    @PartType("text/plain")
     private String projectExternalId;
 
     @FormParam("revisionHash")
-    @PartType("multipart/form-data")
+    @PartType("text/plain")
     private String revisionHash;
 
     @FormParam("user")
-    @PartType("application/json")
-    private User user;
+    @PartType("application/xml")
+    private UserWithAuthentication user;
 
     @FormParam("mainPackage")
     @PartType("application/octet-stream")
@@ -68,11 +68,11 @@ public class CreateOrUpdateRevisionRequest {
         this.specialPackage = specialPackage;
     }
 
-    public User getUser() {
+    public UserWithAuthentication getUser() {
         return user;
     }
 
-    public void setUser(final User user) {
+    public void setUser(final UserWithAuthentication user) {
         this.user = user;
     }
 }

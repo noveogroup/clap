@@ -29,19 +29,25 @@ public class ManifestInfoExtractor {
 
     void getManifest(final ZipEntry zipEntry, final ZipInputStream zipInputStream) {
         if (MANIFEST_NAME.equals(zipEntry.getName())) {
+            //remove after implementing
+            foundManifest = new ApkAndroidManifest();
             if (foundManifest == null) {
                 LOGGER.debug("reading manifest");
                 try {
-                    //assuming manifest can't be such large to break it
-                    final byte[] content = new byte[(int) zipEntry.getSize()];
-                    zipInputStream.read(content, 0, (int) zipEntry.getSize());
-                    final JAXBContext jaxbContext = JAXBContext.newInstance(Manifest.class);
-                    final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-                    final Manifest manifest = (Manifest) unmarshaller.unmarshal(new ByteArrayInputStream(content));
-                    LOGGER.debug("manifest : " + manifest);
-                    //TODO it
-                    foundManifest = new ApkAndroidManifest();
-                    foundManifest.setIconPath("/icon.");
+
+                    int zipEntrySize = (int) zipEntry.getSize();
+                    if (zipEntrySize > 0) {
+                        //assuming manifest can't be such large to break it
+                        final byte[] content = new byte[zipEntrySize];
+                        zipInputStream.read(content, 0, zipEntrySize);
+                        final JAXBContext jaxbContext = JAXBContext.newInstance(Manifest.class);
+                        final Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+                        final Manifest manifest = (Manifest) unmarshaller.unmarshal(new ByteArrayInputStream(content));
+                        LOGGER.debug("manifest : " + manifest);
+                        //TODO it
+                        foundManifest = new ApkAndroidManifest();
+                        foundManifest.setIconPath("/icon.");
+                    }
 
                 } catch (JAXBException e) {
                     LOGGER.error("parsing error", e);

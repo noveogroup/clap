@@ -80,7 +80,6 @@ public class RevisionServiceImpl implements RevisionService {
         if (revisionEntity.getRevisionType() == null) {
             revisionEntity.setRevisionType(RevisionType.DEVELOP);
         }
-        processPackages(revisionEntity, request);
         ProjectEntity projectEntity = null;
 
         projectEntity = projectDAO.findProjectByExternalIdOrReturnNull(request.getProjectExternalId());
@@ -95,6 +94,7 @@ public class RevisionServiceImpl implements RevisionService {
         revisionEntity.setProject(projectEntity);
         projectEntity.getRevisions().add(revisionEntity);
 
+        processPackages(revisionEntity, request);
         projectDAO.persist(projectEntity);
         revisionEntity = revisionDAO.persist(revisionEntity,request.getMainPackage(),request.getSpecialPackage());
         final Revision outcomeRevision = revisionConverter.map(revisionEntity);
@@ -121,12 +121,12 @@ public class RevisionServiceImpl implements RevisionService {
                 case MAIN:
                     ret.setContent(tempFileService.createTempFile(
                             revisionEntity.getMainPackage().getBinaryStream()));
-                    ret.setFilename(createFileName(revisionEntity.getProject(), false));
+                    ret.setFilename(createFileName(revisionEntity.getProject(), true));
                     return ret;
                 case SPECIAL:
                     ret.setContent(tempFileService.createTempFile(
                             revisionEntity.getSpecialPackage().getBinaryStream()));
-                    ret.setFilename(createFileName(revisionEntity.getProject(), true));
+                    ret.setFilename(createFileName(revisionEntity.getProject(), false));
                     return ret;
                 default:
                     throw new IllegalArgumentException("unknown application type : " + request.getApplicationType());

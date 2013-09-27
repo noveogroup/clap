@@ -8,10 +8,12 @@ import com.noveogroup.clap.model.message.Message;
 import com.noveogroup.clap.model.revision.ApkStructure;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
+import org.apache.commons.collections.CollectionUtils;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Andrey Sokolov
@@ -42,8 +44,12 @@ public class RevisionConverter {
         toMap.setId(revision.getId());
         toMap.setHash(revision.getHash());
         toMap.setMessages(new ArrayList<Message>());
-        for (final MessageEntity message : revision.getMessages()) {
-            toMap.getMessages().add(MAPPER.map(message, Message.class));
+
+        final List<MessageEntity> revisionMessages = revision.getMessages();
+        if (CollectionUtils.isNotEmpty(revisionMessages)) {
+            for (final MessageEntity message : revisionMessages) {
+                toMap.getMessages().add(MAPPER.map(message, Message.class));
+            }
         }
         final ProjectEntity project = revision.getProject();
         if(project != null){

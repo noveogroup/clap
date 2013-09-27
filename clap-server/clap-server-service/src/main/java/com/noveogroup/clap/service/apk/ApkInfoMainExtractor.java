@@ -94,7 +94,7 @@ public class ApkInfoMainExtractor {
             manifestInfoExtractor.getManifest(zipentry,zipInputStream);
             zipentry = zipInputStream.getNextEntry();
         }
-        LOGGER.debug("apk structure : " + ret);
+        //LOGGER.debug("apk structure : " + ret);
         zipInputStream.close();
         return ret;
     }

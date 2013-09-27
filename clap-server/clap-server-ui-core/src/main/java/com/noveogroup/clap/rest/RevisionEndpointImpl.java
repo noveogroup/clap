@@ -1,6 +1,8 @@
 package com.noveogroup.clap.rest;
 
 
+import com.noveogroup.clap.integration.auth.AuthenticationRequestHelper;
+import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
 import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
 import com.noveogroup.clap.model.request.revision.RevisionRequest;
@@ -15,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -34,8 +37,14 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
     @Inject
     private TempFileService tempFileService;
 
+    @Inject
+    private AuthenticationRequestHelper authenticationRequestHelper;
+
     @Override
     public Revision createOrUpdateRevision(final CreateOrUpdateRevisionRequest request) {
+        final Authentication authentication = new Authentication();
+        authentication.setUser(request.getUser());
+        authenticationRequestHelper.applyAuthentication(authentication);
         final Revision revision = new Revision();
         revision.setHash(request.getRevisionHash());
         final AddOrGetRevisionRequest addOrGetRevisionRequest = new AddOrGetRevisionRequest();
@@ -53,7 +62,22 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
                 final File tempFile = tempFileService.createTempFile(stream);
                 final long length = tempFile.length();
                 final StreamedPackage streamedPackage = new StreamedPackage(new FileInputStream(tempFile), length);
-                LOGGER.debug("Retrieved package: " + tempFile.getName() + "; length: " + length);
+                LOGGER.debug("Retrieved package as stream: " + tempFile.getName() + "; length: " + length);
+                return streamedPackage;
+            } catch (IOException e) {
+                throw new ClapException(e);
+            }
+        }
+        return null;
+    }
+
+    private StreamedPackage createStreamedPackage(final byte[] data) {
+        if (data != null) {
+            try {
+                final File tempFile = tempFileService.createTempFile(new ByteArrayInputStream(data));
+                final long length = tempFile.length();
+                final StreamedPackage streamedPackage = new StreamedPackage(new FileInputStream(tempFile), length);
+                LOGGER.debug("Retrieved package as byte[]: " + tempFile.getName() + "; length: " + length);
                 return streamedPackage;
             } catch (IOException e) {
                 throw new ClapException(e);

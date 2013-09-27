@@ -10,7 +10,6 @@ import javax.persistence.EntityManager;
 
 import java.lang.reflect.ParameterizedType;
 
-import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
 
 /**

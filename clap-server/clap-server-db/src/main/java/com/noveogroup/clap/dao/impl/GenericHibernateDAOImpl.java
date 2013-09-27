@@ -1,11 +1,13 @@
 package com.noveogroup.clap.dao.impl;
 
+import com.google.common.collect.Lists;
 import com.noveogroup.clap.dao.GenericDAO;
 import com.noveogroup.clap.integration.DAOIntegration;
 
 import javax.annotation.PostConstruct;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
@@ -74,7 +76,12 @@ public abstract class GenericHibernateDAOImpl<T, ID extends Serializable> implem
         final Root<T> rc = cq.from(persistentClass);
         cq.select(rc);
         final TypedQuery<T> query = entityManager.createQuery(cq);
-        return query.getResultList();
+        try{
+            return query.getResultList();
+        } catch (NoResultException e){
+            return Lists.newArrayList();
+        }
+
     }
 
 
