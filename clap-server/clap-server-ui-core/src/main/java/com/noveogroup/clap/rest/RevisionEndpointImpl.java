@@ -11,7 +11,6 @@ import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.rest.exception.ClapException;
 import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.service.tempfiles.TempFileService;
-import com.noveogroup.clap.web.controller.ProjectsController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

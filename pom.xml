@@ -8,6 +8,7 @@
     <modules>
         <module>clap-server</module>
         <module>clap-common</module>
+        <module>clap-application-parent</module>
     </modules>
     <packaging>pom</packaging>
     <name>CLAP</name>
