@@ -29,7 +29,7 @@ import java.io.InputStream;
 @ApplicationScoped
 public class RevisionEndpointImpl implements RevisionEndpoint {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProjectsController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RevisionEndpointImpl.class);
 
     @Inject
     private RevisionService revisionService;

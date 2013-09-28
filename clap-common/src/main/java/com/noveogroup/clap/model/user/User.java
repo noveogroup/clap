@@ -1,17 +1,13 @@
 package com.noveogroup.clap.model.user;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author Andrey Sokolov
  */
-@XmlRootElement
 public class User extends BaseUser {
     private String fullName;
 
 
-    @XmlElement
     public String getFullName() {
         return fullName;
     }

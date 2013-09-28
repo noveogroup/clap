@@ -2,19 +2,15 @@ package com.noveogroup.clap.model.user;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author Andrey Sokolov
  */
-@XmlRootElement
 public class UserWithAuthentication extends BaseUser {
 
     private String password;
     private String authenticationKey;
 
-    @XmlElement
     public String getPassword() {
         return password;
     }
@@ -23,7 +19,6 @@ public class UserWithAuthentication extends BaseUser {
         this.password = password;
     }
 
-    @XmlElement
     public String getAuthenticationKey() {
         return authenticationKey;
     }

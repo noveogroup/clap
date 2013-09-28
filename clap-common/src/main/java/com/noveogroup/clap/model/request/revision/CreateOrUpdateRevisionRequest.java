@@ -25,7 +25,7 @@ public class CreateOrUpdateRevisionRequest {
     private String revisionHash;
 
     @FormParam("user")
-    @PartType("application/xml")
+    @PartType("application/json")
     private UserWithAuthentication user;
 
     @FormParam("mainPackage")
