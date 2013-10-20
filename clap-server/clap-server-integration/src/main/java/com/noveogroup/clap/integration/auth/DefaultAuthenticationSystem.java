@@ -27,10 +27,12 @@ public class DefaultAuthenticationSystem implements AuthenticationSystem {
 
             //TODO finish it, implement auth by authKey, hashing password and a lot of stuff....
             //TODO before finishing authentication not being checked
-            if (!StringUtils.equals(user.getPassword(), user.getPassword())) {
-                authenticationHelper.onLoginFailed();
-                throw new ClapAuthenticationFailedException();
+            if(userPersistedData != null){
+                if (!StringUtils.equals(userPersistedData.getPassword(), user.getPassword())) {
+                    throw new ClapAuthenticationFailedException();
+                }
             }
+            authenticationHelper.onLoginFailed();
         } else {
             LOGGER.debug(" user request data == null");
             authenticationHelper.onLoginRequired();
