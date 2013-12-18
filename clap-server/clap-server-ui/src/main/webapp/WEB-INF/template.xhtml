@@ -11,11 +11,15 @@
     <title>CLAP</title>
 </h:head>
 <h:body>
+    <p:growl autoUpdate="true" />
     <h:form>
         <p:menubar id="mainMenu">
             <p:menuitem ajax="false"  action="projects?faces-redirect=true" value="#{msgs['menu.project.list']}"/>
             <p:menuitem ajax="false"  action="addProject?faces-redirect=true" value="#{msgs['menu.project.add']}"/>
             <ui:insert name="menuItems"/>
+            <f:facet name="options">
+
+            </f:facet>
         </p:menubar>
     </h:form>
     <h:panelGroup id="content">

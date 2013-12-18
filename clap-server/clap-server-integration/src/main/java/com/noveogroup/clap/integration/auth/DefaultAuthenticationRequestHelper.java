@@ -1,10 +1,10 @@
 package com.noveogroup.clap.integration.auth;
 
-import com.noveogroup.clap.rest.exception.AuthenticationException;
 import com.noveogroup.clap.integration.RequestHelper;
 import com.noveogroup.clap.model.auth.Authentication;
-import com.noveogroup.clap.model.user.User;
-import com.noveogroup.clap.model.user.UserWithAuthentication;
+import com.noveogroup.clap.model.user.RequestUserModel;
+import com.noveogroup.clap.model.user.UserWithPersistedAuth;
+import com.noveogroup.clap.rest.exception.AuthenticationException;
 import com.noveogroup.clap.service.user.UserService;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.UserSessionData;
@@ -24,7 +24,7 @@ public class DefaultAuthenticationRequestHelper implements AuthenticationRequest
     @Inject
     private UserService userService;
 
-    private UserWithAuthentication userRequestData;
+    private RequestUserModel userRequestData;
 
     @Inject
     private UserSessionData userSessionData;
@@ -36,22 +36,22 @@ public class DefaultAuthenticationRequestHelper implements AuthenticationRequest
 
 
     @PostConstruct
-    protected void init(){
+    protected void init() {
         context = FacesContext.getCurrentInstance();
         userRequestData = userSessionData.getUser();
     }
 
     @Override
-    public UserWithAuthentication getUserRequestData() {
+    public RequestUserModel getUserRequestData() {
         return userRequestData;
     }
 
     @Override
-    public User getUserPersistedData() {
-        if(userRequestData != null){
-            return userService.getUserData(userRequestData);
+    public UserWithPersistedAuth getUserPersistedData() {
+        if (userRequestData != null) {
+            return userService.getUserWithPersistedAuth(userRequestData.getLogin());
         } else {
-            return null;
+            throw new IllegalStateException("user request data can't be null");
         }
     }
 
@@ -63,7 +63,7 @@ public class DefaultAuthenticationRequestHelper implements AuthenticationRequest
 
     @Override
     public void onLoginRequired() {
-        if(context != null){
+        if (context != null) {
             userSessionData.setRequestedView(context.getViewRoot().getViewId());
             final ConfigurableNavigationHandler navigationHandler = (ConfigurableNavigationHandler) context
                     .getApplication().getNavigationHandler();
@@ -75,7 +75,7 @@ public class DefaultAuthenticationRequestHelper implements AuthenticationRequest
 
     @Override
     public void onLoginFailed() {
-        //To change body of implemented methods use File | Settings | File Templates.
+        userSessionData.setUser(null);
     }
 
     @Override

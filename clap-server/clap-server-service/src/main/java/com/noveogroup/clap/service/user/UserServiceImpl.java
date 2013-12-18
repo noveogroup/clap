@@ -3,10 +3,11 @@ package com.noveogroup.clap.service.user;
 import com.noveogroup.clap.auth.AuthenticationRequired;
 import com.noveogroup.clap.dao.UserDAO;
 import com.noveogroup.clap.entity.user.UserEntity;
+import com.noveogroup.clap.exception.ClapUserNotFoundException;
 import com.noveogroup.clap.exception.WrapException;
 import com.noveogroup.clap.interceptor.ClapMainInterceptor;
 import com.noveogroup.clap.model.user.User;
-import com.noveogroup.clap.model.user.UserWithAuthentication;
+import com.noveogroup.clap.model.user.UserWithPersistedAuth;
 import org.apache.commons.lang3.StringUtils;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
@@ -35,28 +36,17 @@ public class UserServiceImpl implements UserService {
 
     @WrapException
     @Override
-    public User getUserData(final UserWithAuthentication user) {
+    public UserWithPersistedAuth getUserWithPersistedAuth(final String login) {
         LOGGER.debug("user service impl call get user data");
-        if (user == null) {
-            throw new IllegalArgumentException("user == null");
+        if (StringUtils.isBlank(login)) {
+            throw new IllegalArgumentException("blank login");
         }
-        UserEntity userEntity = null;
-        final String authenticationKey = user.getAuthenticationKey();
-        if (StringUtils.isNotBlank(authenticationKey)) {
-            userEntity = userDAO.getUserByAuthenticationKey(authenticationKey);
-        } else {
-            final String login = user.getLogin();
-            if (StringUtils.isNotBlank(login)) {
-                userEntity = userDAO.getUserByLogin(login);
-            } else {
-                throw new IllegalArgumentException("neither login nor authenticationKey provided");
-            }
-        }
+        final UserEntity userEntity = userDAO.getUserByLogin(login);
         if (userEntity != null) {
-            final User updatedModel = MAPPER.map(userEntity, User.class);
-            return updatedModel;
+            return MAPPER.map(userEntity,UserWithPersistedAuth.class);
+        } else {
+            throw new ClapUserNotFoundException("requested login == " + login);
         }
-        return null;
     }
 
 

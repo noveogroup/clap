@@ -16,42 +16,28 @@ import java.util.Map;
  */
 @Named
 @ApplicationScoped
-public class DelegatesInjector implements Serializable{
+public class DelegatesInjector implements Serializable {
 
     @Inject
     @Any
     private Instance<ExceptionHandlerDelegate> delegates;
 
-    //private ExceptionHandlerDelegate<ViewExpiredException> viewExpiredExceptionDelegate;
-
-    private final Map<Class,ExceptionHandlerDelegate> delegatesMap = Maps.newHashMap();
+    private final Map<Class, ExceptionHandlerDelegate> delegatesMap = Maps.newHashMap();
 
     @PostConstruct
-    public void init(){
-        if(delegates != null){
-            for(final ExceptionHandlerDelegate delegate : delegates){
+    public void init() {
+        if (delegates != null) {
+            for (final ExceptionHandlerDelegate delegate : delegates) {
                 final Class exceptionClass = delegate.getExceptionClass();
-                /*
-                if(exceptionClass.equals(ViewExpiredException.class)){
-                    viewExpiredExceptionDelegate = delegate;
-                    continue;
-                } */
-                if(delegatesMap.put(exceptionClass,delegate) != null){
+                if (delegatesMap.put(exceptionClass, delegate) != null) {
                     throw new IllegalStateException("more than one exception handler delegate exists for class " +
                             exceptionClass);
                 }
-            }    /*
-            if(viewExpiredExceptionDelegate == null){
-                viewExpiredExceptionDelegate = new DefaultViewExpiredExceptionHandlerDelegate();
-            }         */
+            }
         }
     }
 
     public Map<Class, ExceptionHandlerDelegate> getDelegatesMap() {
         return delegatesMap;
     }
-            /*
-    public ExceptionHandlerDelegate<ViewExpiredException> getViewExpiredExceptionDelegate() {
-        return viewExpiredExceptionDelegate;
-    }  */
 }

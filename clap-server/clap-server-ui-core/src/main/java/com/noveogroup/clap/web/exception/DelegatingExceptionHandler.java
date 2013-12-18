@@ -3,6 +3,7 @@ package com.noveogroup.clap.web.exception;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.el.ELException;
 import javax.el.ValueExpression;
 import javax.faces.FacesException;
 import javax.faces.context.ExceptionHandler;
@@ -63,6 +64,9 @@ public class DelegatingExceptionHandler extends ExceptionHandlerWrapper {
                                      final FacesContext context) throws IOException {
         Throwable cause = e;
         while (cause != null) {
+            if(cause instanceof ELException){
+                cause = cause.getCause();
+            }
             Class exceptionClass = cause.getClass();
             while (!exceptionClass.equals(Throwable.class)) {
                 final ExceptionHandlerDelegate delegate = delegatesMap.get(exceptionClass);

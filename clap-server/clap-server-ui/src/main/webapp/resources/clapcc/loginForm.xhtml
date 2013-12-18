@@ -1,0 +1,25 @@
+<html xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:f="http://java.sun.com/jsf/core">
+<cc:interface>
+</cc:interface>
+<cc:implementation>
+    <h:form id="loginForm" rendered="#{user}">
+        <h:outputLabel
+                for="login"
+                value="#{msgs['common.form.label.login']}"/>
+        <p:inputText
+                id="login"
+                required="true"/>
+        <h:outputLabel
+                for="password"
+                value="#{msgs['common.form.label.password']}"/>
+        <p:password
+                id="password"
+                required="true"
+                feedback="false"
+                minLength="0"/>
+        <h:commandButton value="#{msgs['common.form.label.submit']}" action="#{authenticationController.authentify}"/>
+    </h:form>
+</cc:implementation>
+</html>

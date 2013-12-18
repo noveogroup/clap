@@ -1,6 +1,6 @@
 package com.noveogroup.clap.model.auth;
 
-import com.noveogroup.clap.model.user.UserWithAuthentication;
+import com.noveogroup.clap.model.user.RequestUserModel;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
@@ -8,14 +8,14 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  */
 public class Authentication {
 
-    private UserWithAuthentication user;
+    private RequestUserModel user;
 
 
-    public UserWithAuthentication getUser() {
+    public RequestUserModel getUser() {
         return user;
     }
 
-    public void setUser(final UserWithAuthentication user) {
+    public void setUser(final RequestUserModel user) {
         this.user = user;
     }
 
