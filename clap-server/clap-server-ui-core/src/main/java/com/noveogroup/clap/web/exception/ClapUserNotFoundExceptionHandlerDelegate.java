@@ -27,6 +27,6 @@ public class ClapUserNotFoundExceptionHandlerDelegate implements ExceptionHandle
 
     @Override
     public Class<ClapUserNotFoundException> getExceptionClass() {
-        return null;
+        return ClapUserNotFoundException.class;
     }
 }

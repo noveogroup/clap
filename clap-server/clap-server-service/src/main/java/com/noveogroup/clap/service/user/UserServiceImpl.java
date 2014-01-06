@@ -1,12 +1,16 @@
 package com.noveogroup.clap.service.user;
 
 import com.noveogroup.clap.auth.AuthenticationRequired;
+import com.noveogroup.clap.auth.PasswordsHashCalculator;
 import com.noveogroup.clap.dao.UserDAO;
 import com.noveogroup.clap.entity.user.UserEntity;
+import com.noveogroup.clap.exception.ClapAuthenticationFailedException;
 import com.noveogroup.clap.exception.ClapUserNotFoundException;
 import com.noveogroup.clap.exception.WrapException;
 import com.noveogroup.clap.interceptor.ClapMainInterceptor;
+import com.noveogroup.clap.model.user.RequestUserModel;
 import com.noveogroup.clap.model.user.User;
+import com.noveogroup.clap.model.user.UserCreationModel;
 import com.noveogroup.clap.model.user.UserWithPersistedAuth;
 import org.apache.commons.lang3.StringUtils;
 import org.dozer.DozerBeanMapper;
@@ -49,12 +53,48 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @AuthenticationRequired
+    @Override
+    public User getUser(final String login) {
+        final UserEntity userEntity = userDAO.getUserByLogin(login);
+        final User user = MAPPER.map(userEntity,User.class);
+        return user;
+    }
 
     @AuthenticationRequired
     @WrapException
     @Override
-    public User createUser(final User user) {
+    public User saveUser(final User user) {
+        final UserEntity userEntity = userDAO.getUserByLogin(user.getLogin());
+        userEntity.setLogin(user.getLogin());
+        userEntity.setFullName(user.getFullName());
+        //TODO when we will have more info
+        final UserEntity updatedUserEnity = userDAO.persist(userEntity);
+        final User updatedUser = MAPPER.map(updatedUserEnity,User.class);
+        return updatedUser;
+    }
+
+
+    @WrapException
+    @Override
+    public void resetUserPassword(final RequestUserModel requestUserModel,final String newPassword) {
+        final UserEntity userEntity = userDAO.getUserByLogin(requestUserModel.getLogin());
+        final String oldPassHash = PasswordsHashCalculator.calculatePasswordHash(requestUserModel.getPassword());
+        if(StringUtils.equals(oldPassHash,userEntity.getAuthenticationKey())){
+            userEntity.setAuthenticationKey(PasswordsHashCalculator.calculatePasswordHash(newPassword));
+            userDAO.persist(userEntity);
+        } else {
+            throw new ClapAuthenticationFailedException("old password incorrect");
+        }
+    }
+
+
+    @AuthenticationRequired
+    @WrapException
+    @Override
+    public User createUser(final UserCreationModel user) {
         UserEntity userEntity = MAPPER.map(user, UserEntity.class);
+        userEntity.setAuthenticationKey(PasswordsHashCalculator.calculatePasswordHash(user.getPassword()));
         userEntity = userDAO.persist(userEntity);
         return MAPPER.map(userEntity, User.class);
     }

@@ -49,7 +49,7 @@ public class AuthenticationLightInterceptor implements LightInterceptor {
 
     @Override
     public int getPriority() {
-        return 100;
+        return 200;
     }
 
     @Override

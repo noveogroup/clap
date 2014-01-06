@@ -1,5 +1,6 @@
 package com.noveogroup.clap.validation;
 
+import com.noveogroup.clap.exception.ClapValidationException;
 import com.noveogroup.clap.interceptor.composite.LightInterceptor;
 import com.noveogroup.clap.interceptor.composite.RequestHelperFactory;
 import org.slf4j.Logger;
@@ -49,7 +50,7 @@ public class ValidationLightInterceptor implements LightInterceptor {
                     }
                     LOGGER.debug("validation failed: "+violations);
                     //TODO somehow exception isn't building message =/
-                    throw new ConstraintViolationException(message, violations);
+                    throw new ClapValidationException(new ConstraintViolationException(message, violations));
                 }
             }
         }
@@ -58,7 +59,7 @@ public class ValidationLightInterceptor implements LightInterceptor {
 
     @Override
     public int getPriority() {
-        return 200;
+        return 100;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.noveogroup.clap.service.init;
 
+import com.noveogroup.clap.auth.PasswordsHashCalculator;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.dao.UserDAO;
@@ -40,7 +41,7 @@ public class InitService {
     public void initDB(){
         UserEntity user = new UserEntity();
         user.setLogin("test");
-        user.setPassword("123");
+        user.setAuthenticationKey(PasswordsHashCalculator.calculatePasswordHash("123"));
         user = userDAO.persist(user);
         LOGGER.debug("user created = " + user);
         ProjectEntity project = new ProjectEntity();

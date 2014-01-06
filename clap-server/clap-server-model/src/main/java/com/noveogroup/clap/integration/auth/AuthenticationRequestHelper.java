@@ -12,6 +12,7 @@ public interface AuthenticationRequestHelper extends RequestHelper {
     RequestUserModel getUserRequestData();
     UserWithPersistedAuth getUserPersistedData();
     void applyAuthentication(Authentication authentication);
+    void onLoginSuccessfull();
     void onLoginRequired();
     void onLoginFailed();
     void onPermissionMissed();

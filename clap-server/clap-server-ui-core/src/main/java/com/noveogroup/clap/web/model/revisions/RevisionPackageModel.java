@@ -1,4 +1,4 @@
-package com.noveogroup.clap.web.model;
+package com.noveogroup.clap.web.model.revisions;
 
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;

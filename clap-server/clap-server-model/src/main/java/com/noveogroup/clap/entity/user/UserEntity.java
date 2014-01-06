@@ -1,6 +1,7 @@
 package com.noveogroup.clap.entity.user;
 
 import com.noveogroup.clap.entity.BaseEntity;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,8 +27,6 @@ public class UserEntity extends BaseEntity {
     @Column(unique = true, nullable = false)
     private String login;
 
-    private String password;
-
     @Column(unique = true, nullable = true)
     private String authenticationKey;
 
@@ -48,14 +47,6 @@ public class UserEntity extends BaseEntity {
         this.login = login;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(final String password) {
-        this.password = password;
-    }
-
     public String getFullName() {
         return fullName;
     }
@@ -66,12 +57,10 @@ public class UserEntity extends BaseEntity {
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("UserEntity{");
-        sb.append("fullName='").append(fullName).append('\'');
-        sb.append(", login='").append(login).append('\'');
-        sb.append(", password='").append(password).append('\'');
-        sb.append(", authenticationKey='").append(authenticationKey).append('\'');
-        sb.append('}');
-        return sb.toString();
+        return new ToStringBuilder(this)
+                .append("fullName", fullName)
+                .append("login", login)
+                .append("authenticationKey", authenticationKey)
+                .toString();
     }
 }

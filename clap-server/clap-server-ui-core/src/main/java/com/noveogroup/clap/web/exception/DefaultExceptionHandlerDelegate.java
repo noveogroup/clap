@@ -16,7 +16,7 @@ public class DefaultExceptionHandlerDelegate implements ExceptionHandlerDelegate
     public boolean handle(FacesContext context, Exception e) throws IOException {
         final FacesMessage message = new FacesMessage();
         message.setSeverity(FacesMessage.SEVERITY_ERROR);
-        message.setSummary(MessageUtils.getMessage(context, "error.unexpected", e.getMessage()));
+        message.setSummary(MessageUtils.getMessage(context, "error.unexpected", new String[]{e.getMessage()}));
         context.addMessage(null, message);
         return true;
     }

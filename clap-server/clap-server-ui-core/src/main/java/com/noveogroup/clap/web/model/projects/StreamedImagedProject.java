@@ -1,4 +1,4 @@
-package com.noveogroup.clap.web.model;
+package com.noveogroup.clap.web.model.projects;
 
 import com.noveogroup.clap.model.project.ImagedProject;
 import org.primefaces.model.DefaultStreamedContent;

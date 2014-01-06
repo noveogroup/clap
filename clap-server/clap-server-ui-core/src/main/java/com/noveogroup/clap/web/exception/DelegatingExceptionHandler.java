@@ -9,6 +9,7 @@ import javax.faces.FacesException;
 import javax.faces.context.ExceptionHandler;
 import javax.faces.context.ExceptionHandlerWrapper;
 import javax.faces.context.FacesContext;
+import javax.faces.el.EvaluationException;
 import javax.faces.event.ExceptionQueuedEvent;
 import javax.faces.event.ExceptionQueuedEventContext;
 import java.io.IOException;
@@ -64,8 +65,17 @@ public class DelegatingExceptionHandler extends ExceptionHandlerWrapper {
                                      final FacesContext context) throws IOException {
         Throwable cause = e;
         while (cause != null) {
+            if (cause instanceof FacesException){
+                cause = cause.getCause();
+                continue;
+            }
             if(cause instanceof ELException){
                 cause = cause.getCause();
+                continue;
+            }
+            if(cause instanceof EvaluationException){
+                cause = cause.getCause();
+                continue;
             }
             Class exceptionClass = cause.getClass();
             while (!exceptionClass.equals(Throwable.class)) {

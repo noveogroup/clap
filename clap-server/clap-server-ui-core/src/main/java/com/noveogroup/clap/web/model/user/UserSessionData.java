@@ -1,17 +1,21 @@
-package com.noveogroup.clap.web.model;
+package com.noveogroup.clap.web.model.user;
 
 import com.noveogroup.clap.model.user.RequestUserModel;
 
 import javax.enterprise.context.SessionScoped;
+import javax.inject.Named;
 import java.io.Serializable;
 
 /**
  * @author Andrey Sokolov
  */
+@Named
 @SessionScoped
 public class UserSessionData implements Serializable{
 
-    private RequestUserModel user;
+    private boolean authenticated = false;
+
+    private final RequestUserModel user = new RequestUserModel();
 
     private String requestedView;
 
@@ -27,7 +31,17 @@ public class UserSessionData implements Serializable{
         return user;
     }
 
-    public void setUser(final RequestUserModel user) {
-        this.user = user;
+    public boolean isAuthenticated() {
+        return authenticated;
+    }
+
+    public void setAuthenticated(boolean authenticated) {
+        this.authenticated = authenticated;
+    }
+
+    public void reset(){
+        authenticated = false;
+        user.setLogin(null);
+        user.setPassword(null);
     }
 }

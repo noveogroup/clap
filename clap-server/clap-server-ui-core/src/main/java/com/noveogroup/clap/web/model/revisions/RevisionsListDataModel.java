@@ -1,4 +1,4 @@
-package com.noveogroup.clap.web.model;
+package com.noveogroup.clap.web.model.revisions;
 
 import com.noveogroup.clap.model.revision.Revision;
 import org.primefaces.model.SelectableDataModel;

@@ -20,7 +20,7 @@
     <properties>
         <javaVersion>1.6</javaVersion>
         <clap-maven-plugin.isMainPackage>true</clap-maven-plugin.isMainPackage>
-        <androidPluginVersion>3.6.1</androidPluginVersion>
+        <androidPluginVersion>3.8.0</androidPluginVersion>
     </properties>
 
     <dependencies>

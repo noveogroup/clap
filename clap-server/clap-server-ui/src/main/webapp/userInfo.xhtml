@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+<ui:composition template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+        <f:event type="preRenderView" listener="#{userInfoController.prepareUserInfoView}"/>
+
+        <h:form>
+            <p:panel id="userInfoPanel" header="#{msgs['user.info.label.edit.header']}">
+                <p:messages id="userInfoMessages"/>
+                <p:panelGrid columns="2">
+                    <h:outputLabel
+                            for="login"
+                            value="#{msgs['user.info.label.edit.login']}"/>
+                    <p:inputText
+                            id="login"
+                            value="#{userInfoModel.user.login}"
+                            required="true"/>
+                    <h:outputLabel
+                            for="fullName"
+                            value="#{msgs['user.info.label.edit.fullname']}"/>
+                    <p:inputText
+                            id="fullName"
+                            value="#{userInfoModel.user.fullName}"
+                            minLength="0"/>
+                </p:panelGrid>
+                <p:commandButton value="#{msgs['common.form.label.submit']}"
+                                 update="userInfoPanel"
+                                 action="#{userInfoController.saveUser}"/>
+            </p:panel>
+        </h:form>
+        <h:form>
+            <p:panel id="resetPasswordPanel" header="#{msgs['user.info.label.password.reset.header']}">
+                <p:messages id="resetPasswordMessages"/>
+                <p:panelGrid columns="2">
+                    <p:outputLabel for="oldPassword"
+                                   value="#{msgs['user.info.label.password.reset.old']}"/>
+                    <p:password id="oldPassword"
+                                value="#{resetPasswordModel.oldPassword}" required="true"/>
+                    <p:outputLabel for="newPassword"
+                                   value="#{msgs['user.info.label.password.reset.new']}"/>
+                    <p:password id="newPassword"
+                                value="#{resetPasswordModel.newPassword}"
+                                required="true"
+                                feedback="true"
+                                match="repeatPassword"/>
+                    <p:outputLabel for="repeatPassword"
+                                   value="#{msgs['user.info.label.password.reset.new2']}"/>
+                    <p:password id="repeatPassword"
+                                value="#{resetPasswordModel.newPassword}"
+                                required="true"/>
+                </p:panelGrid>
+                <p:commandButton value="#{msgs['common.form.label.submit']}"
+                                 action="#{userInfoController.resetPassword}"
+                                 update="resetPasswordPanel"/>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
+</html>

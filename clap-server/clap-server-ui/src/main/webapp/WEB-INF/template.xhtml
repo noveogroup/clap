@@ -5,20 +5,21 @@
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui"
+      xmlns:clp="http://java.sun.com/jsf/composite/clapcc"
       xmlns:h="http://java.sun.com/jsf/html">
 
 <h:head>
     <title>CLAP</title>
 </h:head>
 <h:body>
-    <p:growl autoUpdate="true" />
+    <p:growl autoUpdate="true" globalOnly="true"/>
     <h:form>
         <p:menubar id="mainMenu">
-            <p:menuitem ajax="false"  action="projects?faces-redirect=true" value="#{msgs['menu.project.list']}"/>
-            <p:menuitem ajax="false"  action="addProject?faces-redirect=true" value="#{msgs['menu.project.add']}"/>
+            <p:menuitem ajax="false"  outcome="projects" value="#{msgs['menu.project.list']}"/>
+            <p:menuitem ajax="false"  outcome="addProject" value="#{msgs['menu.project.add']}"/>
             <ui:insert name="menuItems"/>
             <f:facet name="options">
-
+                <clp:loginForm/>
             </f:facet>
         </p:menubar>
     </h:form>
