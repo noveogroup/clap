@@ -13,7 +13,7 @@
                         value="#{msgs['common.form.label.login']}"/>
                 <p:inputText
                         id="login"
-                        value="#{userSessionData.user.login}"
+                        value="#{userSessionData.authentication.login}"
                         required="true"/>
                 <h:outputLabel
                         for="password"
@@ -22,7 +22,7 @@
                         id="password"
                         required="true"
                         feedback="false"
-                        value="#{userSessionData.user.password}"
+                        value="#{userSessionData.authentication.password}"
                         minLength="0"/>
             </p:panelGrid>
             <h:commandButton value="#{msgs['common.form.label.submit']}" action="#{authenticationController.authentify}"/>

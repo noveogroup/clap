@@ -1,6 +1,9 @@
 package com.noveogroup.clap.web.model.user;
 
-import com.noveogroup.clap.model.user.RequestUserModel;
+import com.noveogroup.clap.model.auth.Authentication;
+import com.noveogroup.clap.model.user.Role;
+import com.noveogroup.clap.model.user.User;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
@@ -15,7 +18,9 @@ public class UserSessionData implements Serializable{
 
     private boolean authenticated = false;
 
-    private final RequestUserModel user = new RequestUserModel();
+    private final Authentication authentication = new Authentication();
+
+    private User user;
 
     private String requestedView;
 
@@ -27,8 +32,8 @@ public class UserSessionData implements Serializable{
         this.requestedView = requestedView;
     }
 
-    public RequestUserModel getUser() {
-        return user;
+    public Authentication getAuthentication() {
+        return authentication;
     }
 
     public boolean isAuthenticated() {
@@ -39,9 +44,38 @@ public class UserSessionData implements Serializable{
         this.authenticated = authenticated;
     }
 
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(final User user) {
+        this.user = user;
+    }
+
+    public String getUserLink(){
+        if(user != null){
+            final String fullName = user.getFullName();
+            if(StringUtils.isNotEmpty(fullName)){
+                return fullName;
+            } else {
+                return user.getLogin();
+            }
+        } else {
+            return authentication.getLogin();
+        }
+    }
+
+    public boolean isAdmin(){
+        if(user != null){
+            return Role.ADMIN.equals(user.getRole());
+        } else {
+            return false;
+        }
+    }
+
     public void reset(){
         authenticated = false;
-        user.setLogin(null);
-        user.setPassword(null);
+        authentication.setLogin(null);
+        authentication.setPassword(null);
     }
 }

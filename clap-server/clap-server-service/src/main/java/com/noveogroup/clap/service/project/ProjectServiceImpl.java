@@ -1,5 +1,6 @@
 package com.noveogroup.clap.service.project;
 
+import com.google.common.collect.Lists;
 import com.noveogroup.clap.auth.AuthenticationRequired;
 import com.noveogroup.clap.dao.MessageDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
@@ -23,7 +24,6 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.interceptor.Interceptors;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -110,7 +110,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     private <T extends Project> List<T> findAllProjects(final Class<? extends T> retClass){
         final List<ProjectEntity> projectEntityList = projectDAO.selectAll();
-        final List<T> projectList = new ArrayList<T>();
+        final List<T> projectList = Lists.newArrayList();
         for (final ProjectEntity projectEntity : projectEntityList) {
             projectList.add(MAPPER.map(projectEntity, retClass));
         }

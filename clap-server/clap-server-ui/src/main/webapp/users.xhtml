@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/WEB-INF/template.xhtml">
+    <ui:define name="content">
+        <f:event type="preRenderView" listener="#{usersController.prepareUsersListView}"/>
+
+        <p:dataTable rendered="#{userSessionData.admin}"
+                     id="users"
+                     var="user"
+                     value="#{usersModel.usersListDataModel}"
+                     selection="#{usersModel.user}"
+                     selectionMode="single">
+
+            <p:ajax event="rowSelect" listener="#{usersController.onUserSelect}"/>
+            <p:column headerText="#{msgs['user.info.label.edit.login']}">
+                <h:outputText value="#{user.login}"/>
+            </p:column>
+            <p:column headerText="#{msgs['user.info.label.edit.fullname']}">
+                <h:outputText value="#{user.fullName}"/>
+            </p:column>
+            <p:column headerText="#{msgs['user.info.label.edit.role']}">
+                <h:outputText value="#{user.role}"/>
+            </p:column>
+
+        </p:dataTable>
+
+    </ui:define>
+</ui:composition>
+</html>

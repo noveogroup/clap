@@ -1,28 +1,37 @@
 package com.noveogroup.clap.model.auth;
 
-import com.noveogroup.clap.model.user.RequestUserModel;
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 /**
+ * Authentication data common model
+ *
  * @author Andrey Sokolov
  */
 public class Authentication {
 
-    private RequestUserModel user;
+    private String login;
 
+    private String password;
 
-    public RequestUserModel getUser() {
-        return user;
+    public Authentication() {
     }
 
-    public void setUser(final RequestUserModel user) {
-        this.user = user;
+    public Authentication(final String login, final String password) {
+        this.login = login;
+        this.password = password;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("user", user)
-                .toString();
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(final String login) {
+        this.login = login;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(final String password) {
+        this.password = password;
     }
 }

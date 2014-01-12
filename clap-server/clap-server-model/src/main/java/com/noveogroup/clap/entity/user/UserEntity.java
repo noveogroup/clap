@@ -1,6 +1,7 @@
 package com.noveogroup.clap.entity.user;
 
 import com.noveogroup.clap.entity.BaseEntity;
+import com.noveogroup.clap.model.user.Role;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.Column;
@@ -30,6 +31,16 @@ public class UserEntity extends BaseEntity {
     @Column(unique = true, nullable = true)
     private String authenticationKey;
 
+    @Column(nullable = false)
+    private Role role;
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
 
     public String getAuthenticationKey() {
         return authenticationKey;
@@ -61,6 +72,7 @@ public class UserEntity extends BaseEntity {
                 .append("fullName", fullName)
                 .append("login", login)
                 .append("authenticationKey", authenticationKey)
+                .append("role", role)
                 .toString();
     }
 }

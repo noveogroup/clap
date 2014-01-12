@@ -1,15 +1,25 @@
 package com.noveogroup.clap.service.user;
 
-import com.noveogroup.clap.model.user.RequestUserModel;
+import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.model.user.UserCreationModel;
 import com.noveogroup.clap.model.user.UserWithPersistedAuth;
+
+import java.util.List;
 
 /**
  * @author Andrey Sokolov
  */
 public interface UserService {
 
+    /**
+     * Create user by provided model
+     *
+     * Role is being reset to DEVELOPER
+     *
+     * @param user model
+     * @return created user
+     */
     User createUser(UserCreationModel user);
 
     /**
@@ -24,5 +34,7 @@ public interface UserService {
 
     User saveUser(User user);
 
-    void resetUserPassword(RequestUserModel requestUserModel,String newPassword);
+    void resetUserPassword(Authentication authentication,String newPassword);
+
+    List<User> getUsers();
 }

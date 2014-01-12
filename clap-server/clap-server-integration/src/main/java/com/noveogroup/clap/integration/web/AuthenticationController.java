@@ -4,6 +4,7 @@ import com.noveogroup.clap.auth.AuthenticationSystemFactory;
 import com.noveogroup.clap.integration.auth.AuthenticationRequestHelper;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.user.UserSessionData;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -26,8 +27,13 @@ public class AuthenticationController {
     private AuthenticationRequestHelper authenticationRequestHelper;
 
     public String authentify(){
-        authenticationSystemFactory.getAuthenticationSystem().authentifyUser(authenticationRequestHelper);
-        return Navigation.SAME_PAGE.getView();
+        authenticationSystemFactory.getAuthenticationSystem().authentifyUser(authenticationRequestHelper,null);
+        final String requestedView = userSessionData.getRequestedView();
+        if(StringUtils.isNotEmpty(requestedView)){
+            return requestedView;
+        } else {
+            return Navigation.HOME.getView();
+        }
     }
 
     public String logout(){

@@ -6,7 +6,7 @@
       xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
 <ui:composition template="/WEB-INF/template.xhtml">
     <ui:define name="content">
-        <f:event type="preRenderView" listener="#{userInfoController.prepareUserInfoView}"/>
+        <f:event type="preRenderView" listener="#{usersController.prepareUserInfoView}"/>
 
         <h:form>
             <p:panel id="userInfoPanel" header="#{msgs['user.info.label.edit.header']}">
@@ -17,45 +17,57 @@
                             value="#{msgs['user.info.label.edit.login']}"/>
                     <p:inputText
                             id="login"
-                            value="#{userInfoModel.user.login}"
-                            required="true"/>
+                            value="#{usersModel.user.login}"
+                            disabled="true"/>
                     <h:outputLabel
                             for="fullName"
                             value="#{msgs['user.info.label.edit.fullname']}"/>
                     <p:inputText
                             id="fullName"
-                            value="#{userInfoModel.user.fullName}"
+                            value="#{usersModel.user.fullName}"
                             minLength="0"/>
+                    <h:outputLabel
+                            for="role"
+                            value="#{msgs['user.info.label.edit.role']}"/>
+                    <p:selectOneMenu
+                            id="role"
+                            disabled="#{not userSessionData.admin}"
+                            value="#{usersModel.user.role}"
+                            minLength="0">
+                        <f:selectItems value="#{commonModels.roles}"/>
+                    </p:selectOneMenu>
                 </p:panelGrid>
                 <p:commandButton value="#{msgs['common.form.label.submit']}"
                                  update="userInfoPanel"
-                                 action="#{userInfoController.saveUser}"/>
+                                 action="#{usersController.saveUser}"/>
+                <p:ajaxStatus/>
             </p:panel>
         </h:form>
-        <h:form>
+        <h:form rendered="#{not userSessionData.admin}">
             <p:panel id="resetPasswordPanel" header="#{msgs['user.info.label.password.reset.header']}">
                 <p:messages id="resetPasswordMessages"/>
                 <p:panelGrid columns="2">
                     <p:outputLabel for="oldPassword"
-                                   value="#{msgs['user.info.label.password.reset.old']}"/>
+                                   value="#{msgs['user.info.label.password.old']}"/>
                     <p:password id="oldPassword"
                                 value="#{resetPasswordModel.oldPassword}" required="true"/>
                     <p:outputLabel for="newPassword"
-                                   value="#{msgs['user.info.label.password.reset.new']}"/>
+                                   value="#{msgs['user.info.label.password.new']}"/>
                     <p:password id="newPassword"
                                 value="#{resetPasswordModel.newPassword}"
                                 required="true"
                                 feedback="true"
                                 match="repeatPassword"/>
                     <p:outputLabel for="repeatPassword"
-                                   value="#{msgs['user.info.label.password.reset.new2']}"/>
+                                   value="#{msgs['user.info.label.password.repeat']}"/>
                     <p:password id="repeatPassword"
                                 value="#{resetPasswordModel.newPassword}"
                                 required="true"/>
                 </p:panelGrid>
                 <p:commandButton value="#{msgs['common.form.label.submit']}"
-                                 action="#{userInfoController.resetPassword}"
+                                 action="#{usersController.resetPassword}"
                                  update="resetPasswordPanel"/>
+                <p:ajaxStatus/>
             </p:panel>
         </h:form>
     </ui:define>

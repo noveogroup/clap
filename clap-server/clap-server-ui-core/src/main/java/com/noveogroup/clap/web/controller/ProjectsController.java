@@ -1,5 +1,6 @@
 package com.noveogroup.clap.web.controller;
 
+import com.google.common.collect.Lists;
 import com.noveogroup.clap.exception.ClapPersistenceException;
 import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.model.project.ImagedProject;
@@ -18,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.util.ArrayList;
 import java.util.List;
 
 @Named
@@ -58,7 +58,7 @@ public class ProjectsController extends BaseController {
         final List<ImagedProject> projectList = projectService.findAllImagedProjects();
         LOGGER.debug("project service ret " + projectList);
         if (projectList != null) {
-            final List<StreamedImagedProject> streamedImagedProjects = new ArrayList<StreamedImagedProject>();
+            final List<StreamedImagedProject> streamedImagedProjects = Lists.newArrayList();
             for (final ImagedProject project : projectList) {
                 streamedImagedProjects.add(new StreamedImagedProject(project));
             }

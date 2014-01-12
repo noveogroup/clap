@@ -7,6 +7,7 @@ import com.noveogroup.clap.dao.UserDAO;
 import com.noveogroup.clap.entity.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
+import com.noveogroup.clap.model.user.Role;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,6 +43,7 @@ public class InitService {
         UserEntity user = new UserEntity();
         user.setLogin("test");
         user.setAuthenticationKey(PasswordsHashCalculator.calculatePasswordHash("123"));
+        user.setRole(Role.ADMIN);
         user = userDAO.persist(user);
         LOGGER.debug("user created = " + user);
         ProjectEntity project = new ProjectEntity();

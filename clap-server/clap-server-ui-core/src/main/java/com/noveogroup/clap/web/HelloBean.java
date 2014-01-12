@@ -1,5 +1,6 @@
 package com.noveogroup.clap.web;
 
+import com.google.common.collect.Lists;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
@@ -21,7 +22,6 @@ import javax.inject.Named;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -67,7 +67,7 @@ public class HelloBean {
 
 
     public Collection<SelectItem> autocompleteMethod(){
-        final List<SelectItem> ret = new ArrayList<SelectItem>();
+        final List<SelectItem> ret = Lists.newArrayList();
         ret.add(new SelectItem(1,"111"));
         ret.add(new SelectItem(2,"222"));
         ret.add(new SelectItem(3,"333"));

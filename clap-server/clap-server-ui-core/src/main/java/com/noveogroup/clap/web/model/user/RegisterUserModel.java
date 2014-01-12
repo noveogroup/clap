@@ -1,6 +1,6 @@
 package com.noveogroup.clap.web.model.user;
 
-import com.noveogroup.clap.model.user.User;
+import com.noveogroup.clap.model.user.UserCreationModel;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
@@ -11,15 +11,11 @@ import java.io.Serializable;
  */
 @Named
 @SessionScoped
-public class UserInfoModel implements Serializable{
+public class RegisterUserModel implements Serializable{
 
-    private User user;
+    private UserCreationModel user = new UserCreationModel();
 
-    public User getUser() {
+    public UserCreationModel getUser() {
         return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 }

@@ -2,7 +2,7 @@ package com.noveogroup.clap;
 
 import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
 import com.noveogroup.clap.model.revision.Revision;
-import com.noveogroup.clap.model.user.RequestUserModel;
+import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.rest.RevisionEndpoint;
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -51,7 +51,7 @@ public class UploaderMojo extends AbstractClapMojo {
                 FileInputStream data = new FileInputStream(artifactFile);
                 RevisionEndpoint revisionEndpoint = ProxyFactory.create(RevisionEndpoint.class, serviceUrl);
 
-                RequestUserModel user = new RequestUserModel();
+                Authentication user = new Authentication();
                 user.setLogin(clapLogin);
                 user.setPassword(clapPassword);
                 CreateOrUpdateRevisionRequest createOrUpdateRevisionRequest = new CreateOrUpdateRevisionRequest();

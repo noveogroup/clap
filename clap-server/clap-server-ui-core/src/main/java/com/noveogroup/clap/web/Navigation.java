@@ -5,7 +5,8 @@ public enum Navigation {
     REVISION("revision", true),
     PROJECT("project", true),
     PROJECTS("projects", true),
-    USER_INFO("userInfo",true),
+    EDIT_USER("editUser",true),
+    USERS_LIST("users",true),
     SAME_PAGE("", false);
 
     private final boolean facesRedirect;

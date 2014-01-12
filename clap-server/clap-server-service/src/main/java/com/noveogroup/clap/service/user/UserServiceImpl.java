@@ -1,14 +1,18 @@
 package com.noveogroup.clap.service.user;
 
+import com.google.common.collect.Lists;
 import com.noveogroup.clap.auth.AuthenticationRequired;
 import com.noveogroup.clap.auth.PasswordsHashCalculator;
+import com.noveogroup.clap.auth.constraints.InRole;
+import com.noveogroup.clap.auth.constraints.Self;
 import com.noveogroup.clap.dao.UserDAO;
 import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.exception.ClapAuthenticationFailedException;
 import com.noveogroup.clap.exception.ClapUserNotFoundException;
 import com.noveogroup.clap.exception.WrapException;
 import com.noveogroup.clap.interceptor.ClapMainInterceptor;
-import com.noveogroup.clap.model.user.RequestUserModel;
+import com.noveogroup.clap.model.auth.Authentication;
+import com.noveogroup.clap.model.user.Role;
 import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.model.user.UserCreationModel;
 import com.noveogroup.clap.model.user.UserWithPersistedAuth;
@@ -23,6 +27,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.Interceptors;
+import java.util.List;
 
 /**
  * @author Andrey Sokolov
@@ -64,10 +69,10 @@ public class UserServiceImpl implements UserService {
     @AuthenticationRequired
     @WrapException
     @Override
-    public User saveUser(final User user) {
+    public User saveUser(@Self final User user) {
         final UserEntity userEntity = userDAO.getUserByLogin(user.getLogin());
-        userEntity.setLogin(user.getLogin());
         userEntity.setFullName(user.getFullName());
+        userEntity.setRole(user.getRole());
         //TODO when we will have more info
         final UserEntity updatedUserEnity = userDAO.persist(userEntity);
         final User updatedUser = MAPPER.map(updatedUserEnity,User.class);
@@ -77,9 +82,9 @@ public class UserServiceImpl implements UserService {
 
     @WrapException
     @Override
-    public void resetUserPassword(final RequestUserModel requestUserModel,final String newPassword) {
-        final UserEntity userEntity = userDAO.getUserByLogin(requestUserModel.getLogin());
-        final String oldPassHash = PasswordsHashCalculator.calculatePasswordHash(requestUserModel.getPassword());
+    public void resetUserPassword(final Authentication authentication,final String newPassword) {
+        final UserEntity userEntity = userDAO.getUserByLogin(authentication.getLogin());
+        final String oldPassHash = PasswordsHashCalculator.calculatePasswordHash(authentication.getPassword());
         if(StringUtils.equals(oldPassHash,userEntity.getAuthenticationKey())){
             userEntity.setAuthenticationKey(PasswordsHashCalculator.calculatePasswordHash(newPassword));
             userDAO.persist(userEntity);
@@ -88,11 +93,24 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-
     @AuthenticationRequired
+    @InRole(role = Role.ADMIN)
+    @WrapException
+    @Override
+    public List<User> getUsers() {
+        final List<UserEntity> userEntities = userDAO.selectAll();
+        final List<User> users = Lists.newArrayList();
+        for (UserEntity userEntity : userEntities){
+            users.add(MAPPER.map(userEntity,User.class));
+        }
+        return users;
+    }
+
+
     @WrapException
     @Override
     public User createUser(final UserCreationModel user) {
+        user.setRole(Role.DEVELOPER);
         UserEntity userEntity = MAPPER.map(user, UserEntity.class);
         userEntity.setAuthenticationKey(PasswordsHashCalculator.calculatePasswordHash(user.getPassword()));
         userEntity = userDAO.persist(userEntity);

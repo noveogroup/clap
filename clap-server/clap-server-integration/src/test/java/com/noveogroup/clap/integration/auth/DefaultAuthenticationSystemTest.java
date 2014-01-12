@@ -1,6 +1,6 @@
 package com.noveogroup.clap.integration.auth;
 
-import com.noveogroup.clap.model.user.RequestUserModel;
+import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.user.UserWithPersistedAuth;
 import org.junit.Test;
 
@@ -15,7 +15,7 @@ public class DefaultAuthenticationSystemTest {
 
     @Test
     public void testCheckAuth() throws Exception {
-        RequestUserModel requestUer = new RequestUserModel();
+        Authentication requestUer = new Authentication();
         requestUer.setPassword("123");
         UserWithPersistedAuth persistedUser = new UserWithPersistedAuth();
         persistedUser.setAuthenticationKey("202cb962ac59075b964b07152d234b70");
@@ -24,6 +24,6 @@ public class DefaultAuthenticationSystemTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testCheckAuth2() throws Exception {
-        system.checkAuth(new RequestUserModel(), new UserWithPersistedAuth());
+        system.checkAuth(new Authentication(), new UserWithPersistedAuth());
     }
 }
