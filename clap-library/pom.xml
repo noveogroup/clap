@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <groupId>com.noveogroup.clap</groupId>
+    <artifactId>clap-library</artifactId>
+    <packaging>pom</packaging>
+    <version>1.0-SNAPSHOT</version>
+    <modelVersion>4.0.0</modelVersion>
+    <modules>
+        <module>clap-library-logger</module>
+        <module>clap-library-common</module>
+    </modules>
+    <properties>
+
+        <android.version>4.2.2_r2</android.version>
+        <aspectjrt.version>1.7.2</aspectjrt.version>
+        <aspectj-maven-plugin.version>1.4</aspectj-maven-plugin.version>
+        <aspectj-maven-plugin.argumentFileName>clap-trace.lst</aspectj-maven-plugin.argumentFileName>
+        <aspectj-maven-plugin.complianceLevel>1.6</aspectj-maven-plugin.complianceLevel>
+        <maven-compiler-plugin.version>3.1</maven-compiler-plugin.version>
+        <maven-compiler-plugin.target>1.6</maven-compiler-plugin.target>
+        <maven-compiler-plugin.source>1.6</maven-compiler-plugin.source>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>android</groupId>
+                <artifactId>android</artifactId>
+                <version>${android.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.aspectj</groupId>
+                <artifactId>aspectjrt</artifactId>
+                <version>${aspectjrt.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>aspectj-maven-plugin</artifactId>
+                    <version>${aspectj-maven-plugin.version}</version>
+                    <configuration>
+                        <argumentFileName>${aspectj-maven-plugin.argumentFileName}</argumentFileName>
+                        <complianceLevel>${aspectj-maven-plugin.complianceLevel}</complianceLevel>
+                    </configuration>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven-compiler-plugin.version}</version>
+                    <configuration>
+                        <target>${maven-compiler-plugin.target}</target>
+                        <source>${maven-compiler-plugin.source}</source>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+
+
+</project>

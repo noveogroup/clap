@@ -1,0 +1,3 @@
+# Build instructions
+Для успешного билда пользуемся вот этой штукой, делаем все по инструкции https://github.com/mosabua/maven-android-sdk-deployer?source=cr
+Важно: не забудьте выполнить команду "mvn install -Dextras.compatibility.v4.groupid=com.google.android -Dextras.compatibility.v4.artifactid=support-v4 -Dextras.compatibility.v4.version.prefix=r" из папки с Android deployer, иначе не будет проходить сборка HoloEverywhere.
