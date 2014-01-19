@@ -2,14 +2,6 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
     version="3.0">
-    <login-config>
-        <auth-method>FORM</auth-method>
-        <realm-name>admin-realm</realm-name>
-        <form-login-config>
-            <form-login-page>/auth/default.xhtml</form-login-page>
-            <form-error-page>/auth/loginerror.xhtml</form-error-page>
-        </form-login-config>
-    </login-config>
 
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
@@ -28,39 +20,15 @@
         <param-value>/WEB-INF/faces-config.xml</param-value>
     </context-param>
 
-    <context-param>
-        <param-name>resteasy.injector.factory</param-name>
-        <param-value>org.jboss.resteasy.cdi.CdiInjectorFactory</param-value>
-    </context-param>
 
-    <context-param>
-        <param-name>resteasy.scan</param-name>
-        <param-value>true</param-value>
-    </context-param>
-
-    <!-- this need same with resteasy servlet url-pattern -->
-    <context-param>
-        <param-name>resteasy.servlet.mapping.prefix</param-name>
-        <param-value>/rest</param-value>
-    </context-param>
-
-    <listener>
-        <listener-class>
-            org.jboss.resteasy.plugins.server.servlet.ResteasyBootstrap
-        </listener-class>
-    </listener>
-
-    <servlet>
-        <servlet-name>resteasy-servlet</servlet-name>
-        <servlet-class>
-            org.jboss.resteasy.plugins.server.servlet.HttpServletDispatcher
-        </servlet-class>
-    </servlet>
-
-    <servlet-mapping>
-        <servlet-name>resteasy-servlet</servlet-name>
-        <url-pattern>/rest/*</url-pattern>
-    </servlet-mapping>
+    <filter>
+        <filter-name>CLAP add request helper filter</filter-name>
+        <filter-class>com.noveogroup.clap.web.auth.AddRequestHelperFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CLAP add request helper filter</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+    </filter-mapping>
 
     <filter>
         <filter-name>PrimeFaces FileUpload Filter</filter-name>
@@ -70,4 +38,45 @@
         <filter-name>PrimeFaces FileUpload Filter</filter-name>
         <servlet-name>Faces Servlet</servlet-name>
     </filter-mapping>
+
+    <context-param>
+        <param-name>casServerLoginUrl</param-name>
+        <param-value>https://cas.noveogroup.com/login</param-value>
+    </context-param>
+    <context-param>
+        <param-name>serverName</param-name>
+        <param-value>http://localhost:8080</param-value>
+    </context-param>
+
+    <!--
+    <filter>
+        <filter-name>CAS Authentication Filter</filter-name>
+        <filter-class>org.jasig.cas.client.authentication.Saml11AuthenticationFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>CAS Validation Filter</filter-name>
+        <filter-class>org.jasig.cas.client.validation.Saml11TicketValidationFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+        <filter-class>org.jasig.cas.client.util.HttpServletRequestWrapperFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CAS Authentication Filter</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS Validation Filter</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+        <servlet-name>Faces Servlet</servlet-name>
+    </filter-mapping>
+    -->
+
+
+    <welcome-file-list>
+        <welcome-file>index.xhtml</welcome-file>
+    </welcome-file-list>
 </web-app>

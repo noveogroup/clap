@@ -1,6 +1,6 @@
 package com.noveogroup.clap.auth.constraints;
 
-import com.noveogroup.clap.integration.auth.AuthenticationConstraint;
+import com.noveogroup.clap.auth.AuthenticationConstraint;
 import com.noveogroup.clap.model.auth.ConstraintViolation;
 import com.noveogroup.clap.model.user.Role;
 import com.noveogroup.clap.model.user.User;

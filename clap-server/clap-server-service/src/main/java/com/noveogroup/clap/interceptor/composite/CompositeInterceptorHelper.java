@@ -1,5 +1,6 @@
 package com.noveogroup.clap.interceptor.composite;
 
+import com.noveogroup.clap.integration.RequestHelperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

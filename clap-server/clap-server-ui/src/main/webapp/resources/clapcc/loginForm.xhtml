@@ -7,7 +7,7 @@
     <h:form rendered="#{not userSessionData.authenticated}">
         <h:commandButton value="#{msgs['common.form.label.login']}"
                          immediate="true"
-                         action="#{webIntegrationBean.authenticationIntegrationView.viewName}"/>
+                         action="authentication"/>
         <h:commandButton value="#{msgs['common.form.label.register']}"
                          immediate="true"
                          action="registerUser"

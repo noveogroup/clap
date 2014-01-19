@@ -6,9 +6,10 @@
         <artifactId>clap-server</artifactId>
         <groupId>com.noveogroup.clap</groupId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <packaging>jar</packaging>
+    <packaging>ejb</packaging>
 
     <name>CLAP server service layer</name>
 
@@ -17,13 +18,7 @@
     <dependencies>
         <dependency>
             <groupId>com.noveogroup.clap</groupId>
-            <artifactId>clap-server-db</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <scope>provided</scope>
+            <artifactId>clap-server-model</artifactId>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -56,6 +51,10 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
         </dependency>
     </dependencies>
 

@@ -1,8 +1,8 @@
 package com.noveogroup.clap.validation;
 
 import com.noveogroup.clap.exception.ClapValidationException;
+import com.noveogroup.clap.integration.RequestHelperFactory;
 import com.noveogroup.clap.interceptor.composite.LightInterceptor;
-import com.noveogroup.clap.interceptor.composite.RequestHelperFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,15 +1,15 @@
 package com.noveogroup.clap.auth;
 
 import com.noveogroup.clap.config.ConfigBean;
-import com.noveogroup.clap.integration.auth.AuthenticationSystem;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
-import javax.enterprise.inject.Any;
+import javax.enterprise.inject.Default;
 import javax.enterprise.inject.Instance;
+import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 
 /**
@@ -25,7 +25,7 @@ public class AuthenticationSystemFactory {
     private ConfigBean configBean;
 
     @Inject
-    @Any
+    @Default
     private Instance<AuthenticationSystem> authenticationSystems;
 
     private AuthenticationSystem selectedAuthenticationSystem;
@@ -51,6 +51,8 @@ public class AuthenticationSystemFactory {
         }
     }
 
+    @Produces
+    @FromFactory
     public AuthenticationSystem getAuthenticationSystem(){
         return selectedAuthenticationSystem;
     }

@@ -94,7 +94,7 @@
     <properties>
         <!-- versions -->
         <maven-compiler-plugin.version>3.0</maven-compiler-plugin.version>
-        <maven-checkstyle-plugin.version>2.9.1</maven-checkstyle-plugin.version>
+        <maven-checkstyle-plugin.version>2.11</maven-checkstyle-plugin.version>
         <junit.version>4.11</junit.version>
         <maven-javadoc-plugin.version>2.9</maven-javadoc-plugin.version>
         <maven-surefire-plugin.version>2.14</maven-surefire-plugin.version>
@@ -111,22 +111,20 @@
         <powermock.version>1.5</powermock.version>
         <glassfish-embedded-all.version>3.1.1</glassfish-embedded-all.version>
         <javaee-api.version>6.0</javaee-api.version>
-        <jsf-api.version>2.1</jsf-api.version>
         <primefaces.version>3.5</primefaces.version>
-        <jersey.version>1.17.1</jersey.version>
         <slf4j.version>1.7.5</slf4j.version>
         <logback.version>1.0.12</logback.version>
         <dozer.version>5.4.0</dozer.version>
-        <jax-rs-api.version>2.0-m16</jax-rs-api.version>
         <hibernate-validator.version>5.0.0.Final</hibernate-validator.version>
         <zxing.version>2.1</zxing.version>
         <commons-io.version>2.4</commons-io.version>
         <commons-fileupload.version>1.3</commons-fileupload.version>
         <commons-collections.version>3.2.1</commons-collections.version>
         <commons-lang.version>2.6</commons-lang.version>
-        <resteasy.version>2.3.6.Final</resteasy.version>
+        <resteasy.version>2.3.7.Final</resteasy.version>
         <gson.version>2.2.4</gson.version>
         <guava.version>14.0.1</guava.version>
+        <cas-client.version>3.2.1</cas-client.version>
     </properties>
 
 
@@ -227,15 +225,11 @@
                 <groupId>javax</groupId>
                 <artifactId>javaee-api</artifactId>
                 <version>${javaee-api.version}</version>
+                <scope>provided</scope>
             </dependency>
 
             <!-- JSF dependensies -->
 
-            <dependency>
-                <groupId>javax.faces</groupId>
-                <artifactId>jsf-api</artifactId>
-                <version>${jsf-api.version}</version>
-            </dependency>
             <dependency>
                 <groupId>org.primefaces</groupId>
                 <artifactId>primefaces</artifactId>
@@ -247,14 +241,7 @@
             <dependency>
                 <groupId>javax.ws.rs</groupId>
                 <artifactId>jsr311-api</artifactId>
-                <version>1.1-ea</version>
-            </dependency>
-
-
-            <dependency>
-                <groupId>org.jboss.resteasy</groupId>
-                <artifactId>jaxrs-api</artifactId>
-                <version>${resteasy.version}</version>
+                <version>1.1.1</version>
             </dependency>
             <dependency>
                 <groupId>org.jboss.resteasy</groupId>
@@ -356,6 +343,12 @@
                 <groupId>com.google.code.gson</groupId>
                 <artifactId>gson</artifactId>
                 <version>${gson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.jasig.cas.client</groupId>
+                <artifactId>cas-client-core</artifactId>
+                <version>${cas-client.version}</version>
             </dependency>
 
         </dependencies>

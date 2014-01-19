@@ -1,5 +1,7 @@
 package com.noveogroup.clap.interceptor.composite;
 
+import com.noveogroup.clap.integration.RequestHelperFactory;
+
 import javax.interceptor.InvocationContext;
 import java.lang.annotation.Annotation;
 import java.util.Map;

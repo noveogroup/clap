@@ -6,27 +6,22 @@
         <artifactId>clap-server</artifactId>
         <groupId>com.noveogroup.clap</groupId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>clap-server-db</artifactId>
     <name>CLAP server database</name>
-    <packaging>jar</packaging>
+    <packaging>ejb</packaging>
 
 
     <dependencies>
         <dependency>
             <groupId>com.noveogroup.clap</groupId>
             <artifactId>clap-server-model</artifactId>
-            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>javax</groupId>
-            <artifactId>javaee-api</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.glassfish.extras</groupId>
@@ -47,6 +42,14 @@
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
         </dependency>
 
     </dependencies>

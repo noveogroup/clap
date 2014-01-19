@@ -50,7 +50,7 @@ public class ConfigBeanTest {
         assertEquals(properties,configBean.getProperties());
 
         assertEquals("DEFAULT",configBean.getAuthenticationSystemId());
-        assertEquals("http://localhost:8080/clap-server-ui-1.0-SNAPSHOT/rest/downloadAPK/{id}/{type}",configBean.getDownloadApkUrl());
+        assertEquals("http://localhost:8080/clap-rest/apk/{id}/{type}",configBean.getDownloadApkUrl());
         assertEquals(30000000,configBean.getMaxApkSize());
         assertEquals(60000,configBean.getTempFilesCleanInterval());
         assertEquals(TEMP_FILES_DIR_PROPERTY,configBean.getTempFilesDir());
