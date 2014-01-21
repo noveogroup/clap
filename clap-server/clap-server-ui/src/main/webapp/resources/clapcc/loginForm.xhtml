@@ -15,7 +15,7 @@
     </h:form>
     <h:form rendered="#{userSessionData.authenticated}">
         <h:link value="#{userSessionData.userLink}"
-                outcome="editUser"/>
+                outcome="inner/editUser"/>
         <h:commandButton value="#{msgs['common.form.label.logout']}"
                          immediate="true"
                          action="#{authenticationController.logout}"/>

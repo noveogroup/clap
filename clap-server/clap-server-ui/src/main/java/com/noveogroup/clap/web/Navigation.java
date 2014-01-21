@@ -2,11 +2,11 @@ package com.noveogroup.clap.web;
 
 public enum Navigation {
     HOME("index",true),
-    REVISION("revision", true),
-    PROJECT("project", true),
-    PROJECTS("projects", true),
-    EDIT_USER("editUser",true),
-    USERS_LIST("users",true),
+    REVISION("inner/revision", true),
+    PROJECT("inner/project", true),
+    PROJECTS("inner/projects", true),
+    EDIT_USER("inner/editUser",true),
+    USERS_LIST("inner/users",true),
     AUTH("authentication",true),
     SAME_PAGE("", false);
 

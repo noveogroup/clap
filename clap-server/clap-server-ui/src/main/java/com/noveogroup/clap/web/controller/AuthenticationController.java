@@ -7,6 +7,7 @@ import com.noveogroup.clap.integration.RequestHelperFactory;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.user.UserSessionData;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Inject;
@@ -44,6 +45,7 @@ public class AuthenticationController {
 
     public String logout(){
         userSessionData.reset();
+        SecurityUtils.getSubject().logout();
         return Navigation.HOME.getView();
     }
 }

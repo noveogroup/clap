@@ -20,6 +20,24 @@
         <param-value>/WEB-INF/faces-config.xml</param-value>
     </context-param>
 
+    <listener>
+        <listener-class>org.apache.shiro.web.env.EnvironmentLoaderListener</listener-class>
+    </listener>
+
+
+    <filter>
+        <filter-name>ShiroFilter</filter-name>
+        <filter-class>org.apache.shiro.web.servlet.ShiroFilter</filter-class>
+    </filter>
+
+    <filter-mapping>
+        <filter-name>ShiroFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+        <dispatcher>INCLUDE</dispatcher>
+        <dispatcher>ERROR</dispatcher>
+    </filter-mapping>
 
     <filter>
         <filter-name>CLAP add request helper filter</filter-name>
@@ -38,42 +56,6 @@
         <filter-name>PrimeFaces FileUpload Filter</filter-name>
         <servlet-name>Faces Servlet</servlet-name>
     </filter-mapping>
-
-    <context-param>
-        <param-name>casServerLoginUrl</param-name>
-        <param-value>https://cas.noveogroup.com/login</param-value>
-    </context-param>
-    <context-param>
-        <param-name>serverName</param-name>
-        <param-value>http://localhost:8080</param-value>
-    </context-param>
-
-    <!--
-    <filter>
-        <filter-name>CAS Authentication Filter</filter-name>
-        <filter-class>org.jasig.cas.client.authentication.Saml11AuthenticationFilter</filter-class>
-    </filter>
-    <filter>
-        <filter-name>CAS Validation Filter</filter-name>
-        <filter-class>org.jasig.cas.client.validation.Saml11TicketValidationFilter</filter-class>
-    </filter>
-    <filter>
-        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
-        <filter-class>org.jasig.cas.client.util.HttpServletRequestWrapperFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>CAS Authentication Filter</filter-name>
-        <servlet-name>Faces Servlet</servlet-name>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>CAS Validation Filter</filter-name>
-        <servlet-name>Faces Servlet</servlet-name>
-    </filter-mapping>
-    <filter-mapping>
-        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
-        <servlet-name>Faces Servlet</servlet-name>
-    </filter-mapping>
-    -->
 
 
     <welcome-file-list>

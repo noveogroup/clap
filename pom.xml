@@ -125,6 +125,7 @@
         <gson.version>2.2.4</gson.version>
         <guava.version>14.0.1</guava.version>
         <cas-client.version>3.2.1</cas-client.version>
+        <shiro.version>1.2.2</shiro.version>
     </properties>
 
 
@@ -264,6 +265,28 @@
                 <artifactId>resteasy-cdi</artifactId>
                 <version>${resteasy.version}</version>
             </dependency>
+
+            <!-- security-->
+
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-core</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-web</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.shiro</groupId>
+                <artifactId>shiro-cas</artifactId>
+                <version>${shiro.version}</version>
+            </dependency>
+
+
 
             <!-- javax dependecies -->
             <dependency>

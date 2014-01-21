@@ -8,7 +8,7 @@
       xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/template.xhtml">
     <ui:define name="menuItems">
-        <p:menuitem value="#{msgs['menu.project.view']}" action="project?faces-redirect=true"/>
+        <p:menuitem value="#{msgs['menu.project.view']}" action="innner/project?faces-redirect=true"/>
     </ui:define>
     <ui:define name="content">
         <f:event type="preRenderView" listener="#{revisionsController.prepareRevisionView}"/>
