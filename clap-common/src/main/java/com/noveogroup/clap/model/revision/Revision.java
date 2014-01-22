@@ -2,7 +2,6 @@ package com.noveogroup.clap.model.revision;
 
 import com.noveogroup.clap.model.BaseModel;
 import com.noveogroup.clap.model.message.Message;
-import com.noveogroup.clap.model.user.User;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -28,7 +27,7 @@ public class Revision extends BaseModel {
 
     private String specialPackageUrl;
 
-    private User uploadedBy;
+    private String uploadedBy;
 
 
     public Revision() {
@@ -97,11 +96,11 @@ public class Revision extends BaseModel {
         this.hash = hash;
     }
 
-    public User getUploadedBy() {
+    public String getUploadedBy() {
         return uploadedBy;
     }
 
-    public void setUploadedBy(final User uploadedBy) {
+    public void setUploadedBy(final String uploadedBy) {
         this.uploadedBy = uploadedBy;
     }
 

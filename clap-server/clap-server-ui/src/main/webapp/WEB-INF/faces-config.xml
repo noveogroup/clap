@@ -17,7 +17,8 @@
 
     </application>
     <factory>
-        <exception-handler-factory>com.noveogroup.clap.web.exception.ClapExceptionHandlerFactory</exception-handler-factory>
+        <exception-handler-factory>com.noveogroup.clap.web.exception.ClapExceptionHandlerFactory
+        </exception-handler-factory>
     </factory>
     <converter>
         <converter-id>TimestampConverter</converter-id>

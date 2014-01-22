@@ -37,13 +37,4 @@
     </servlet-mapping>
 
 
-    <filter>
-        <filter-name>CLAP add request helper filter</filter-name>
-        <filter-class>com.noveogroup.clap.rest.AddRequestHelperFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>CLAP add request helper filter</filter-name>
-        <servlet-name>resteasy-servlet</servlet-name>
-    </filter-mapping>
-
 </web-app>

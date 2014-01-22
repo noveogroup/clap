@@ -52,7 +52,7 @@ public class TempFilesDirectoryCleaner {
             }
         }
         final String name = file.getName();
-        if(file.delete()){
+        if (file.delete()) {
             LOGGER.debug(name + " deleted");
         } else {
             LOGGER.debug(name + " not deleted");

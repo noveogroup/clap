@@ -61,7 +61,7 @@ public class ConfigBean {
 
     private void checkIfDir(final String dirPath) {
         if (!new File(dirPath).isDirectory()) {
-            throw new IllegalArgumentException("Configured "+dirPath+" directory is not directory");
+            throw new IllegalArgumentException("Configured " + dirPath + " directory is not directory");
         }
     }
 }

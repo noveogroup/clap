@@ -19,8 +19,8 @@ public class VariablableProperties extends Properties {
         if (value != null) {
             int startIndex = 0;
             int endIndex = 0;
-            while ( (startIndex = value.indexOf(START_DELIMITER, endIndex)) >= 0
-                    && (endIndex = value.indexOf(END_DELIMITER, startIndex) ) >= 0) {
+            while ((startIndex = value.indexOf(START_DELIMITER, endIndex)) >= 0
+                    && (endIndex = value.indexOf(END_DELIMITER, startIndex)) >= 0) {
 
                 final String variableName = value.substring(startIndex + START_DELIMITER.length(), endIndex);
                 // now call getProperty recursively to have this looked up

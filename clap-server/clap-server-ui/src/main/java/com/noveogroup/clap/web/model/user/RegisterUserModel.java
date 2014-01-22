@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 @Named
 @SessionScoped
-public class RegisterUserModel implements Serializable{
+public class RegisterUserModel implements Serializable {
 
     private UserCreationModel user = new UserCreationModel();
 

@@ -76,9 +76,9 @@ public abstract class GenericHibernateDAOImpl<T, ID extends Serializable> implem
         final Root<T> rc = cq.from(persistentClass);
         cq.select(rc);
         final TypedQuery<T> query = entityManager.createQuery(cq);
-        try{
+        try {
             return query.getResultList();
-        } catch (NoResultException e){
+        } catch (NoResultException e) {
             return Lists.newArrayList();
         }
 

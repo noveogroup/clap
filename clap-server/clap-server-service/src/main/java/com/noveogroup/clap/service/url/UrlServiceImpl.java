@@ -15,8 +15,8 @@ public class UrlServiceImpl implements UrlService {
 
     @Override
     public String createUrl(final Long revisionId, final boolean isMainPackage) {
-        String url = StringUtils.replace(configBean.getDownloadApkUrl(),ID_TEMPLATE,Long.toString(revisionId));
-        url = StringUtils.replace(url,TYPE_TEMPLATE, isMainPackage ? "0" : "1");
+        String url = StringUtils.replace(configBean.getDownloadApkUrl(), ID_TEMPLATE, Long.toString(revisionId));
+        url = StringUtils.replace(url, TYPE_TEMPLATE, isMainPackage ? "0" : "1");
         return url;
     }
 }

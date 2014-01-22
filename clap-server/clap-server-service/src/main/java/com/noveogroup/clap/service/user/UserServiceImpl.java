@@ -1,16 +1,12 @@
 package com.noveogroup.clap.service.user;
 
 import com.google.common.collect.Lists;
-import com.noveogroup.clap.auth.AuthenticationRequired;
 import com.noveogroup.clap.auth.PasswordsHashCalculator;
-import com.noveogroup.clap.auth.constraints.InRole;
-import com.noveogroup.clap.auth.constraints.Self;
 import com.noveogroup.clap.dao.UserDAO;
 import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.exception.ClapAuthenticationFailedException;
 import com.noveogroup.clap.exception.ClapUserNotFoundException;
 import com.noveogroup.clap.exception.WrapException;
-import com.noveogroup.clap.interceptor.ClapMainInterceptor;
 import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.user.Role;
 import com.noveogroup.clap.model.user.User;
@@ -26,7 +22,6 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
-import javax.interceptor.Interceptors;
 import java.util.List;
 
 /**
@@ -34,7 +29,6 @@ import java.util.List;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
-@Interceptors({ClapMainInterceptor.class})
 public class UserServiceImpl implements UserService {
 
     private static final Mapper MAPPER = new DozerBeanMapper();
@@ -52,40 +46,38 @@ public class UserServiceImpl implements UserService {
         }
         final UserEntity userEntity = userDAO.getUserByLogin(login);
         if (userEntity != null) {
-            return MAPPER.map(userEntity,UserWithPersistedAuth.class);
+            return MAPPER.map(userEntity, UserWithPersistedAuth.class);
         } else {
             throw new ClapUserNotFoundException("requested login == " + login);
         }
     }
 
-    @AuthenticationRequired
     @Override
     public User getUser(final String login) {
         final UserEntity userEntity = userDAO.getUserByLogin(login);
-        final User user = MAPPER.map(userEntity,User.class);
+        final User user = MAPPER.map(userEntity, User.class);
         return user;
     }
 
-    @AuthenticationRequired
     @WrapException
     @Override
-    public User saveUser(@Self final User user) {
+    public User saveUser(final User user) {
         final UserEntity userEntity = userDAO.getUserByLogin(user.getLogin());
         userEntity.setFullName(user.getFullName());
         userEntity.setRole(user.getRole());
         //TODO when we will have more info
         final UserEntity updatedUserEnity = userDAO.persist(userEntity);
-        final User updatedUser = MAPPER.map(updatedUserEnity,User.class);
+        final User updatedUser = MAPPER.map(updatedUserEnity, User.class);
         return updatedUser;
     }
 
 
     @WrapException
     @Override
-    public void resetUserPassword(final Authentication authentication,final String newPassword) {
+    public void resetUserPassword(final Authentication authentication, final String newPassword) {
         final UserEntity userEntity = userDAO.getUserByLogin(authentication.getLogin());
         final String oldPassHash = PasswordsHashCalculator.calculatePasswordHash(authentication.getPassword());
-        if(StringUtils.equals(oldPassHash,userEntity.getAuthenticationKey())){
+        if (StringUtils.equals(oldPassHash, userEntity.getAuthenticationKey())) {
             userEntity.setAuthenticationKey(PasswordsHashCalculator.calculatePasswordHash(newPassword));
             userDAO.persist(userEntity);
         } else {
@@ -93,15 +85,13 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    @AuthenticationRequired
-    @InRole(role = Role.ADMIN)
     @WrapException
     @Override
     public List<User> getUsers() {
         final List<UserEntity> userEntities = userDAO.selectAll();
         final List<User> users = Lists.newArrayList();
-        for (UserEntity userEntity : userEntities){
-            users.add(MAPPER.map(userEntity,User.class));
+        for (UserEntity userEntity : userEntities) {
+            users.add(MAPPER.map(userEntity, User.class));
         }
         return users;
     }

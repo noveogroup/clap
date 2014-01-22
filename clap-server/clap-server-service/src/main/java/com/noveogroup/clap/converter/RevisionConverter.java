@@ -28,7 +28,7 @@ public class RevisionConverter {
 
     public Revision map(final RevisionEntity revision) {
         final Revision ret = new Revision();
-        map(ret,revision);
+        map(ret, revision);
         return ret;
     }
 
@@ -52,7 +52,7 @@ public class RevisionConverter {
             }
         }
         final ProjectEntity project = revision.getProject();
-        if(project != null){
+        if (project != null) {
             toMap.setProjectId(project.getId());
         }
         toMap.setRevisionType(revision.getRevisionType());

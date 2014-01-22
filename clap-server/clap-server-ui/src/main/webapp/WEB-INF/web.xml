@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <web-app xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-    version="3.0">
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
 
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
@@ -37,15 +37,6 @@
         <dispatcher>FORWARD</dispatcher>
         <dispatcher>INCLUDE</dispatcher>
         <dispatcher>ERROR</dispatcher>
-    </filter-mapping>
-
-    <filter>
-        <filter-name>CLAP add request helper filter</filter-name>
-        <filter-class>com.noveogroup.clap.web.auth.AddRequestHelperFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>CLAP add request helper filter</filter-name>
-        <servlet-name>Faces Servlet</servlet-name>
     </filter-mapping>
 
     <filter>

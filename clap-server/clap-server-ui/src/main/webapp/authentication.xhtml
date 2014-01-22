@@ -25,7 +25,8 @@
                         value="#{userSessionData.authentication.password}"
                         minLength="0"/>
             </p:panelGrid>
-            <h:commandButton value="#{msgs['common.form.label.submit']}" action="#{authenticationController.authentify}"/>
+            <h:commandButton value="#{msgs['common.form.label.submit']}"
+                             action="#{authenticationController.authentify}"/>
         </h:form>
     </ui:define>
 </ui:composition>

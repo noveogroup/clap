@@ -24,15 +24,15 @@ public class MessageSupport {
         return MessageUtils.getMessage(FacesContext.getCurrentInstance(), bundleVar, messageName, args);
     }
 
-    public void addMessage(final String messageId){
-        addMessage(null,messageId);
+    public void addMessage(final String messageId) {
+        addMessage(null, messageId);
     }
 
-    public void addMessage(final String componentId,final String messageId){
+    public void addMessage(final String componentId, final String messageId) {
         addMessage(componentId, new FacesMessage(getMessage(messageId)));
     }
 
-    public void addMessage(final String componentId,final FacesMessage facesMessage){
-        FacesContext.getCurrentInstance().addMessage(componentId,facesMessage);
+    public void addMessage(final String componentId, final FacesMessage facesMessage) {
+        FacesContext.getCurrentInstance().addMessage(componentId, facesMessage);
     }
 }

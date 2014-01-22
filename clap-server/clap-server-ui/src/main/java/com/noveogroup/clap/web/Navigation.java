@@ -1,13 +1,13 @@
 package com.noveogroup.clap.web;
 
 public enum Navigation {
-    HOME("index",true),
+    HOME("index", true),
     REVISION("inner/revision", true),
     PROJECT("inner/project", true),
     PROJECTS("inner/projects", true),
-    EDIT_USER("inner/editUser",true),
-    USERS_LIST("inner/users",true),
-    AUTH("authentication",true),
+    EDIT_USER("inner/editUser", true),
+    USERS_LIST("inner/users", true),
+    AUTH("authentication", true),
     SAME_PAGE("", false);
 
     private final boolean facesRedirect;

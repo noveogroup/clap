@@ -5,7 +5,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 /**
  * @author Andrey Sokolov
  */
-public class UserWithPersistedAuth extends User{
+public class UserWithPersistedAuth extends User {
     private String authenticationKey;
 
     public String getAuthenticationKey() {

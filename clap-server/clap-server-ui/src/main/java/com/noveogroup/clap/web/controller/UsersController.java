@@ -5,9 +5,9 @@ import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.service.user.UserService;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.user.ResetPasswordModel;
+import com.noveogroup.clap.web.model.user.UserSessionData;
 import com.noveogroup.clap.web.model.user.UsersListDataModel;
 import com.noveogroup.clap.web.model.user.UsersModel;
-import com.noveogroup.clap.web.model.user.UserSessionData;
 import com.noveogroup.clap.web.util.message.MessageSupport;
 import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
@@ -23,7 +23,7 @@ import java.util.List;
  */
 @Named
 @RequestScoped
-public class UsersController extends BaseController{
+public class UsersController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UsersController.class);
 
@@ -44,12 +44,12 @@ public class UsersController extends BaseController{
 
     public void prepareUserInfoView() {
         final User user = usersModel.getUser();
-        if(user == null){
+        if (user == null) {
             usersModel.setUser(userSessionData.getUser());
         }
     }
 
-    public void prepareUsersListView(){
+    public void prepareUsersListView() {
         final List<User> users = userService.getUsers();
         usersModel.setUsersListDataModel(new UsersListDataModel(users));
     }

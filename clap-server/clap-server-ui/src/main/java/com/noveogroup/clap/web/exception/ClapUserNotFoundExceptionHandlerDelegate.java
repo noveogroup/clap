@@ -15,7 +15,6 @@ import java.io.IOException;
 public class ClapUserNotFoundExceptionHandlerDelegate implements ExceptionHandlerDelegate<ClapUserNotFoundException> {
 
 
-
     @Override
     public boolean handle(FacesContext context, ClapUserNotFoundException e) throws IOException {
         final FacesMessage message = new FacesMessage();

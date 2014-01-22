@@ -16,6 +16,6 @@
     <logger name="com.noveogroup" level="DEBUG"/>
 
     <root level="INFO">
-        <appender-ref ref="FILE" />
+        <appender-ref ref="FILE"/>
     </root>
 </configuration>

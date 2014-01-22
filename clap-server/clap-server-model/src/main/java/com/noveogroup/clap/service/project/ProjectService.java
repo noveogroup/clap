@@ -34,7 +34,6 @@ public interface ProjectService {
     Project findById(Long id);
 
     /**
-     *
      * @param id
      * @return the same entity as findById() but with iconFile mapped field
      */
@@ -46,7 +45,6 @@ public interface ProjectService {
      * @return the same entity collection as findAllProjects() but with iconFile mapped fields
      */
     List<ImagedProject> findAllImagedProjects();
-
 
 
 }

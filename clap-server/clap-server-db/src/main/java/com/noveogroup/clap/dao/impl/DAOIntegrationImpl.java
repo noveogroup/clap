@@ -10,7 +10,7 @@ import javax.persistence.PersistenceContext;
  * @author Andrey Sokolov
  */
 @ApplicationScoped
-public class DAOIntegrationImpl implements DAOIntegration{
+public class DAOIntegrationImpl implements DAOIntegration {
 
     @PersistenceContext(unitName = "distribution_pu")
     protected EntityManager entityManager;

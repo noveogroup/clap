@@ -1,14 +1,12 @@
 package com.noveogroup.clap.service.revision;
 
 import com.google.gson.Gson;
-import com.noveogroup.clap.auth.AuthenticationRequired;
 import com.noveogroup.clap.converter.RevisionConverter;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.exception.WrapException;
-import com.noveogroup.clap.interceptor.ClapMainInterceptor;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
 import com.noveogroup.clap.model.request.revision.BaseRevisionPackagesRequest;
 import com.noveogroup.clap.model.request.revision.GetApplicationRequest;
@@ -32,7 +30,6 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
-import javax.interceptor.Interceptors;
 import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.FileInputStream;
@@ -45,7 +42,6 @@ import java.util.Date;
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
-@Interceptors({ClapMainInterceptor.class})
 public class RevisionServiceImpl implements RevisionService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RevisionServiceImpl.class);
@@ -66,7 +62,6 @@ public class RevisionServiceImpl implements RevisionService {
     private TempFileService tempFileService;
 
     @WrapException
-    @AuthenticationRequired
     @Override
     public Revision addOrGetRevision(final @NotNull AddOrGetRevisionRequest request) {
         final Revision revision = request.getRevision();
@@ -96,7 +91,7 @@ public class RevisionServiceImpl implements RevisionService {
 
         processPackages(revisionEntity, request);
         projectDAO.persist(projectEntity);
-        revisionEntity = revisionDAO.persist(revisionEntity,request.getMainPackage(),request.getSpecialPackage());
+        revisionEntity = revisionDAO.persist(revisionEntity, request.getMainPackage(), request.getSpecialPackage());
         final Revision outcomeRevision = revisionConverter.map(revisionEntity);
         outcomeRevision.setProjectId(projectEntity.getId());
         createUrls(outcomeRevision, revisionEntity);
@@ -104,7 +99,6 @@ public class RevisionServiceImpl implements RevisionService {
     }
 
     @WrapException
-    @AuthenticationRequired
     @Override
     public Revision updateRevisionPackages(final @NotNull UpdateRevisionPackagesRequest request) {
         final RevisionEntity revisionEntity = revisionDAO.getRevisionByHash(request.getRevisionHash());
@@ -117,24 +111,25 @@ public class RevisionServiceImpl implements RevisionService {
         if (revisionEntity != null) {
             final ApplicationFile ret = new ApplicationFile();
             try {
-            switch (request.getApplicationType()) {
-                case MAIN:
-                    ret.setContent(tempFileService.createTempFile(
-                            revisionEntity.getMainPackage().getBinaryStream()));
-                    ret.setFilename(createFileName(revisionEntity.getProject(), true));
-                    return ret;
-                case SPECIAL:
-                    ret.setContent(tempFileService.createTempFile(
-                            revisionEntity.getSpecialPackage().getBinaryStream()));
-                    ret.setFilename(createFileName(revisionEntity.getProject(), false));
-                    return ret;
-                default:
-                    throw new IllegalArgumentException("unknown application type : " + request.getApplicationType());
-            }
+                switch (request.getApplicationType()) {
+                    case MAIN:
+                        ret.setContent(tempFileService.createTempFile(
+                                revisionEntity.getMainPackage().getBinaryStream()));
+                        ret.setFilename(createFileName(revisionEntity.getProject(), true));
+                        return ret;
+                    case SPECIAL:
+                        ret.setContent(tempFileService.createTempFile(
+                                revisionEntity.getSpecialPackage().getBinaryStream()));
+                        ret.setFilename(createFileName(revisionEntity.getProject(), false));
+                        return ret;
+                    default:
+                        throw new IllegalArgumentException("unknown application type : "
+                                + request.getApplicationType());
+                }
             } catch (IOException e) {
-                LOGGER.error("error getting file",e);
+                LOGGER.error("error getting file", e);
             } catch (SQLException e) {
-                LOGGER.error("error getting file",e);
+                LOGGER.error("error getting file", e);
             }
         }
         return null;
@@ -158,7 +153,7 @@ public class RevisionServiceImpl implements RevisionService {
 
     private Revision updateRevisionPackages(RevisionEntity revisionEntity, final BaseRevisionPackagesRequest request) {
         processPackages(revisionEntity, request);
-        revisionEntity = revisionDAO.persist(revisionEntity,request.getMainPackage(),request.getSpecialPackage());
+        revisionEntity = revisionDAO.persist(revisionEntity, request.getMainPackage(), request.getSpecialPackage());
         final Revision outcomeRevision = revisionConverter.map(revisionEntity);
         createUrls(outcomeRevision, revisionEntity);
         return outcomeRevision;
@@ -170,27 +165,26 @@ public class RevisionServiceImpl implements RevisionService {
      * sets boolean flags in revision entity
      *
      * @param revisionEntity to modify flags
-     * @param request request object, updates stream references in it
+     * @param request        request object, updates stream references in it
      */
     private void processPackages(final RevisionEntity revisionEntity, final BaseRevisionPackagesRequest request) {
         final StreamedPackage mainPackage = request.getMainPackage();
         boolean extractInfo = true;
         if (mainPackage != null) {
-            extractInfo = !processStreamedPackage(revisionEntity,mainPackage,extractInfo);
+            extractInfo = !processStreamedPackage(revisionEntity, mainPackage, extractInfo);
             revisionEntity.setMainPackageLoaded(true);
         }
         final StreamedPackage specialPackage = request.getSpecialPackage();
         if (specialPackage != null) {
-            processStreamedPackage(revisionEntity,specialPackage,extractInfo);
+            processStreamedPackage(revisionEntity, specialPackage, extractInfo);
             revisionEntity.setSpecialPackageLoaded(true);
         }
     }
 
     /**
-     *
      * @param revisionEntity
      * @param streamedPackage
-     * @param extractInfo true if need to extract apk info (icon, structure, etc)
+     * @param extractInfo     true if need to extract apk info (icon, structure, etc)
      * @return true if info was extracted
      */
     private boolean processStreamedPackage(final RevisionEntity revisionEntity,
@@ -199,19 +193,19 @@ public class RevisionServiceImpl implements RevisionService {
         boolean ret = false;
         try {
             final File file = tempFileService.createTempFile(streamedPackage.getStream());
-            if(extractInfo){
+            if (extractInfo) {
                 final ApkInfoMainExtractor mainExtractor = new ApkInfoMainExtractor(file);
                 final IconExtractor iconExtractor = new IconExtractor();
                 mainExtractor.addInfoExtractor(iconExtractor);
                 mainExtractor.processApk();
                 revisionEntity.getProject().setIconFile(iconExtractor.getIcon());
                 final ApkStructure apkStructure = mainExtractor.getStructure();
-                revisionEntity.setApkStructureJSON(new Gson().toJson(apkStructure,ApkStructure.class));
+                revisionEntity.setApkStructureJSON(new Gson().toJson(apkStructure, ApkStructure.class));
                 ret = true;
             }
             streamedPackage.setStream(new FileInputStream(file));
         } catch (IOException e) {
-            LOGGER.error("error while processing: "+streamedPackage,e);
+            LOGGER.error("error while processing: " + streamedPackage, e);
         }
         return ret;
     }

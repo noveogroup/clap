@@ -17,7 +17,7 @@ public interface TempFileService {
      * @return temp file
      * @throws IOException
      */
-    File createTempFile() throws IOException ;
+    File createTempFile() throws IOException;
 
     /**
      * creates new temp file and write input stream in it
@@ -26,5 +26,5 @@ public interface TempFileService {
      * @return temp file with written content
      * @throws IOException
      */
-    File createTempFile(InputStream content) throws IOException ;
+    File createTempFile(InputStream content) throws IOException;
 }

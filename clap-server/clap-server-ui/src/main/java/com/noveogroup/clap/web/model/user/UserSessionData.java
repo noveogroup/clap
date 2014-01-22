@@ -14,7 +14,7 @@ import java.io.Serializable;
  */
 @Named
 @SessionScoped
-public class UserSessionData implements Serializable{
+public class UserSessionData implements Serializable {
 
     private boolean authenticated = false;
 
@@ -52,10 +52,10 @@ public class UserSessionData implements Serializable{
         this.user = user;
     }
 
-    public String getUserLink(){
-        if(user != null){
+    public String getUserLink() {
+        if (user != null) {
             final String fullName = user.getFullName();
-            if(StringUtils.isNotEmpty(fullName)){
+            if (StringUtils.isNotEmpty(fullName)) {
                 return fullName;
             } else {
                 return user.getLogin();
@@ -65,15 +65,15 @@ public class UserSessionData implements Serializable{
         }
     }
 
-    public boolean isAdmin(){
-        if(user != null){
+    public boolean isAdmin() {
+        if (user != null) {
             return Role.ADMIN.equals(user.getRole());
         } else {
             return false;
         }
     }
 
-    public void reset(){
+    public void reset() {
         authenticated = false;
         authentication.setLogin(null);
         authentication.setPassword(null);

@@ -8,9 +8,9 @@ import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.projects.ProjectsListDataModel;
 import com.noveogroup.clap.web.model.projects.ProjectsModel;
+import com.noveogroup.clap.web.model.projects.StreamedImagedProject;
 import com.noveogroup.clap.web.model.revisions.RevisionsListDataModel;
 import com.noveogroup.clap.web.model.revisions.RevisionsModel;
-import com.noveogroup.clap.web.model.projects.StreamedImagedProject;
 import com.noveogroup.clap.web.util.message.MessageSupport;
 import org.primefaces.event.SelectEvent;
 import org.slf4j.Logger;
@@ -45,8 +45,8 @@ public class ProjectsController extends BaseController {
         LOGGER.debug("add project : " + projectsModel.getNewProject());
         try {
             projectService.createProject(projectsModel.getNewProject());
-        } catch (ClapPersistenceException e){
-            throw new ClapPersistenceException(messageSupport.getMessage("project.add.message.exists"),e.getCause());
+        } catch (ClapPersistenceException e) {
+            throw new ClapPersistenceException(messageSupport.getMessage("project.add.message.exists"), e.getCause());
         }
         projectsModel.setNewProject(new Project());
         LOGGER.debug("project saved");

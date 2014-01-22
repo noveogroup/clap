@@ -3,6 +3,8 @@ package com.noveogroup.clap.model.user;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import java.util.List;
+
 /**
  * @author Andrey Sokolov
  */
@@ -10,6 +12,8 @@ public class User extends BaseUser {
     private String fullName;
 
     private Role role;
+
+    private List<ClapPermission> clapPermissions;
 
     public Role getRole() {
         return role;
@@ -25,6 +29,14 @@ public class User extends BaseUser {
 
     public void setFullName(final String fullName) {
         this.fullName = fullName;
+    }
+
+    public List<ClapPermission> getClapPermissions() {
+        return clapPermissions;
+    }
+
+    public void setClapPermissions(final List<ClapPermission> clapPermissions) {
+        this.clapPermissions = clapPermissions;
     }
 
     @Override

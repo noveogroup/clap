@@ -9,7 +9,7 @@ import java.io.Serializable;
  *
  * @author Andrey Sokolov
  */
-public interface ExceptionHandlerDelegate<T extends Throwable> extends Serializable{
+public interface ExceptionHandlerDelegate<T extends Throwable> extends Serializable {
 
     /**
      * @param context context of thrown exception

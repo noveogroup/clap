@@ -39,12 +39,19 @@ public class InitService {
     private RevisionDAO revisionDAO;
 
     @PostConstruct
-    public void initDB(){
+    public void initDB() {
         UserEntity user = new UserEntity();
         user.setLogin("test");
         user.setAuthenticationKey(PasswordsHashCalculator.calculatePasswordHash("123"));
         user.setRole(Role.ADMIN);
         user = userDAO.persist(user);
+
+        user = new UserEntity();
+        user.setLogin("asokolov");
+        user.setAuthenticationKey(PasswordsHashCalculator.calculatePasswordHash("321"));
+        user.setRole(Role.ADMIN);
+        user = userDAO.persist(user);
+
         LOGGER.debug("user created = " + user);
         ProjectEntity project = new ProjectEntity();
         project.setName("test_project");

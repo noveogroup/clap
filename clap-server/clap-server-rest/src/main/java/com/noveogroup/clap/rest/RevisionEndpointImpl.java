@@ -1,8 +1,5 @@
 package com.noveogroup.clap.rest;
 
-
-import com.noveogroup.clap.auth.AuthenticationRequestHelper;
-import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
 import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
 import com.noveogroup.clap.model.request.revision.RevisionRequest;
@@ -36,13 +33,9 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
     @Inject
     private TempFileService tempFileService;
 
-    @Inject
-    private AuthenticationRequestHelper authenticationRequestHelper;
 
     @Override
     public Revision createOrUpdateRevision(final CreateOrUpdateRevisionRequest request) {
-        final Authentication authentication = request.getUser();
-        authenticationRequestHelper.applyAuthentication(authentication);
         final Revision revision = new Revision();
         revision.setHash(request.getRevisionHash());
         final AddOrGetRevisionRequest addOrGetRevisionRequest = new AddOrGetRevisionRequest();

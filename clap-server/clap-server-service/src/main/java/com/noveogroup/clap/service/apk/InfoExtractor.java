@@ -13,8 +13,8 @@ public interface InfoExtractor {
     /**
      * define if processing entry is interested and should be read in memory
      *
-     * @param entry current entry
-     * @param structure apk structure
+     * @param entry           current entry
+     * @param structure       apk structure
      * @param androidManifest android manifest
      * @return true if entry enterested
      */

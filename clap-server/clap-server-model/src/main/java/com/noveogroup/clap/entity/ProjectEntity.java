@@ -24,7 +24,7 @@ public class ProjectEntity extends BaseEntity {
 
     private String name;
 
-    @Column(unique = true,nullable = false)
+    @Column(unique = true, nullable = false)
     private String externalId;
 
     private String description;

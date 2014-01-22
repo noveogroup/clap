@@ -19,13 +19,13 @@
                     packageUrl="#{revisionsModel.selectedRevision.mainPackageUrl}"
                     packageModel="#{revisionsModel.cleanPackageModel}"
                     packageModelEL="revisionsModel.cleanPackageModel"
-                    header="#{msgs['revision.label.exp.clean']}" />
+                    header="#{msgs['revision.label.exp.clean']}"/>
             <clp:packageForm
                     id="hacked"
                     packageUrl="#{revisionsModel.selectedRevision.specialPackageUrl}"
                     packageModel="#{revisionsModel.hackedPackageModel}"
                     packageModelEL="revisionsModel.hackedPackageModel"
-                    header="#{msgs['revision.label.exp.hacked']}" />
+                    header="#{msgs['revision.label.exp.hacked']}"/>
         </p:panelGrid>
 
         <p:panel rendered="#{not empty revisionsModel.selectedRevisionApkStructure}">

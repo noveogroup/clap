@@ -5,7 +5,7 @@ import javax.ejb.ApplicationException;
 /**
  * @author Andrey Sokolov
  */
-@ApplicationException(rollback=true)
+@ApplicationException(rollback = true)
 public class ClapPersistenceException extends ClapException {
 
     public ClapPersistenceException() {

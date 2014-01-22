@@ -1,0 +1,16 @@
+<beans xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+    http://java.sun.com/xml/ns/javaee
+    http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">
+
+    <interceptors>
+        <class>com.noveogroup.clap.security.ShiroSecuredInterceptor</class>
+    </interceptors>
+    <interceptors>
+        <class>com.noveogroup.clap.validation.ValidationInterceptor</class>
+    </interceptors>
+    <interceptors>
+        <class>com.noveogroup.clap.exception.ExceptionWrapperInterceptor</class>
+    </interceptors>
+
+</beans>

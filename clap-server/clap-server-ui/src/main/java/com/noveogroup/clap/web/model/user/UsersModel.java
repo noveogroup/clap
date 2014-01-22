@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 @Named
 @SessionScoped
-public class UsersModel implements Serializable{
+public class UsersModel implements Serializable {
 
     private User user;
 

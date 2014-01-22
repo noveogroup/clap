@@ -20,9 +20,9 @@ import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.projects.ProjectsModel;
+import com.noveogroup.clap.web.model.projects.StreamedImagedProject;
 import com.noveogroup.clap.web.model.revisions.RevisionsListDataModel;
 import com.noveogroup.clap.web.model.revisions.RevisionsModel;
-import com.noveogroup.clap.web.model.projects.StreamedImagedProject;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultStreamedContent;
@@ -71,7 +71,7 @@ public class RevisionsController extends BaseController {
         final Revision revision = new Revision();
         final long timestamp = new Date().getTime();
         revision.setTimestamp(timestamp);
-        revision.setHash("mock_hash_"+timestamp);
+        revision.setHash("mock_hash_" + timestamp);
         final UploadedFile newRevisionCleanApk = revisionsModel.getCleanPackageModel().getUploadApk();
         final UploadedFile newRevisionHackedApk = revisionsModel.getHackedPackageModel().getUploadApk();
 
@@ -111,9 +111,9 @@ public class RevisionsController extends BaseController {
             request.setRevisionId(selectedRevision.getId());
             final RevisionWithApkStructure revWithApkStructure = revisionService.getRevisionWithApkStructure(request);
             revisionsModel.setSelectedRevision(revWithApkStructure);
-            if(revWithApkStructure.getApkStructure() != null){
+            if (revWithApkStructure.getApkStructure() != null) {
                 revisionsModel.setSelectedRevisionApkStructure(
-                        createApkStructureTree(null,revWithApkStructure.getApkStructure().getRootEntry()));
+                        createApkStructureTree(null, revWithApkStructure.getApkStructure().getRootEntry()));
             }
             updateQRCodes(revisionsModel.getSelectedRevision());
             LOGGER.debug(selectedRevision.getId() + " revision preparing finished");
@@ -123,11 +123,11 @@ public class RevisionsController extends BaseController {
     }
 
     private TreeNode createApkStructureTree(final TreeNode root, final ApkEntry apkEntry) {
-        final TreeNode ret = new DefaultTreeNode(apkEntry,root);
+        final TreeNode ret = new DefaultTreeNode(apkEntry, root);
         final List<ApkEntry> innerEntries = apkEntry.getInnerEntries();
-        if(innerEntries != null){
-            for (final ApkEntry innerEntry : innerEntries){
-                createApkStructureTree(ret,innerEntry);
+        if (innerEntries != null) {
+            for (final ApkEntry innerEntry : innerEntries) {
+                createApkStructureTree(ret, innerEntry);
             }
         }
         return ret;

@@ -91,7 +91,7 @@ public class ApkInfoMainExtractor {
         rootEntry.setInnerEntries(new ArrayList<ApkEntry>());
         while (zipentry != null) {
             processEntry(rootEntry, zipentry);
-            manifestInfoExtractor.getManifest(zipentry,zipInputStream);
+            manifestInfoExtractor.getManifest(zipentry, zipInputStream);
             zipentry = zipInputStream.getNextEntry();
         }
         //LOGGER.debug("apk structure : " + ret);

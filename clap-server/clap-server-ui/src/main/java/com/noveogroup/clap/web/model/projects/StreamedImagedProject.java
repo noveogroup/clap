@@ -21,7 +21,7 @@ public class StreamedImagedProject extends ImagedProject {
     }
 
     public StreamedContent getStreamedIconFile() {
-        if(streamedIconFile == null && getIconFile() != null){
+        if (streamedIconFile == null && getIconFile() != null) {
             streamedIconFile = new DefaultStreamedContent(new ByteArrayInputStream(getIconFile()));
         }
         return streamedIconFile;

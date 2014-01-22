@@ -19,13 +19,13 @@ public class CommonModels {
     private final List<SelectItem> roles = Lists.newArrayList();
 
     @PostConstruct
-    public void setup(){
-        for(Role role : Role.values()){
-            roles.add(new SelectItem(role,role.name()));
+    public void setup() {
+        for (Role role : Role.values()) {
+            roles.add(new SelectItem(role, role.name()));
         }
     }
 
-    public List<SelectItem> getRoles(){
+    public List<SelectItem> getRoles() {
         return roles;
     }
 

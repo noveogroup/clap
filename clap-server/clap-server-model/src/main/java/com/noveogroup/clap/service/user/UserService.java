@@ -14,7 +14,7 @@ public interface UserService {
 
     /**
      * Create user by provided model
-     *
+     * <p/>
      * Role is being reset to DEVELOPER
      *
      * @param user model
@@ -34,7 +34,7 @@ public interface UserService {
 
     User saveUser(User user);
 
-    void resetUserPassword(Authentication authentication,String newPassword);
+    void resetUserPassword(Authentication authentication, String newPassword);
 
     List<User> getUsers();
 }

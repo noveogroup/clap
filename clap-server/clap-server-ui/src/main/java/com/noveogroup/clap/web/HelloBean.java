@@ -7,7 +7,6 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-
 import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.exception.ClapException;
 import com.noveogroup.clap.model.Project;
@@ -66,13 +65,13 @@ public class HelloBean {
     }
 
 
-    public Collection<SelectItem> autocompleteMethod(){
+    public Collection<SelectItem> autocompleteMethod() {
         final List<SelectItem> ret = Lists.newArrayList();
-        ret.add(new SelectItem(1,"111"));
-        ret.add(new SelectItem(2,"222"));
-        ret.add(new SelectItem(3,"333"));
-        ret.add(new SelectItem(4,"444"));
-        return  ret;
+        ret.add(new SelectItem(1, "111"));
+        ret.add(new SelectItem(2, "222"));
+        ret.add(new SelectItem(3, "333"));
+        ret.add(new SelectItem(4, "444"));
+        return ret;
     }
 
     public String getTestValue() {

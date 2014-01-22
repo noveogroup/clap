@@ -65,15 +65,15 @@ public class DelegatingExceptionHandler extends ExceptionHandlerWrapper {
                                      final FacesContext context) throws IOException {
         Throwable cause = e;
         while (cause != null) {
-            if (cause instanceof FacesException){
+            if (cause instanceof FacesException) {
                 cause = cause.getCause();
                 continue;
             }
-            if(cause instanceof ELException){
+            if (cause instanceof ELException) {
                 cause = cause.getCause();
                 continue;
             }
-            if(cause instanceof EvaluationException){
+            if (cause instanceof EvaluationException) {
                 cause = cause.getCause();
                 continue;
             }

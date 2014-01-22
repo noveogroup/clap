@@ -7,7 +7,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import javax.persistence.EntityManager;
-
 import java.lang.reflect.ParameterizedType;
 
 import static org.mockito.Mockito.when;
@@ -25,7 +24,7 @@ public abstract class AbstractDAOImplTest<T extends GenericHibernateDAOImpl> {
 
     protected abstract T getDAOImpl();
 
-    protected Class getEntityClass(){
+    protected Class getEntityClass() {
         return (Class<T>) ((ParameterizedType) getDAOImpl().getClass()
                 .getGenericSuperclass()).getActualTypeArguments()[0];
     }
@@ -35,7 +34,6 @@ public abstract class AbstractDAOImplTest<T extends GenericHibernateDAOImpl> {
         MockitoAnnotations.initMocks(this);
         when(daoIntegration.getClapEntityManager()).thenReturn(entityManager);
     }
-
 
 
     @Test

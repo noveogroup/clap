@@ -6,7 +6,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @author Andrey Sokolov
  */
 public class RevisionWithApkStructure extends Revision {
-    private  ApkStructure apkStructure;
+    private ApkStructure apkStructure;
 
     public ApkStructure getApkStructure() {
         return apkStructure;

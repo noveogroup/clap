@@ -22,7 +22,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "revisions")
-@NamedQuery(name="getRevisionByHash",query="SELECT rev FROM RevisionEntity rev WHERE rev.hash = :hash")
+@NamedQuery(name = "getRevisionByHash", query = "SELECT rev FROM RevisionEntity rev WHERE rev.hash = :hash")
 public class RevisionEntity extends BaseEntity {
 
     private static final int COLUMN_LENGTH = 16777215;

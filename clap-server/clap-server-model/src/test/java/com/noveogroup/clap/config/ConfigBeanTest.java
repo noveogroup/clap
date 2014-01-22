@@ -1,6 +1,5 @@
 package com.noveogroup.clap.config;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +18,7 @@ import static org.junit.Assert.assertEquals;
  * @author Andrey Sokolov
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({ConfigBean.class,ConfigurationUtils.class})
+@PrepareForTest({ConfigBean.class, ConfigurationUtils.class})
 public class ConfigBeanTest {
 
     private static final String TEMP_FILES_DIR_PROPERTY = "blablabla";
@@ -47,13 +46,13 @@ public class ConfigBeanTest {
 
         configBean.setup();
 
-        assertEquals(properties,configBean.getProperties());
+        assertEquals(properties, configBean.getProperties());
 
-        assertEquals("DEFAULT",configBean.getAuthenticationSystemId());
-        assertEquals("http://localhost:8080/clap-rest/apk/{id}/{type}",configBean.getDownloadApkUrl());
-        assertEquals(30000000,configBean.getMaxApkSize());
-        assertEquals(60000,configBean.getTempFilesCleanInterval());
-        assertEquals(TEMP_FILES_DIR_PROPERTY,configBean.getTempFilesDir());
+        assertEquals("DEFAULT", configBean.getAuthenticationSystemId());
+        assertEquals("http://localhost:8080/clap-rest/apk/{id}/{type}", configBean.getDownloadApkUrl());
+        assertEquals(30000000, configBean.getMaxApkSize());
+        assertEquals(60000, configBean.getTempFilesCleanInterval());
+        assertEquals(TEMP_FILES_DIR_PROPERTY, configBean.getTempFilesDir());
 
     }
 

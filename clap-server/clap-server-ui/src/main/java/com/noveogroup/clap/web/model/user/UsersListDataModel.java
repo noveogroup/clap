@@ -23,8 +23,8 @@ public class UsersListDataModel extends ListDataModel<User> implements Selectabl
 
     @Override
     public User getRowData(final String s) {
-        for(User user : (List<User>)getWrappedData()){
-            if(StringUtils.equals(s,user.getLogin())){
+        for (User user : (List<User>) getWrappedData()) {
+            if (StringUtils.equals(s, user.getLogin())) {
                 return user;
             }
         }

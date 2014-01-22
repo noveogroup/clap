@@ -21,7 +21,7 @@ public class TempFileServiceImpl implements TempFileService {
     private ConfigBean configBean;
 
     public File createTempFile() throws IOException {
-        return File.createTempFile("clap_","",new File(configBean.getTempFilesDir()));
+        return File.createTempFile("clap_", "", new File(configBean.getTempFilesDir()));
     }
 
     public File createTempFile(final InputStream content) throws IOException {

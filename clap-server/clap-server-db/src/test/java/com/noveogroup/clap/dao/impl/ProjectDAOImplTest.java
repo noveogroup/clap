@@ -1,6 +1,5 @@
 package com.noveogroup.clap.dao.impl;
 
-import com.noveogroup.clap.entity.ProjectEntity;
 import org.mockito.InjectMocks;
 
 /**

@@ -37,21 +37,21 @@ public class IconExtractor implements InfoExtractor {
         return icon;
     }
 
-    private void findBestIcon(final ApkStructure structure, final ApkAndroidManifest androidManifest){
+    private void findBestIcon(final ApkStructure structure, final ApkAndroidManifest androidManifest) {
         final ApkEntry rootEntry = structure.getRootEntry();
         foundIconEntryName = null;
         foundIconPriority = 0;
-        for(final IconPathTemplate template : iconsPathPriorityMap.values()){
+        for (final IconPathTemplate template : iconsPathPriorityMap.values()) {
             //TODO fix
             template.setIconName(androidManifest.getIconPath());
         }
         searchIcon(rootEntry);
     }
 
-    private void searchIcon(final ApkEntry apkEntry){
-        if(apkEntry != null){
-            if(apkEntry.isDirectory()){
-                for (final ApkEntry innerEntry : apkEntry.getInnerEntries()){
+    private void searchIcon(final ApkEntry apkEntry) {
+        if (apkEntry != null) {
+            if (apkEntry.isDirectory()) {
+                for (final ApkEntry innerEntry : apkEntry.getInnerEntries()) {
                     searchIcon(innerEntry);
                 }
             } else {
@@ -75,10 +75,10 @@ public class IconExtractor implements InfoExtractor {
     public boolean isEntryInterested(final ZipEntry entry,
                                      final ApkStructure structure,
                                      final ApkAndroidManifest androidManifest) {
-        if (foundIconEntryName == null){
-            findBestIcon(structure,androidManifest);
+        if (foundIconEntryName == null) {
+            findBestIcon(structure, androidManifest);
         }
-        return StringUtils.equals(entry.getName(),foundIconEntryName);
+        return StringUtils.equals(entry.getName(), foundIconEntryName);
     }
 
     @Override

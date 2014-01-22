@@ -79,8 +79,8 @@ public class ELStreamedContentResourceHandler extends ResourceHandlerWrapper {
     }
 
     private boolean isELAllowed(final String el) {
-        for (final String allowedPrefix : ALLOWED_EL_PREFIXES){
-            if (StringUtils.startsWith(el,allowedPrefix)){
+        for (final String allowedPrefix : ALLOWED_EL_PREFIXES) {
+            if (StringUtils.startsWith(el, allowedPrefix)) {
                 return true;
             }
         }

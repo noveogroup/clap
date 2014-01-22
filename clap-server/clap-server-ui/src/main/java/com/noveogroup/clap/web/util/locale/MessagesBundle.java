@@ -44,8 +44,7 @@ public abstract class MessagesBundle extends ResourceBundle {
                                         final String format,
                                         final ClassLoader loader,
                                         final boolean reload)
-                throws IllegalAccessException, InstantiationException, IOException
-        {
+                throws IllegalAccessException, InstantiationException, IOException {
             // The below code is copied from default Control#newBundle() implementation.
             // Only the PropertyResourceBundle line is changed to read the file as UTF-8.
             final String bundleName = toBundleName(baseName, locale);

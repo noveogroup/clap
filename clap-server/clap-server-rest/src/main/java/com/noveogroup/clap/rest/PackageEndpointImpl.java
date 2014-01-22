@@ -27,6 +27,6 @@ public class PackageEndpointImpl implements PackageEndpoint {
         request.setAuthentication(new Authentication());
         final ApplicationFile application = revisionService.getApplication(request);
         return Response.ok(application.getContent()).header("Content-Disposition",
-                "attachment; filename=\""+application.getFilename()+"\"").build();
+                "attachment; filename=\"" + application.getFilename() + "\"").build();
     }
 }

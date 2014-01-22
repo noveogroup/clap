@@ -7,7 +7,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 /**
  * @author Andrey Sokolov
  */
-public class UpdateRevisionPackagesRequest extends BaseRevisionPackagesRequest{
+public class UpdateRevisionPackagesRequest extends BaseRevisionPackagesRequest {
     private String revisionHash;
 
     public String getRevisionHash() {
