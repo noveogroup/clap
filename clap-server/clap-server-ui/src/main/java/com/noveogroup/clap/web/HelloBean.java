@@ -8,8 +8,6 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.noveogroup.clap.config.ConfigBean;
-import com.noveogroup.clap.exception.ClapException;
-import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.service.project.ProjectService;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
@@ -58,12 +56,6 @@ public class HelloBean {
     public StreamedContent getQRCode() {
         return QRCode;
     }
-
-    public String testValidation() throws ClapException {
-        projectsFacade.getCreateUpdateProject(new Project());
-        return Navigation.PROJECTS.getView();
-    }
-
 
     public Collection<SelectItem> autocompleteMethod() {
         final List<SelectItem> ret = Lists.newArrayList();

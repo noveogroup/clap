@@ -13,6 +13,8 @@ import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.model.user.UserCreationModel;
 import com.noveogroup.clap.model.user.UserWithPersistedAuth;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 import org.slf4j.Logger;
@@ -52,6 +54,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @RequiresAuthentication
     @Override
     public User getUser(final String login) {
         final UserEntity userEntity = userDAO.getUserByLogin(login);
@@ -59,6 +62,7 @@ public class UserServiceImpl implements UserService {
         return user;
     }
 
+    @RequiresAuthentication
     @WrapException
     @Override
     public User saveUser(final User user) {
@@ -72,6 +76,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    @RequiresAuthentication
     @WrapException
     @Override
     public void resetUserPassword(final Authentication authentication, final String newPassword) {
@@ -85,6 +90,8 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @RequiresAuthentication
+    @RequiresRoles("ADMIN")
     @WrapException
     @Override
     public List<User> getUsers() {
@@ -97,6 +104,8 @@ public class UserServiceImpl implements UserService {
     }
 
 
+    @RequiresAuthentication
+    @RequiresRoles("ADMIN")
     @WrapException
     @Override
     public User createUser(final UserCreationModel user) {

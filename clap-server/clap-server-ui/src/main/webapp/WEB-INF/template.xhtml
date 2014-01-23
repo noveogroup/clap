@@ -10,23 +10,42 @@
 
 <h:head>
     <title>CLAP</title>
+    <h:outputStylesheet name="css/clap.css"/>
 </h:head>
 <h:body>
-    <p:growl autoUpdate="true" globalOnly="true"/>
-    <h:form>
-        <p:menubar id="mainMenu">
-            <p:menuitem ajax="false" outcome="/inner/projects" value="#{msgs['menu.project.list']}"/>
-            <p:menuitem ajax="false" outcome="/inner/addProject" value="#{msgs['menu.project.add']}"/>
-            <p:menuitem ajax="false" outcome="/inner/users" value="#{msgs['menu.users.list']}"
-                        rendered="#{userSessionData.admin}"/>
-            <ui:insert name="menuItems"/>
-            <f:facet name="options">
-                <clp:loginForm/>
-            </f:facet>
-        </p:menubar>
-    </h:form>
-    <h:panelGroup id="content">
-        <ui:insert name="content"/>
+    <h:panelGroup styleClass="rootContainer" layout="block">
+        <p:growl autoUpdate="true" globalOnly="true"/>
+
+        <h:form>
+            <p:menubar id="mainMenu">
+                <p:menuitem ajax="false" outcome="/index" value="#{msgs['menu.home']}"/>
+                <p:menuitem ajax="false" outcome="/inner/projects" value="#{msgs['menu.project.list']}"/>
+                <p:menuitem ajax="false" outcome="/inner/editUser" value="#{msgs['menu.my.account.settings']}"/>
+                <p:menuitem ajax="false" outcome="/inner/users" value="#{msgs['users.label.link']}"
+                            rendered="#{request.isUserInRole('ADMIN')}"/>
+                <ui:insert name="topMenuItems"/>
+                <f:facet name="options">
+                    <clp:loginForm/>
+                    <!-- TODO improve it-->
+                    <p:themeSwitcher value="#{themeSwitcherBean.theme}" style="width:165px" rendered="true">
+                        <f:selectItem itemLabel="Choose Theme" itemValue="" />
+                        <f:selectItems value="#{themeSwitcherBean.themes}" />
+                    </p:themeSwitcher>
+                </f:facet>
+            </p:menubar>
+        </h:form>
+        <p:menu id="sideMenu" rendered="#{userSessionData.authenticated}">
+            <ui:insert name="sideMenuItems"/>
+            <p:submenu styleClass="subMenu" label="#{msgs['side.menu.my.revisions']}">
+            </p:submenu>
+            <p:submenu styleClass="subMenu" label="#{msgs['side.menu.watching.projects']}">
+            </p:submenu>
+            <p:submenu styleClass="subMenu" label="#{msgs['side.menu.last.updates']}">
+            </p:submenu>
+        </p:menu>
+        <h:panelGroup id="content">
+            <ui:insert name="content"/>
+        </h:panelGroup>
     </h:panelGroup>
 </h:body>
 </html>

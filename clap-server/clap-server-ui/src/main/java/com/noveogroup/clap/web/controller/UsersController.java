@@ -69,7 +69,6 @@ public class UsersController extends BaseController {
         authentication.setLogin(login);
         authentication.setPassword(password);
         userService.resetUserPassword(authentication, newPassword);
-        userSessionData.getAuthentication().setPassword(newPassword);
         messageSupport.addMessage("resetPasswordMessages", "common.form.info.update.success");
     }
 

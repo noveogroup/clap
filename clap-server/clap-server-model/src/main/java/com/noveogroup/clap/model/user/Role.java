@@ -6,6 +6,6 @@ package com.noveogroup.clap.model.user;
 public enum Role {
     DEVELOPER,
     TESTER,
-    PROJECT_MANAGER,
+    MANAGER,
     ADMIN;
 }

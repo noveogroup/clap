@@ -31,7 +31,7 @@
                             value="#{msgs['user.info.label.edit.role']}"/>
                     <p:selectOneMenu
                             id="role"
-                            disabled="#{not userSessionData.admin}"
+                            disabled="#{not request.isUserInRole('ADMIN')}"
                             value="#{usersModel.user.role}"
                             minLength="0">
                         <f:selectItems value="#{commonModels.roles}"/>
@@ -43,7 +43,7 @@
                 <p:ajaxStatus/>
             </p:panel>
         </h:form>
-        <h:form rendered="#{not userSessionData.admin}">
+        <h:form >
             <p:panel id="resetPasswordPanel" header="#{msgs['user.info.label.password.reset.header']}">
                 <p:messages id="resetPasswordMessages"/>
                 <p:panelGrid columns="2">

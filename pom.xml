@@ -88,6 +88,16 @@
             </snapshots>
             <url>http://ec2-54-218-97-98.us-west-2.compute.amazonaws.com:8081/nexus/content/repositories/releases/</url>
         </repository>
+        <repository>
+            <id>prime-repo</id>
+            <name>PrimeFaces Maven Repository</name>
+            <url>http://repository.primefaces.org</url>
+            <layout>default</layout>
+        </repository>
+        <repository>
+            <id>gcm-server-repository</id>
+            <url>https://raw.github.com/slorber/gcm-server-repository/master/releases/</url>
+        </repository>
     </repositories>
 
 
@@ -235,6 +245,11 @@
                 <groupId>org.primefaces</groupId>
                 <artifactId>primefaces</artifactId>
                 <version>${primefaces.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.primefaces.themes</groupId>
+                <artifactId>all-themes</artifactId>
+                <version>1.0.10</version>
             </dependency>
 
             <!-- JAX-RS dependensies -->

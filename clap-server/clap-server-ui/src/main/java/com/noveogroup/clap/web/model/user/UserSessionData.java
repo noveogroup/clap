@@ -1,7 +1,5 @@
 package com.noveogroup.clap.web.model.user;
 
-import com.noveogroup.clap.model.auth.Authentication;
-import com.noveogroup.clap.model.user.Role;
 import com.noveogroup.clap.model.user.User;
 import org.apache.commons.lang3.StringUtils;
 
@@ -18,23 +16,7 @@ public class UserSessionData implements Serializable {
 
     private boolean authenticated = false;
 
-    private final Authentication authentication = new Authentication();
-
     private User user;
-
-    private String requestedView;
-
-    public String getRequestedView() {
-        return requestedView;
-    }
-
-    public void setRequestedView(final String requestedView) {
-        this.requestedView = requestedView;
-    }
-
-    public Authentication getAuthentication() {
-        return authentication;
-    }
 
     public boolean isAuthenticated() {
         return authenticated;
@@ -61,21 +43,13 @@ public class UserSessionData implements Serializable {
                 return user.getLogin();
             }
         } else {
-            return authentication.getLogin();
-        }
-    }
-
-    public boolean isAdmin() {
-        if (user != null) {
-            return Role.ADMIN.equals(user.getRole());
-        } else {
-            return false;
+            //shouldn't be there
+            return "no user";
         }
     }
 
     public void reset() {
         authenticated = false;
-        authentication.setLogin(null);
-        authentication.setPassword(null);
+        user = null;
     }
 }

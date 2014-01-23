@@ -12,7 +12,7 @@ import com.noveogroup.clap.model.project.ImagedProject;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.service.url.UrlService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
-import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 import org.slf4j.Logger;
@@ -61,21 +61,7 @@ public class ProjectServiceImpl implements ProjectService {
 
     @WrapException
     @RequiresAuthentication
-    @Override
-    public Project getCreateUpdateProject(final Project project) {
-        ProjectEntity projectEntity = null;
-        try {
-            projectEntity = projectDAO.findProjectByExternalIdOrReturnNull(project.getExternalId());
-        } catch (Exception e) {
-            projectEntity = MAPPER.map(project, ProjectEntity.class);
-        }
-        //TODO check null fields
-        projectEntity = projectDAO.persist(projectEntity);
-        return MAPPER.map(projectEntity, Project.class);
-    }
-
-    @WrapException
-    @RequiresAuthentication
+    @RequiresPermissions("EDIT_PROJECTS")
     @Override
     public Project save(final Project project) {
         final ProjectEntity projectEntity = MAPPER.map(project, ProjectEntity.class);
@@ -95,14 +81,12 @@ public class ProjectServiceImpl implements ProjectService {
     }
 
     @RequiresAuthentication
-    @RequiresRoles("ADMIN")
     @Override
     public List<Project> findAllProjects() {
         return findAllProjects(Project.class);
     }
 
     @RequiresAuthentication
-    @RequiresRoles("ADMIN")
     @Override
     public List<ImagedProject> findAllImagedProjects() {
         return findAllProjects(ImagedProject.class);

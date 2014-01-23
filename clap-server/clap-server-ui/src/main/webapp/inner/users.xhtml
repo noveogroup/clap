@@ -9,8 +9,7 @@
     <ui:define name="content">
         <f:event type="preRenderView" listener="#{usersController.prepareUsersListView}"/>
 
-        <p:dataTable rendered="#{userSessionData.admin}"
-                     id="users"
+        <p:dataTable id="users"
                      var="user"
                      value="#{usersModel.usersListDataModel}"
                      selection="#{usersModel.user}"
