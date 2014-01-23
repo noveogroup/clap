@@ -15,9 +15,9 @@
     <p:growl autoUpdate="true" globalOnly="true"/>
     <h:form>
         <p:menubar id="mainMenu">
-            <p:menuitem ajax="false" outcome="inner/projects" value="#{msgs['menu.project.list']}"/>
-            <p:menuitem ajax="false" outcome="inner/addProject" value="#{msgs['menu.project.add']}"/>
-            <p:menuitem ajax="false" outcome="inner/users" value="#{msgs['menu.users.list']}"
+            <p:menuitem ajax="false" outcome="/inner/projects" value="#{msgs['menu.project.list']}"/>
+            <p:menuitem ajax="false" outcome="/inner/addProject" value="#{msgs['menu.project.add']}"/>
+            <p:menuitem ajax="false" outcome="/inner/users" value="#{msgs['menu.users.list']}"
                         rendered="#{userSessionData.admin}"/>
             <ui:insert name="menuItems"/>
             <f:facet name="options">

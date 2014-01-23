@@ -20,11 +20,10 @@
     <assembly-descriptor>
         <interceptor-binding>
             <ejb-name>*</ejb-name>
-            <interceptor-class>com.noveogroup.clap.security.ShiroSecuredInterceptor</interceptor-class>
-        </interceptor-binding>
-        <interceptor-binding>
-            <ejb-name>*</ejb-name>
-            <interceptor-class>com.noveogroup.clap.exception.ExceptionWrapperInterceptor</interceptor-class>
+            <interceptor-order>
+                <interceptor-class>com.noveogroup.clap.security.ShiroSecuredInterceptor</interceptor-class>
+                <interceptor-class>com.noveogroup.clap.exception.ExceptionWrapperInterceptor</interceptor-class>
+            </interceptor-order>
         </interceptor-binding>
     </assembly-descriptor>
 </ejb-jar>
