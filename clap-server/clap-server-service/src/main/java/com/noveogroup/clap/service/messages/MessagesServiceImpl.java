@@ -6,6 +6,7 @@ import com.noveogroup.clap.entity.message.MessageEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.exception.WrapException;
 import com.noveogroup.clap.model.message.Message;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
@@ -28,6 +29,7 @@ public class MessagesServiceImpl implements MessagesService {
     @EJB
     private MessageDAO messageDAO;
 
+    @RequiresAuthentication
     @WrapException
     @Override
     public void saveMessage(final String revisionHash, final Message message) {

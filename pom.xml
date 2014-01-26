@@ -61,7 +61,8 @@
         </repository>
         <snapshotRepository>
             <id>snapshot</id>
-            <url>http://ec2-54-218-97-98.us-west-2.compute.amazonaws.com:8081/nexus/content/repositories/snapshots/</url>
+            <url>http://ec2-54-218-97-98.us-west-2.compute.amazonaws.com:8081/nexus/content/repositories/snapshots/
+            </url>
         </snapshotRepository>
     </distributionManagement>
 
@@ -75,7 +76,8 @@
             <snapshots>
                 <enabled>true</enabled>
             </snapshots>
-            <url>http://ec2-54-218-97-98.us-west-2.compute.amazonaws.com:8081/nexus/content/repositories/snapshots/</url>
+            <url>http://ec2-54-218-97-98.us-west-2.compute.amazonaws.com:8081/nexus/content/repositories/snapshots/
+            </url>
         </repository>
         <repository>
             <id>release</id>
@@ -172,7 +174,6 @@
                 <version>${powermock.version}</version>
                 <scope>test</scope>
             </dependency>
-
 
 
             <!--LOGGING DEPENDENCIES-->
@@ -300,7 +301,6 @@
                 <artifactId>shiro-cas</artifactId>
                 <version>${shiro.version}</version>
             </dependency>
-
 
 
             <!-- javax dependecies -->

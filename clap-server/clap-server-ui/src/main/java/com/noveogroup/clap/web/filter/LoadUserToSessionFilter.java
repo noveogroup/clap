@@ -45,12 +45,12 @@ public class LoadUserToSessionFilter implements Filter {
             if (subject.isAuthenticated()) {
                 //time to load user in session bean
                 final String login = (String) subject.getPrincipals().getPrimaryPrincipal();
-                final User user = userService.getUser(login,webConfigBean.isAutoCreateUsers());
+                final User user = userService.getUser(login, webConfigBean.isAutoCreateUsers());
                 userSessionData.setUser(user);
                 userSessionData.setAuthenticated(true);
             }
         }
-        filterChain.doFilter(servletRequest,servletResponse);
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override

@@ -5,20 +5,20 @@ import org.aspectj.lang.Signature;
 
 public aspect TraceAspect {
 
-  private static final String TAG = "TRACE";
+    private static final String TAG = "TRACE";
 
-  pointcut eachExecution(): execution(* *(..));
+    pointcut eachExecution(): execution(* *(..));
 
-  before(): eachExecution() {
-    Signature signature = thisJoinPoint.getSignature();
-    Log.d(TAG, String.format("before %s::%s",
-            signature.getDeclaringType(), signature.getName()));
-  }
+    before(): eachExecution() {
+        Signature signature = thisJoinPoint.getSignature();
+        Log.d(TAG, String.format("before %s::%s",
+                signature.getDeclaringType(), signature.getName()));
+    }
 
-  after(): eachExecution() {
-    Signature signature = thisJoinPoint.getSignature();
-    Log.d(TAG, String.format("after %s::%s",
-            signature.getDeclaringType(), signature.getName()));
-  }
+    after(): eachExecution() {
+        Signature signature = thisJoinPoint.getSignature();
+        Log.d(TAG, String.format("after %s::%s",
+                signature.getDeclaringType(), signature.getName()));
+    }
 
 }

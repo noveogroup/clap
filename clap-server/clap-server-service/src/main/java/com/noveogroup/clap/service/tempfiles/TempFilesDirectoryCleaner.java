@@ -14,6 +14,7 @@ import javax.ejb.TimerConfig;
 import javax.ejb.TimerService;
 import javax.inject.Inject;
 import java.io.File;
+import java.util.List;
 
 /**
  * @author Andrey Sokolov
@@ -39,9 +40,12 @@ public class TempFilesDirectoryCleaner {
     @Timeout
     public void timeout(final Timer timer) {
         LOGGER.debug("deleting temp files");
-        final File tempFilesDir = new File(configBean.getTempFilesDir());
-        for (final File tempFile : tempFilesDir.listFiles()) {
-            delete(tempFile);
+        final List<String> tempFilesDirs = configBean.getTempFilesDirs();
+        for (String tempFilesDirPath : tempFilesDirs) {
+            final File tempFilesDir = new File(tempFilesDirPath);
+            for (final File tempFile : tempFilesDir.listFiles()) {
+                delete(tempFile);
+            }
         }
     }
 

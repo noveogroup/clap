@@ -10,6 +10,7 @@
     <context-param>
         <param-name>resteasy.resources</param-name>
         <param-value>
+            com.noveogroup.clap.rest.auth.AuthenticationEndpointImpl,
             com.noveogroup.clap.rest.MessagesEndpointImpl,
             com.noveogroup.clap.rest.PackageEndpointImpl,
             com.noveogroup.clap.rest.ProjectEndpointImpl,

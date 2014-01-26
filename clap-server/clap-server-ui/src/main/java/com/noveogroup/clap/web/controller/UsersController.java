@@ -1,6 +1,5 @@
 package com.noveogroup.clap.web.controller;
 
-import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.service.user.UserService;
 import com.noveogroup.clap.web.Navigation;

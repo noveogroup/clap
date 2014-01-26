@@ -21,7 +21,8 @@ import static org.junit.Assert.assertEquals;
 @PrepareForTest({ConfigBean.class, ConfigurationUtils.class})
 public class ConfigBeanTest {
 
-    private static final String TEMP_FILES_DIR_PROPERTY = "blablabla";
+    private static final String TEMP_FILES_DIR_PROPERTY_1 = "blablabla";
+    private static final String TEMP_FILES_DIR_PROPERTY_2 = "qweqweqwe";
 
     @InjectMocks
     private ConfigBean configBean;
@@ -49,10 +50,11 @@ public class ConfigBeanTest {
         assertEquals(properties, configBean.getProperties());
 
         assertEquals("DEFAULT", configBean.getAuthenticationSystemId());
-        assertEquals("http://localhost:8080/clap-rest/apk/{id}/{type}", configBean.getDownloadApkUrl());
+        assertEquals("http://localhost:8080/clap-rest/apk/{id}/{type}?token={token}", configBean.getDownloadApkUrl());
         assertEquals(30000000, configBean.getMaxApkSize());
         assertEquals(60000, configBean.getTempFilesCleanInterval());
-        assertEquals(TEMP_FILES_DIR_PROPERTY, configBean.getTempFilesDir());
+        assertEquals(TEMP_FILES_DIR_PROPERTY_1, configBean.getTempFilesDirs().get(0));
+        assertEquals(TEMP_FILES_DIR_PROPERTY_2, configBean.getTempFilesDirs().get(1));
 
     }
 

@@ -1,6 +1,6 @@
 package com.noveogroup.clap.model.request;
 
-import com.noveogroup.clap.model.auth.Authentication;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.validation.constraints.NotNull;
 
@@ -9,21 +9,20 @@ import javax.validation.constraints.NotNull;
  */
 public class BaseRequest {
     @NotNull
-    private Authentication authentication;
+    private String token;
 
-    public Authentication getAuthentication() {
-        return authentication;
+    public String getToken() {
+        return token;
     }
 
-    public void setAuthentication(final Authentication authentication) {
-        this.authentication = authentication;
+    public void setToken(final String token) {
+        this.token = token;
     }
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("BaseRequest{");
-        sb.append("authentication=").append(authentication);
-        sb.append('}');
-        return sb.toString();
+        return new ToStringBuilder(this)
+                .append("token", token)
+                .toString();
     }
 }

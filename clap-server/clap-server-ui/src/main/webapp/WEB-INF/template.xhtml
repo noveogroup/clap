@@ -30,9 +30,9 @@
                     <p:themeSwitcher value="#{themeSwitcherBean.theme}"
                                      rendered="#{webConfigBean.showThemeSwitcher}"
                                      style="width:165px">
-                        <f:selectItem itemLabel="Choose Theme" itemValue="" />
-                        <f:selectItems value="#{themeSwitcherBean.themes}" />
-                        <p:ajax listener="#{themeSwitcherBean.saveTheme}" />
+                        <f:selectItem itemLabel="Choose Theme" itemValue=""/>
+                        <f:selectItems value="#{themeSwitcherBean.themes}"/>
+                        <p:ajax listener="#{themeSwitcherBean.saveTheme}"/>
                     </p:themeSwitcher>
                 </f:facet>
             </p:menubar>

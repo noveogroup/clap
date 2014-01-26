@@ -4,7 +4,6 @@ import com.google.common.collect.Lists;
 import com.noveogroup.clap.auth.PasswordsHashCalculator;
 import com.noveogroup.clap.dao.UserDAO;
 import com.noveogroup.clap.entity.user.UserEntity;
-import com.noveogroup.clap.exception.ClapAuthenticationFailedException;
 import com.noveogroup.clap.exception.ClapUserNotFoundException;
 import com.noveogroup.clap.exception.WrapException;
 import com.noveogroup.clap.model.auth.Authentication;
@@ -14,6 +13,7 @@ import com.noveogroup.clap.model.user.UserCreationModel;
 import com.noveogroup.clap.model.user.UserWithPersistedAuth;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
@@ -27,6 +27,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * @author Andrey Sokolov
@@ -43,16 +44,13 @@ public class UserServiceImpl implements UserService {
 
     @WrapException
     @Override
-    public UserWithPersistedAuth getUserWithPersistedAuth(final String login) {
-        LOGGER.debug("user service impl call get user data");
-        if (StringUtils.isBlank(login)) {
-            throw new IllegalArgumentException("blank login");
-        }
-        final UserEntity userEntity = userDAO.getUserByLogin(login);
+    public UserWithPersistedAuth getUserWithToken() {
+        final String currentUserLogin = getCurrentUserLogin();
+        final UserEntity userEntity = userDAO.getUserByLogin(currentUserLogin);
         if (userEntity != null) {
             return MAPPER.map(userEntity, UserWithPersistedAuth.class);
         } else {
-            throw new ClapUserNotFoundException("requested login == " + login);
+            throw new ClapUserNotFoundException("requested login == " + currentUserLogin);
         }
     }
 
@@ -82,12 +80,9 @@ public class UserServiceImpl implements UserService {
             final User user = MAPPER.map(userEntity, User.class);
             return user;
         } else if (autocreate) {
-            UserEntity newUserEntity = new UserEntity();
-            newUserEntity.setLogin(login);
-            newUserEntity.setRole(Role.DEVELOPER);
-            newUserEntity = userDAO.persist(newUserEntity);
-            final User newUser = MAPPER.map(newUserEntity, User.class);
-            return newUser;
+            final UserCreationModel userCreationModel = new UserCreationModel();
+            userCreationModel.setLogin(login);
+            return createUser(userCreationModel);
         } else {
             return null;
         }
@@ -111,7 +106,7 @@ public class UserServiceImpl implements UserService {
     @WrapException
     @Override
     public void resetUserPassword(final String newPassword) {
-        resetUserPassword(getCurrentUserLogin(),newPassword);
+        resetUserPassword(getCurrentUserLogin(), newPassword);
     }
 
     @RequiresAuthentication
@@ -119,7 +114,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void resetUserPassword(String login, String newPassword) {
         final UserEntity userEntity = userDAO.getUserByLogin(login);
-        userEntity.setAuthenticationKey(PasswordsHashCalculator.calculatePasswordHash(newPassword));
+        userEntity.setToken(PasswordsHashCalculator.calculatePasswordHash(newPassword));
         userDAO.persist(userEntity);
     }
 
@@ -136,6 +131,34 @@ public class UserServiceImpl implements UserService {
         return users;
     }
 
+    @Override
+    public String getToken(final Authentication authentication) {
+        final String login = authentication.getLogin();
+        final UserEntity userByLogin = userDAO.getUserByLogin(login);
+        if (userByLogin != null) {
+            final String password = authentication.getPassword();
+            if (StringUtils.equals(userByLogin.getHashedPassword(),
+                    PasswordsHashCalculator.calculatePasswordHash(password))) {
+                updateToken(userByLogin);
+                userDAO.persist(userByLogin);
+                return userByLogin.getToken();
+            } else {
+                throw new IncorrectCredentialsException();
+            }
+        } else {
+            throw new ClapUserNotFoundException("user " + login + " not found");
+        }
+    }
+
+    @Override
+    public User getUserByToken(final String token) {
+        final UserEntity userEntity = userDAO.getUserByToken(token);
+        if (userEntity != null) {
+            final User user = MAPPER.map(userEntity, User.class);
+            return user;
+        }
+        return null;
+    }
 
     @RequiresAuthentication
     @RequiresRoles("ADMIN")
@@ -144,14 +167,20 @@ public class UserServiceImpl implements UserService {
     public User createUser(final UserCreationModel user) {
         user.setRole(Role.DEVELOPER);
         UserEntity userEntity = MAPPER.map(user, UserEntity.class);
-        userEntity.setAuthenticationKey(PasswordsHashCalculator.calculatePasswordHash(user.getPassword()));
+        userEntity.setHashedPassword(PasswordsHashCalculator.calculatePasswordHash(user.getPassword()));
+        updateToken(userEntity);
         userEntity = userDAO.persist(userEntity);
         return MAPPER.map(userEntity, User.class);
     }
 
+    private void updateToken(final UserEntity userEntity) {
+        LOGGER.debug("token for " + userEntity.getLogin() + " updated");
+        final String token = UUID.randomUUID().toString();
+        userEntity.setToken(token);
+    }
 
 
-    private String getCurrentUserLogin(){
+    private String getCurrentUserLogin() {
         final Subject subject = SecurityUtils.getSubject();
         if (subject != null) {
             final String login = (String) subject.getPrincipals().getPrimaryPrincipal();

@@ -1,8 +1,9 @@
 package com.noveogroup.clap.model.request.message;
 
 import com.noveogroup.clap.model.message.Message;
+import com.noveogroup.clap.model.request.BaseRequest;
 
-public class SendMessageRequest {
+public class SendMessageRequest extends BaseRequest {
 
     private Message message;
 

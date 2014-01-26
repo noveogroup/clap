@@ -1,5 +1,7 @@
 package com.noveogroup.clap.model.auth;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Authentication data common model
  *
@@ -7,8 +9,10 @@ package com.noveogroup.clap.model.auth;
  */
 public class Authentication {
 
+    @NotNull
     private String login;
 
+    @NotNull
     private String password;
 
     public Authentication() {

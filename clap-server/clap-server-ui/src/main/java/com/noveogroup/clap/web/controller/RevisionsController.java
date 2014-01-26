@@ -7,10 +7,8 @@ import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.noveogroup.clap.model.Project;
-import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.project.ImagedProject;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
-import com.noveogroup.clap.model.request.revision.RevisionRequest;
 import com.noveogroup.clap.model.request.revision.StreamedPackage;
 import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
 import com.noveogroup.clap.model.revision.ApkEntry;
@@ -106,10 +104,8 @@ public class RevisionsController extends BaseController {
         revisionsModel.reset();
         final Revision selectedRevision = revisionsModel.getSelectedRevision();
         if (selectedRevision != null) {
-            final RevisionRequest request = new RevisionRequest();
-            request.setAuthentication(new Authentication());
-            request.setRevisionId(selectedRevision.getId());
-            final RevisionWithApkStructure revWithApkStructure = revisionService.getRevisionWithApkStructure(request);
+            final RevisionWithApkStructure revWithApkStructure = revisionService.getRevisionWithApkStructure(
+                    selectedRevision.getId());
             revisionsModel.setSelectedRevision(revWithApkStructure);
             if (revWithApkStructure.getApkStructure() != null) {
                 revisionsModel.setSelectedRevisionApkStructure(

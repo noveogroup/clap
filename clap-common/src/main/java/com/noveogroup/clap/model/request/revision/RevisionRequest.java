@@ -5,7 +5,7 @@ import com.noveogroup.clap.model.request.BaseRequest;
 /**
  * @author Andrey Sokolov
  */
-public class RevisionRequest extends BaseRequest{
+public class RevisionRequest extends BaseRequest {
     private Long revisionId;
 
     public Long getRevisionId() {

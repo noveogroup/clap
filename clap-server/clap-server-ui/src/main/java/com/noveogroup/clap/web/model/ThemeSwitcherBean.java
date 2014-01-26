@@ -12,7 +12,7 @@ import java.util.TreeMap;
  */
 @Named
 @SessionScoped
-public class ThemeSwitcherBean implements Serializable{
+public class ThemeSwitcherBean implements Serializable {
 
     public static final String DEFAULT_THEME = "bluesky";
     private Map<String, String> themes;

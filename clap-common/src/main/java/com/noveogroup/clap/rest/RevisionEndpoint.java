@@ -1,7 +1,7 @@
 package com.noveogroup.clap.rest;
 
-import com.noveogroup.clap.model.request.revision.RevisionRequest;
 import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
+import com.noveogroup.clap.model.request.revision.RevisionRequest;
 import com.noveogroup.clap.model.revision.Revision;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 

@@ -13,15 +13,15 @@ import javax.ws.rs.core.MediaType;
 /**
  * @author Andrey Sokolov
  */
-@Path("/")
+@Path("/test")
 public interface TestEndpoint {
 
     @GET
-    @Path("echo")
+    @Path("/echo")
     String echo(@QueryParam("q") String original);
 
     @POST
-    @Path("testModifyProject")
+    @Path("/testModifyProject")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     Project getTestModifyProject(Project project);

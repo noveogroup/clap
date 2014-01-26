@@ -13,7 +13,8 @@ import javax.ws.rs.QueryParam;
  * @author Mikhail Demidov
  */
 @ApplicationScoped
-public class ProjectEndpointImpl implements ProjectEndpoint {
+public class ProjectEndpointImpl extends BaseEndpoint implements ProjectEndpoint {
+    //TODO apply authc
 
     private static final Mapper MAPPER = new DozerBeanMapper();
 

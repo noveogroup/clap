@@ -5,10 +5,6 @@ import com.noveogroup.clap.annotation.Parameter;
 import com.noveogroup.clap.dataprovider.DataProvider;
 import com.noveogroup.clap.generator.method.MethodGenerator;
 import com.sun.codemodel.JDefinedClass;
-import com.sun.codemodel.JExpr;
-import com.sun.codemodel.JFieldVar;
-import com.sun.codemodel.JMethod;
-import com.sun.codemodel.JMod;
 
 import java.lang.reflect.Method;
 

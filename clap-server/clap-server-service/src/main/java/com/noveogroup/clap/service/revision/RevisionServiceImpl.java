@@ -9,19 +9,21 @@ import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.exception.WrapException;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
 import com.noveogroup.clap.model.request.revision.BaseRevisionPackagesRequest;
-import com.noveogroup.clap.model.request.revision.GetApplicationRequest;
-import com.noveogroup.clap.model.request.revision.RevisionRequest;
 import com.noveogroup.clap.model.request.revision.StreamedPackage;
 import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
 import com.noveogroup.clap.model.revision.ApkStructure;
 import com.noveogroup.clap.model.revision.ApplicationFile;
+import com.noveogroup.clap.model.revision.ApplicationType;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
+import com.noveogroup.clap.model.user.UserWithPersistedAuth;
 import com.noveogroup.clap.service.apk.ApkInfoMainExtractor;
 import com.noveogroup.clap.service.apk.IconExtractor;
 import com.noveogroup.clap.service.tempfiles.TempFileService;
 import com.noveogroup.clap.service.url.UrlService;
+import com.noveogroup.clap.service.user.UserService;
+import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +40,7 @@ import java.sql.SQLException;
 import java.util.Date;
 
 /**
- * @author Mikhail Demidov
+ * Inner revision service
  */
 @Stateless
 @TransactionManagement(TransactionManagementType.CONTAINER)
@@ -61,6 +63,10 @@ public class RevisionServiceImpl implements RevisionService {
     @Inject
     private TempFileService tempFileService;
 
+    @Inject
+    private UserService userService;
+
+    @RequiresAuthentication
     @WrapException
     @Override
     public Revision addOrGetRevision(final @NotNull AddOrGetRevisionRequest request) {
@@ -98,6 +104,7 @@ public class RevisionServiceImpl implements RevisionService {
         return outcomeRevision;
     }
 
+    @RequiresAuthentication
     @WrapException
     @Override
     public Revision updateRevisionPackages(final @NotNull UpdateRevisionPackagesRequest request) {
@@ -105,13 +112,14 @@ public class RevisionServiceImpl implements RevisionService {
         return updateRevisionPackages(revisionEntity, request);
     }
 
+    @RequiresAuthentication
     @Override
-    public ApplicationFile getApplication(final GetApplicationRequest request) {
-        final RevisionEntity revisionEntity = revisionDAO.findById(request.getRevisionId());
+    public ApplicationFile getApplication(final Long revisionId, final ApplicationType applicationType) {
+        final RevisionEntity revisionEntity = revisionDAO.findById(revisionId);
         if (revisionEntity != null) {
             final ApplicationFile ret = new ApplicationFile();
             try {
-                switch (request.getApplicationType()) {
+                switch (applicationType) {
                     case MAIN:
                         ret.setContent(tempFileService.createTempFile(
                                 revisionEntity.getMainPackage().getBinaryStream()));
@@ -124,10 +132,8 @@ public class RevisionServiceImpl implements RevisionService {
                         return ret;
                     default:
                         throw new IllegalArgumentException("unknown application type : "
-                                + request.getApplicationType());
+                                + applicationType);
                 }
-            } catch (IOException e) {
-                LOGGER.error("error getting file", e);
             } catch (SQLException e) {
                 LOGGER.error("error getting file", e);
             }
@@ -135,17 +141,19 @@ public class RevisionServiceImpl implements RevisionService {
         return null;
     }
 
+    @RequiresAuthentication
     @Override
-    public Revision getRevision(final RevisionRequest request) {
-        final RevisionEntity revisionEntity = revisionDAO.findById(request.getRevisionId());
+    public Revision getRevision(final Long revisionId) {
+        final RevisionEntity revisionEntity = revisionDAO.findById(revisionId);
         final Revision revision = revisionConverter.map(revisionEntity);
         createUrls(revision, revisionEntity);
         return revision;
     }
 
+    @RequiresAuthentication
     @Override
-    public RevisionWithApkStructure getRevisionWithApkStructure(final RevisionRequest request) {
-        final RevisionEntity revisionEntity = revisionDAO.findById(request.getRevisionId());
+    public RevisionWithApkStructure getRevisionWithApkStructure(final Long revisionId) {
+        final RevisionEntity revisionEntity = revisionDAO.findById(revisionId);
         final RevisionWithApkStructure revision = revisionConverter.mapWithApkStructure(revisionEntity);
         createUrls(revision, revisionEntity);
         return revision;
@@ -211,11 +219,14 @@ public class RevisionServiceImpl implements RevisionService {
     }
 
     private void createUrls(final Revision outcomeRevision, final RevisionEntity revisionEntity) {
+        final UserWithPersistedAuth userWithToken = userService.getUserWithToken();
         if (revisionEntity.isMainPackageLoaded()) {
-            outcomeRevision.setMainPackageUrl(urlService.createUrl(outcomeRevision.getId(), true));
+            outcomeRevision.setMainPackageUrl(urlService.createUrl(outcomeRevision.getId(), true,
+                    userWithToken.getToken()));
         }
         if (revisionEntity.isSpecialPackageLoaded()) {
-            outcomeRevision.setSpecialPackageUrl(urlService.createUrl(outcomeRevision.getId(), false));
+            outcomeRevision.setSpecialPackageUrl(urlService.createUrl(outcomeRevision.getId(), false,
+                    userWithToken.getToken()));
         }
     }
 

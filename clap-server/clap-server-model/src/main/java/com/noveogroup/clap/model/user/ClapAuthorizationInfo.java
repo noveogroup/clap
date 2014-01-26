@@ -20,13 +20,13 @@ public class ClapAuthorizationInfo implements AuthorizationInfo {
     private List<Permission> permissions = Lists.newArrayList();
 
     public ClapAuthorizationInfo(final User user) {
-        if(user != null){
+        if (user != null) {
             final Role role = user.getRole();
-            if(role != null) {
+            if (role != null) {
                 roles.add(role.name());
             }
             final List<ClapPermission> clapPermissions = user.getClapPermissions();
-            if (CollectionUtils.isNotEmpty(clapPermissions)){
+            if (CollectionUtils.isNotEmpty(clapPermissions)) {
                 permissions.addAll(clapPermissions);
             }
         }

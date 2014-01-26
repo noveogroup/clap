@@ -1,20 +1,15 @@
 package com.noveogroup.clap.model.request.revision;
 
-import com.noveogroup.clap.model.auth.Authentication;
+import com.noveogroup.clap.model.request.BaseRequest;
 import org.jboss.resteasy.annotations.providers.multipart.PartType;
 
 import javax.ws.rs.FormParam;
 import java.io.InputStream;
 
 /**
- * Created with IntelliJ IDEA.
- * User: mdemidov
- * Date: 5/31/13
- * Time: 6:42 PM
- *
- * @since 5/31/13 6:42 PM
+ * upload apk request
  */
-public class CreateOrUpdateRevisionRequest {
+public class CreateOrUpdateRevisionRequest extends BaseRequest {
 
     @FormParam("projectExternalId")
     @PartType("text/plain")
@@ -23,10 +18,6 @@ public class CreateOrUpdateRevisionRequest {
     @FormParam("revisionHash")
     @PartType("text/plain")
     private String revisionHash;
-
-    @FormParam("user")
-    @PartType("application/json")
-    private Authentication user;
 
     @FormParam("mainPackage")
     @PartType("application/octet-stream")
@@ -68,11 +59,4 @@ public class CreateOrUpdateRevisionRequest {
         this.specialPackage = specialPackage;
     }
 
-    public Authentication getUser() {
-        return user;
-    }
-
-    public void setUser(final Authentication user) {
-        this.user = user;
-    }
 }

@@ -5,7 +5,7 @@ import javax.ws.rs.core.Response;
 
 /**
  * base class for common business exceptions
- *
+ * <p/>
  * may be thrown via rest
  *
  * @author Andrey Sokolov

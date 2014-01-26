@@ -23,29 +23,30 @@ public interface UserService {
     User createUser(UserCreationModel user);
 
     /**
-     * retrieve user with persisted authentication data
+     * retrieve current user with token
      *
-     * @param login request user login
      * @return user model, not null
      */
-    UserWithPersistedAuth getUserWithPersistedAuth(String login);
+    UserWithPersistedAuth getUserWithToken();
 
 
     /**
      * resolve login via security utils
+     *
      * @return current user
      */
     User getUser();
 
     /**
      * resolve login via security utils
+     *
      * @return current user
      */
     User getUser(boolean autocreate);
 
     User getUser(String login);
 
-    User getUser(String login,boolean autocreate);
+    User getUser(String login, boolean autocreate);
 
     User saveUser(User user);
 
@@ -54,4 +55,8 @@ public interface UserService {
     void resetUserPassword(String login, String newPassword);
 
     List<User> getUsers();
+
+    String getToken(Authentication authentication);
+
+    User getUserByToken(String token);
 }

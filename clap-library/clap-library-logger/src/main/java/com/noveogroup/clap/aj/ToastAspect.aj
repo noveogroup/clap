@@ -1,8 +1,6 @@
 package com.noveogroup.clap.aj;
 
 import android.content.Context;
-import android.app.Activity;
-import android.content.Intent;
 import android.widget.Toast;
 
 public aspect ToastAspect {

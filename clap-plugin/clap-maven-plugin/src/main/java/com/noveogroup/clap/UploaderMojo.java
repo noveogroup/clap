@@ -1,8 +1,9 @@
 package com.noveogroup.clap;
 
+import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
 import com.noveogroup.clap.model.revision.Revision;
-import com.noveogroup.clap.model.auth.Authentication;
+import com.noveogroup.clap.rest.AuthenticationEndpoint;
 import com.noveogroup.clap.rest.RevisionEndpoint;
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -48,13 +49,19 @@ public class UploaderMojo extends AbstractClapMojo {
             getLog().error("Artifact not exists");
         } else {
             try {
-                FileInputStream data = new FileInputStream(artifactFile);
-                RevisionEndpoint revisionEndpoint = ProxyFactory.create(RevisionEndpoint.class, serviceUrl);
+                final FileInputStream data = new FileInputStream(artifactFile);
+                final RevisionEndpoint revisionEndpoint = ProxyFactory.create(RevisionEndpoint.class, serviceUrl);
+                final AuthenticationEndpoint authenticationEndpoint = ProxyFactory.create(AuthenticationEndpoint.class,
+                        serviceUrl);
 
-                Authentication user = new Authentication();
+                final Authentication user = new Authentication();
                 user.setLogin(clapLogin);
                 user.setPassword(clapPassword);
+                final String token = authenticationEndpoint.getToken(user);
+                getLog().debug("token - " + token);
+
                 CreateOrUpdateRevisionRequest createOrUpdateRevisionRequest = new CreateOrUpdateRevisionRequest();
+                createOrUpdateRevisionRequest.setToken(token);
                 if (isMainPackage) {
                     createOrUpdateRevisionRequest.setMainPackage(data);
                 } else {
@@ -62,7 +69,6 @@ public class UploaderMojo extends AbstractClapMojo {
                 }
                 createOrUpdateRevisionRequest.setRevisionHash(revisionId);
                 createOrUpdateRevisionRequest.setProjectExternalId(projectId);
-                createOrUpdateRevisionRequest.setUser(user);
                 Revision revision = revisionEndpoint.createOrUpdateRevision(createOrUpdateRevisionRequest);
                 getLog().info("HASH " + revision.getHash());
             } catch (FileNotFoundException e) {

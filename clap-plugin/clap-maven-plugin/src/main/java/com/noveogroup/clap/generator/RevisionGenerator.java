@@ -1,7 +1,10 @@
 package com.noveogroup.clap.generator;
 
 import com.noveogroup.clap.ProjectInfo;
-import com.sun.codemodel.*;
+import com.sun.codemodel.JClassAlreadyExistsException;
+import com.sun.codemodel.JCodeModel;
+import com.sun.codemodel.JDefinedClass;
+import com.sun.codemodel.JPackage;
 
 import java.io.File;
 import java.io.IOException;

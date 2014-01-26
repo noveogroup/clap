@@ -9,7 +9,7 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 @ApplicationScoped
-public class MessagesEndpointImpl implements MessagesEndpoint {
+public class MessagesEndpointImpl extends BaseEndpoint implements MessagesEndpoint {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessagesEndpointImpl.class);
 
@@ -19,6 +19,7 @@ public class MessagesEndpointImpl implements MessagesEndpoint {
     @Override
     public void saveMessage(final SendMessageRequest request) {
         LOGGER.debug("saving message " + request);
+        login(request.getToken());
         messagesService.saveMessage(request.getRevisionHash(), request.getMessage());
         LOGGER.debug(request + "saved");
     }

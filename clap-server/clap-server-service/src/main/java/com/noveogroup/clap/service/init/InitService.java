@@ -18,6 +18,7 @@ import javax.ejb.Startup;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * @author Andrey Sokolov
@@ -42,13 +43,8 @@ public class InitService {
     public void initDB() {
         UserEntity user = new UserEntity();
         user.setLogin("test");
-        user.setAuthenticationKey(PasswordsHashCalculator.calculatePasswordHash("123"));
-        user.setRole(Role.ADMIN);
-        user = userDAO.persist(user);
-
-        user = new UserEntity();
-        user.setLogin("asokolov");
-        user.setAuthenticationKey(PasswordsHashCalculator.calculatePasswordHash("321"));
+        user.setHashedPassword(PasswordsHashCalculator.calculatePasswordHash("123"));
+        user.setToken(UUID.randomUUID().toString());
         user.setRole(Role.ADMIN);
         user = userDAO.persist(user);
 

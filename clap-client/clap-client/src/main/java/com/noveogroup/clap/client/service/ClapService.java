@@ -32,6 +32,7 @@ public class ClapService extends IntentService {
             HttpProtocolParams.setContentCharset(param, HTTP.DEFAULT_CONTENT_CHARSET);
             HttpProtocolParams.setUseExpectContinue(param, false);
             MessagesEndpoint messagesEndpoint = ProxyFactory.create(MessagesEndpoint.class, "http://10.0.14.53:8080/clap-rest", new ApacheHttpClient4Executor(param));
+            //TODO auth
             Message messageDTO = new Message();
             messageDTO.setLogCat(intent.getStringExtra("logCat"));
             messageDTO.setStackTraceInfo(intent.getStringExtra("stackTraceInfo"));

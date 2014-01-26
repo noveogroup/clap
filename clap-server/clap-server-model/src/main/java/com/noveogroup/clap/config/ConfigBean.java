@@ -1,11 +1,16 @@
 package com.noveogroup.clap.config;
 
 
+import com.google.common.collect.Lists;
+import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang.StringUtils;
+
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 
 @Named
@@ -20,7 +25,7 @@ public class ConfigBean {
 
     private String authenticationSystemId;
 
-    private String tempFilesDir;
+    private List<String> tempFilesDirs = Lists.newArrayList();
 
     private long tempFilesCleanInterval;
 
@@ -30,8 +35,16 @@ public class ConfigBean {
         maxApkSize = Long.parseLong(properties.getProperty("maxApkSize"));
         downloadApkUrl = properties.getProperty("rest.apkDownload");
         authenticationSystemId = properties.getProperty("authenticationSystemId");
-        tempFilesDir = properties.getProperty("temp.files.directory");
-        checkIfDir(tempFilesDir);
+        final String[] tempFilesDirArray = StringUtils.split(properties.getProperty("temp.files.directory"), ';');
+        if (ArrayUtils.isNotEmpty(tempFilesDirArray)) {
+            for (String tempFilesDir : tempFilesDirArray) {
+                checkIfDir(tempFilesDir);
+                tempFilesDirs.add(tempFilesDir);
+            }
+        }
+        if (tempFilesDirs.isEmpty()) {
+            throw new IllegalArgumentException("No temp files directory is set");
+        }
         tempFilesCleanInterval = Long.parseLong(properties.getProperty("temp.files.clean.interval"));
     }
 
@@ -51,8 +64,8 @@ public class ConfigBean {
         return authenticationSystemId;
     }
 
-    public String getTempFilesDir() {
-        return tempFilesDir;
+    public List<String> getTempFilesDirs() {
+        return tempFilesDirs;
     }
 
     public long getTempFilesCleanInterval() {

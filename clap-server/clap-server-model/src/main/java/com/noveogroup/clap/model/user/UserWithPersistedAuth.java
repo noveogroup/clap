@@ -6,20 +6,20 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @author Andrey Sokolov
  */
 public class UserWithPersistedAuth extends User {
-    private String authenticationKey;
+    private String token;
 
-    public String getAuthenticationKey() {
-        return authenticationKey;
+    public String getToken() {
+        return token;
     }
 
-    public void setAuthenticationKey(String authenticationKey) {
-        this.authenticationKey = authenticationKey;
+    public void setToken(String token) {
+        this.token = token;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("authenticationKey", authenticationKey)
+                .append("token", token)
                 .toString();
     }
 }

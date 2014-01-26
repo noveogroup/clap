@@ -1,10 +1,9 @@
 package com.noveogroup.clap.service.revision;
 
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
-import com.noveogroup.clap.model.request.revision.GetApplicationRequest;
-import com.noveogroup.clap.model.request.revision.RevisionRequest;
 import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
 import com.noveogroup.clap.model.revision.ApplicationFile;
+import com.noveogroup.clap.model.revision.ApplicationType;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
 
@@ -17,10 +16,10 @@ public interface RevisionService {
 
     Revision updateRevisionPackages(UpdateRevisionPackagesRequest request);
 
-    ApplicationFile getApplication(GetApplicationRequest request);
+    ApplicationFile getApplication(Long revisionId, ApplicationType applicationType);
 
-    Revision getRevision(RevisionRequest request);
+    Revision getRevision(Long revisionId);
 
-    RevisionWithApkStructure getRevisionWithApkStructure(RevisionRequest request);
+    RevisionWithApkStructure getRevisionWithApkStructure(Long revisionId);
 
 }

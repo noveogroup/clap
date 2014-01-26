@@ -23,7 +23,7 @@ import java.io.InputStream;
  * @author Mikhail Demidov
  */
 @ApplicationScoped
-public class RevisionEndpointImpl implements RevisionEndpoint {
+public class RevisionEndpointImpl extends BaseEndpoint implements RevisionEndpoint {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RevisionEndpointImpl.class);
 
@@ -36,6 +36,7 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
 
     @Override
     public Revision createOrUpdateRevision(final CreateOrUpdateRevisionRequest request) {
+        login(request.getToken());
         final Revision revision = new Revision();
         revision.setHash(request.getRevisionHash());
         final AddOrGetRevisionRequest addOrGetRevisionRequest = new AddOrGetRevisionRequest();
@@ -79,6 +80,7 @@ public class RevisionEndpointImpl implements RevisionEndpoint {
 
     @Override
     public Revision getRevision(final RevisionRequest request) {
-        return revisionService.getRevision(request);
+        login(request.getToken());
+        return revisionService.getRevision(request.getRevisionId());
     }
 }

@@ -13,16 +13,16 @@ import javax.persistence.Query;
 @Stateless
 public class UserDAOImpl extends GenericHibernateDAOImpl<UserEntity, Long> implements UserDAO {
 
-    private static final String GET_USER_BY_AUTHENTICATION_KEY = "getUserByAuthenticationKey";
-    private static final String GET_USER_BY_AUTHENTICATION_KEY_PARAMETER = "authenticationKey";
+    private static final String GET_USER_BY_TOKEN = "getUserByToken";
+    private static final String GET_USER_BY_TOKEN_PARAMETER = "token";
 
     private static final String GET_USER_BY_LOGIN = "getUserByLogin";
     private static final String GET_USER_BY_LOGIN_PARAMETER = "login";
 
     @Override
-    public UserEntity getUserByAuthenticationKey(final String authenticationKey) {
-        final Query query = entityManager.createNamedQuery(GET_USER_BY_AUTHENTICATION_KEY);
-        query.setParameter(GET_USER_BY_AUTHENTICATION_KEY_PARAMETER, authenticationKey);
+    public UserEntity getUserByToken(final String token) {
+        final Query query = entityManager.createNamedQuery(GET_USER_BY_TOKEN);
+        query.setParameter(GET_USER_BY_TOKEN_PARAMETER, token);
         try {
             final UserEntity userEntity = (UserEntity) query.getSingleResult();
             return userEntity;

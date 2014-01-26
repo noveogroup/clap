@@ -16,8 +16,8 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "clapUsers")
 @NamedQueries({
-        @NamedQuery(name = "getUserByAuthenticationKey",
-                query = "SELECT u FROM UserEntity u WHERE u.authenticationKey = :authenticationKey"),
+        @NamedQuery(name = "getUserByToken",
+                query = "SELECT u FROM UserEntity u WHERE u.token = :token"),
         @NamedQuery(name = "getUserByLogin",
                 query = "SELECT u FROM UserEntity u WHERE u.login = :login")
 })
@@ -29,7 +29,10 @@ public class UserEntity extends BaseEntity {
     private String login;
 
     @Column(unique = true, nullable = true)
-    private String authenticationKey;
+    private String token;
+
+    @Column(nullable = true)
+    private String hashedPassword;
 
     @Column(nullable = false)
     private Role role;
@@ -42,12 +45,12 @@ public class UserEntity extends BaseEntity {
         this.role = role;
     }
 
-    public String getAuthenticationKey() {
-        return authenticationKey;
+    public String getToken() {
+        return token;
     }
 
-    public void setAuthenticationKey(final String authenticationKey) {
-        this.authenticationKey = authenticationKey;
+    public void setToken(final String authenticationKey) {
+        this.token = authenticationKey;
     }
 
     public String getLogin() {
@@ -66,12 +69,20 @@ public class UserEntity extends BaseEntity {
         this.fullName = fullName;
     }
 
+    public String getHashedPassword() {
+        return hashedPassword;
+    }
+
+    public void setHashedPassword(final String hashedPassword) {
+        this.hashedPassword = hashedPassword;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .append("fullName", fullName)
                 .append("login", login)
-                .append("authenticationKey", authenticationKey)
+                .append("authenticationKey", token)
                 .append("role", role)
                 .toString();
     }
