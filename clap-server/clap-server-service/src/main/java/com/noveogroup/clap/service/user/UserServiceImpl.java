@@ -13,8 +13,10 @@ import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.model.user.UserCreationModel;
 import com.noveogroup.clap.model.user.UserWithPersistedAuth;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresRoles;
+import org.apache.shiro.subject.Subject;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 import org.slf4j.Logger;
@@ -56,10 +58,39 @@ public class UserServiceImpl implements UserService {
 
     @RequiresAuthentication
     @Override
+    public User getUser() {
+        return getUser(false);
+    }
+
+    @RequiresAuthentication
+    @Override
+    public User getUser(boolean autocreate) {
+        return getUser(getCurrentUserLogin(), autocreate);
+    }
+
+    @RequiresAuthentication
+    @Override
     public User getUser(final String login) {
+        return getUser(login, false);
+    }
+
+    @RequiresAuthentication
+    @Override
+    public User getUser(final String login, final boolean autocreate) {
         final UserEntity userEntity = userDAO.getUserByLogin(login);
-        final User user = MAPPER.map(userEntity, User.class);
-        return user;
+        if (userEntity != null) {
+            final User user = MAPPER.map(userEntity, User.class);
+            return user;
+        } else if (autocreate) {
+            UserEntity newUserEntity = new UserEntity();
+            newUserEntity.setLogin(login);
+            newUserEntity.setRole(Role.DEVELOPER);
+            newUserEntity = userDAO.persist(newUserEntity);
+            final User newUser = MAPPER.map(newUserEntity, User.class);
+            return newUser;
+        } else {
+            return null;
+        }
     }
 
     @RequiresAuthentication
@@ -79,15 +110,17 @@ public class UserServiceImpl implements UserService {
     @RequiresAuthentication
     @WrapException
     @Override
-    public void resetUserPassword(final Authentication authentication, final String newPassword) {
-        final UserEntity userEntity = userDAO.getUserByLogin(authentication.getLogin());
-        final String oldPassHash = PasswordsHashCalculator.calculatePasswordHash(authentication.getPassword());
-        if (StringUtils.equals(oldPassHash, userEntity.getAuthenticationKey())) {
-            userEntity.setAuthenticationKey(PasswordsHashCalculator.calculatePasswordHash(newPassword));
-            userDAO.persist(userEntity);
-        } else {
-            throw new ClapAuthenticationFailedException("old password incorrect");
-        }
+    public void resetUserPassword(final String newPassword) {
+        resetUserPassword(getCurrentUserLogin(),newPassword);
+    }
+
+    @RequiresAuthentication
+    @RequiresRoles("ADMIN")
+    @Override
+    public void resetUserPassword(String login, String newPassword) {
+        final UserEntity userEntity = userDAO.getUserByLogin(login);
+        userEntity.setAuthenticationKey(PasswordsHashCalculator.calculatePasswordHash(newPassword));
+        userDAO.persist(userEntity);
     }
 
     @RequiresAuthentication
@@ -114,5 +147,17 @@ public class UserServiceImpl implements UserService {
         userEntity.setAuthenticationKey(PasswordsHashCalculator.calculatePasswordHash(user.getPassword()));
         userEntity = userDAO.persist(userEntity);
         return MAPPER.map(userEntity, User.class);
+    }
+
+
+
+    private String getCurrentUserLogin(){
+        final Subject subject = SecurityUtils.getSubject();
+        if (subject != null) {
+            final String login = (String) subject.getPrincipals().getPrimaryPrincipal();
+            return login;
+        } else {
+            throw new IllegalStateException("security utils not prepared");
+        }
     }
 }

@@ -30,11 +30,28 @@ public interface UserService {
      */
     UserWithPersistedAuth getUserWithPersistedAuth(String login);
 
+
+    /**
+     * resolve login via security utils
+     * @return current user
+     */
+    User getUser();
+
+    /**
+     * resolve login via security utils
+     * @return current user
+     */
+    User getUser(boolean autocreate);
+
     User getUser(String login);
+
+    User getUser(String login,boolean autocreate);
 
     User saveUser(User user);
 
-    void resetUserPassword(Authentication authentication, String newPassword);
+    void resetUserPassword(String newPassword);
+
+    void resetUserPassword(String login, String newPassword);
 
     List<User> getUsers();
 }

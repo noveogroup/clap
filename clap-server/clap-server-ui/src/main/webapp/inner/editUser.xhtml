@@ -47,10 +47,6 @@
             <p:panel id="resetPasswordPanel" header="#{msgs['user.info.label.password.reset.header']}">
                 <p:messages id="resetPasswordMessages"/>
                 <p:panelGrid columns="2">
-                    <p:outputLabel for="oldPassword"
-                                   value="#{msgs['user.info.label.password.old']}"/>
-                    <p:password id="oldPassword"
-                                value="#{resetPasswordModel.oldPassword}" required="true"/>
                     <p:outputLabel for="newPassword"
                                    value="#{msgs['user.info.label.password.new']}"/>
                     <p:password id="newPassword"

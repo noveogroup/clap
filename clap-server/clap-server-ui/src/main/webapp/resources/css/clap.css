@@ -9,6 +9,24 @@
     float: left;
 }
 
-#sideMenu {
+#sideMenuForm {
     float: left;
+    width: 222px;
+    margin-right: 12px;
+}
+
+div.sideMenu {
+    width: 100%;
+}
+
+.mainMenu span.ui-menuitem-text {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.sideMenu span.ui-menuitem-text {
+    font-size: 13px;
+}
+.sideMenu .subMenu {
+    font-size: 13px;
 }

@@ -3,12 +3,6 @@
 <cc:interface>
 </cc:interface>
 <cc:implementation>
-    <h:form rendered="#{not userSessionData.authenticated}">
-        <!-- TODO make configurable -->
-        <h:outputLink value="/clap/cas-check">
-            <h:outputText value="#{msgs['common.form.label.login']}"/>
-        </h:outputLink>
-    </h:form>
     <h:form rendered="#{userSessionData.authenticated}">
         <h:link value="#{userSessionData.userLink}"
                 outcome="/inner/userInfo"/>

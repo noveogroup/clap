@@ -5,9 +5,11 @@ import com.noveogroup.clap.web.model.user.UserSessionData;
 import org.apache.shiro.SecurityUtils;
 
 import javax.enterprise.context.RequestScoped;
+import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.inject.Inject;
 import javax.inject.Named;
+import java.io.IOException;
 
 /**
  * @author Andrey Sokolov
@@ -19,10 +21,12 @@ public class AuthenticationController {
     @Inject
     private UserSessionData userSessionData;
 
-    public String logout() {
+    public String logout() throws IOException {
         userSessionData.reset();
         SecurityUtils.getSubject().logout();
-        FacesContext.getCurrentInstance().getExternalContext().invalidateSession();
+        ExternalContext externalContext = FacesContext.getCurrentInstance().getExternalContext();
+        externalContext.invalidateSession();
+        externalContext.redirect(externalContext.getRequestContextPath() + "/logout");
         return Navigation.HOME.getView();
     }
 }

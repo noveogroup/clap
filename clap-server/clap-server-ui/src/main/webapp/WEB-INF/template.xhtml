@@ -17,7 +17,7 @@
         <p:growl autoUpdate="true" globalOnly="true"/>
 
         <h:form>
-            <p:menubar id="mainMenu">
+            <p:menubar id="mainMenu" styleClass="mainMenu">
                 <p:menuitem ajax="false" outcome="/index" value="#{msgs['menu.home']}"/>
                 <p:menuitem ajax="false" outcome="/inner/projects" value="#{msgs['menu.project.list']}"/>
                 <p:menuitem ajax="false" outcome="/inner/editUser" value="#{msgs['menu.my.account.settings']}"/>
@@ -27,22 +27,30 @@
                 <f:facet name="options">
                     <clp:loginForm/>
                     <!-- TODO improve it-->
-                    <p:themeSwitcher value="#{themeSwitcherBean.theme}" style="width:165px" rendered="true">
+                    <p:themeSwitcher value="#{themeSwitcherBean.theme}"
+                                     rendered="#{webConfigBean.showThemeSwitcher}"
+                                     style="width:165px">
                         <f:selectItem itemLabel="Choose Theme" itemValue="" />
                         <f:selectItems value="#{themeSwitcherBean.themes}" />
+                        <p:ajax listener="#{themeSwitcherBean.saveTheme}" />
                     </p:themeSwitcher>
                 </f:facet>
             </p:menubar>
         </h:form>
-        <p:menu id="sideMenu" rendered="#{userSessionData.authenticated}">
-            <ui:insert name="sideMenuItems"/>
-            <p:submenu styleClass="subMenu" label="#{msgs['side.menu.my.revisions']}">
-            </p:submenu>
-            <p:submenu styleClass="subMenu" label="#{msgs['side.menu.watching.projects']}">
-            </p:submenu>
-            <p:submenu styleClass="subMenu" label="#{msgs['side.menu.last.updates']}">
-            </p:submenu>
-        </p:menu>
+        <h:form id="sideMenuForm">
+            <p:menu id="sideMenu" styleClass="sideMenu" rendered="#{userSessionData.authenticated}">
+                <ui:insert name="sideMenuItems"/>
+                <p:submenu styleClass="subMenu" label="#{msgs['side.menu.my.revisions']}">
+                    <p:menuitem value="TODO" disabled="true"/>
+                </p:submenu>
+                <p:submenu styleClass="subMenu" label="#{msgs['side.menu.watching.projects']}">
+                    <p:menuitem value="TODO" disabled="true"/>
+                </p:submenu>
+                <p:submenu styleClass="subMenu" label="#{msgs['side.menu.last.updates']}">
+                    <p:menuitem value="TODO" disabled="true"/>
+                </p:submenu>
+            </p:menu>
+        </h:form>
         <h:panelGroup id="content">
             <ui:insert name="content"/>
         </h:panelGroup>

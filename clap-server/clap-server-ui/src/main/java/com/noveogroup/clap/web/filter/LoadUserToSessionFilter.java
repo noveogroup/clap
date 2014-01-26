@@ -2,6 +2,7 @@ package com.noveogroup.clap.web.filter;
 
 import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.service.user.UserService;
+import com.noveogroup.clap.web.config.WebConfigBean;
 import com.noveogroup.clap.web.model.user.UserSessionData;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.subject.Subject;
@@ -26,6 +27,9 @@ public class LoadUserToSessionFilter implements Filter {
     @Inject
     private UserService userService;
 
+    @Inject
+    private WebConfigBean webConfigBean;
+
     @Override
     public void init(final FilterConfig filterConfig) throws ServletException {
     }
@@ -41,7 +45,7 @@ public class LoadUserToSessionFilter implements Filter {
             if (subject.isAuthenticated()) {
                 //time to load user in session bean
                 final String login = (String) subject.getPrincipals().getPrimaryPrincipal();
-                final User user = userService.getUser(login);
+                final User user = userService.getUser(login,webConfigBean.isAutoCreateUsers());
                 userSessionData.setUser(user);
                 userSessionData.setAuthenticated(true);
             }

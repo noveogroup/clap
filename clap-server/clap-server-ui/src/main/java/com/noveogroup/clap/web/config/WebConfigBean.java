@@ -19,13 +19,27 @@ public class WebConfigBean {
 
     private Properties properties;
 
+    private boolean autoCreateUsers;
+
+    private boolean showThemeSwitcher;
+
     @PostConstruct
     public void setup() throws IOException {
         properties = ConfigurationUtils.getPropertiesFromConfig("clap-ui.properties");
         enableRegisteringUsers = Boolean.parseBoolean(properties.getProperty("enable.registering.users"));
+        autoCreateUsers = Boolean.parseBoolean(properties.getProperty("auto.create.users.from.cas"));
+        showThemeSwitcher = Boolean.parseBoolean(properties.getProperty("show.theme.switcher"));
+    }
+
+    public boolean isAutoCreateUsers() {
+        return autoCreateUsers;
     }
 
     public boolean isEnableRegisteringUsers() {
         return enableRegisteringUsers;
+    }
+
+    public boolean isShowThemeSwitcher() {
+        return showThemeSwitcher;
     }
 }

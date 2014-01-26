@@ -14,6 +14,7 @@ import java.util.TreeMap;
 @SessionScoped
 public class ThemeSwitcherBean implements Serializable{
 
+    public static final String DEFAULT_THEME = "bluesky";
     private Map<String, String> themes;
 
     private String theme;
@@ -33,6 +34,7 @@ public class ThemeSwitcherBean implements Serializable{
     @PostConstruct
     public void init() {
         themes = new TreeMap<String, String>();
+        theme = DEFAULT_THEME;
         themes.put("Aristo", "aristo");
         themes.put("Black-Tie", "black-tie");
         themes.put("Blitzer", "blitzer");

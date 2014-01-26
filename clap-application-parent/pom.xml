@@ -22,6 +22,9 @@
         <javaVersion>1.6</javaVersion>
         <clap-maven-plugin.isMainPackage>true</clap-maven-plugin.isMainPackage>
         <androidPluginVersion>3.8.0</androidPluginVersion>
+        <!-- for now its in settings.xml
+        <clap.serviceUrl>http://localhost:8080/clap-rest</clap.serviceUrl>
+        -->
     </properties>
 
     <dependencies>
@@ -97,7 +100,7 @@
                         <exclude>target</exclude>
                         <exclude>gen-external-apklibs</exclude>
                     </excludes>
-                    <serviceUrl>http://localhost:8080/clap-rest</serviceUrl>
+                    <serviceUrl>${clap.serviceUrl}</serviceUrl>
                     <isMainPackage>${clap-maven-plugin.isMainPackage}</isMainPackage>
                 </configuration>
                 <executions>

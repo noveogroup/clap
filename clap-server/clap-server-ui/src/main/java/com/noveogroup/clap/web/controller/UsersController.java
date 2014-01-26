@@ -62,13 +62,8 @@ public class UsersController extends BaseController {
     }
 
     public void resetPassword() {
-        final String login = userSessionData.getUser().getLogin();
-        final String password = resetPasswordModel.getOldPassword();
         final String newPassword = resetPasswordModel.getNewPassword();
-        final Authentication authentication = new Authentication();
-        authentication.setLogin(login);
-        authentication.setPassword(password);
-        userService.resetUserPassword(authentication, newPassword);
+        userService.resetUserPassword(newPassword);
         messageSupport.addMessage("resetPasswordMessages", "common.form.info.update.success");
     }
 
