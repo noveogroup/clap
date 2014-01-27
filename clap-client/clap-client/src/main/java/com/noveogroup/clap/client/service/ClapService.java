@@ -3,8 +3,10 @@ package com.noveogroup.clap.client.service;
 import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
+import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.message.Message;
 import com.noveogroup.clap.model.request.message.SendMessageRequest;
+import com.noveogroup.clap.rest.AuthenticationEndpoint;
 import com.noveogroup.clap.rest.MessagesEndpoint;
 import org.apache.http.HttpVersion;
 import org.apache.http.params.BasicHttpParams;
@@ -20,6 +22,8 @@ import java.util.Date;
  */
 public class ClapService extends IntentService {
 
+    public static final String CLAP_HOST = "http://10.0.14.53:8080/clap-rest";
+
     public ClapService() {
         super("Clap service");
     }
@@ -31,8 +35,15 @@ public class ClapService extends IntentService {
             HttpProtocolParams.setVersion(param, HttpVersion.HTTP_1_1);
             HttpProtocolParams.setContentCharset(param, HTTP.DEFAULT_CONTENT_CHARSET);
             HttpProtocolParams.setUseExpectContinue(param, false);
-            MessagesEndpoint messagesEndpoint = ProxyFactory.create(MessagesEndpoint.class, "http://10.0.14.53:8080/clap-rest", new ApacheHttpClient4Executor(param));
-            //TODO auth
+            AuthenticationEndpoint authenticationEndpoint = ProxyFactory.create(AuthenticationEndpoint.class, CLAP_HOST, new ApacheHttpClient4Executor(param));
+            Authentication authentication = new Authentication();
+            //TODO think about convenient acquiring auth token
+            authentication.setLogin("test");
+            authentication.setPassword("123");
+            String token = authenticationEndpoint.getToken(authentication);
+
+            MessagesEndpoint messagesEndpoint = ProxyFactory.create(MessagesEndpoint.class, CLAP_HOST, new ApacheHttpClient4Executor(param));
+
             Message messageDTO = new Message();
             messageDTO.setLogCat(intent.getStringExtra("logCat"));
             messageDTO.setStackTraceInfo(intent.getStringExtra("stackTraceInfo"));
@@ -42,6 +53,7 @@ public class ClapService extends IntentService {
             SendMessageRequest sendMessageRequest = new SendMessageRequest();
             sendMessageRequest.setMessage(messageDTO);
             sendMessageRequest.setRevisionHash(intent.getStringExtra("revision"));
+            sendMessageRequest.setToken(token);
             messagesEndpoint.saveMessage(sendMessageRequest);
 
             Log.d("SERVICE", "SERVICE START");

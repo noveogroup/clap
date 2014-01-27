@@ -167,7 +167,10 @@ public class UserServiceImpl implements UserService {
     public User createUser(final UserCreationModel user) {
         user.setRole(Role.DEVELOPER);
         UserEntity userEntity = MAPPER.map(user, UserEntity.class);
-        userEntity.setHashedPassword(PasswordsHashCalculator.calculatePasswordHash(user.getPassword()));
+        final String password = user.getPassword();
+        if(password != null){
+            userEntity.setHashedPassword(PasswordsHashCalculator.calculatePasswordHash(password));
+        }
         updateToken(userEntity);
         userEntity = userDAO.persist(userEntity);
         return MAPPER.map(userEntity, User.class);

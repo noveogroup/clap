@@ -20,7 +20,8 @@ public class ClapRestRealm extends AuthenticatingRealm {
             throws AuthenticationException {
         ClapRestAuthenticationToken clapToken = (ClapRestAuthenticationToken) token;
         final User userByToken = clapRealmHelper.getUserService().getUserByToken((String) clapToken.getCredentials());
-        final AuthenticationInfo ret = new SimpleAuthenticationInfo(userByToken.getLogin(), token, "ClapRestRealm");
+        final AuthenticationInfo ret = new SimpleAuthenticationInfo(userByToken.getLogin(),
+                clapToken.getCredentials(), "ClapRestRealm");
         return ret;
     }
 

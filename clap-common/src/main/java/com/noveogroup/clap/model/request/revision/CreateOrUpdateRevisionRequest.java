@@ -1,6 +1,5 @@
 package com.noveogroup.clap.model.request.revision;
 
-import com.noveogroup.clap.model.request.BaseRequest;
 import org.jboss.resteasy.annotations.providers.multipart.PartType;
 
 import javax.ws.rs.FormParam;
@@ -9,7 +8,7 @@ import java.io.InputStream;
 /**
  * upload apk request
  */
-public class CreateOrUpdateRevisionRequest extends BaseRequest {
+public class CreateOrUpdateRevisionRequest {
 
     @FormParam("projectExternalId")
     @PartType("text/plain")
@@ -26,6 +25,18 @@ public class CreateOrUpdateRevisionRequest extends BaseRequest {
     @FormParam("specialPackage")
     @PartType("application/octet-stream")
     private InputStream specialPackage;
+
+    @FormParam("token")
+    @PartType("text/plain")
+    private String token;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(final String token) {
+        this.token = token;
+    }
 
     public String getProjectExternalId() {
         return projectExternalId;

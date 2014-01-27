@@ -17,7 +17,7 @@
         <androidPluginVersion>3.8.0</androidPluginVersion>
         <javaVersion>1.6</javaVersion>
         <android.version>4.2.2_r2</android.version>
-        <support-v4.version>r19.0.1</support-v4.version>
+        <support-v4.version>r18</support-v4.version>
         <holoeverywhere.version>1.6.8</holoeverywhere.version>
         <resteasy-mobile.version>1.0.0</resteasy-mobile.version>
         <maven-compiler-plugin.version>2.5.1</maven-compiler-plugin.version>
