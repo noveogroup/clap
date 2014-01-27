@@ -4,8 +4,10 @@ import com.google.gson.Gson;
 import com.noveogroup.clap.converter.RevisionConverter;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
-import com.noveogroup.clap.entity.ProjectEntity;
+import com.noveogroup.clap.dao.UserDAO;
+import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
+import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.exception.WrapException;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
 import com.noveogroup.clap.model.request.revision.BaseRevisionPackagesRequest;
@@ -65,6 +67,9 @@ public class RevisionServiceImpl implements RevisionService {
 
     @Inject
     private UserService userService;
+
+    @EJB
+    private UserDAO userDAO;
 
     @RequiresAuthentication
     @WrapException
@@ -176,16 +181,24 @@ public class RevisionServiceImpl implements RevisionService {
      * @param request        request object, updates stream references in it
      */
     private void processPackages(final RevisionEntity revisionEntity, final BaseRevisionPackagesRequest request) {
+        String currentUserLogin = null;
+        UserEntity userByLogin = null;
         final StreamedPackage mainPackage = request.getMainPackage();
+        final StreamedPackage specialPackage = request.getSpecialPackage();
         boolean extractInfo = true;
+        if (mainPackage != null || specialPackage != null) {
+            currentUserLogin = userService.getCurrentUserLogin();
+            userByLogin = userDAO.getUserByLogin(currentUserLogin);
+        }
         if (mainPackage != null) {
             extractInfo = !processStreamedPackage(revisionEntity, mainPackage, extractInfo);
             revisionEntity.setMainPackageLoaded(true);
+            revisionEntity.setMainPackageUploadedBy(userByLogin);
         }
-        final StreamedPackage specialPackage = request.getSpecialPackage();
         if (specialPackage != null) {
             processStreamedPackage(revisionEntity, specialPackage, extractInfo);
             revisionEntity.setSpecialPackageLoaded(true);
+            revisionEntity.setSpecialPackageUploadedBy(userByLogin);
         }
     }
 

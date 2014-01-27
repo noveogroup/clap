@@ -1,10 +1,11 @@
 package com.noveogroup.clap.service.project;
 
 import com.google.common.collect.Lists;
+import com.noveogroup.clap.converter.ProjectConverter;
 import com.noveogroup.clap.dao.MessageDAO;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
-import com.noveogroup.clap.entity.ProjectEntity;
+import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.exception.WrapException;
 import com.noveogroup.clap.model.Project;
@@ -15,8 +16,6 @@ import com.noveogroup.clap.service.url.UrlService;
 import com.noveogroup.clap.service.user.UserService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
-import org.dozer.DozerBeanMapper;
-import org.dozer.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +34,6 @@ import java.util.List;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class ProjectServiceImpl implements ProjectService {
 
-    private static final Mapper MAPPER = new DozerBeanMapper();
     private static final Logger LOGGER = LoggerFactory.getLogger(ProjectServiceImpl.class);
 
     @EJB
@@ -53,6 +51,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Inject
     private UserService userService;
 
+    private ProjectConverter projectConverter = new ProjectConverter();
+
     @WrapException
     @RequiresAuthentication
     @Override
@@ -60,8 +60,8 @@ public class ProjectServiceImpl implements ProjectService {
         if (project.getCreationDate() == null) {
             project.setCreationDate(new Date());
         }
-        final ProjectEntity projectEntity = MAPPER.map(project, ProjectEntity.class);
-        return MAPPER.map(projectDAO.persist(projectEntity), Project.class);
+        final ProjectEntity projectEntity = projectConverter.map(project);
+        return projectConverter.map(projectDAO.persist(projectEntity));
     }
 
     @WrapException
@@ -69,47 +69,54 @@ public class ProjectServiceImpl implements ProjectService {
     @RequiresPermissions("EDIT_PROJECTS")
     @Override
     public Project save(final Project project) {
-        final ProjectEntity projectEntity = MAPPER.map(project, ProjectEntity.class);
-        return MAPPER.map(projectDAO.persist(projectEntity), Project.class);
+        final ProjectEntity projectEntity = projectConverter.map(project);
+        return projectConverter.map(projectDAO.persist(projectEntity));
     }
 
     @RequiresAuthentication
     @Override
     public Project findById(final Long id) {
-        return findById(id, Project.class);
+        final ProjectEntity projectEntity = projectDAO.findById(id);
+        final Project project = projectConverter.map(projectEntity);
+        updateRevisionUrls(id,projectEntity,project);
+        return project;
     }
 
     @RequiresAuthentication
     @Override
     public ImagedProject findByIdWithImage(final Long id) {
-        return findById(id, ImagedProject.class);
+        final ProjectEntity projectEntity = projectDAO.findById(id);
+        final ImagedProject project = projectConverter.mapToImagedProject(projectEntity);
+        updateRevisionUrls(id,projectEntity,project);
+        return project;
     }
 
     @RequiresAuthentication
     @Override
     public List<Project> findAllProjects() {
-        return findAllProjects(Project.class);
+        final List<ProjectEntity> projectEntityList = projectDAO.selectAll();
+        final List<Project> projectList = Lists.newArrayList();
+        for (final ProjectEntity projectEntity : projectEntityList) {
+            projectList.add(projectConverter.map(projectEntity, false));
+        }
+        return projectList;
     }
 
     @RequiresAuthentication
     @Override
     public List<ImagedProject> findAllImagedProjects() {
-        return findAllProjects(ImagedProject.class);
-    }
-
-    private <T extends Project> List<T> findAllProjects(final Class<? extends T> retClass) {
         final List<ProjectEntity> projectEntityList = projectDAO.selectAll();
-        final List<T> projectList = Lists.newArrayList();
+        final List<ImagedProject> projectList = Lists.newArrayList();
         for (final ProjectEntity projectEntity : projectEntityList) {
-            projectList.add(MAPPER.map(projectEntity, retClass));
+            projectList.add(projectConverter.mapToImagedProject(projectEntity, false));
         }
         return projectList;
     }
 
 
-    private <T extends Project> T findById(final Long id, final Class<? extends T> retClass) {
-        final ProjectEntity projectEntity = projectDAO.findById(id);
-        final T project = MAPPER.map(projectEntity, retClass);
+    private void updateRevisionUrls(final Long id,
+                                    final ProjectEntity projectEntity,
+                                    final Project project) {
         final UserWithPersistedAuth userWithToken = userService.getUserWithToken();
         final String token = userWithToken.getToken();
         final List<Revision> revisions = project.getRevisions();
@@ -124,7 +131,10 @@ public class ProjectServiceImpl implements ProjectService {
                 revision.setSpecialPackageUrl(urlService.createUrl(revision.getId(), false, token));
             }
         }
-        return project;
     }
 
+
+    public void setProjectConverter(final ProjectConverter projectConverter) {
+        this.projectConverter = projectConverter;
+    }
 }

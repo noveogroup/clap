@@ -1,9 +1,10 @@
 package com.noveogroup.clap.converter;
 
 import com.google.gson.Gson;
-import com.noveogroup.clap.entity.ProjectEntity;
 import com.noveogroup.clap.entity.message.MessageEntity;
+import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
+import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.model.message.Message;
 import com.noveogroup.clap.model.revision.ApkStructure;
 import com.noveogroup.clap.model.revision.Revision;
@@ -48,7 +49,9 @@ public class RevisionConverter {
         final List<MessageEntity> revisionMessages = revision.getMessages();
         if (CollectionUtils.isNotEmpty(revisionMessages)) {
             for (final MessageEntity message : revisionMessages) {
-                toMap.getMessages().add(MAPPER.map(message, Message.class));
+                Message map = MAPPER.map(message, Message.class);
+                map.setUploadedBy(message.getUploadedBy().getLogin());
+                toMap.getMessages().add(map);
             }
         }
         final ProjectEntity project = revision.getProject();
@@ -57,5 +60,13 @@ public class RevisionConverter {
         }
         toMap.setRevisionType(revision.getRevisionType());
         toMap.setTimestamp(revision.getTimestamp());
+        final UserEntity mainPackageUploadedBy = revision.getMainPackageUploadedBy();
+        if (mainPackageUploadedBy != null) {
+            toMap.setMainPackageUploadedBy(mainPackageUploadedBy.getLogin());
+        }
+        final UserEntity specialPackageUploadedBy = revision.getSpecialPackageUploadedBy();
+        if (specialPackageUploadedBy != null) {
+            toMap.setSpecialPackageUploadedBy(specialPackageUploadedBy.getLogin());
+        }
     }
 }

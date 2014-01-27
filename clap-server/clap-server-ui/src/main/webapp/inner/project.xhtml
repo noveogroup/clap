@@ -35,6 +35,12 @@
                 <p:column headerText="#{msgs['revision.label.type']}">
                     <h:outputText value="#{revision.revisionType}"/>
                 </p:column>
+                <p:column headerText="#{msgs['revision.label.mainUploadedBy']}">
+                    <h:outputText value="#{revision.mainPackageUploadedBy}"/>
+                </p:column>
+                <p:column headerText="#{msgs['revision.label.specialUploadedBy']}">
+                    <h:outputText value="#{revision.specialPackageUploadedBy}"/>
+                </p:column>
             </p:dataTable>
 
             <p:panel header="#{msgs['project.view.uploadRevision.header']}">

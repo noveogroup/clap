@@ -4,7 +4,7 @@ import com.noveogroup.clap.auth.PasswordsHashCalculator;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.dao.UserDAO;
-import com.noveogroup.clap.entity.ProjectEntity;
+import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.model.user.Role;

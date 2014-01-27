@@ -1,8 +1,9 @@
 package com.noveogroup.clap.entity.revision;
 
 import com.noveogroup.clap.entity.BaseEntity;
-import com.noveogroup.clap.entity.ProjectEntity;
 import com.noveogroup.clap.entity.message.MessageEntity;
+import com.noveogroup.clap.entity.project.ProjectEntity;
+import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.model.revision.RevisionType;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
@@ -46,7 +47,7 @@ public class RevisionEntity extends BaseEntity {
 
     private boolean specialPackageLoaded;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "revision")
     private List<MessageEntity> messages;
 
     @Column(length = COLUMN_LENGTH)
@@ -54,6 +55,12 @@ public class RevisionEntity extends BaseEntity {
 
     @ManyToOne(optional = false)
     private ProjectEntity project;
+
+    @ManyToOne(optional = true)
+    private UserEntity mainPackageUploadedBy;
+
+    @ManyToOne(optional = true)
+    private UserEntity specialPackageUploadedBy;
 
     /**
      * Constructor
@@ -142,17 +149,37 @@ public class RevisionEntity extends BaseEntity {
         this.apkStructureJSON = apkStructureJSON;
     }
 
+    public UserEntity getMainPackageUploadedBy() {
+        return mainPackageUploadedBy;
+    }
+
+    public void setMainPackageUploadedBy(final UserEntity mainPackageUploadedBy) {
+        this.mainPackageUploadedBy = mainPackageUploadedBy;
+    }
+
+    public UserEntity getSpecialPackageUploadedBy() {
+        return specialPackageUploadedBy;
+    }
+
+    public void setSpecialPackageUploadedBy(final UserEntity specialPackageUploadedBy) {
+        this.specialPackageUploadedBy = specialPackageUploadedBy;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .append("timestamp", timestamp)
                 .append("revisionType", revisionType)
                 .append("hash", hash)
+                .append("mainPackage", mainPackage)
+                .append("specialPackage", specialPackage)
                 .append("mainPackageLoaded", mainPackageLoaded)
                 .append("specialPackageLoaded", specialPackageLoaded)
                 .append("messages", messages)
-                .append("project", project)
                 .append("apkStructureJSON", apkStructureJSON)
+                .append("project", project)
+                .append("mainPackageUploadedBy", mainPackageUploadedBy)
+                .append("specialPackageUploadedBy", specialPackageUploadedBy)
                 .toString();
     }
 }

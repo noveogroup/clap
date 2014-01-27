@@ -1,5 +1,6 @@
-package com.noveogroup.clap.entity;
+package com.noveogroup.clap.entity.project;
 
+import com.noveogroup.clap.entity.BaseEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 
 import javax.persistence.Column;

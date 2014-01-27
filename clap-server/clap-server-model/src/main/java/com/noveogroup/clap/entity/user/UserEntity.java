@@ -1,14 +1,21 @@
 package com.noveogroup.clap.entity.user;
 
 import com.noveogroup.clap.entity.BaseEntity;
+import com.noveogroup.clap.entity.message.MessageEntity;
+import com.noveogroup.clap.entity.revision.RevisionEntity;
+import com.noveogroup.clap.model.user.ClapPermission;
 import com.noveogroup.clap.model.user.Role;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.List;
 
 /**
  * @author Andrey Sokolov
@@ -36,6 +43,18 @@ public class UserEntity extends BaseEntity {
 
     @Column(nullable = false)
     private Role role;
+
+    @ElementCollection(targetClass = ClapPermission.class)
+    private List<ClapPermission> clapPermissions;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "mainPackageUploadedBy")
+    private List<RevisionEntity> uploadedMainRevisions;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "specialPackageUploadedBy")
+    private List<RevisionEntity> uploadedSpecialRevisions;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "uploadedBy")
+    private List<MessageEntity> uploadedMessages;
 
     public Role getRole() {
         return role;
@@ -75,6 +94,38 @@ public class UserEntity extends BaseEntity {
 
     public void setHashedPassword(final String hashedPassword) {
         this.hashedPassword = hashedPassword;
+    }
+
+    public List<RevisionEntity> getUploadedMainRevisions() {
+        return uploadedMainRevisions;
+    }
+
+    public void setUploadedMainRevisions(final List<RevisionEntity> uploadedMainRevisions) {
+        this.uploadedMainRevisions = uploadedMainRevisions;
+    }
+
+    public List<RevisionEntity> getUploadedSpecialRevisions() {
+        return uploadedSpecialRevisions;
+    }
+
+    public void setUploadedSpecialRevisions(final List<RevisionEntity> uploadedSpecialRevisions) {
+        this.uploadedSpecialRevisions = uploadedSpecialRevisions;
+    }
+
+    public List<MessageEntity> getUploadedMessages() {
+        return uploadedMessages;
+    }
+
+    public void setUploadedMessages(final List<MessageEntity> uploadedMessages) {
+        this.uploadedMessages = uploadedMessages;
+    }
+
+    public List<ClapPermission> getClapPermissions() {
+        return clapPermissions;
+    }
+
+    public void setClapPermissions(final List<ClapPermission> clapPermissions) {
+        this.clapPermissions = clapPermissions;
     }
 
     @Override

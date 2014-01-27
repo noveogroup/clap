@@ -168,7 +168,7 @@ public class UserServiceImpl implements UserService {
         user.setRole(Role.DEVELOPER);
         UserEntity userEntity = MAPPER.map(user, UserEntity.class);
         final String password = user.getPassword();
-        if(password != null){
+        if (password != null) {
             userEntity.setHashedPassword(PasswordsHashCalculator.calculatePasswordHash(password));
         }
         updateToken(userEntity);
@@ -183,7 +183,7 @@ public class UserServiceImpl implements UserService {
     }
 
 
-    private String getCurrentUserLogin() {
+    public String getCurrentUserLogin() {
         final Subject subject = SecurityUtils.getSubject();
         if (subject != null) {
             final String login = (String) subject.getPrincipals().getPrimaryPrincipal();

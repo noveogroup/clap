@@ -48,6 +48,9 @@
             <p:column headerText="#{msgs['message.label.time']}">
                 <h:outputText value="#{message.timestamp}"/>
             </p:column>
+            <p:column headerText="#{msgs['message.label.uploadedBy']}">
+                <h:outputText value="#{message.uploadedBy}"/>
+            </p:column>
 
             <p:rowExpansion>
                 <p:panelGrid columns="2">

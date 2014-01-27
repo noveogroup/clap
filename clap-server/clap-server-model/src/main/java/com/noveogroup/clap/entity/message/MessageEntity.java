@@ -1,9 +1,13 @@
 package com.noveogroup.clap.entity.message;
 
 import com.noveogroup.clap.entity.BaseEntity;
+import com.noveogroup.clap.entity.revision.RevisionEntity;
+import com.noveogroup.clap.entity.user.UserEntity;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -32,6 +36,12 @@ public class MessageEntity extends BaseEntity {
     private String logCat;
     @Column(length = COLUMN_LENGTH)
     private String activityTraceLog;
+
+    @ManyToOne(optional = false)
+    private RevisionEntity revision;
+
+    @ManyToOne(optional = false)
+    private UserEntity uploadedBy;
 
     /**
      * Constructor
@@ -77,5 +87,33 @@ public class MessageEntity extends BaseEntity {
 
     public void setActivityTraceLog(final String activityTraceLog) {
         this.activityTraceLog = activityTraceLog;
+    }
+
+    public UserEntity getUploadedBy() {
+        return uploadedBy;
+    }
+
+    public void setUploadedBy(final UserEntity uploadedBy) {
+        this.uploadedBy = uploadedBy;
+    }
+
+    public void setRevision(final RevisionEntity revision) {
+        this.revision = revision;
+    }
+
+    public RevisionEntity getRevision() {
+        return revision;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("timestamp", timestamp)
+                .append("deviceInfo", deviceInfo)
+                .append("stackTraceInfo", stackTraceInfo)
+                .append("logCat", logCat)
+                .append("activityTraceLog", activityTraceLog)
+                .append("uploadedBy", uploadedBy)
+                .toString();
     }
 }

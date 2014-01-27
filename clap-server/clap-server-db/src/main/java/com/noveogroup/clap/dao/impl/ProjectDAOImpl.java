@@ -1,7 +1,7 @@
 package com.noveogroup.clap.dao.impl;
 
 import com.noveogroup.clap.dao.ProjectDAO;
-import com.noveogroup.clap.entity.ProjectEntity;
+import com.noveogroup.clap.entity.project.ProjectEntity;
 import org.hibernate.Hibernate;
 
 import javax.ejb.Stateless;

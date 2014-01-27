@@ -38,17 +38,11 @@ public class LoadUserToSessionFilter implements Filter {
     public void doFilter(final ServletRequest servletRequest,
                          final ServletResponse servletResponse,
                          final FilterChain filterChain) throws IOException, ServletException {
-        //no data in session
-        if (!userSessionData.isAuthenticated()) {
-            final Subject subject = SecurityUtils.getSubject();
-            //but have authenticated subject
-            if (subject.isAuthenticated()) {
-                //time to load user in session bean
-                final String login = (String) subject.getPrincipals().getPrimaryPrincipal();
-                final User user = userService.getUser(login, webConfigBean.isAutoCreateUsers());
-                userSessionData.setUser(user);
-                userSessionData.setAuthenticated(true);
-            }
+        final Subject subject = SecurityUtils.getSubject();
+        if (subject.isAuthenticated()) {
+            final User user = userService.getUser(webConfigBean.isAutoCreateUsers());
+            userSessionData.setUser(user);
+            userSessionData.setAuthenticated(true);
         }
         filterChain.doFilter(servletRequest, servletResponse);
     }

@@ -2,15 +2,13 @@ package com.noveogroup.clap.model.revision;
 
 import com.noveogroup.clap.model.BaseModel;
 import com.noveogroup.clap.model.message.Message;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 /**
  * @author Mikhail Demidov
  */
-@XmlRootElement
 public class Revision extends BaseModel {
 
     private Long timestamp;
@@ -27,13 +25,14 @@ public class Revision extends BaseModel {
 
     private String specialPackageUrl;
 
-    private String uploadedBy;
+    private String mainPackageUploadedBy;
+
+    private String specialPackageUploadedBy;
 
 
     public Revision() {
     }
 
-    @XmlElement
     public RevisionType getRevisionType() {
         return revisionType;
     }
@@ -42,7 +41,6 @@ public class Revision extends BaseModel {
         this.revisionType = revisionType;
     }
 
-    @XmlElement
     public List<Message> getMessages() {
         return messages;
     }
@@ -51,7 +49,6 @@ public class Revision extends BaseModel {
         this.messages = messages;
     }
 
-    @XmlElement
     public Long getProjectId() {
         return projectId;
     }
@@ -60,7 +57,6 @@ public class Revision extends BaseModel {
         this.projectId = projectId;
     }
 
-    @XmlElement
     public String getMainPackageUrl() {
         return mainPackageUrl;
     }
@@ -69,7 +65,6 @@ public class Revision extends BaseModel {
         this.mainPackageUrl = mainPackageUrl;
     }
 
-    @XmlElement
     public String getSpecialPackageUrl() {
         return specialPackageUrl;
     }
@@ -78,7 +73,6 @@ public class Revision extends BaseModel {
         this.specialPackageUrl = specialPackageUrl;
     }
 
-    @XmlElement
     public Long getTimestamp() {
         return timestamp;
     }
@@ -87,7 +81,6 @@ public class Revision extends BaseModel {
         this.timestamp = timestamp;
     }
 
-    @XmlElement
     public String getHash() {
         return hash;
     }
@@ -96,26 +89,36 @@ public class Revision extends BaseModel {
         this.hash = hash;
     }
 
-    public String getUploadedBy() {
-        return uploadedBy;
+
+    public String getMainPackageUploadedBy() {
+        return mainPackageUploadedBy;
     }
 
-    public void setUploadedBy(final String uploadedBy) {
-        this.uploadedBy = uploadedBy;
+    public void setMainPackageUploadedBy(final String mainPackageUploadedBy) {
+        this.mainPackageUploadedBy = mainPackageUploadedBy;
     }
+
+    public String getSpecialPackageUploadedBy() {
+        return specialPackageUploadedBy;
+    }
+
+    public void setSpecialPackageUploadedBy(final String specialPackageUploadedBy) {
+        this.specialPackageUploadedBy = specialPackageUploadedBy;
+    }
+
 
     @Override
     public String toString() {
-        final StringBuilder sb = new StringBuilder("Revision{");
-        sb.append("timestamp=").append(timestamp);
-        sb.append(", revisionType=").append(revisionType);
-        sb.append(", messages=").append(messages);
-        sb.append(", projectId=").append(projectId);
-        sb.append(", hash='").append(hash).append('\'');
-        sb.append(", mainPackageUrl='").append(mainPackageUrl).append('\'');
-        sb.append(", specialPackageUrl='").append(specialPackageUrl).append('\'');
-        sb.append(", uploadedBy=").append(uploadedBy);
-        sb.append('}');
-        return sb.toString();
+        return new ToStringBuilder(this)
+                .append("timestamp", timestamp)
+                .append("revisionType", revisionType)
+                .append("messages", messages)
+                .append("projectId", projectId)
+                .append("hash", hash)
+                .append("mainPackageUrl", mainPackageUrl)
+                .append("specialPackageUrl", specialPackageUrl)
+                .append("mainPackageUploadedBy", mainPackageUploadedBy)
+                .append("specialPackageUploadedBy", specialPackageUploadedBy)
+                .toString();
     }
 }

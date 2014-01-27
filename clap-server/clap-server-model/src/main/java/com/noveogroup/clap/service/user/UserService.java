@@ -59,4 +59,6 @@ public interface UserService {
     String getToken(Authentication authentication);
 
     User getUserByToken(String token);
+
+    String getCurrentUserLogin();
 }

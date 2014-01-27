@@ -15,6 +15,7 @@ public class Message extends BaseModel {
     private String stackTraceInfo;
     private String logCat;
     private String activityTraceLog;
+    private String uploadedBy;
 
     public Date getTimestamp() {
         return timestamp;
@@ -54,6 +55,14 @@ public class Message extends BaseModel {
 
     public void setActivityTraceLog(final String activityTraceLog) {
         this.activityTraceLog = activityTraceLog;
+    }
+
+    public String getUploadedBy() {
+        return uploadedBy;
+    }
+
+    public void setUploadedBy(final String uploadedBy) {
+        this.uploadedBy = uploadedBy;
     }
 
     @Override
