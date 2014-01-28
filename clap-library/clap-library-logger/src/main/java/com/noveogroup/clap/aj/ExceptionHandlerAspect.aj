@@ -1,6 +1,8 @@
 package com.noveogroup.clap.aj;
 
 import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
 import com.noveogroup.clap.ActivityTraceLogger;
 import com.noveogroup.clap.ExceptionHandler;
 

@@ -92,8 +92,8 @@ public class RevisionServiceImpl implements RevisionService {
         if (projectEntity == null) {
             projectEntity = new ProjectEntity();
             projectEntity.setExternalId(request.getProjectExternalId());
-            projectEntity.setName("Name");
-            projectEntity.setDescription("Description");
+            projectEntity.setName(request.getProjectExternalId());
+            projectEntity.setDescription("Description empty");
             projectEntity.setCreationDate(new Date());
             projectEntity = projectDAO.persist(projectEntity);
         }

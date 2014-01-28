@@ -30,6 +30,7 @@ public class ClapService extends IntentService {
 
     @Override
     protected void onHandleIntent(final Intent intent) {
+        Log.d("SERVICE", "SERVICE START");
         try {
             BasicHttpParams param = new BasicHttpParams();
             HttpProtocolParams.setVersion(param, HttpVersion.HTTP_1_1);
@@ -41,6 +42,7 @@ public class ClapService extends IntentService {
             authentication.setLogin("test");
             authentication.setPassword("123");
             String token = authenticationEndpoint.getToken(authentication);
+            Log.d("SERVICE", "TOKEN "+token);
 
             MessagesEndpoint messagesEndpoint = ProxyFactory.create(MessagesEndpoint.class, CLAP_HOST, new ApacheHttpClient4Executor(param));
 
@@ -54,10 +56,11 @@ public class ClapService extends IntentService {
             sendMessageRequest.setMessage(messageDTO);
             sendMessageRequest.setRevisionHash(intent.getStringExtra("revision"));
             sendMessageRequest.setToken(token);
+            Log.d("SERVICE", "Trying to send: " + sendMessageRequest);
             messagesEndpoint.saveMessage(sendMessageRequest);
 
-            Log.d("SERVICE", "SERVICE START");
-        } catch (Exception e) {
+            Log.d("SERVICE", "MESSAGE SENT");
+        } catch (Throwable e) {
             Log.e("ClapService", "Error while sending message to server " + e.getMessage(), e);
         }
 

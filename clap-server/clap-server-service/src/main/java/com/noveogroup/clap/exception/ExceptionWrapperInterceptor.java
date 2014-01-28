@@ -20,6 +20,7 @@ public class ExceptionWrapperInterceptor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ExceptionWrapperInterceptor.class);
 
+    //TODO check appropriate scope
     @Inject
     private DAOIntegration daoIntegration;
 

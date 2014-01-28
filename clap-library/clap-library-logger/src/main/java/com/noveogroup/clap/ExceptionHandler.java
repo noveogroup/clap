@@ -1,5 +1,7 @@
 package com.noveogroup.clap;
 
+import android.app.Activity;
+import android.content.Context;
 import android.util.Log;
 
 //import javax.mail.MessagingException;

@@ -46,7 +46,7 @@ public class MessagesServiceImpl implements MessagesService {
         final RevisionEntity revisionEntity = revisionDAO.getRevisionByHash(revisionHash);
         UserEntity userByLogin = userDAO.getUserByLogin(userService.getCurrentUserLogin());
         MessageEntity messageEntity = messagesConverter.map(message);
-        //messageEntity.setRevision(revisionEntity);
+        messageEntity.setRevision(revisionEntity);
         messageEntity.setUploadedBy(userByLogin);
         messageEntity = messageDAO.persist(messageEntity);
         List<MessageEntity> messageEntities = revisionEntity.getMessages();
