@@ -39,7 +39,7 @@ public class TempFilesDirectoryCleaner {
 
     @Timeout
     public void timeout(final Timer timer) {
-        LOGGER.debug("deleting temp files");
+        LOGGER.trace("deleting temp files");
         final List<String> tempFilesDirs = configBean.getTempFilesDirs();
         for (String tempFilesDirPath : tempFilesDirs) {
             final File tempFilesDir = new File(tempFilesDirPath);
@@ -57,9 +57,9 @@ public class TempFilesDirectoryCleaner {
         }
         final String name = file.getName();
         if (file.delete()) {
-            LOGGER.debug(name + " deleted");
+            LOGGER.trace(name + " deleted");
         } else {
-            LOGGER.debug(name + " not deleted");
+            LOGGER.trace(name + " not deleted");
         }
     }
 }
