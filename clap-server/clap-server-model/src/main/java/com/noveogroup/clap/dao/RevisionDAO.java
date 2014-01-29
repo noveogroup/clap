@@ -2,6 +2,9 @@ package com.noveogroup.clap.dao;
 
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.model.request.revision.StreamedPackage;
+import com.noveogroup.clap.model.revision.RevisionType;
+
+import java.util.List;
 
 
 /**
@@ -23,4 +26,6 @@ public interface RevisionDAO extends GenericDAO<RevisionEntity, Long> {
     RevisionEntity persist(RevisionEntity entity,
                            StreamedPackage mainPackage,
                            StreamedPackage specialPackage);
+
+    List<RevisionEntity> findForProjectAndType(Long projectId, RevisionType type);
 }

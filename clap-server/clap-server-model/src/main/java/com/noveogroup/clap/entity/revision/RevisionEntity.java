@@ -12,6 +12,7 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -23,7 +24,11 @@ import java.util.List;
  */
 @Entity
 @Table(name = "revisions")
-@NamedQuery(name = "getRevisionByHash", query = "SELECT rev FROM RevisionEntity rev WHERE rev.hash = :hash")
+@NamedQueries({
+        @NamedQuery(name = "getRevisionByHash", query = "SELECT rev FROM RevisionEntity rev WHERE rev.hash = :hash"),
+        @NamedQuery(name = "getRevisionsByProjectAndType",
+                query = "SELECT rev FROM RevisionEntity rev WHERE rev.project.id = :id and rev.revisionType = :type")
+})
 public class RevisionEntity extends BaseEntity {
 
     private static final int COLUMN_LENGTH = 16777215;
@@ -47,7 +52,7 @@ public class RevisionEntity extends BaseEntity {
 
     private boolean specialPackageLoaded;
 
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "revision")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "revision", orphanRemoval = true)
     private List<MessageEntity> messages;
 
     @Column(length = COLUMN_LENGTH)

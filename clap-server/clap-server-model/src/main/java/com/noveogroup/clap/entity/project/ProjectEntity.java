@@ -33,7 +33,7 @@ public class ProjectEntity extends BaseEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date creationDate;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "project",orphanRemoval = true)
     private List<RevisionEntity> revisions;
 
     @Lob

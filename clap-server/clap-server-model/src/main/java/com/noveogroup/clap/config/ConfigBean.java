@@ -13,7 +13,6 @@ import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Named;
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.Properties;
 
@@ -40,6 +39,8 @@ public class ConfigBean {
 
     private long configFileLastModified;
 
+    private int keepDevRevisions;
+
     @PostConstruct
     protected void setup() throws IOException {
         properties = ConfigurationUtils.getPropertiesFromConfig(CONFIG_FILE_NAME);
@@ -58,6 +59,7 @@ public class ConfigBean {
         }
         tempFilesCleanInterval = Long.parseLong(properties.getProperty("temp.files.clean.interval"));
         updateConfigInterval = Long.parseLong(properties.getProperty("config.update.interval"));
+        keepDevRevisions = Integer.parseInt(properties.getProperty("keep.dev.revisions"));
         configFileLastModified = getConfigFileLastModified();
     }
 
@@ -111,6 +113,10 @@ public class ConfigBean {
         return configFile.lastModified();
     }
 
+    public int getKeepDevRevisions() {
+        return keepDevRevisions;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
@@ -119,8 +125,9 @@ public class ConfigBean {
                 .append("authenticationSystemId", authenticationSystemId)
                 .append("tempFilesDirs", tempFilesDirs)
                 .append("tempFilesCleanInterval", tempFilesCleanInterval)
+                .append("updateConfigInterval", updateConfigInterval)
                 .append("configFileLastModified", configFileLastModified)
-                .append("lastModified", new Date(configFileLastModified))
+                .append("keepDevRevisions", keepDevRevisions)
                 .toString();
     }
 }

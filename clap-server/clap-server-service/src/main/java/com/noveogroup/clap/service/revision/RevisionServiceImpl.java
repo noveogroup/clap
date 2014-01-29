@@ -1,6 +1,7 @@
 package com.noveogroup.clap.service.revision;
 
 import com.google.gson.Gson;
+import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.converter.RevisionConverter;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
@@ -25,6 +26,7 @@ import com.noveogroup.clap.service.apk.IconExtractor;
 import com.noveogroup.clap.service.tempfiles.TempFileService;
 import com.noveogroup.clap.service.url.UrlService;
 import com.noveogroup.clap.service.user.UserService;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,7 +41,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Inner revision service
@@ -49,6 +54,9 @@ import java.util.Date;
 public class RevisionServiceImpl implements RevisionService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RevisionServiceImpl.class);
+
+    @Inject
+    private ConfigBean configBean;
 
     @Inject
     private RevisionConverter revisionConverter;
@@ -77,8 +85,10 @@ public class RevisionServiceImpl implements RevisionService {
     public Revision addOrGetRevision(final @NotNull AddOrGetRevisionRequest request) {
         final Revision revision = request.getRevision();
         RevisionEntity revisionEntity = revisionDAO.getRevisionByHashOrNull(request.getRevision().getHash());
+        boolean needToCheckRevisionsAmount = false;
         if (revisionEntity == null) {
             revisionEntity = revisionConverter.map(revision);
+            needToCheckRevisionsAmount = true;
         }
         if (revisionEntity.getTimestamp() == null) {
             revisionEntity.setTimestamp(new Date().getTime());
@@ -96,6 +106,8 @@ public class RevisionServiceImpl implements RevisionService {
             projectEntity.setDescription("Description empty");
             projectEntity.setCreationDate(new Date());
             projectEntity = projectDAO.persist(projectEntity);
+        } else if (needToCheckRevisionsAmount){
+            checkAndRemoveOldRevisions(projectEntity);
         }
         revisionEntity.setProject(projectEntity);
         projectEntity.getRevisions().add(revisionEntity);
@@ -248,5 +260,19 @@ public class RevisionServiceImpl implements RevisionService {
 
     private String createFileName(final ProjectEntity projectEntity, final boolean mainPackage) {
         return projectEntity.getName() + (mainPackage ? "" : "_hacked") + ".apk";
+    }
+
+    private void checkAndRemoveOldRevisions(final ProjectEntity projectEntity){
+        final List<RevisionEntity> revisions = revisionDAO.findForProjectAndType(projectEntity.getId(),
+                RevisionType.DEVELOP);
+        if(CollectionUtils.isNotEmpty(revisions) && configBean.getKeepDevRevisions() <= revisions.size()){
+            Collections.sort(revisions,new Comparator<RevisionEntity>() {
+                @Override
+                public int compare(final RevisionEntity lhs, final RevisionEntity rhs) {
+                    return (int)(lhs.getTimestamp() - rhs.getTimestamp());
+                }
+            });
+            revisionDAO.remove(revisions.get(0));
+        }
     }
 }

@@ -3,6 +3,7 @@ package com.noveogroup.clap.dao.impl;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.model.request.revision.StreamedPackage;
+import com.noveogroup.clap.model.revision.RevisionType;
 import org.hibernate.Hibernate;
 import org.hibernate.ejb.HibernateEntityManager;
 import org.hibernate.engine.jdbc.LobCreator;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import javax.ejb.Stateless;
 import javax.persistence.Query;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * @author Mikhail Demidov
@@ -21,6 +23,9 @@ public class RevisionDAOImpl extends GenericHibernateDAOImpl<RevisionEntity, Lon
 
     private static final String REVISION_BY_HASH = "getRevisionByHash";
     private static final String REVISION_BY_HASH_PARAMETER = "hash";
+    private static final String REVISIONS_BY_PROJECT_AND_TYPE = "getRevisionsByProjectAndType";
+    private static final String REVISIONS_BY_PROJECT_AND_TYPE_PARAMETER_ID = "id";
+    private static final String REVISIONS_BY_PROJECT_AND_TYPE_PARAMETER_TYPE = "type";
     private static final Logger LOGGER = LoggerFactory.getLogger(RevisionDAOImpl.class);
 
     @Override
@@ -73,6 +78,15 @@ public class RevisionDAOImpl extends GenericHibernateDAOImpl<RevisionEntity, Lon
             LOGGER.error("freeing blobs error", e);
         }
         return entity;
+    }
+
+    @Override
+    public List<RevisionEntity> findForProjectAndType(final Long projectId, final RevisionType type) {
+        final Query query = entityManager.createNamedQuery(REVISIONS_BY_PROJECT_AND_TYPE);
+        query.setParameter(REVISIONS_BY_PROJECT_AND_TYPE_PARAMETER_ID, projectId);
+        query.setParameter(REVISIONS_BY_PROJECT_AND_TYPE_PARAMETER_TYPE,type);
+        final List<RevisionEntity> resultList = query.getResultList();
+        return resultList;
     }
 
     @Override

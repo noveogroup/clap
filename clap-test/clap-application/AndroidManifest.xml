@@ -12,7 +12,6 @@
 
     <application
             android:icon="@drawable/icon"
-            android:name="org.holoeverywhere.app.Application"
             android:label="@string/app_name">
         <activity
                 android:name=".TestActivity"
