@@ -3,6 +3,7 @@ package com.noveogroup.clap;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.app.Activity;
 
 public final class IntentSender {
 
