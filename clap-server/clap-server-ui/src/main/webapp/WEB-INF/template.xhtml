@@ -37,11 +37,15 @@
                 </f:facet>
             </p:menubar>
         </h:form>
-        <h:form id="sideMenuForm">
+        <h:form id="sideMenuForm" styleClass="sideMenuForm">
             <p:menu id="sideMenu" styleClass="sideMenu" rendered="#{userSessionData.authenticated}">
                 <ui:insert name="sideMenuItems"/>
                 <p:submenu styleClass="subMenu" label="#{msgs['side.menu.my.revisions']}">
-                    <p:menuitem value="TODO" disabled="true"/>
+                    <p:menuitem value="#{msgs['side.menu.my.revisions.empty']}" disabled="true"
+                                rendered="#{(empty userSessionData.user.uploadedMainRevisions) and (empty userSessionData.user.uploadedSpecialRevisions)}"/>
+                    <p:menuitem outcome="/inner/revision/myRevisions"
+                                value="#{userSessionData.user.uploadedMainRevisions.size()} main, #{userSessionData.user.uploadedSpecialRevisions.size()} special"
+                                rendered="#{(not empty userSessionData.user.uploadedMainRevisions) or (not empty userSessionData.user.uploadedSpecialRevisions)}" />
                 </p:submenu>
                 <p:submenu styleClass="subMenu" label="#{msgs['side.menu.watching.projects']}">
                     <p:menuitem value="TODO" disabled="true"/>

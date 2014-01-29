@@ -61,7 +61,9 @@ public class ProjectServiceImpl implements ProjectService {
             project.setCreationDate(new Date());
         }
         final ProjectEntity projectEntity = projectConverter.map(project);
-        return projectConverter.map(projectDAO.persist(projectEntity));
+        final Project ret = projectConverter.map(projectDAO.persist(projectEntity));
+        projectDAO.flush();
+        return ret;
     }
 
     @WrapException
@@ -70,7 +72,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project save(final Project project) {
         final ProjectEntity projectEntity = projectConverter.map(project);
-        return projectConverter.map(projectDAO.persist(projectEntity));
+        final Project ret = projectConverter.map(projectDAO.persist(projectEntity));
+        projectDAO.flush();
+        return ret;
     }
 
     @RequiresAuthentication

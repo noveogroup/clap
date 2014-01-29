@@ -2,7 +2,8 @@ package com.noveogroup.clap.web;
 
 public enum Navigation {
     HOME("/index", true),
-    REVISION("/inner/revision", true),
+    REVISION("/inner/revision/revision", true),
+    MY_REVISIONS("/inner/revision/myRevisions", true),
     PROJECT("/inner/project", true),
     PROJECTS("/inner/projects", true),
     EDIT_USER("/inner/editUser", true),
@@ -20,4 +21,5 @@ public enum Navigation {
     public String getView() {
         return view + (facesRedirect ? "?faces-redirect=true" : "");
     }
+
 }

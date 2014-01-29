@@ -2,13 +2,12 @@ package com.noveogroup.clap.dao.impl;
 
 import com.google.common.collect.Lists;
 import com.noveogroup.clap.dao.GenericDAO;
-import com.noveogroup.clap.integration.DAOIntegration;
 
 import javax.annotation.PostConstruct;
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
+import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -23,10 +22,8 @@ import java.util.List;
  */
 public abstract class GenericHibernateDAOImpl<T, ID extends Serializable> implements GenericDAO<T, ID> {
 
+    @PersistenceContext(unitName = "distribution_pu")
     protected EntityManager entityManager;
-
-    @Inject
-    protected DAOIntegration daoIntegration;
 
     private Class<T> persistentClass;
 
@@ -36,7 +33,6 @@ public abstract class GenericHibernateDAOImpl<T, ID extends Serializable> implem
 
     @PostConstruct
     public void setup() {
-        entityManager = daoIntegration.getClapEntityManager();
         persistentClass = (Class<T>) ((ParameterizedType) getClass()
                 .getGenericSuperclass()).getActualTypeArguments()[0];
     }

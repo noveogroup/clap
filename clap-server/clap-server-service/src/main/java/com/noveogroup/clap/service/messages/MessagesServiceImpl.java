@@ -56,6 +56,8 @@ public class MessagesServiceImpl implements MessagesService {
         }
         messageEntities.add(messageEntity);
         revisionDAO.persist(revisionEntity);
+        revisionDAO.flush();
+        messageDAO.flush();
     }
 
     public void setMessagesConverter(final MessagesConverter messagesConverter) {

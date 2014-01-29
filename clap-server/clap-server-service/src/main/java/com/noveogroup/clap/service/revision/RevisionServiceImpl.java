@@ -103,6 +103,8 @@ public class RevisionServiceImpl implements RevisionService {
         processPackages(revisionEntity, request);
         projectDAO.persist(projectEntity);
         revisionEntity = revisionDAO.persist(revisionEntity, request.getMainPackage(), request.getSpecialPackage());
+        projectDAO.flush();
+        revisionDAO.flush();
         final Revision outcomeRevision = revisionConverter.map(revisionEntity);
         outcomeRevision.setProjectId(projectEntity.getId());
         createUrls(outcomeRevision, revisionEntity);
@@ -167,6 +169,7 @@ public class RevisionServiceImpl implements RevisionService {
     private Revision updateRevisionPackages(RevisionEntity revisionEntity, final BaseRevisionPackagesRequest request) {
         processPackages(revisionEntity, request);
         revisionEntity = revisionDAO.persist(revisionEntity, request.getMainPackage(), request.getSpecialPackage());
+        revisionDAO.flush();
         final Revision outcomeRevision = revisionConverter.map(revisionEntity);
         createUrls(outcomeRevision, revisionEntity);
         return outcomeRevision;

@@ -42,7 +42,6 @@ public class UserServiceImpl implements UserService {
     @EJB
     private UserDAO userDAO;
 
-    @WrapException
     @Override
     public UserWithPersistedAuth getUserWithToken() {
         final String currentUserLogin = getCurrentUserLogin();
@@ -97,6 +96,7 @@ public class UserServiceImpl implements UserService {
         userEntity.setRole(user.getRole());
         //TODO when we will have more info
         final UserEntity updatedUserEnity = userDAO.persist(userEntity);
+        userDAO.flush();
         final User updatedUser = MAPPER.map(updatedUserEnity, User.class);
         return updatedUser;
     }
@@ -114,13 +114,14 @@ public class UserServiceImpl implements UserService {
     @Override
     public void resetUserPassword(String login, String newPassword) {
         final UserEntity userEntity = userDAO.getUserByLogin(login);
-        userEntity.setToken(PasswordsHashCalculator.calculatePasswordHash(newPassword));
+        userEntity.setHashedPassword(PasswordsHashCalculator.calculatePasswordHash(newPassword));
+        updateToken(userEntity);
         userDAO.persist(userEntity);
+        userDAO.flush();
     }
 
     @RequiresAuthentication
     @RequiresRoles("ADMIN")
-    @WrapException
     @Override
     public List<User> getUsers() {
         final List<UserEntity> userEntities = userDAO.selectAll();
@@ -173,6 +174,7 @@ public class UserServiceImpl implements UserService {
         }
         updateToken(userEntity);
         userEntity = userDAO.persist(userEntity);
+        userDAO.flush();
         return MAPPER.map(userEntity, User.class);
     }
 

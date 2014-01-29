@@ -7,7 +7,7 @@
             res-type="javax.sql.DataSource"
             datasource-classname="com.mysql.jdbc.jdbc2.optional.MysqlDataSource"
             pool-resize-quantity="1"
-            max-pool-size="5"
+            max-pool-size="50"
             steady-pool-size="0"
             non-transactional-connections="true"
             statement-timeout-in-seconds="30">

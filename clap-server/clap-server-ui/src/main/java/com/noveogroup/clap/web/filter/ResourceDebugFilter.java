@@ -27,9 +27,9 @@ public class ResourceDebugFilter implements Filter {
     public void doFilter(final ServletRequest servletRequest,
                          final ServletResponse servletResponse,
                          final FilterChain filterChain) throws IOException, ServletException {
-        try{
-            filterChain.doFilter(servletRequest,servletResponse);
-        } catch (Throwable e){
+        try {
+            filterChain.doFilter(servletRequest, servletResponse);
+        } catch (Throwable e) {
             LOGGER.error("error while processing resources", e);
         }
     }

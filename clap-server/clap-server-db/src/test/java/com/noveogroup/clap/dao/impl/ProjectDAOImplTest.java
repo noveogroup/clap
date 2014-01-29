@@ -1,5 +1,6 @@
 package com.noveogroup.clap.dao.impl;
 
+import com.noveogroup.clap.entity.project.ProjectEntity;
 import org.mockito.InjectMocks;
 
 /**
@@ -13,6 +14,11 @@ public class ProjectDAOImplTest extends AbstractDAOImplTest<ProjectDAOImpl> {
     @Override
     protected ProjectDAOImpl getDAOImpl() {
         return projectDAO;
+    }
+
+    @Override
+    protected Class getEntityClass() {
+        return ProjectEntity.class;
     }
 
 }

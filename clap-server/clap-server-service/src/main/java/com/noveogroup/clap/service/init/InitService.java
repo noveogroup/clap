@@ -48,6 +48,13 @@ public class InitService {
         user.setRole(Role.ADMIN);
         user = userDAO.persist(user);
 
+        user = new UserEntity();
+        user.setLogin("asokolov");
+        user.setHashedPassword(PasswordsHashCalculator.calculatePasswordHash("testtest"));
+        user.setToken(UUID.randomUUID().toString());
+        user.setRole(Role.ADMIN);
+        user = userDAO.persist(user);
+
         LOGGER.debug("user created = " + user);
         ProjectEntity project = new ProjectEntity();
         project.setName("test_project");
