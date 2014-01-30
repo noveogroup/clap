@@ -1,5 +1,6 @@
 package com.noveogroup.clap.model.user;
 
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -17,7 +18,7 @@ import java.util.List;
 public class ClapAuthorizationInfo implements AuthorizationInfo {
 
     private List<String> roles = Lists.newArrayList();
-    private List<Permission> permissions = Lists.newArrayList();
+    private List<ClapPermission> permissions = Lists.newArrayList();
 
     public ClapAuthorizationInfo(final User user) {
         if (user != null) {
@@ -39,11 +40,16 @@ public class ClapAuthorizationInfo implements AuthorizationInfo {
 
     @Override
     public Collection<String> getStringPermissions() {
-        return Collections.emptyList();
+        return Lists.transform(permissions,new Function<ClapPermission, String>() {
+            @Override
+            public String apply(final ClapPermission permission) {
+                return permission.name();
+            }
+        });
     }
 
     @Override
     public Collection<Permission> getObjectPermissions() {
-        return permissions;
+        return Collections.emptyList();
     }
 }

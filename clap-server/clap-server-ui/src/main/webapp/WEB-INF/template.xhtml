@@ -22,7 +22,7 @@
                 <p:menuitem ajax="false" outcome="/inner/project/projects" value="#{msgs['menu.project.list']}"/>
                 <p:menuitem ajax="false" outcome="/inner/editUser" value="#{msgs['menu.my.account.settings']}"/>
                 <p:menuitem ajax="false" outcome="/inner/users" value="#{msgs['users.label.link']}"
-                            rendered="#{request.isUserInRole('ADMIN')}"/>
+                            rendered="#{userSessionData.hasPermission('EDIT_USERS')}"/>
                 <ui:insert name="topMenuItems"/>
                 <f:facet name="options">
                     <clp:loginForm/>

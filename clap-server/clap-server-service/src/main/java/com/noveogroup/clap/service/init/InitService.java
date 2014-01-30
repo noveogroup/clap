@@ -1,5 +1,6 @@
 package com.noveogroup.clap.service.init;
 
+import com.google.common.collect.Lists;
 import com.noveogroup.clap.auth.PasswordsHashCalculator;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
@@ -7,7 +8,9 @@ import com.noveogroup.clap.dao.UserDAO;
 import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
+import com.noveogroup.clap.model.user.ClapPermission;
 import com.noveogroup.clap.model.user.Role;
+import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,6 +21,7 @@ import javax.ejb.Startup;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -41,17 +45,23 @@ public class InitService {
 
     @PostConstruct
     public void initDB() {
+        List<UserEntity> userEntities = userDAO.selectAll();
+        if(CollectionUtils.isNotEmpty(userEntities)){
+            return;
+        }
         UserEntity user = new UserEntity();
         user.setLogin("test");
         user.setHashedPassword(PasswordsHashCalculator.calculatePasswordHash("123"));
         user.setToken(UUID.randomUUID().toString());
         user.setRole(Role.ADMIN);
+        user.setClapPermissions(Lists.newArrayList(ClapPermission.values()));
         user = userDAO.persist(user);
 
         user = new UserEntity();
         user.setLogin("asokolov");
         user.setHashedPassword(PasswordsHashCalculator.calculatePasswordHash("testtest"));
         user.setToken(UUID.randomUUID().toString());
+        user.setClapPermissions(Lists.newArrayList(ClapPermission.values()));
         user.setRole(Role.ADMIN);
         user = userDAO.persist(user);
 

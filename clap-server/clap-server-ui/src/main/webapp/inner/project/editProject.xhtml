@@ -2,10 +2,39 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
-        >
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/template.xhtml">
+    <ui:define name="sideMenuItems">
+        <p:menuitem value="#{msgs['menu.project.view']}" outcome="/inner/project/project"/>
+    </ui:define>
     <ui:define name="content">
-        <h1>mock edit project page</h1>
+        <h:form>
+            <p:messages/>
+            <p:panelGrid columns="2">
+                <h:outputLabel for="name"
+                               value="#{msgs['project.add.label.name']}"/>
+                <p:inputText id="name"
+                             value="#{projectsModel.selectedProject.name}"
+                             validatorMessage="#{msgs['project.add.message.name']}">
+                    <f:validateLength minimum="5" maximum="20"/>
+                </p:inputText>
+                <h:outputLabel for="externalId"
+                               value="#{msgs['project.add.label.externalId']}"/>
+                <p:inputText id="externalId"   disabled="true"
+                             value="#{projectsModel.selectedProject.externalId}" />
+                <h:outputLabel for="description"
+                               value="#{msgs['project.add.label.description']}"/>
+                <p:inputText id="description"
+                             value="#{projectsModel.selectedProject.description}"/>
+                <f:facet name="footer">
+                    <p:commandButton value="#{msgs['common.form.label.submit']}"
+                                     ajax="false"
+                                     action="#{projectsController.editProject()}"/>
+                </f:facet>
+            </p:panelGrid>
+        </h:form>
     </ui:define>
 </ui:composition>
 </html>

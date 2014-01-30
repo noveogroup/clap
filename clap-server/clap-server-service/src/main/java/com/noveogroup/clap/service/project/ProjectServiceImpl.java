@@ -7,6 +7,7 @@ import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
+import com.noveogroup.clap.exception.ClapPersistenceException;
 import com.noveogroup.clap.exception.WrapException;
 import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.model.project.ImagedProject;
@@ -71,10 +72,16 @@ public class ProjectServiceImpl implements ProjectService {
     @RequiresPermissions("EDIT_PROJECTS")
     @Override
     public Project save(final Project project) {
-        final ProjectEntity projectEntity = projectConverter.map(project);
-        final Project ret = projectConverter.map(projectDAO.persist(projectEntity));
-        projectDAO.flush();
-        return ret;
+        final ProjectEntity projectEntity = projectDAO.findProjectByExternalIdOrReturnNull(project.getExternalId());
+        if(projectEntity != null){
+            projectConverter.updateEntity(project,projectEntity);
+            final ProjectEntity persisted = projectDAO.persist(projectEntity);
+            projectDAO.flush();
+            final Project ret = projectConverter.map(persisted);
+            return ret;
+        } else {
+            throw new ClapPersistenceException("Project doesn't exists");
+        }
     }
 
     @RequiresAuthentication
@@ -115,6 +122,15 @@ public class ProjectServiceImpl implements ProjectService {
             projectList.add(projectConverter.mapToImagedProject(projectEntity, false));
         }
         return projectList;
+    }
+
+    @WrapException
+    @RequiresAuthentication
+    @RequiresPermissions("DELETE_PROJECTS")
+    @Override
+    public void deleteProject(final Project project) {
+        projectDAO.removeById(project.getId());
+        projectDAO.flush();
     }
 
 

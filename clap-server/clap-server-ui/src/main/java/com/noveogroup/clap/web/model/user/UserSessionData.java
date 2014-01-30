@@ -1,11 +1,14 @@
 package com.noveogroup.clap.web.model.user;
 
+import com.noveogroup.clap.model.user.ClapPermission;
 import com.noveogroup.clap.model.user.User;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.enterprise.context.SessionScoped;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @author Andrey Sokolov
@@ -51,5 +54,16 @@ public class UserSessionData implements Serializable {
     public void reset() {
         authenticated = false;
         user = null;
+    }
+
+    public boolean hasPermission(final String string) {
+        if (user != null) {
+            final List<ClapPermission> clapPermissions = user.getClapPermissions();
+            if (CollectionUtils.isNotEmpty(clapPermissions)) {
+                final ClapPermission clapPermission = ClapPermission.valueOf(string);
+                return clapPermissions.contains(clapPermission);
+            }
+        }
+        return false;
     }
 }

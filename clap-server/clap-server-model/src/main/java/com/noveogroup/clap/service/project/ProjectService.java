@@ -35,5 +35,7 @@ public interface ProjectService {
      */
     List<ImagedProject> findAllImagedProjects();
 
+    void deleteProject(Project project);
+
 
 }

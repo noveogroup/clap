@@ -9,6 +9,13 @@
     <ui:define name="content">
         <f:event type="preRenderView" listener="#{projectsController.prepareProjectsListView}"/>
 
+        <h:panelGroup>
+            <p:commandButton value="#{msgs['menu.project.add']}"
+                             immediate="true"
+                             rendered="#{userSessionData.hasPermission('ADD_PROJECTS')}"
+                             action="#{projectsController.toAddProjectView()}"/>
+        </h:panelGroup>
+
         <p:dataTable id="projects"
                      var="project"
                      value="#{projectsModel.projectsListDataModel}"

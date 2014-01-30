@@ -25,7 +25,9 @@
                     <p:inputText
                             id="fullName"
                             value="#{usersModel.user.fullName}"
-                            minLength="0"/>
+                            minLength="0">
+                        <f:validateLength minimum="3" maximum="25"/>
+                    </p:inputText>
                     <h:outputLabel
                             for="role"
                             value="#{msgs['user.info.label.edit.role']}"/>

@@ -82,4 +82,9 @@ public class ProjectConverter extends BaseConverter{
     public void setRevisionConverter(final RevisionConverter revisionConverter) {
         this.revisionConverter = revisionConverter;
     }
+
+    public void updateEntity(final Project project,final ProjectEntity toUpdate){
+        toUpdate.setName(project.getName());
+        toUpdate.setDescription(project.getDescription());
+    }
 }

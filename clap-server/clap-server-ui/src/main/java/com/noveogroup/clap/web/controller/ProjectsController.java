@@ -53,6 +53,16 @@ public class ProjectsController extends BaseController {
         return Navigation.PROJECTS.getView();
     }
 
+    public String editProject(){
+        projectService.save(projectsModel.getSelectedProject());
+        return Navigation.PROJECT.getView();
+    }
+
+    public String deleteProject(){
+        projectService.deleteProject(projectsModel.getSelectedProject());
+        return Navigation.PROJECTS.getView();
+    }
+
     public void prepareProjectsListView() {
         LOGGER.debug("call project service");
         final List<ImagedProject> projectList = projectService.findAllImagedProjects();
@@ -91,6 +101,9 @@ public class ProjectsController extends BaseController {
 
     public String toEditProjectView(){
         return Navigation.EDIT_PROJECT.getView();
+    }
+    public String toAddProjectView(){
+        return Navigation.ADD_PROJECT.getView();
     }
 
 }
