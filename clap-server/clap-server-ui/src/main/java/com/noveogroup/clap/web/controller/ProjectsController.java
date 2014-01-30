@@ -89,5 +89,8 @@ public class ProjectsController extends BaseController {
         redirectTo(Navigation.PROJECT);
     }
 
+    public String toEditProjectView(){
+        return Navigation.EDIT_PROJECT.getView();
+    }
 
 }

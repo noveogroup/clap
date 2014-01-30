@@ -82,7 +82,7 @@ public class ProjectServiceImpl implements ProjectService {
     public Project findById(final Long id) {
         final ProjectEntity projectEntity = projectDAO.findById(id);
         final Project project = projectConverter.map(projectEntity);
-        updateRevisionUrls(id,projectEntity,project);
+        updateRevisionUrls(id, projectEntity, project);
         return project;
     }
 
@@ -91,7 +91,7 @@ public class ProjectServiceImpl implements ProjectService {
     public ImagedProject findByIdWithImage(final Long id) {
         final ProjectEntity projectEntity = projectDAO.findById(id);
         final ImagedProject project = projectConverter.mapToImagedProject(projectEntity);
-        updateRevisionUrls(id,projectEntity,project);
+        updateRevisionUrls(id, projectEntity, project);
         return project;
     }
 
@@ -124,15 +124,17 @@ public class ProjectServiceImpl implements ProjectService {
         final UserWithPersistedAuth userWithToken = userService.getUserWithToken();
         final String token = userWithToken.getToken();
         final List<Revision> revisions = project.getRevisions();
-        for (int i = 0; i < revisions.size(); i++) {
-            final Revision revision = revisions.get(i);
-            final RevisionEntity revisionEntityOrigin = projectEntity.getRevisions().get(i);
-            revision.setProjectId(project.getId());
-            if (revisionEntityOrigin.isMainPackageLoaded()) {
-                revision.setMainPackageUrl(urlService.createUrl(revision.getId(), true, token));
-            }
-            if (revisionEntityOrigin.isSpecialPackageLoaded()) {
-                revision.setSpecialPackageUrl(urlService.createUrl(revision.getId(), false, token));
+        if (revisions != null) {
+            for (int i = 0; i < revisions.size(); i++) {
+                final Revision revision = revisions.get(i);
+                final RevisionEntity revisionEntityOrigin = projectEntity.getRevisions().get(i);
+                revision.setProjectId(project.getId());
+                if (revisionEntityOrigin.isMainPackageLoaded()) {
+                    revision.setMainPackageUrl(urlService.createUrl(revision.getId(), true, token));
+                }
+                if (revisionEntityOrigin.isSpecialPackageLoaded()) {
+                    revision.setSpecialPackageUrl(urlService.createUrl(revision.getId(), false, token));
+                }
             }
         }
     }

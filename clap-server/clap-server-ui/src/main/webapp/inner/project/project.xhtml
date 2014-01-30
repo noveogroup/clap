@@ -13,6 +13,10 @@
             <p:panel id="projectSummary" header="#{projectsModel.selectedProject.name}">
                 <p:graphicImage value="#{projectsModel.selectedProject.streamedIconFile}"/>
                 <h:outputText value="#{projectsModel.selectedProject.description}"/>
+                <h:commandButton value="#{msgs['menu.project.edit']}"
+                                 immediate="true"
+                                 rendered="#{request.isUserInRole('MANAGER') or request.isUserInRole('ADMIN')}"
+                                 action="#{projectsController.toEditProjectView}"/>
             </p:panel>
 
             <p:dataTable id="revisions"
