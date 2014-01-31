@@ -1,6 +1,7 @@
 package com.noveogroup.clap.web.model.user;
 
 import com.noveogroup.clap.model.user.ClapPermission;
+import com.noveogroup.clap.model.user.Role;
 import com.noveogroup.clap.model.user.User;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -63,6 +64,14 @@ public class UserSessionData implements Serializable {
                 final ClapPermission clapPermission = ClapPermission.valueOf(string);
                 return clapPermissions.contains(clapPermission);
             }
+        }
+        return false;
+    }
+
+    public boolean isInRole(final String string) {
+        if (user != null) {
+            Role role = Role.valueOf(string);
+            return user.getRole().equals(role);
         }
         return false;
     }

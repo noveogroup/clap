@@ -13,6 +13,7 @@ import javax.ejb.Timer;
 import javax.ejb.TimerConfig;
 import javax.ejb.TimerService;
 import javax.inject.Inject;
+import javax.interceptor.ExcludeDefaultInterceptors;
 import java.io.File;
 import java.util.List;
 
@@ -21,6 +22,7 @@ import java.util.List;
  */
 @Singleton
 @Startup
+@ExcludeDefaultInterceptors
 public class TempFilesDirectoryCleaner {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TempFilesDirectoryCleaner.class);

@@ -1,11 +1,13 @@
 package com.noveogroup.clap.web.util.message;
 
+import javax.enterprise.context.RequestScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 
 /**
  * @author Andrey Sokolov
  */
+@RequestScoped
 public class MessageSupport {
 
     public String getMessage(final String messageName) {

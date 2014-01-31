@@ -13,6 +13,7 @@ import javax.ejb.Timer;
 import javax.ejb.TimerConfig;
 import javax.ejb.TimerService;
 import javax.inject.Inject;
+import javax.interceptor.ExcludeDefaultInterceptors;
 import java.io.IOException;
 
 /**
@@ -20,6 +21,7 @@ import java.io.IOException;
  */
 @Singleton
 @Startup
+@ExcludeDefaultInterceptors
 public class ConfigUpdateService {
     private static final Logger LOGGER = LoggerFactory.getLogger(ConfigUpdateService.class);
     @Inject

@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @author Mikhail Demidov
  */
-@Entity
+@Entity(name = "RevisionEntity")
 @Table(name = "revisions")
 @NamedQueries({
         @NamedQuery(name = "getRevisionByHash", query = "SELECT rev FROM RevisionEntity rev WHERE rev.hash = :hash"),
@@ -33,29 +33,27 @@ public class RevisionEntity extends BaseEntity {
 
     private static final int COLUMN_LENGTH = 16777215;
 
+    @Column(name = "upload_time", nullable = false)
     private Long timestamp;
 
+    @Column(name = "type", nullable = false)
     private RevisionType revisionType;
 
-    @Column(unique = true)
+    @Column(name = "hash", unique = true,nullable = false)
     private String hash;
 
-    @Column(name = "main_package")
+    @Column(name = "main_package",nullable = true)
     @Lob
     private Blob mainPackage;
 
-    @Column(name = "special_package")
+    @Column(name = "special_package",nullable = true)
     @Lob
     private Blob specialPackage;
-
-    private boolean mainPackageLoaded;
-
-    private boolean specialPackageLoaded;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "revision", orphanRemoval = true)
     private List<MessageEntity> messages;
 
-    @Column(length = COLUMN_LENGTH)
+    @Column(name = "apk_structure", length = COLUMN_LENGTH)
     private String apkStructureJSON;
 
     @ManyToOne(optional = false)
@@ -98,19 +96,11 @@ public class RevisionEntity extends BaseEntity {
     }
 
     public boolean isMainPackageLoaded() {
-        return mainPackageLoaded;
-    }
-
-    public void setMainPackageLoaded(final boolean mainPackageLoaded) {
-        this.mainPackageLoaded = mainPackageLoaded;
+        return mainPackage != null;
     }
 
     public boolean isSpecialPackageLoaded() {
-        return specialPackageLoaded;
-    }
-
-    public void setSpecialPackageLoaded(final boolean specialPackageLoaded) {
-        this.specialPackageLoaded = specialPackageLoaded;
+        return specialPackage != null;
     }
 
     public String getHash() {
@@ -178,8 +168,6 @@ public class RevisionEntity extends BaseEntity {
                 .append("hash", hash)
                 .append("mainPackage", mainPackage)
                 .append("specialPackage", specialPackage)
-                .append("mainPackageLoaded", mainPackageLoaded)
-                .append("specialPackageLoaded", specialPackageLoaded)
                 .append("messages", messages)
                 .append("apkStructureJSON", apkStructureJSON)
                 .append("project", project)

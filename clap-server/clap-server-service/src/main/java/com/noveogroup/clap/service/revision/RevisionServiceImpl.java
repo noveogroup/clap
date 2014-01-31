@@ -207,12 +207,10 @@ public class RevisionServiceImpl implements RevisionService {
         }
         if (mainPackage != null) {
             extractInfo = !processStreamedPackage(revisionEntity, mainPackage, extractInfo);
-            revisionEntity.setMainPackageLoaded(true);
             revisionEntity.setMainPackageUploadedBy(userByLogin);
         }
         if (specialPackage != null) {
             processStreamedPackage(revisionEntity, specialPackage, extractInfo);
-            revisionEntity.setSpecialPackageLoaded(true);
             revisionEntity.setSpecialPackageUploadedBy(userByLogin);
         }
     }

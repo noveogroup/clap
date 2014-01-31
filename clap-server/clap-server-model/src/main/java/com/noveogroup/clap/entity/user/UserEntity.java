@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * @author Andrey Sokolov
  */
-@Entity
+@Entity(name = "UserEntity")
 @Table(name = "clapUsers")
 @NamedQueries({
         @NamedQuery(name = "getUserByToken",
@@ -30,18 +30,19 @@ import java.util.List;
 })
 public class UserEntity extends BaseEntity {
 
+    @Column(name = "full_name", nullable = true)
     private String fullName;
 
-    @Column(unique = true, nullable = false)
+    @Column(name = "login", unique = true, nullable = false)
     private String login;
 
-    @Column(unique = true, nullable = true)
+    @Column(name = "token", unique = true, nullable = true)
     private String token;
 
-    @Column(nullable = true)
+    @Column(name = "pass_hash", nullable = true)
     private String hashedPassword;
 
-    @Column(nullable = false)
+    @Column(name = "role", nullable = false)
     private Role role;
 
     @ElementCollection(targetClass = ClapPermission.class)

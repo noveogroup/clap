@@ -51,7 +51,8 @@
                 </p:column>
             </p:dataTable>
 
-            <p:panel header="#{msgs['project.view.uploadRevision.header']}">
+            <p:panel header="#{msgs['project.view.uploadRevision.header']}"
+                     rendered="#{userSessionData.isInRole('ADMIN')}">
                 <h:form enctype="multipart/form-data">
                     <p:messages/>
                     <p:panelGrid columns="2">

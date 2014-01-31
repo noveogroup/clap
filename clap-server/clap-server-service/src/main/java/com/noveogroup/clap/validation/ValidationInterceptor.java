@@ -4,8 +4,8 @@ import com.noveogroup.clap.exception.ClapValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.annotation.PostConstruct;
 import javax.interceptor.AroundInvoke;
+import javax.interceptor.Interceptor;
 import javax.interceptor.InvocationContext;
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
@@ -19,15 +19,11 @@ import java.util.Set;
  * @author Andrey Sokolov
  */
 @Validate
+@Interceptor
 public class ValidationInterceptor {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ValidationInterceptor.class);
-    private ValidatorFactory validatorFactory;
-
-    @PostConstruct
-    protected void setup() {
-        validatorFactory = Validation.buildDefaultValidatorFactory();
-    }
+    private ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory();
 
     @AroundInvoke
     public Object proceed(final InvocationContext context) throws Exception {

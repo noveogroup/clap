@@ -3,8 +3,10 @@ package com.noveogroup.clap.service.url;
 import com.noveogroup.clap.config.ConfigBean;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.ejb.Stateless;
 import javax.inject.Inject;
 
+@Stateless
 public class UrlServiceImpl implements UrlService {
 
     private static final String ID_TEMPLATE = "{id}";

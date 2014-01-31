@@ -33,7 +33,7 @@
                             value="#{msgs['user.info.label.edit.role']}"/>
                     <p:selectOneMenu
                             id="role"
-                            disabled="#{not request.isUserInRole('ADMIN')}"
+                            disabled="#{not userSessionData.isInRole('ADMIN')}"
                             value="#{usersModel.user.role}"
                             minLength="0">
                         <f:selectItems value="#{commonModels.roles}"/>

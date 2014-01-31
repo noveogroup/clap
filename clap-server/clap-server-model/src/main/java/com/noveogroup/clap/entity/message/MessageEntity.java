@@ -13,28 +13,22 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import java.util.Date;
 
-/**
- * Created with IntelliJ IDEA.
- * User: admin2
- * Date: 5/11/13
- * Time: 12:56 PM
- * To change this template use File | Settings | File Templates.
- */
-@Entity
+@Entity(name = "MessageEntity")
 @Table(name = "messages")
 public class MessageEntity extends BaseEntity {
     private static final int COLUMN_LENGTH = 16777215;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "time")
     private Date timestamp;
 
-    @Column(length = COLUMN_LENGTH)
+    @Column(name = "device_info", length = COLUMN_LENGTH)
     private String deviceInfo;
-    @Column(length = COLUMN_LENGTH)
+    @Column(name = "stack_trace", length = COLUMN_LENGTH)
     private String stackTraceInfo;
-    @Column(length = COLUMN_LENGTH)
+    @Column(name = "log", length = COLUMN_LENGTH)
     private String logCat;
-    @Column(length = COLUMN_LENGTH)
+    @Column(name = "activity_trace", length = COLUMN_LENGTH)
     private String activityTraceLog;
 
     @ManyToOne(optional = false)

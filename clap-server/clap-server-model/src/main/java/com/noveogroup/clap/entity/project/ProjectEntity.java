@@ -16,27 +16,31 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Entity
+@Entity(name = "ProjectEntity")
 @Table(name = "projects")
 @NamedQuery(name = "getProjectByExternalId", query = "SELECT p FROM ProjectEntity p WHERE p.externalId = :externalId")
 public class ProjectEntity extends BaseEntity {
 
     private static final long serialVersionUID = 8306757495649843962L;
 
+    @Column(name = "name", nullable = false)
     private String name;
 
     @Column(unique = true, nullable = false)
     private String externalId;
 
+    @Column(name = "description", nullable = true)
     private String description;
 
     @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "creation_date", nullable = false)
     private Date creationDate;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "project",orphanRemoval = true)
     private List<RevisionEntity> revisions;
 
     @Lob
+    @Column(name = "icon")
     private byte[] iconFile;
 
     public ProjectEntity() {

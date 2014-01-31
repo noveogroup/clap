@@ -22,6 +22,7 @@
             <ejb-name>*</ejb-name>
             <interceptor-order>
                 <interceptor-class>com.noveogroup.clap.security.ShiroSecuredInterceptor</interceptor-class>
+                <interceptor-class>com.noveogroup.clap.validation.ValidationInterceptor</interceptor-class>
                 <interceptor-class>com.noveogroup.clap.exception.ExceptionWrapperInterceptor</interceptor-class>
             </interceptor-order>
         </interceptor-binding>

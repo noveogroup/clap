@@ -8,8 +8,6 @@ import java.util.List;
 
 public class RevisionsListDataModel extends ListDataModel<Revision> implements SelectableDataModel<Revision> {
 
-    public RevisionsListDataModel() {
-    }
 
     public RevisionsListDataModel(final List<Revision> revisions) {
         super(revisions);

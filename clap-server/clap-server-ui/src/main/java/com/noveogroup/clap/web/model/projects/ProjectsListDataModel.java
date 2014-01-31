@@ -8,8 +8,6 @@ import java.util.List;
 public class ProjectsListDataModel extends ListDataModel<StreamedImagedProject>
         implements SelectableDataModel<StreamedImagedProject> {
 
-    public ProjectsListDataModel() {
-    }
 
     public ProjectsListDataModel(final List<StreamedImagedProject> projects) {
         super(projects);

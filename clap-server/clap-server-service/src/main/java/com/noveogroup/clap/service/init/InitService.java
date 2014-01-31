@@ -8,6 +8,7 @@ import com.noveogroup.clap.dao.UserDAO;
 import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
+import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.model.user.ClapPermission;
 import com.noveogroup.clap.model.user.Role;
 import org.apache.commons.collections.CollectionUtils;
@@ -20,6 +21,7 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.interceptor.ExcludeDefaultInterceptors;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -30,6 +32,7 @@ import java.util.UUID;
 @Singleton
 @TransactionManagement(TransactionManagementType.CONTAINER)
 @Startup
+@ExcludeDefaultInterceptors
 public class InitService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(InitService.class);
@@ -76,6 +79,7 @@ public class InitService {
         revision.setTimestamp(1368318776L);
         revision.setHash("test_hash");
         revision.setProject(project);
+        revision.setRevisionType(RevisionType.DEVELOP);
         revision = revisionDAO.persist(revision);
         LOGGER.debug("revision created : " + revision);
     }

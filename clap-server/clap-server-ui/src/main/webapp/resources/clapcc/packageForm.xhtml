@@ -19,7 +19,7 @@
                 </p:graphicImage>
             </div>
         </h:panelGroup>
-        <h:panelGroup rendered="#{empty cc.attrs.packageUrl}">
+        <h:panelGroup rendered="#{(empty cc.attrs.packageUrl) and userSessionData.isInRole('ADMIN')}">
             <h:form enctype="multipart/form-data">
                 <p:fileUpload
                         mode="simple"
