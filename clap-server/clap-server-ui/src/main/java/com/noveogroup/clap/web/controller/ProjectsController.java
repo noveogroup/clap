@@ -64,6 +64,9 @@ public class ProjectsController extends BaseController {
     }
 
     public void prepareProjectsListView() {
+        if (isAjaxRequest()) {
+            return;
+        }
         LOGGER.debug("call project service");
         final List<ImagedProject> projectList = projectService.findAllImagedProjects();
         LOGGER.debug("project service ret " + projectList);
@@ -78,6 +81,9 @@ public class ProjectsController extends BaseController {
     }
 
     public void prepareProjectView() {
+        if (isAjaxRequest()) {
+            return;
+        }
         final Project selectedProject = projectsModel.getSelectedProject();
         if (selectedProject != null) {
             final ImagedProject projectWithRevisions = projectService.findByIdWithImage(selectedProject.getId());

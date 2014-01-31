@@ -4,6 +4,7 @@ import com.noveogroup.clap.model.revision.Revision;
 import org.primefaces.model.SelectableDataModel;
 
 import javax.faces.model.ListDataModel;
+import java.util.Iterator;
 import java.util.List;
 
 public class RevisionsListDataModel extends ListDataModel<Revision> implements SelectableDataModel<Revision> {
@@ -28,5 +29,17 @@ public class RevisionsListDataModel extends ListDataModel<Revision> implements S
             }
         }
         return null;
+    }
+
+    public void remove(final Long id){
+        final List<Revision> revisions = (List<Revision>) getWrappedData();
+        Iterator<Revision> iterator = revisions.iterator();
+        while (iterator.hasNext()){
+            Revision next = iterator.next();
+            if(id.equals(next.getId())){
+                iterator.remove();
+                break;
+            }
+        }
     }
 }

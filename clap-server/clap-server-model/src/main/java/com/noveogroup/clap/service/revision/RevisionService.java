@@ -22,4 +22,6 @@ public interface RevisionService {
 
     RevisionWithApkStructure getRevisionWithApkStructure(Long revisionId);
 
+    void deleteRevision(Long id);
+
 }

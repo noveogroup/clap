@@ -28,6 +28,7 @@ import com.noveogroup.clap.service.url.UrlService;
 import com.noveogroup.clap.service.user.UserService;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -176,6 +177,15 @@ public class RevisionServiceImpl implements RevisionService {
         final RevisionWithApkStructure revision = revisionConverter.mapWithApkStructure(revisionEntity);
         createUrls(revision, revisionEntity);
         return revision;
+    }
+
+    @RequiresAuthentication
+    @RequiresPermissions("DELETE_REVISIONS")
+    @WrapException
+    @Override
+    public void deleteRevision(final Long id) {
+        revisionDAO.removeById(id);
+        revisionDAO.flush();
     }
 
     private Revision updateRevisionPackages(RevisionEntity revisionEntity, final BaseRevisionPackagesRequest request) {

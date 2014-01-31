@@ -1,5 +1,6 @@
 package com.noveogroup.clap.web.controller;
 
+import com.google.common.collect.Lists;
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Writer;
 import com.google.zxing.WriterException;
@@ -14,6 +15,7 @@ import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
 import com.noveogroup.clap.model.revision.ApkEntry;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
+import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.web.Navigation;
@@ -21,6 +23,7 @@ import com.noveogroup.clap.web.model.projects.ProjectsModel;
 import com.noveogroup.clap.web.model.projects.StreamedImagedProject;
 import com.noveogroup.clap.web.model.revisions.RevisionsListDataModel;
 import com.noveogroup.clap.web.model.revisions.RevisionsModel;
+import com.noveogroup.clap.web.model.user.UserSessionData;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultStreamedContent;
@@ -37,6 +40,7 @@ import javax.inject.Named;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -56,6 +60,9 @@ public class RevisionsController extends BaseController {
 
     @Inject
     private ProjectService projectService;
+
+    @Inject
+    private UserSessionData userSessionData;
 
     /**
      * adding revision via web-interface functionality will be removed
@@ -101,6 +108,9 @@ public class RevisionsController extends BaseController {
     }
 
     public void prepareRevisionView() throws IOException, WriterException {
+        if (isAjaxRequest()) {
+            return;
+        }
         revisionsModel.reset();
         final Revision selectedRevision = revisionsModel.getSelectedRevision();
         if (selectedRevision != null) {
@@ -134,6 +144,12 @@ public class RevisionsController extends BaseController {
         revisionsModel.setSelectedRevision(revision);
         LOGGER.debug(revision.getId() + " revision selected");
         redirectTo(Navigation.REVISION);
+    }
+
+    public void removeRevision(final String revisionId) {
+        long id = Long.parseLong(revisionId);
+        revisionService.deleteRevision(id);
+        revisionsModel.getRevisionsListDataModel().remove(id);
     }
 
     public String uploadApkToRevision() throws IOException, WriterException {
@@ -180,6 +196,23 @@ public class RevisionsController extends BaseController {
         } else {
             LOGGER.debug("empty url");
             return null;
+        }
+    }
+
+    public void prepareMyRevisionsView() {
+        if (isAjaxRequest()) {
+            return;
+        }
+        final User user = userSessionData.getUser();
+        if (user != null) {
+            final List<Revision> userRevisions = Lists.newArrayList();
+            userRevisions.addAll(user.getUploadedMainRevisions());
+            userRevisions.addAll(user.getUploadedSpecialRevisions());
+            revisionsModel.setRevisionsListDataModel(
+                    new RevisionsListDataModel(userRevisions));
+        } else {
+            revisionsModel.setRevisionsListDataModel(
+                    new RevisionsListDataModel(Collections.<Revision>emptyList()));
         }
     }
 }

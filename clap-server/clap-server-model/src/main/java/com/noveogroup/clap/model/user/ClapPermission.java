@@ -7,6 +7,7 @@ import org.apache.shiro.authz.Permission;
  */
 public enum ClapPermission implements Permission {
     EDIT_REVISIONS,
+    DELETE_REVISIONS,
     ADD_PROJECTS,
     EDIT_PROJECTS,
     DELETE_PROJECTS,

@@ -4,6 +4,7 @@ import com.noveogroup.clap.web.Navigation;
 
 import javax.faces.application.ConfigurableNavigationHandler;
 import javax.faces.context.FacesContext;
+import javax.faces.context.PartialViewContext;
 
 public abstract class BaseController {
 
@@ -12,6 +13,11 @@ public abstract class BaseController {
                 = (ConfigurableNavigationHandler) FacesContext.getCurrentInstance()
                 .getApplication().getNavigationHandler();
         configurableNavigationHandler.performNavigation(navigation.getView());
+    }
+
+    protected boolean isAjaxRequest(){
+        PartialViewContext partialViewContext = FacesContext.getCurrentInstance().getPartialViewContext();
+        return partialViewContext != null ? partialViewContext.isAjaxRequest() : false;
     }
 
 }

@@ -2,6 +2,7 @@
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:clp="http://java.sun.com/jsf/composite/clapcc"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
@@ -22,34 +23,7 @@
                                  rendered="#{userSessionData.hasPermission('DELETE_PROJECTS')}"
                                  action="#{projectsController.deleteProject()}"/>
             </p:panel>
-
-            <p:dataTable id="revisions"
-                         var="revision"
-                         selectionMode="single"
-                         selection="#{revisionsModel.selectedRevision}"
-                         value="#{revisionsModel.revisionsListDataModel}">
-
-                <p:ajax event="rowSelect"
-                        listener="#{revisionsController.onRevisionSelected}"/>
-
-                <p:column headerText="#{msgs['revision.label.id']}">
-                    <h:outputText value="#{revision.id}"/>
-                </p:column>
-                <p:column headerText="#{msgs['revision.label.date']}">
-                    <h:outputText value="#{revision.timestamp}">
-                        <f:converter converterId="TimestampConverter"/>
-                    </h:outputText>
-                </p:column>
-                <p:column headerText="#{msgs['revision.label.type']}">
-                    <h:outputText value="#{revision.revisionType}"/>
-                </p:column>
-                <p:column headerText="#{msgs['revision.label.mainUploadedBy']}">
-                    <h:outputText value="#{revision.mainPackageUploadedBy}"/>
-                </p:column>
-                <p:column headerText="#{msgs['revision.label.specialUploadedBy']}">
-                    <h:outputText value="#{revision.specialPackageUploadedBy}"/>
-                </p:column>
-            </p:dataTable>
+            <clp:revisionsTable />
 
             <p:panel header="#{msgs['project.view.uploadRevision.header']}"
                      rendered="#{userSessionData.isInRole('ADMIN')}">

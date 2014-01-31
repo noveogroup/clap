@@ -2,6 +2,7 @@ package com.noveogroup.clap.service.user;
 
 import com.google.common.collect.Lists;
 import com.noveogroup.clap.auth.PasswordsHashCalculator;
+import com.noveogroup.clap.converter.UserConverter;
 import com.noveogroup.clap.dao.UserDAO;
 import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.exception.ClapUserNotFoundException;
@@ -17,8 +18,6 @@ import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
-import org.dozer.DozerBeanMapper;
-import org.dozer.Mapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -36,8 +35,9 @@ import java.util.UUID;
 @TransactionManagement(TransactionManagementType.CONTAINER)
 public class UserServiceImpl implements UserService {
 
-    private static final Mapper MAPPER = new DozerBeanMapper();
     private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
+
+    private UserConverter converter = new UserConverter();
 
     @EJB
     private UserDAO userDAO;
@@ -47,7 +47,7 @@ public class UserServiceImpl implements UserService {
         final String currentUserLogin = getCurrentUserLogin();
         final UserEntity userEntity = userDAO.getUserByLogin(currentUserLogin);
         if (userEntity != null) {
-            return MAPPER.map(userEntity, UserWithPersistedAuth.class);
+            return converter.mapWithPersistedAuth(userEntity);
         } else {
             throw new ClapUserNotFoundException("requested login == " + currentUserLogin);
         }
@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserService {
     public User getUser(final String login, final boolean autocreate) {
         final UserEntity userEntity = userDAO.getUserByLogin(login);
         if (userEntity != null) {
-            final User user = MAPPER.map(userEntity, User.class);
+            final User user = converter.map(userEntity);
             return user;
         } else if (autocreate) {
             final UserCreationModel userCreationModel = new UserCreationModel();
@@ -97,7 +97,7 @@ public class UserServiceImpl implements UserService {
         //TODO when we will have more info
         final UserEntity updatedUserEnity = userDAO.persist(userEntity);
         userDAO.flush();
-        final User updatedUser = MAPPER.map(updatedUserEnity, User.class);
+        final User updatedUser = converter.map(updatedUserEnity);
         return updatedUser;
     }
 
@@ -127,7 +127,7 @@ public class UserServiceImpl implements UserService {
         final List<UserEntity> userEntities = userDAO.selectAll();
         final List<User> users = Lists.newArrayList();
         for (UserEntity userEntity : userEntities) {
-            users.add(MAPPER.map(userEntity, User.class));
+            users.add(converter.map(userEntity));
         }
         return users;
     }
@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService {
     public User getUserByToken(final String token) {
         final UserEntity userEntity = userDAO.getUserByToken(token);
         if (userEntity != null) {
-            final User user = MAPPER.map(userEntity, User.class);
+            final User user = converter.map(userEntity);
             return user;
         }
         return null;
@@ -167,7 +167,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(final UserCreationModel user) {
         user.setRole(Role.DEVELOPER);
-        UserEntity userEntity = MAPPER.map(user, UserEntity.class);
+        UserEntity userEntity = converter.map(user);
         final String password = user.getPassword();
         if (password != null) {
             userEntity.setHashedPassword(PasswordsHashCalculator.calculatePasswordHash(password));
@@ -175,7 +175,7 @@ public class UserServiceImpl implements UserService {
         updateToken(userEntity);
         userEntity = userDAO.persist(userEntity);
         userDAO.flush();
-        return MAPPER.map(userEntity, User.class);
+        return converter.map(userEntity);
     }
 
     private void updateToken(final UserEntity userEntity) {
@@ -193,5 +193,9 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new IllegalStateException("security utils not prepared");
         }
+    }
+
+    public void setConverter(final UserConverter converter) {
+        this.converter = converter;
     }
 }
