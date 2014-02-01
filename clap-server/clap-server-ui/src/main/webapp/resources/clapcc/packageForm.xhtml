@@ -19,8 +19,8 @@
                 </p:graphicImage>
             </div>
         </h:panelGroup>
-        <h:panelGroup rendered="#{(empty cc.attrs.packageUrl) and userSessionData.isInRole('ADMIN')}">
-            <h:form enctype="multipart/form-data">
+        <h:panelGroup rendered="#{empty cc.attrs.packageUrl}">
+            <h:form enctype="multipart/form-data" rendered="#{userSessionData.isInRole('ADMIN')}">
                 <p:fileUpload
                         mode="simple"
                         id="apkFileUpload"
@@ -30,6 +30,8 @@
                                  ajax="false"
                                  action="#{revisionsController.uploadApkToRevision}"/>
             </h:form>
+            <h:outputText rendered="#{not userSessionData.isInRole('ADMIN')}"
+                          value="#{msgs['revision.label.notUploaded']}"/>
         </h:panelGroup>
     </p:panel>
 </cc:implementation>

@@ -16,6 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.apache.shiro.subject.Subject;
 import org.slf4j.Logger;
@@ -91,14 +92,10 @@ public class UserServiceImpl implements UserService {
     @WrapException
     @Override
     public User saveUser(final User user) {
-        final UserEntity userEntity = userDAO.getUserByLogin(user.getLogin());
+        final UserEntity userEntity = getUserByLogin(user);
         userEntity.setFullName(user.getFullName());
-        userEntity.setRole(user.getRole());
         //TODO when we will have more info
-        final UserEntity updatedUserEnity = userDAO.persist(userEntity);
-        userDAO.flush();
-        final User updatedUser = converter.map(updatedUserEnity);
-        return updatedUser;
+        return persistFlushAndReturnConverted(userEntity);
     }
 
 
@@ -121,7 +118,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @RequiresAuthentication
-    @RequiresRoles("ADMIN")
     @Override
     public List<User> getUsers() {
         final List<UserEntity> userEntities = userDAO.selectAll();
@@ -193,6 +189,37 @@ public class UserServiceImpl implements UserService {
         } else {
             throw new IllegalStateException("security utils not prepared");
         }
+    }
+
+    @RequiresPermissions("EDIT_PERMISSIONS")
+    @RequiresAuthentication
+    @WrapException
+    @Override
+    public User editPermissions(final User user) {
+        final UserEntity userEntity = getUserByLogin(user);
+        userEntity.setClapPermissions(user.getClapPermissions());
+        return persistFlushAndReturnConverted(userEntity);
+    }
+
+    @RequiresPermissions("EDIT_ROLES")
+    @RequiresAuthentication
+    @WrapException
+    @Override
+    public User editRole(final User user) {
+        final UserEntity userEntity = getUserByLogin(user);
+        userEntity.setRole(user.getRole());
+        return persistFlushAndReturnConverted(userEntity);
+    }
+
+    private UserEntity getUserByLogin(final User user) {
+        return userDAO.getUserByLogin(user.getLogin());
+    }
+
+    private User persistFlushAndReturnConverted(final UserEntity userEntity) {
+        final UserEntity updatedUserEnity = userDAO.persist(userEntity);
+        userDAO.flush();
+        final User updatedUser = converter.map(updatedUserEnity);
+        return updatedUser;
     }
 
     public void setConverter(final UserConverter converter) {

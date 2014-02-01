@@ -53,12 +53,12 @@ public class ProjectsController extends BaseController {
         return Navigation.PROJECTS.getView();
     }
 
-    public String editProject(){
+    public String editProject() {
         projectService.save(projectsModel.getSelectedProject());
         return Navigation.PROJECT.getView();
     }
 
-    public String deleteProject(){
+    public String deleteProject() {
         projectService.deleteProject(projectsModel.getSelectedProject());
         return Navigation.PROJECTS.getView();
     }
@@ -97,18 +97,31 @@ public class ProjectsController extends BaseController {
         }
     }
 
+    public void setSelectedProject(final Long projectId) {
+        final StreamedImagedProject selectedProject = projectsModel.getSelectedProject();
+        if (selectedProject == null || !projectId.equals(selectedProject.getId())) {
+            final ImagedProject projectWithRevisions = projectService.findByIdWithImage(projectId);
+            if (projectWithRevisions != null) {
+                projectsModel.setSelectedProject(new StreamedImagedProject(projectWithRevisions));
+                revisionsModel.setRevisionsListDataModel(
+                        new RevisionsListDataModel(projectWithRevisions.getRevisions()));
+            }
+        }
+    }
+
 
     public void onProjectSelect(final SelectEvent event) {
         final StreamedImagedProject selectedProject = (StreamedImagedProject) event.getObject();
         projectsModel.setSelectedProject(selectedProject);
-        LOGGER.debug(selectedProject.getName() + " prject selected");
+        LOGGER.debug(selectedProject.getName() + " project selected");
         redirectTo(Navigation.PROJECT);
     }
 
-    public String toEditProjectView(){
+    public String toEditProjectView() {
         return Navigation.EDIT_PROJECT.getView();
     }
-    public String toAddProjectView(){
+
+    public String toAddProjectView() {
         return Navigation.ADD_PROJECT.getView();
     }
 

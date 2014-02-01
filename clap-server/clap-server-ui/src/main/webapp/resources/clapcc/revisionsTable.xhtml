@@ -63,6 +63,7 @@
             <p:column rendered="#{userSessionData.hasPermission('DELETE_REVISIONS')}">
                 <p:commandButton value="#{msgs['common.form.label.delete']}"
                                  update="@form"
+                                 immediate="true"
                                  action="#{revisionsController.removeRevision(revision.id)}"/>
             </p:column>
         </p:dataTable>

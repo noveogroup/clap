@@ -15,8 +15,17 @@
     margin-right: 12px;
 }
 
-div.sideMenu {
+div.sideMenu, .packagesBlock, .userInfoTable {
     width: 100%;
+}
+
+.packagesBlockColumn {
+    width: 50%;
+    height: 1px;
+}
+
+.packagesBlockColumn>* {
+    height: 100%;
 }
 
 .mainMenu span.ui-menuitem-text {
@@ -30,4 +39,12 @@ div.sideMenu {
 
 .sideMenu .subMenu {
     font-size: 13px;
+}
+
+.ajaxStatusImage{
+    margin-top: 5px;
+}
+
+.shortColumn {
+    width: 100px;
 }

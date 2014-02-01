@@ -8,8 +8,10 @@ public enum Navigation {
     PROJECTS("/inner/project/projects", true),
     ADD_PROJECT("/inner/project/addProject", true),
     EDIT_PROJECT("/inner/project/editProject", true),
-    EDIT_USER("/inner/editUser", true),
-    USERS_LIST("/inner/users", true),
+    MY_SETTINGS("/inner/user/mySettings", true),
+    EDIT_USER("/inner/user/editUser", true),
+    USER_INFO("/inner/user/userInfo", true),
+    USERS_LIST("/inner/user/users", true),
     SAME_PAGE("", false);
 
     private final boolean facesRedirect;

@@ -14,6 +14,7 @@ import com.noveogroup.clap.model.request.revision.StreamedPackage;
 import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
 import com.noveogroup.clap.model.revision.ApkEntry;
 import com.noveogroup.clap.model.revision.Revision;
+import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
 import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.service.project.ProjectService;
@@ -64,6 +65,8 @@ public class RevisionsController extends BaseController {
     @Inject
     private UserSessionData userSessionData;
 
+    @Inject
+    private ProjectsController projectsController;
     /**
      * adding revision via web-interface functionality will be removed
      *
@@ -114,6 +117,7 @@ public class RevisionsController extends BaseController {
         revisionsModel.reset();
         final Revision selectedRevision = revisionsModel.getSelectedRevision();
         if (selectedRevision != null) {
+            projectsController.setSelectedProject(selectedRevision.getProjectId());
             final RevisionWithApkStructure revWithApkStructure = revisionService.getRevisionWithApkStructure(
                     selectedRevision.getId());
             revisionsModel.setSelectedRevision(revWithApkStructure);
@@ -144,6 +148,11 @@ public class RevisionsController extends BaseController {
         revisionsModel.setSelectedRevision(revision);
         LOGGER.debug(revision.getId() + " revision selected");
         redirectTo(Navigation.REVISION);
+    }
+
+    public String removeSelectedRevision(){
+        revisionService.deleteRevision(revisionsModel.getSelectedRevision().getId());
+        return Navigation.PROJECT.getView();
     }
 
     public void removeRevision(final String revisionId) {
@@ -214,5 +223,21 @@ public class RevisionsController extends BaseController {
             revisionsModel.setRevisionsListDataModel(
                     new RevisionsListDataModel(Collections.<Revision>emptyList()));
         }
+    }
+
+    public boolean isRevisionDeleteButtonDisabled(){
+        //TODO
+        return true;
+    }
+
+    public boolean isRevisionCanBeSwitchedTo(final String typeString){
+        //TODO
+        return true;
+    }
+
+
+    public void switchRevisionTo(final String typeString){
+        final RevisionType revisionType = RevisionType.valueOf(typeString);
+        //TODO
     }
 }

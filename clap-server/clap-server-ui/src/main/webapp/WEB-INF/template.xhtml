@@ -20,10 +20,10 @@
             <p:menubar id="mainMenu" styleClass="mainMenu">
                 <p:menuitem ajax="false" outcome="/index" value="#{msgs['menu.home']}"/>
                 <p:menuitem ajax="false" outcome="/inner/project/projects" value="#{msgs['menu.project.list']}"/>
-                <p:menuitem ajax="false" outcome="/inner/editUser" value="#{msgs['menu.my.account.settings']}"/>
-                <p:menuitem ajax="false" outcome="/inner/users" value="#{msgs['users.label.link']}"
-                            rendered="#{userSessionData.hasPermission('EDIT_USERS')}"/>
+                <p:menuitem ajax="false" outcome="/inner/user/mySettings" value="#{msgs['menu.my.account.settings']}"/>
+                <p:menuitem ajax="false" outcome="/inner/user/users" value="#{msgs['users.label.link']}"/>
                 <ui:insert name="topMenuItems"/>
+                <p:menuitem><clp:ajaxStatus/></p:menuitem>
                 <f:facet name="options">
                     <clp:loginForm/>
                     <!-- TODO improve it-->

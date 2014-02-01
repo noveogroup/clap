@@ -1,0 +1,16 @@
+<html xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html" xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+<cc:interface>
+</cc:interface>
+<cc:implementation>
+    <p:ajaxStatus id="ajaxStatusPanel">
+        <f:facet name="start">
+            <h:graphicImage value="/resources/images/ajaxloading.gif" styleClass="ajaxStatusImage"/>
+        </f:facet>
+
+        <f:facet name="complete">
+            <h:outputText value=""/>
+        </f:facet>
+    </p:ajaxStatus>
+</cc:implementation>
+</html>

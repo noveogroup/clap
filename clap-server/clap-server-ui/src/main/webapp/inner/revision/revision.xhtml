@@ -13,7 +13,11 @@
     <ui:define name="content">
         <f:event type="preRenderView" listener="#{revisionsController.prepareRevisionView}"/>
 
-        <p:panelGrid id="revisionDetails" columns="2" rendered="#{not empty revisionsModel.selectedRevision}">
+        <p:panelGrid id="revisionDetails"
+                     styleClass="packagesBlock"
+                     columnClasses="packagesBlockColumn,packagesBlockColumn"
+                     columns="2"
+                     rendered="#{not empty revisionsModel.selectedRevision}">
             <clp:packageForm
                     id="clean"
                     packageUrl="#{revisionsModel.selectedRevision.mainPackageUrl}"
@@ -27,6 +31,27 @@
                     packageModelEL="revisionsModel.hackedPackageModel"
                     header="#{msgs['revision.label.exp.hacked']}"/>
         </p:panelGrid>
+        <p:panel header="#{msgs['revision.label.control.header']}">
+            <h:form>
+                <p:commandButton value="#{msgs['common.form.label.delete']}"
+                                 ajax="false"
+                                 immediate="true"
+                                 disabled="#{revisionsController.revisionDeleteButtonDisabled}"
+                                 action="#{revisionsController.removeRevision}"/>
+
+                <p:menuButton value="#{msgs['revision.label.control.change.type']}">
+                    <p:menuitem value="DEVELOP"
+                                rendered="#{revisionsController.isRevisionCanBeSwitchedTo('DEVELOP')}"
+                                action="#{revisionsController.switchRevisionTo('DEVELOP')}"/>
+                    <p:menuitem value="TEST"
+                                rendered="#{revisionsController.isRevisionCanBeSwitchedTo('TEST')}"
+                                action="#{revisionsController.switchRevisionTo('TEST')}"/>
+                    <p:menuitem value="RELEASE"
+                                rendered="#{revisionsController.isRevisionCanBeSwitchedTo('RELEASE')}"
+                                action="#{revisionsController.switchRevisionTo('RELEASE')}"/>
+                </p:menuButton>
+            </h:form>
+        </p:panel>
 
         <p:panel rendered="#{not empty revisionsModel.selectedRevisionApkStructure}">
             <p:tree value="#{revisionsModel.selectedRevisionApkStructure}" var="node" id="tree">

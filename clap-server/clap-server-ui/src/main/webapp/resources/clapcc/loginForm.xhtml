@@ -5,7 +5,7 @@
 <cc:implementation>
     <h:form rendered="#{userSessionData.authenticated}">
         <h:link value="#{userSessionData.userLink}"
-                outcome="/inner/userInfo"/>
+                outcome="/inner/user/myInfo"/>
         <h:commandButton value="#{msgs['common.form.label.logout']}"
                          immediate="true"
                          action="#{authenticationController.logout}"/>

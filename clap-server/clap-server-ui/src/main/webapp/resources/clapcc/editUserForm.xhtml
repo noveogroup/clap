@@ -1,0 +1,98 @@
+<html xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+<cc:interface>
+</cc:interface>
+<cc:implementation>
+    <h:form>
+        <p:panel id="userInfoPanel" header="#{msgs['user.info.label.edit.header']}">
+            <p:messages id="userInfoMessages"/>
+            <p:panelGrid columns="2">
+                <h:outputLabel
+                        for="login"
+                        value="#{msgs['user.info.label.edit.login']}"/>
+                <p:inputText
+                        id="login"
+                        value="#{usersModel.user.login}"
+                        disabled="true"/>
+                <h:outputLabel
+                        for="fullName"
+                        value="#{msgs['user.info.label.edit.fullname']}"/>
+                <p:inputText
+                        id="fullName"
+                        value="#{usersModel.user.fullName}"
+                        label="#{msgs['user.info.label.edit.fullname']}"
+                        validatorMessage="#{msgs['user.info.error.name.length']}"
+                        minLength="0">
+                    <f:validateLength minimum="3" maximum="25"/>
+                </p:inputText>
+            </p:panelGrid>
+            <p:commandButton value="#{msgs['common.form.label.submit']}"
+                             update="@form"
+                             action="#{usersController.saveUser()}"/>
+        </p:panel>
+    </h:form>
+    <h:form>
+        <p:panel id="resetPasswordPanel" header="#{msgs['user.info.label.password.reset.header']}">
+            <p:messages id="resetPasswordMessages"/>
+            <p:panelGrid columns="2">
+                <p:outputLabel for="newPassword"
+                               value="#{msgs['user.info.label.password.new']}"/>
+                <p:password id="newPassword"
+                            value="#{resetPasswordModel.newPassword}"
+                            required="true"
+                            feedback="true"
+                            match="repeatPassword"/>
+                <p:outputLabel for="repeatPassword"
+                               value="#{msgs['user.info.label.password.repeat']}"/>
+                <p:password id="repeatPassword"
+                            value="#{resetPasswordModel.newPassword}"
+                            required="true"/>
+            </p:panelGrid>
+            <p:commandButton value="#{msgs['common.form.label.submit']}"
+                             action="#{usersController.resetPassword()}"
+                             update="@form"/>
+        </p:panel>
+    </h:form>
+    <p:panel id="advancedEditPanel"
+             rendered="#{userSessionData.hasPermission('EDIT_PERMISSIONS') or userSessionData.hasPermission('EDIT_ROLES')}"
+             header="#{msgs['user.info.label.edit.advanced.header']}">
+        <h:form rendered="#{userSessionData.hasPermission('EDIT_PERMISSIONS')}">
+            <p:messages id="editPermissionsMessages"/>
+            <p:pickList id="permissionsPickList"
+                        showCheckbox="true"
+                        converter="ClapPermissionConverter"
+                        var="perm" itemLabel="#{perm}" itemValue="#{perm}"
+                        value="#{usersModel.userPermissions}">
+                <f:facet name="sourceCaption">
+                    <h:outputText value="#{msgs['user.info.label.edit.availablePermissions.header']}"/>
+                </f:facet>
+                <f:facet name="targetCaption">
+                    <h:outputText value="#{msgs['user.info.label.edit.grantedPermissions.header']}"/>
+                </f:facet>
+            </p:pickList>
+            <p:commandButton value="#{msgs['common.form.label.submit']}"
+                             action="#{usersController.editPermissions()}"
+                             update="@form"/>
+        </h:form>
+        <h:form rendered="#{userSessionData.hasPermission('EDIT_ROLES')}">
+            <p:messages id="editRoleMessages"/>
+            <p:panelGrid columns="2">
+                <h:outputLabel
+                        for="role"
+                        value="#{msgs['user.info.label.edit.role']}"/>
+                <p:selectOneMenu
+                        id="role"
+                        value="#{usersModel.user.role}"
+                        minLength="0">
+                    <f:selectItems value="#{commonModels.roles}"/>
+                </p:selectOneMenu>
+            </p:panelGrid>
+            <p:commandButton value="#{msgs['common.form.label.submit']}"
+                             action="#{usersController.editRole()}"
+                             update="@form"/>
+        </h:form>
+    </p:panel>
+</cc:implementation>
+</html>

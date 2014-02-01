@@ -24,4 +24,8 @@
         <converter-id>TimestampConverter</converter-id>
         <converter-class>com.noveogroup.clap.web.util.converter.TimestampConverter</converter-class>
     </converter>
+    <converter>
+        <converter-id>ClapPermissionConverter</converter-id>
+        <converter-class>com.noveogroup.clap.web.util.converter.ClapPermissionConverter</converter-class>
+    </converter>
 </faces-config>

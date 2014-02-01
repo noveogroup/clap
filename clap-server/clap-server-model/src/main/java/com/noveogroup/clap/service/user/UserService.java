@@ -61,4 +61,8 @@ public interface UserService {
     User getUserByToken(String token);
 
     String getCurrentUserLogin();
+
+    User editPermissions(User user);
+
+    User editRole(User user);
 }

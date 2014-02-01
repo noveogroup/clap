@@ -1,0 +1,20 @@
+<html xmlns:cc="http://java.sun.com/jsf/composite"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+<cc:interface>
+</cc:interface>
+<cc:implementation>
+    <p:panelGrid columns="2" styleClass="userInfoTable" columnClasses="shortColumn">
+        <h:outputText value="#{msgs['user.info.label.edit.login']}"/>
+        <h:outputText value="#{usersModel.user.login}"/>
+
+        <h:outputText value="#{msgs['user.info.label.edit.fullname']}"/>
+        <h:outputText value="#{usersModel.user.fullName}"/>
+
+        <h:outputText value="#{msgs['user.info.label.edit.role']}"/>
+        <h:outputText value="#{usersModel.user.role}"/>
+    </p:panelGrid>
+    <span style="color: lightgray;">Quite useless page but may be in future it will show some complex info</span>
+</cc:implementation>
+</html>
