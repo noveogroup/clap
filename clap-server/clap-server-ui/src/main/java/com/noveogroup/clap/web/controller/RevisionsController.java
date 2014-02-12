@@ -25,6 +25,7 @@ import com.noveogroup.clap.web.model.projects.StreamedImagedProject;
 import com.noveogroup.clap.web.model.revisions.RevisionsListDataModel;
 import com.noveogroup.clap.web.model.revisions.RevisionsModel;
 import com.noveogroup.clap.web.model.user.UserSessionData;
+import com.noveogroup.clap.web.util.message.MessageSupport;
 import org.apache.commons.lang3.StringUtils;
 import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultStreamedContent;
@@ -36,6 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.RequestScoped;
+import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.io.ByteArrayInputStream;
@@ -67,6 +69,10 @@ public class RevisionsController extends BaseController {
 
     @Inject
     private ProjectsController projectsController;
+
+    @Inject
+    private MessageSupport messageSupport;
+
     /**
      * adding revision via web-interface functionality will be removed
      *
@@ -126,6 +132,7 @@ public class RevisionsController extends BaseController {
                         createApkStructureTree(null, revWithApkStructure.getApkStructure().getRootEntry()));
             }
             updateQRCodes(revisionsModel.getSelectedRevision());
+            populateRevisionTypesList();
             LOGGER.debug(selectedRevision.getId() + " revision preparing finished");
         } else {
             LOGGER.error("revision not selected");
@@ -150,7 +157,7 @@ public class RevisionsController extends BaseController {
         redirectTo(Navigation.REVISION);
     }
 
-    public String removeSelectedRevision(){
+    public String removeSelectedRevision() {
         revisionService.deleteRevision(revisionsModel.getSelectedRevision().getId());
         return Navigation.PROJECT.getView();
     }
@@ -225,19 +232,27 @@ public class RevisionsController extends BaseController {
         }
     }
 
-    public boolean isRevisionDeleteButtonDisabled(){
+    public boolean isRevisionDeleteButtonDisabled() {
         //TODO
         return true;
     }
 
-    public boolean isRevisionCanBeSwitchedTo(final String typeString){
+    public void populateRevisionTypesList() {
         //TODO
-        return true;
+        final User user = userSessionData.getUser();
+        final Revision selectedRevision = revisionsModel.getSelectedRevision();
+        final List<RevisionType> availableTypes = revisionService.getAvailableTypesToChange(user, selectedRevision);
+        final List<SelectItem> types = Lists.newArrayList();
+        for (RevisionType revisionType : availableTypes) {
+            types.add(new SelectItem(revisionType, revisionType.name()));
+        }
+        revisionsModel.setRevisionTypes(types);
     }
 
 
-    public void switchRevisionTo(final String typeString){
-        final RevisionType revisionType = RevisionType.valueOf(typeString);
+    public void onRevisionTypeSelected() {
         //TODO
+        messageSupport.addMessage("revisionControlMessages", "common.form.info.update.success");
+        LOGGER.error("Type is : " + revisionsModel.getSelectedRevision().getRevisionType());
     }
 }

@@ -20,6 +20,7 @@ import com.noveogroup.clap.model.revision.ApplicationType;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
+import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.model.user.UserWithPersistedAuth;
 import com.noveogroup.clap.service.apk.ApkInfoMainExtractor;
 import com.noveogroup.clap.service.apk.IconExtractor;
@@ -42,6 +43,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -186,6 +188,12 @@ public class RevisionServiceImpl implements RevisionService {
     public void deleteRevision(final Long id) {
         revisionDAO.removeById(id);
         revisionDAO.flush();
+    }
+
+    @Override
+    public List<RevisionType> getAvailableTypesToChange(final User user, final Revision revision) {
+        //TODO
+        return Arrays.asList(RevisionType.values());
     }
 
     private Revision updateRevisionPackages(RevisionEntity revisionEntity, final BaseRevisionPackagesRequest request) {

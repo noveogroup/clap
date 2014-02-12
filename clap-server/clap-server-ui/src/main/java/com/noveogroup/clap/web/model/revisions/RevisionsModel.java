@@ -5,8 +5,10 @@ import com.noveogroup.clap.model.revision.Revision;
 import org.primefaces.model.TreeNode;
 
 import javax.enterprise.context.SessionScoped;
+import javax.faces.model.SelectItem;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.List;
 
 @Named
 @SessionScoped
@@ -15,6 +17,7 @@ public class RevisionsModel implements Serializable {
     private RevisionsListDataModel revisionsListDataModel;
     private Revision selectedRevision;
     private TreeNode selectedRevisionApkStructure;
+    private List<SelectItem> revisionTypes;
 
     private RevisionPackageModel cleanPackageModel = new RevisionPackageModel();
     private RevisionPackageModel hackedPackageModel = new RevisionPackageModel();
@@ -59,4 +62,11 @@ public class RevisionsModel implements Serializable {
         return hackedPackageModel;
     }
 
+    public List<SelectItem> getRevisionTypes() {
+        return revisionTypes;
+    }
+
+    public void setRevisionTypes(final List<SelectItem> revisionTypes) {
+        this.revisionTypes = revisionTypes;
+    }
 }

@@ -33,23 +33,22 @@
         </p:panelGrid>
         <p:panel header="#{msgs['revision.label.control.header']}">
             <h:form>
-                <p:commandButton value="#{msgs['common.form.label.delete']}"
-                                 ajax="false"
-                                 immediate="true"
-                                 disabled="#{revisionsController.revisionDeleteButtonDisabled}"
-                                 action="#{revisionsController.removeRevision}"/>
+                <p:messages id="revisionControlMessages" />
+                <h:panelGrid columns="2">
+                    <h:outputText value="#{msgs['revision.label.control.remove']}"/>
+                    <p:commandButton value="#{msgs['common.form.label.delete']}"
+                                     ajax="false"
+                                     immediate="true"
+                                     disabled="#{revisionsController.revisionDeleteButtonDisabled}"
+                                     action="#{revisionsController.removeRevision}"/>
 
-                <p:menuButton value="#{msgs['revision.label.control.change.type']}">
-                    <p:menuitem value="DEVELOP"
-                                rendered="#{revisionsController.isRevisionCanBeSwitchedTo('DEVELOP')}"
-                                action="#{revisionsController.switchRevisionTo('DEVELOP')}"/>
-                    <p:menuitem value="TEST"
-                                rendered="#{revisionsController.isRevisionCanBeSwitchedTo('TEST')}"
-                                action="#{revisionsController.switchRevisionTo('TEST')}"/>
-                    <p:menuitem value="RELEASE"
-                                rendered="#{revisionsController.isRevisionCanBeSwitchedTo('RELEASE')}"
-                                action="#{revisionsController.switchRevisionTo('RELEASE')}"/>
-                </p:menuButton>
+                    <p:outputLabel value="#{msgs['revision.label.control.change.type']}" for="changeTypeMenu"/>
+                    <p:selectOneMenu id="changeTypeMenu"
+                                     value="#{revisionsModel.selectedRevision.revisionType}" >
+                        <f:selectItems value="#{revisionsModel.revisionTypes}"/>
+                        <p:ajax listener="#{revisionsController.onRevisionTypeSelected}" update="@form"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
             </h:form>
         </p:panel>
 
