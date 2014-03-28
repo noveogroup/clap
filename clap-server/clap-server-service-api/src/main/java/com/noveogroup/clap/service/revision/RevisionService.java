@@ -9,7 +9,7 @@ import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
 import com.noveogroup.clap.model.user.User;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author Mikhail Demidov
@@ -20,6 +20,8 @@ public interface RevisionService {
 
     Revision updateRevisionPackages(UpdateRevisionPackagesRequest request);
 
+    void updateRevisionData(Revision revision);
+
     ApplicationFile getApplication(Long revisionId, ApplicationType applicationType);
 
     Revision getRevision(Long revisionId);
@@ -28,5 +30,5 @@ public interface RevisionService {
 
     void deleteRevision(Long id);
 
-    List<RevisionType> getAvailableTypesToChange(User user,Revision revision);
+    Set<RevisionType> getAvailableTypesToChange(User user,Revision revision);
 }

@@ -40,6 +40,10 @@ public class RevisionConverter {
         return ret;
     }
 
+    public void updateRevisionData(final RevisionEntity entityToUpdate,final Revision newData){
+        entityToUpdate.setRevisionType(newData.getRevisionType());
+    }
+
 
     private void map(final Revision toMap, final RevisionEntity revision) {
         toMap.setId(revision.getId());

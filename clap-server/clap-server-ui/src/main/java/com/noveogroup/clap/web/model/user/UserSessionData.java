@@ -57,6 +57,10 @@ public class UserSessionData implements Serializable {
         user = null;
     }
 
+    public boolean hasPermission(final ClapPermission permission) {
+        return hasPermission(permission.name());
+    }
+
     public boolean hasPermission(final String string) {
         if (user != null) {
             final List<ClapPermission> clapPermissions = user.getClapPermissions();

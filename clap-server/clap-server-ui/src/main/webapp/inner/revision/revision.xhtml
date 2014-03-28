@@ -33,18 +33,19 @@
         </p:panelGrid>
         <p:panel header="#{msgs['revision.label.control.header']}">
             <h:form>
-                <p:messages id="revisionControlMessages" />
+                <p:messages id="revisionControlMessages"/>
                 <h:panelGrid columns="2">
-                    <h:outputText value="#{msgs['revision.label.control.remove']}"/>
+                    <h:outputText value="#{msgs['revision.label.control.remove']}"
+                                  rendered="#{userSessionData.hasPermission('DELETE_REVISIONS')}"/>
                     <p:commandButton value="#{msgs['common.form.label.delete']}"
                                      ajax="false"
                                      immediate="true"
-                                     disabled="#{revisionsController.revisionDeleteButtonDisabled}"
-                                     action="#{revisionsController.removeRevision}"/>
+                                     rendered="#{userSessionData.hasPermission('DELETE_REVISIONS')}"
+                                     action="#{revisionsController.removeSelectedRevision}"/>
 
                     <p:outputLabel value="#{msgs['revision.label.control.change.type']}" for="changeTypeMenu"/>
                     <p:selectOneMenu id="changeTypeMenu"
-                                     value="#{revisionsModel.selectedRevision.revisionType}" >
+                                     value="#{revisionsModel.selectedRevision.revisionType}">
                         <f:selectItems value="#{revisionsModel.revisionTypes}"/>
                         <p:ajax listener="#{revisionsController.onRevisionTypeSelected}" update="@form"/>
                     </p:selectOneMenu>

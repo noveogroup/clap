@@ -19,6 +19,8 @@
 
     <modules>
         <module>clap-server-model</module>
+        <module>clap-server-db-api</module>
+        <module>clap-server-service-api</module>
         <module>clap-server-db</module>
         <module>clap-server-service</module>
         <module>clap-server-ui</module>
@@ -124,6 +126,16 @@
             <dependency>
                 <groupId>com.noveogroup.clap</groupId>
                 <artifactId>clap-server-model</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.noveogroup.clap</groupId>
+                <artifactId>clap-server-db-api</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.noveogroup.clap</groupId>
+                <artifactId>clap-server-service-api</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>

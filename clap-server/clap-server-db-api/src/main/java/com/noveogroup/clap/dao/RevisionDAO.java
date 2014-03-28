@@ -1,7 +1,7 @@
 package com.noveogroup.clap.dao;
 
 import com.noveogroup.clap.entity.revision.RevisionEntity;
-import com.noveogroup.clap.model.request.revision.StreamedPackage;
+import com.noveogroup.clap.model.revision.StreamedPackage;
 import com.noveogroup.clap.model.revision.RevisionType;
 
 import java.util.List;

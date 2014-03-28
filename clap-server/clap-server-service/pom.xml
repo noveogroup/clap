@@ -21,6 +21,14 @@
             <artifactId>clap-server-model</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.noveogroup.clap</groupId>
+            <artifactId>clap-server-db-api</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.noveogroup.clap</groupId>
+            <artifactId>clap-server-service-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.apache.shiro</groupId>
             <artifactId>shiro-core</artifactId>
         </dependency>

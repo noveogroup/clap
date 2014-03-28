@@ -8,17 +8,15 @@ import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
-import com.noveogroup.clap.model.request.revision.StreamedPackage;
+import com.noveogroup.clap.model.revision.StreamedPackage;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.service.user.UserService;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 
 import java.util.Date;
 import java.util.List;

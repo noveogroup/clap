@@ -1,6 +1,9 @@
 package com.noveogroup.clap.model.user;
 
+import com.google.common.collect.Maps;
 import org.apache.shiro.authz.Permission;
+
+import java.util.Map;
 
 /**
  * @author Andrey Sokolov
@@ -18,8 +21,21 @@ public enum ClapPermission implements Permission {
     EDIT_PERMISSIONS,
     EDIT_ROLES;
 
+    private static Map<String,ClapPermission> permissionMap = Maps.newHashMap();
+
+    static {
+        for(ClapPermission permission : values()){
+            permissionMap.put(permission.name(),permission);
+        }
+    }
+
+
     @Override
     public boolean implies(final Permission p) {
         return false;
+    }
+
+    public static ClapPermission parseName(final String name){
+        return permissionMap.get(name);
     }
 }

@@ -1,5 +1,6 @@
 package com.noveogroup.clap.service.revision;
 
+import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.converter.RevisionConverter;
@@ -12,7 +13,6 @@ import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.exception.WrapException;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
 import com.noveogroup.clap.model.request.revision.BaseRevisionPackagesRequest;
-import com.noveogroup.clap.model.request.revision.StreamedPackage;
 import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
 import com.noveogroup.clap.model.revision.ApkStructure;
 import com.noveogroup.clap.model.revision.ApplicationFile;
@@ -20,6 +20,8 @@ import com.noveogroup.clap.model.revision.ApplicationType;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
+import com.noveogroup.clap.model.revision.StreamedPackage;
+import com.noveogroup.clap.model.user.ClapPermission;
 import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.model.user.UserWithPersistedAuth;
 import com.noveogroup.clap.service.apk.ApkInfoMainExtractor;
@@ -43,11 +45,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Inner revision service
@@ -109,14 +111,13 @@ public class RevisionServiceImpl implements RevisionService {
             projectEntity.setDescription("Description empty");
             projectEntity.setCreationDate(new Date());
             projectEntity = projectDAO.persist(projectEntity);
-        } else if (needToCheckRevisionsAmount){
+        } else if (needToCheckRevisionsAmount) {
             checkAndRemoveOldRevisions(projectEntity);
         }
         revisionEntity.setProject(projectEntity);
         projectEntity.getRevisions().add(revisionEntity);
 
         processPackages(revisionEntity, request);
-        projectDAO.persist(projectEntity);
         revisionEntity = revisionDAO.persist(revisionEntity, request.getMainPackage(), request.getSpecialPackage());
         projectDAO.flush();
         revisionDAO.flush();
@@ -132,6 +133,12 @@ public class RevisionServiceImpl implements RevisionService {
     public Revision updateRevisionPackages(final @NotNull UpdateRevisionPackagesRequest request) {
         final RevisionEntity revisionEntity = revisionDAO.getRevisionByHash(request.getRevisionHash());
         return updateRevisionPackages(revisionEntity, request);
+    }
+
+    @Override
+    public void updateRevisionData(final Revision revision) {
+        final RevisionEntity revisionByHash = revisionDAO.getRevisionByHash(revision.getHash());
+        revisionConverter.updateRevisionData(revisionByHash, revision);
     }
 
     @RequiresAuthentication
@@ -191,9 +198,15 @@ public class RevisionServiceImpl implements RevisionService {
     }
 
     @Override
-    public List<RevisionType> getAvailableTypesToChange(final User user, final Revision revision) {
-        //TODO
-        return Arrays.asList(RevisionType.values());
+    public Set<RevisionType> getAvailableTypesToChange(final User user, final Revision revision) {
+        final Set<RevisionType> revisionTypes = Sets.newLinkedHashSet();
+        for (RevisionType type : RevisionType.values()) {
+            //TODO think about more good solution
+            if (user.getClapPermissions().contains(ClapPermission.parseName("SWITCH_REVISION_TO_" + type.name()))) {
+                revisionTypes.add(type);
+            }
+        }
+        return revisionTypes;
     }
 
     private Revision updateRevisionPackages(RevisionEntity revisionEntity, final BaseRevisionPackagesRequest request) {
@@ -278,14 +291,14 @@ public class RevisionServiceImpl implements RevisionService {
         return projectEntity.getName() + (mainPackage ? "" : "_hacked") + ".apk";
     }
 
-    private void checkAndRemoveOldRevisions(final ProjectEntity projectEntity){
+    private void checkAndRemoveOldRevisions(final ProjectEntity projectEntity) {
         final List<RevisionEntity> revisions = revisionDAO.findForProjectAndType(projectEntity.getId(),
                 RevisionType.DEVELOP);
-        if(CollectionUtils.isNotEmpty(revisions) && configBean.getKeepDevRevisions() <= revisions.size()){
-            Collections.sort(revisions,new Comparator<RevisionEntity>() {
+        if (CollectionUtils.isNotEmpty(revisions) && configBean.getKeepDevRevisions() <= revisions.size()) {
+            Collections.sort(revisions, new Comparator<RevisionEntity>() {
                 @Override
                 public int compare(final RevisionEntity lhs, final RevisionEntity rhs) {
-                    return (int)(lhs.getTimestamp() - rhs.getTimestamp());
+                    return (int) (lhs.getTimestamp() - rhs.getTimestamp());
                 }
             });
             revisionDAO.remove(revisions.get(0));

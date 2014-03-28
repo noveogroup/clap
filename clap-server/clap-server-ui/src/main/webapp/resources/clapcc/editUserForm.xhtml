@@ -61,6 +61,7 @@
         <h:form rendered="#{userSessionData.hasPermission('EDIT_PERMISSIONS')}">
             <p:messages id="editPermissionsMessages"/>
             <p:pickList id="permissionsPickList"
+                        styleClass="permissionsPickList"
                         showCheckbox="true"
                         converter="ClapPermissionConverter"
                         var="perm" itemLabel="#{perm}" itemValue="#{perm}"

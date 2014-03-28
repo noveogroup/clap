@@ -3,7 +3,7 @@ package com.noveogroup.clap.rest;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
 import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
 import com.noveogroup.clap.model.request.revision.RevisionRequest;
-import com.noveogroup.clap.model.request.revision.StreamedPackage;
+import com.noveogroup.clap.model.revision.StreamedPackage;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.rest.exception.ClapException;
 import com.noveogroup.clap.service.revision.RevisionService;

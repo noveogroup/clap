@@ -2,7 +2,7 @@ package com.noveogroup.clap.dao.impl;
 
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
-import com.noveogroup.clap.model.request.revision.StreamedPackage;
+import com.noveogroup.clap.model.revision.StreamedPackage;
 import com.noveogroup.clap.model.revision.RevisionType;
 import org.hibernate.Hibernate;
 import org.hibernate.ejb.HibernateEntityManager;

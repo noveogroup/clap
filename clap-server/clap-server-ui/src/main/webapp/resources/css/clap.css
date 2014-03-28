@@ -48,3 +48,7 @@ div.sideMenu, .packagesBlock, .userInfoTable {
 .shortColumn {
     width: 100px;
 }
+
+.permissionsPickList.ui-picklist .ui-picklist-list {
+    width: 300px;
+}

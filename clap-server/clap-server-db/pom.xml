@@ -20,6 +20,10 @@
             <artifactId>clap-server-model</artifactId>
         </dependency>
         <dependency>
+            <groupId>com.noveogroup.clap</groupId>
+            <artifactId>clap-server-db-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
         </dependency>

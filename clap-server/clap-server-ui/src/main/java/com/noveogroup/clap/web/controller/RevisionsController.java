@@ -10,7 +10,7 @@ import com.google.zxing.qrcode.QRCodeWriter;
 import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.model.project.ImagedProject;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
-import com.noveogroup.clap.model.request.revision.StreamedPackage;
+import com.noveogroup.clap.model.revision.StreamedPackage;
 import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
 import com.noveogroup.clap.model.revision.ApkEntry;
 import com.noveogroup.clap.model.revision.Revision;
@@ -46,6 +46,7 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 @Named
 @RequestScoped
@@ -166,6 +167,7 @@ public class RevisionsController extends BaseController {
         long id = Long.parseLong(revisionId);
         revisionService.deleteRevision(id);
         revisionsModel.getRevisionsListDataModel().remove(id);
+        redirectTo(Navigation.PROJECT);
     }
 
     public String uploadApkToRevision() throws IOException, WriterException {
@@ -232,16 +234,10 @@ public class RevisionsController extends BaseController {
         }
     }
 
-    public boolean isRevisionDeleteButtonDisabled() {
-        //TODO
-        return true;
-    }
-
     public void populateRevisionTypesList() {
-        //TODO
         final User user = userSessionData.getUser();
         final Revision selectedRevision = revisionsModel.getSelectedRevision();
-        final List<RevisionType> availableTypes = revisionService.getAvailableTypesToChange(user, selectedRevision);
+        final Set<RevisionType> availableTypes = revisionService.getAvailableTypesToChange(user, selectedRevision);
         final List<SelectItem> types = Lists.newArrayList();
         for (RevisionType revisionType : availableTypes) {
             types.add(new SelectItem(revisionType, revisionType.name()));
@@ -251,8 +247,8 @@ public class RevisionsController extends BaseController {
 
 
     public void onRevisionTypeSelected() {
-        //TODO
-        messageSupport.addMessage("revisionControlMessages", "common.form.info.update.success");
+        revisionService.updateRevisionData(revisionsModel.getSelectedRevision());
         LOGGER.error("Type is : " + revisionsModel.getSelectedRevision().getRevisionType());
+        messageSupport.addMessage("revisionControlMessages", "common.form.info.update.success");
     }
 }

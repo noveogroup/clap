@@ -1,6 +1,5 @@
 package com.noveogroup.clap.rest;
 
-import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.service.project.ProjectService;
 import org.dozer.DozerBeanMapper;
@@ -19,10 +18,9 @@ public class TestEndpointImpl implements TestEndpoint {
 
     @Override
     public String echo(final String original) {
-        final ProjectEntity projectEntity = new ProjectEntity();
-        projectEntity.setName("Name");
-//        projectService.save(project);
-        return MAPPER.map(projectEntity, Project.class).getName();
+        final Project projectEntity = new Project();
+        projectEntity.setName(original);
+        return projectEntity.getName();
     }
 
     @Override
