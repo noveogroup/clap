@@ -4,7 +4,7 @@ import com.google.common.collect.Lists;
 import com.noveogroup.clap.entity.message.MessageEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
-import com.noveogroup.clap.model.message.Message;
+import com.noveogroup.clap.model.message.CrashMessage;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.user.ClapPermission;
 import com.noveogroup.clap.model.user.User;
@@ -60,7 +60,7 @@ public class UserConverter {
         List<ClapPermission> permissions = Lists.newArrayList();
         permissions.addAll(mapWith.getClapPermissions());
         toMap.setClapPermissions(permissions);
-        List<Message> messages = Lists.newArrayList();
+        List<CrashMessage> messages = Lists.newArrayList();
         toMap.setUploadedMessages(messages);
         for (MessageEntity messageEntity : mapWith.getUploadedMessages()) {
             messages.add(messagesConverter.map(messageEntity));

@@ -1,29 +1,15 @@
 package com.noveogroup.clap.model.message;
 
-import com.noveogroup.clap.model.BaseModel;
-
-import java.util.Date;
 
 /**
  * @author Mikhail Demidov
  */
-public class Message extends BaseModel {
-
-    private Date timestamp;
+public class CrashMessage extends BaseMessage {
 
     private String deviceInfo;
     private String stackTraceInfo;
     private String logCat;
     private String activityTraceLog;
-    private String uploadedBy;
-
-    public Date getTimestamp() {
-        return timestamp;
-    }
-
-    public void setTimestamp(final Date timestamp) {
-        this.timestamp = timestamp;
-    }
 
     public String getDeviceInfo() {
         return deviceInfo;
@@ -55,14 +41,6 @@ public class Message extends BaseModel {
 
     public void setActivityTraceLog(final String activityTraceLog) {
         this.activityTraceLog = activityTraceLog;
-    }
-
-    public String getUploadedBy() {
-        return uploadedBy;
-    }
-
-    public void setUploadedBy(final String uploadedBy) {
-        this.uploadedBy = uploadedBy;
     }
 
     @Override

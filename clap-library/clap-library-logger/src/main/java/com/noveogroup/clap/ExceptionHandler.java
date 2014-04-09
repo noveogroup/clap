@@ -1,8 +1,8 @@
 package com.noveogroup.clap;
 
-import android.app.Activity;
-import android.content.Context;
 import android.util.Log;
+import com.noveogroup.clap.intent.CrashIntentModel;
+import com.noveogroup.clap.intent.IntentSender;
 
 //import javax.mail.MessagingException;
 
@@ -78,10 +78,12 @@ public class ExceptionHandler {
 
     private static IntentSender prepareSender(Throwable throwable) {
         IntentSender intentSender = new IntentSender();
-        intentSender.setDeviceInfo(DeviceInfoProvider.getDeviceInfo());
-        intentSender.setStackTraceInfo(Log.getStackTraceString(throwable));
-        intentSender.setActivityLog(ActivityTraceLogger.getInstance().getLog());
-        intentSender.setLogCat(LogCatProvider.getLogCat());
+        final CrashIntentModel intentModel = new CrashIntentModel();
+        intentSender.setIntentModel(intentModel);
+        intentModel.setDeviceInfo(DeviceInfoProvider.getDeviceInfo());
+        intentModel.setStackTraceInfo(Log.getStackTraceString(throwable));
+        intentModel.setActivityLog(ActivityTraceLogger.getInstance().getLog());
+        intentModel.setLogCat(LogCatProvider.getLogCat());
         intentSender.setContext(ActivityTraceLogger.getInstance().getLastContext());
         return intentSender;
     }

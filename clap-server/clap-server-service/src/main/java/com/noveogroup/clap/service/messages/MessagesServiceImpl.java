@@ -8,7 +8,7 @@ import com.noveogroup.clap.entity.message.MessageEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.exception.WrapException;
-import com.noveogroup.clap.model.message.Message;
+import com.noveogroup.clap.model.message.CrashMessage;
 import com.noveogroup.clap.service.user.UserService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 
@@ -42,7 +42,7 @@ public class MessagesServiceImpl implements MessagesService {
     @RequiresAuthentication
     @WrapException
     @Override
-    public void saveMessage(final String revisionHash, final Message message) {
+    public void saveMessage(final String revisionHash, final CrashMessage message) {
         final RevisionEntity revisionEntity = revisionDAO.getRevisionByHash(revisionHash);
         UserEntity userByLogin = userDAO.getUserByLogin(userService.getCurrentUserLogin());
         MessageEntity messageEntity = messagesConverter.map(message);

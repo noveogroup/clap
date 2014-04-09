@@ -4,7 +4,7 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 import com.noveogroup.clap.model.auth.Authentication;
-import com.noveogroup.clap.model.message.Message;
+import com.noveogroup.clap.model.message.CrashMessage;
 import com.noveogroup.clap.model.request.message.SendMessageRequest;
 import com.noveogroup.clap.rest.AuthenticationEndpoint;
 import com.noveogroup.clap.rest.MessagesEndpoint;
@@ -46,7 +46,7 @@ public class ClapService extends IntentService {
 
             MessagesEndpoint messagesEndpoint = ProxyFactory.create(MessagesEndpoint.class, CLAP_HOST, new ApacheHttpClient4Executor(param));
 
-            Message messageDTO = new Message();
+            CrashMessage messageDTO = new CrashMessage();
             messageDTO.setLogCat(intent.getStringExtra("logCat"));
             messageDTO.setStackTraceInfo(intent.getStringExtra("stackTraceInfo"));
             messageDTO.setDeviceInfo(intent.getStringExtra("deviceInfo"));
@@ -57,7 +57,7 @@ public class ClapService extends IntentService {
             sendMessageRequest.setRevisionHash(intent.getStringExtra("revision"));
             sendMessageRequest.setToken(token);
             Log.d("SERVICE", "Trying to send: " + sendMessageRequest);
-            messagesEndpoint.saveMessage(sendMessageRequest);
+            messagesEndpoint.saveCrashMessage(sendMessageRequest);
 
             Log.d("SERVICE", "MESSAGE SENT");
         } catch (Throwable e) {

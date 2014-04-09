@@ -5,7 +5,7 @@ import com.noveogroup.clap.entity.message.MessageEntity;
 import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
-import com.noveogroup.clap.model.message.Message;
+import com.noveogroup.clap.model.message.CrashMessage;
 import com.noveogroup.clap.model.revision.ApkStructure;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
@@ -48,12 +48,12 @@ public class RevisionConverter {
     private void map(final Revision toMap, final RevisionEntity revision) {
         toMap.setId(revision.getId());
         toMap.setHash(revision.getHash());
-        toMap.setMessages(new ArrayList<Message>());
+        toMap.setMessages(new ArrayList<CrashMessage>());
 
         final List<MessageEntity> revisionMessages = revision.getMessages();
         if (CollectionUtils.isNotEmpty(revisionMessages)) {
             for (final MessageEntity message : revisionMessages) {
-                Message map = MAPPER.map(message, Message.class);
+                CrashMessage map = MAPPER.map(message, CrashMessage.class);
                 map.setUploadedBy(message.getUploadedBy().getLogin());
                 toMap.getMessages().add(map);
             }

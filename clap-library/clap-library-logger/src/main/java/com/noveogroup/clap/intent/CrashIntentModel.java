@@ -1,17 +1,18 @@
-package com.noveogroup.clap;
+package com.noveogroup.clap.intent;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import com.noveogroup.clap.ProjectInfo;
 
-public final class IntentSender {
-
+/**
+ * @author Andrey Sokolov
+ */
+public class CrashIntentModel extends IntentModel {
 
     private String deviceInfo;
     private String stackTraceInfo;
     private String logCat;
     private String activityLog;
-    private Context context;
 
     public String getDeviceInfo() {
         return deviceInfo;
@@ -45,39 +46,21 @@ public final class IntentSender {
         this.activityLog = activityLog;
     }
 
-    public Context getContext() {
-        return context;
-    }
 
-    public void setContext(final Context context) {
-        this.context = context;
-    }
 
-    public void send() {
-        Class<?> c = null;
-        try {
-            c = Class.forName("com.noveogroup.clap.RevisionImpl");
-            ProjectInfo revision = (ProjectInfo) c.newInstance();
-            Intent intent = new Intent("com.noveogroup.clap.SEND_MESSAGE");
+    public Intent createIntent(){
+        final Intent intent = super.createIntent();
+        if(intent != null){
             intent.putExtra("deviceInfo", deviceInfo);
             intent.putExtra("stackTraceInfo", stackTraceInfo);
             intent.putExtra("logCat", logCat);
             intent.putExtra("activityLog", activityLog);
-            intent.putExtra("revision", revision.getRevisionId());
-            intent.putExtra("project", revision.getProjectId());
-            context.startService(intent);
-        } catch (ClassNotFoundException e) {
-            // TODO fix this
-        } catch (InstantiationException e) {
-            // TODO fix this
-        } catch (IllegalAccessException e) {
-            // TODO fix this
-        } catch (Exception e) {
-            // TODO fix this
         }
-
-
+        return intent;
     }
 
-
+    @Override
+    protected String getModelType() {
+        return "crash";
+    }
 }

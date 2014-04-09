@@ -1,28 +1,17 @@
 package com.noveogroup.clap.model.request.message;
 
-import com.noveogroup.clap.model.message.Message;
-import com.noveogroup.clap.model.request.BaseRequest;
+import com.noveogroup.clap.model.message.CrashMessage;
 
-public class SendMessageRequest extends BaseRequest {
+public class SendMessageRequest extends BaseMessageRequest {
 
-    private Message message;
+    private CrashMessage message;
 
-    private String revisionHash;
-
-    public Message getMessage() {
+    public CrashMessage getMessage() {
         return message;
     }
 
-    public void setMessage(final Message message) {
+    public void setMessage(final CrashMessage message) {
         this.message = message;
-    }
-
-    public String getRevisionHash() {
-        return revisionHash;
-    }
-
-    public void setRevisionHash(final String revisionHash) {
-        this.revisionHash = revisionHash;
     }
 
     @Override

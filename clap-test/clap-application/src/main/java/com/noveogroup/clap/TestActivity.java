@@ -2,7 +2,11 @@ package com.noveogroup.clap;
 
 
 import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -25,5 +29,12 @@ public class TestActivity extends Activity {
             }
         });
 
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        //To enable clap screenshots
+        Log.e("CLAP","dispatch key in app updated");
+        return super.dispatchKeyEvent(event);
     }
 }

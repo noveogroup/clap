@@ -18,10 +18,6 @@
         </dependency>
         <dependency>
             <groupId>com.noveogroup.clap</groupId>
-            <artifactId>clap-common</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>com.noveogroup.clap</groupId>
             <artifactId>clap-server-model</artifactId>
         </dependency>
         <dependency>
