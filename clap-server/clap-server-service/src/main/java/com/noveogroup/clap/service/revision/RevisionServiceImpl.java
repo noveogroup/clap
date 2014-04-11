@@ -13,6 +13,7 @@ import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.exception.WrapException;
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
 import com.noveogroup.clap.model.request.revision.BaseRevisionPackagesRequest;
+import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
 import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
 import com.noveogroup.clap.model.revision.ApkStructure;
 import com.noveogroup.clap.model.revision.ApplicationFile;
@@ -26,7 +27,7 @@ import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.model.user.UserWithPersistedAuth;
 import com.noveogroup.clap.service.apk.ApkInfoMainExtractor;
 import com.noveogroup.clap.service.apk.IconExtractor;
-import com.noveogroup.clap.service.tempfiles.TempFileService;
+import com.noveogroup.clap.service.file.FileService;
 import com.noveogroup.clap.service.url.UrlService;
 import com.noveogroup.clap.service.user.UserService;
 import org.apache.commons.collections.CollectionUtils;
@@ -44,6 +45,7 @@ import javax.validation.constraints.NotNull;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Comparator;
@@ -76,7 +78,7 @@ public class RevisionServiceImpl implements RevisionService {
     private UrlService urlService;
 
     @Inject
-    private TempFileService tempFileService;
+    private FileService fileService;
 
     @Inject
     private UserService userService;
@@ -87,12 +89,12 @@ public class RevisionServiceImpl implements RevisionService {
     @RequiresAuthentication
     @WrapException
     @Override
-    public Revision addOrGetRevision(final @NotNull AddOrGetRevisionRequest request) {
-        final Revision revision = request.getRevision();
-        RevisionEntity revisionEntity = revisionDAO.getRevisionByHashOrNull(request.getRevision().getHash());
+    public Revision addOrGetRevision(final @NotNull CreateOrUpdateRevisionRequest request) {
+        RevisionEntity revisionEntity = revisionDAO.getRevisionByHashOrNull(request.getRevisionHash());
         boolean needToCheckRevisionsAmount = false;
         if (revisionEntity == null) {
-            revisionEntity = revisionConverter.map(revision);
+            revisionEntity = new RevisionEntity();
+            revisionEntity.setHash(request.getRevisionHash());
             needToCheckRevisionsAmount = true;
         }
         if (revisionEntity.getTimestamp() == null) {
@@ -118,7 +120,7 @@ public class RevisionServiceImpl implements RevisionService {
         projectEntity.getRevisions().add(revisionEntity);
 
         processPackages(revisionEntity, request);
-        revisionEntity = revisionDAO.persist(revisionEntity, request.getMainPackage(), request.getSpecialPackage());
+        revisionEntity = revisionDAO.persist(revisionEntity);
         projectDAO.flush();
         revisionDAO.flush();
         final Revision outcomeRevision = revisionConverter.map(revisionEntity);
@@ -150,12 +152,12 @@ public class RevisionServiceImpl implements RevisionService {
             try {
                 switch (applicationType) {
                     case MAIN:
-                        ret.setContent(tempFileService.createTempFile(
+                        ret.setContent(fileService.createTempFile(
                                 revisionEntity.getMainPackage().getBinaryStream()));
                         ret.setFilename(createFileName(revisionEntity.getProject(), true));
                         return ret;
                     case SPECIAL:
-                        ret.setContent(tempFileService.createTempFile(
+                        ret.setContent(fileService.createTempFile(
                                 revisionEntity.getSpecialPackage().getBinaryStream()));
                         ret.setFilename(createFileName(revisionEntity.getProject(), false));
                         return ret;
@@ -226,22 +228,22 @@ public class RevisionServiceImpl implements RevisionService {
      * @param revisionEntity to modify flags
      * @param request        request object, updates stream references in it
      */
-    private void processPackages(final RevisionEntity revisionEntity, final BaseRevisionPackagesRequest request) {
+    private void processPackages(final RevisionEntity revisionEntity, final CreateOrUpdateRevisionRequest request) {
         String currentUserLogin = null;
         UserEntity userByLogin = null;
-        final StreamedPackage mainPackage = request.getMainPackage();
-        final StreamedPackage specialPackage = request.getSpecialPackage();
+        final InputStream mainPackage = request.getMainPackage();
+        final InputStream specialPackage = request.getSpecialPackage();
         boolean extractInfo = true;
         if (mainPackage != null || specialPackage != null) {
             currentUserLogin = userService.getCurrentUserLogin();
             userByLogin = userDAO.getUserByLogin(currentUserLogin);
         }
         if (mainPackage != null) {
-            extractInfo = !processStreamedPackage(revisionEntity, mainPackage, extractInfo);
+            extractInfo = !processStreamedPackage(revisionEntity, mainPackage, extractInfo,true);
             revisionEntity.setMainPackageUploadedBy(userByLogin);
         }
         if (specialPackage != null) {
-            processStreamedPackage(revisionEntity, specialPackage, extractInfo);
+            processStreamedPackage(revisionEntity, specialPackage, extractInfo,false);
             revisionEntity.setSpecialPackageUploadedBy(userByLogin);
         }
     }
@@ -253,11 +255,11 @@ public class RevisionServiceImpl implements RevisionService {
      * @return true if info was extracted
      */
     private boolean processStreamedPackage(final RevisionEntity revisionEntity,
-                                           final StreamedPackage streamedPackage,
-                                           final boolean extractInfo) {
+                                           final InputStream streamedPackage,
+                                           final boolean extractInfo,final boolean isMainPackage) {
         boolean ret = false;
         try {
-            final File file = tempFileService.createTempFile(streamedPackage.getStream());
+            final File file = fileService.saveFile(streamedPackage);
             if (extractInfo) {
                 final ApkInfoMainExtractor mainExtractor = new ApkInfoMainExtractor(file);
                 final IconExtractor iconExtractor = new IconExtractor();
@@ -268,7 +270,11 @@ public class RevisionServiceImpl implements RevisionService {
                 revisionEntity.setApkStructureJSON(new Gson().toJson(apkStructure, ApkStructure.class));
                 ret = true;
             }
-            streamedPackage.setStream(new FileInputStream(file));
+            if(isMainPackage){
+                revisionEntity.setMainPackageFileUrl(file.getAbsolutePath());
+            } else {
+                revisionEntity.setSpecialPackageFileUrl(file.getAbsolutePath());
+            }
         } catch (IOException e) {
             LOGGER.error("error while processing: " + streamedPackage, e);
         }
@@ -301,7 +307,10 @@ public class RevisionServiceImpl implements RevisionService {
                     return (int) (lhs.getTimestamp() - rhs.getTimestamp());
                 }
             });
-            revisionDAO.remove(revisions.get(0));
+            final RevisionEntity revisionToRemove = revisions.get(0);
+            fileService.removeFile(revisionToRemove.getMainPackageFileUrl());
+            fileService.removeFile(revisionToRemove.getSpecialPackageFileUrl());
+            revisionDAO.remove(revisionToRemove);
         }
     }
 }

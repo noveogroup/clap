@@ -1,6 +1,7 @@
 package com.noveogroup.clap.service.revision;
 
 import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
+import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
 import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
 import com.noveogroup.clap.model.revision.ApplicationFile;
 import com.noveogroup.clap.model.revision.ApplicationType;
@@ -16,7 +17,7 @@ import java.util.Set;
  */
 public interface RevisionService {
 
-    Revision addOrGetRevision(AddOrGetRevisionRequest request);
+    Revision addOrGetRevision(CreateOrUpdateRevisionRequest request);
 
     Revision updateRevisionPackages(UpdateRevisionPackagesRequest request);
 

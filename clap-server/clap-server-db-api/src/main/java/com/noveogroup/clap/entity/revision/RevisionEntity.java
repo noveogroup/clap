@@ -2,7 +2,6 @@ package com.noveogroup.clap.entity.revision;
 
 import com.noveogroup.clap.entity.BaseEntity;
 import com.noveogroup.clap.entity.message.BaseMessageEntity;
-import com.noveogroup.clap.entity.message.CrashMessageEntity;
 import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.model.revision.RevisionType;
@@ -11,13 +10,11 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import java.sql.Blob;
 import java.util.List;
 
 /**
@@ -40,16 +37,14 @@ public class RevisionEntity extends BaseEntity {
     @Column(name = "type", nullable = false)
     private RevisionType revisionType;
 
-    @Column(name = "hash", unique = true,nullable = false)
+    @Column(name = "hash", unique = true, nullable = false)
     private String hash;
 
-    @Column(name = "main_package",nullable = true)
-    @Lob
-    private Blob mainPackage;
+    @Column(name = "main_package", nullable = true)
+    private String mainPackageFileUrl;
 
-    @Column(name = "special_package",nullable = true)
-    @Lob
-    private Blob specialPackage;
+    @Column(name = "special_package", nullable = true)
+    private String specialPackageFileUrl;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "revision", orphanRemoval = true)
     private List<BaseMessageEntity> messages;
@@ -97,11 +92,11 @@ public class RevisionEntity extends BaseEntity {
     }
 
     public boolean isMainPackageLoaded() {
-        return mainPackage != null;
+        return mainPackageFileUrl != null;
     }
 
     public boolean isSpecialPackageLoaded() {
-        return specialPackage != null;
+        return specialPackageFileUrl != null;
     }
 
     public String getHash() {
@@ -119,22 +114,6 @@ public class RevisionEntity extends BaseEntity {
 
     public void setTimestamp(final Long timestamp) {
         this.timestamp = timestamp;
-    }
-
-    public Blob getMainPackage() {
-        return mainPackage;
-    }
-
-    public void setMainPackage(final Blob mainPackage) {
-        this.mainPackage = mainPackage;
-    }
-
-    public Blob getSpecialPackage() {
-        return specialPackage;
-    }
-
-    public void setSpecialPackage(final Blob specialPackage) {
-        this.specialPackage = specialPackage;
     }
 
     public String getApkStructureJSON() {
@@ -161,14 +140,30 @@ public class RevisionEntity extends BaseEntity {
         this.specialPackageUploadedBy = specialPackageUploadedBy;
     }
 
+    public String getMainPackageFileUrl() {
+        return mainPackageFileUrl;
+    }
+
+    public void setMainPackageFileUrl(final String mainPackageFileUrl) {
+        this.mainPackageFileUrl = mainPackageFileUrl;
+    }
+
+    public String getSpecialPackageFileUrl() {
+        return specialPackageFileUrl;
+    }
+
+    public void setSpecialPackageFileUrl(final String specialPackageFileUrl) {
+        this.specialPackageFileUrl = specialPackageFileUrl;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .append("timestamp", timestamp)
                 .append("revisionType", revisionType)
                 .append("hash", hash)
-                .append("mainPackage", mainPackage)
-                .append("specialPackage", specialPackage)
+                .append("mainPackage", mainPackageFileUrl)
+                .append("specialPackage", specialPackageFileUrl)
                 .append("messages", messages)
                 .append("apkStructureJSON", apkStructureJSON)
                 .append("project", project)

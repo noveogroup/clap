@@ -3,7 +3,7 @@ package com.noveogroup.clap.rest;
 import com.noveogroup.clap.model.revision.StreamedPackage;
 import com.noveogroup.clap.rest.auth.ClapRestAuthenticationToken;
 import com.noveogroup.clap.rest.exception.ClapException;
-import com.noveogroup.clap.service.tempfiles.TempFileService;
+import com.noveogroup.clap.service.file.FileService;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +23,7 @@ public abstract class BaseEndpoint {
     private static final Logger LOGGER = LoggerFactory.getLogger(BaseEndpoint.class);
 
     @Inject
-    private TempFileService tempFileService;
+    private FileService fileService;
 
     protected void login(final String token) {
         SecurityUtils.getSubject().login(new ClapRestAuthenticationToken(token));
@@ -32,7 +32,7 @@ public abstract class BaseEndpoint {
     protected StreamedPackage createStreamedPackage(final InputStream stream) {
         if (stream != null) {
             try {
-                final File tempFile = tempFileService.createTempFile(stream);
+                final File tempFile = fileService.createTempFile(stream);
                 final long length = tempFile.length();
                 final StreamedPackage streamedPackage = new StreamedPackage(new FileInputStream(tempFile), length);
                 LOGGER.debug("Retrieved package as stream: " + tempFile.getName() + "; length: " + length);
@@ -47,7 +47,7 @@ public abstract class BaseEndpoint {
     protected StreamedPackage createStreamedPackage(final byte[] data) {
         if (data != null) {
             try {
-                final File tempFile = tempFileService.createTempFile(new ByteArrayInputStream(data));
+                final File tempFile = fileService.createTempFile(new ByteArrayInputStream(data));
                 final long length = tempFile.length();
                 final StreamedPackage streamedPackage = new StreamedPackage(new FileInputStream(tempFile), length);
                 LOGGER.debug("Retrieved package as byte[]: " + tempFile.getName() + "; length: " + length);

@@ -47,38 +47,6 @@ public class RevisionDAOImpl extends GenericHibernateDAOImpl<RevisionEntity, Lon
         return getSingleResultOrNull(query);
     }
 
-    @Override
-    public RevisionEntity persist(final RevisionEntity entity,
-                                  final StreamedPackage mainPackage,
-                                  final StreamedPackage specialPackage) {
-        final HibernateEntityManager hibernateEntityManager = entityManager.unwrap(HibernateEntityManager.class);
-        final LobCreator lobCreator = Hibernate.getLobCreator(hibernateEntityManager.getSession());
-        if (mainPackage != null) {
-            entity.setMainPackage(
-                    lobCreator.createBlob(
-                            mainPackage.getStream(),
-                            mainPackage.getLength()));
-        }
-        if (specialPackage != null) {
-            entity.setSpecialPackage(
-                    lobCreator.createBlob(
-                            specialPackage.getStream(),
-                            specialPackage.getLength()));
-        }
-        super.persist(entity);
-        entityManager.flush();
-        try {
-            if (entity.getMainPackage() != null) {
-                entity.getMainPackage().free();
-            }
-            if (entity.getSpecialPackage() != null) {
-                entity.getSpecialPackage().free();
-            }
-        } catch (SQLException e) {
-            LOGGER.error("freeing blobs error", e);
-        }
-        return entity;
-    }
 
     @Override
     public List<RevisionEntity> findForProjectAndType(final Long projectId, final RevisionType type) {

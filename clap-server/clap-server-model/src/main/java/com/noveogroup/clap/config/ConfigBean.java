@@ -31,6 +31,10 @@ public class ConfigBean {
 
     private String authenticationSystemId;
 
+    private List<String> apkFilesDirs = Lists.newArrayList();
+
+    private List<String> screenshotFilesDirs = Lists.newArrayList();
+
     private List<String> tempFilesDirs = Lists.newArrayList();
 
     private long tempFilesCleanInterval;
@@ -47,20 +51,26 @@ public class ConfigBean {
         maxApkSize = Long.parseLong(properties.getProperty("maxApkSize"));
         downloadApkUrl = properties.getProperty("rest.apkDownload");
         authenticationSystemId = properties.getProperty("authenticationSystemId");
-        final String[] tempFilesDirArray = StringUtils.split(properties.getProperty("temp.files.directory"), ';');
-        if (ArrayUtils.isNotEmpty(tempFilesDirArray)) {
-            for (String tempFilesDir : tempFilesDirArray) {
-                checkIfDir(tempFilesDir);
-                tempFilesDirs.add(tempFilesDir);
-            }
-        }
-        if (tempFilesDirs.isEmpty()) {
-            throw new IllegalArgumentException("No temp files directory is set");
-        }
+        fillStringArrayConfig("files.directory.apk", apkFilesDirs);
+        fillStringArrayConfig("files.directory.screenshots", screenshotFilesDirs);
+        fillStringArrayConfig("files.directory.temp", tempFilesDirs);
         tempFilesCleanInterval = Long.parseLong(properties.getProperty("temp.files.clean.interval"));
         updateConfigInterval = Long.parseLong(properties.getProperty("config.update.interval"));
         keepDevRevisions = Integer.parseInt(properties.getProperty("keep.dev.revisions"));
         configFileLastModified = getConfigFileLastModified();
+    }
+
+    private void fillStringArrayConfig(final String property, final List<String> configList) {
+        final String[] tempFilesDirArray = StringUtils.split(properties.getProperty(property), ';');
+        if (ArrayUtils.isNotEmpty(tempFilesDirArray)) {
+            for (String tempFilesDir : tempFilesDirArray) {
+                checkIfDir(tempFilesDir);
+                configList.add(tempFilesDir);
+            }
+        }
+        if (configList.isEmpty()) {
+            throw new IllegalArgumentException("No files directory is set for" + property);
+        }
     }
 
     public long getMaxApkSize() {
