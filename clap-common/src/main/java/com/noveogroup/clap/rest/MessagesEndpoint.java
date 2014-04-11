@@ -14,12 +14,13 @@ import javax.ws.rs.core.MediaType;
 public interface MessagesEndpoint {
 
     @POST
-    @Path("/add")
+    @Path("/crash")
     @Consumes(MediaType.APPLICATION_JSON)
     void saveCrashMessage(SendMessageRequest request);
 
 
     @POST
+    @Path("/screenshot")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
     void saveScreenshot(@MultipartForm ScreenshotMessageRequest request);

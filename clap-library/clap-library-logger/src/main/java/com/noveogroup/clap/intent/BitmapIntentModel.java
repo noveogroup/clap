@@ -3,6 +3,8 @@ package com.noveogroup.clap.intent;
 import android.content.Intent;
 import android.graphics.Bitmap;
 
+import java.io.ByteArrayOutputStream;
+
 /**
  * @author Andrey Sokolov
  */
@@ -33,8 +35,9 @@ public class BitmapIntentModel extends IntentModel {
         if (bitmap != null) {
             final Intent intent = super.createIntent();
             if (intent != null) {
-                //TODO compress bitmap
-                intent.putExtra("bitmap",bitmap);
+                ByteArrayOutputStream bs = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 50, bs);
+                intent.putExtra("bitmap",bs.toByteArray());
             }
             return intent;
         } else {

@@ -4,11 +4,11 @@ import com.noveogroup.clap.converter.MessagesConverter;
 import com.noveogroup.clap.dao.MessageDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.dao.UserDAO;
-import com.noveogroup.clap.entity.message.MessageEntity;
+import com.noveogroup.clap.entity.message.BaseMessageEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.exception.WrapException;
-import com.noveogroup.clap.model.message.CrashMessage;
+import com.noveogroup.clap.model.message.BaseMessage;
 import com.noveogroup.clap.service.user.UserService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 
@@ -42,16 +42,16 @@ public class MessagesServiceImpl implements MessagesService {
     @RequiresAuthentication
     @WrapException
     @Override
-    public void saveMessage(final String revisionHash, final CrashMessage message) {
+    public void saveMessage(final String revisionHash, final BaseMessage message) {
         final RevisionEntity revisionEntity = revisionDAO.getRevisionByHash(revisionHash);
         UserEntity userByLogin = userDAO.getUserByLogin(userService.getCurrentUserLogin());
-        MessageEntity messageEntity = messagesConverter.map(message);
+        BaseMessageEntity messageEntity = messagesConverter.map(message);
         messageEntity.setRevision(revisionEntity);
         messageEntity.setUploadedBy(userByLogin);
         messageEntity = messageDAO.persist(messageEntity);
-        List<MessageEntity> messageEntities = revisionEntity.getMessages();
+        List<BaseMessageEntity> messageEntities = revisionEntity.getMessages();
         if (messageEntities == null) {
-            messageEntities = new ArrayList<MessageEntity>();
+            messageEntities = new ArrayList<BaseMessageEntity>();
             revisionEntity.setMessages(messageEntities);
         }
         messageEntities.add(messageEntity);

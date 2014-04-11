@@ -25,13 +25,9 @@ import java.io.InputStream;
 @ApplicationScoped
 public class RevisionEndpointImpl extends BaseEndpoint implements RevisionEndpoint {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RevisionEndpointImpl.class);
-
     @Inject
     private RevisionService revisionService;
 
-    @Inject
-    private TempFileService tempFileService;
 
 
     @Override
@@ -46,36 +42,6 @@ public class RevisionEndpointImpl extends BaseEndpoint implements RevisionEndpoi
         addOrGetRevisionRequest.setSpecialPackage(createStreamedPackage(request.getSpecialPackage()));
         return revisionService.addOrGetRevision(addOrGetRevisionRequest);
 
-    }
-
-    private StreamedPackage createStreamedPackage(final InputStream stream) {
-        if (stream != null) {
-            try {
-                final File tempFile = tempFileService.createTempFile(stream);
-                final long length = tempFile.length();
-                final StreamedPackage streamedPackage = new StreamedPackage(new FileInputStream(tempFile), length);
-                LOGGER.debug("Retrieved package as stream: " + tempFile.getName() + "; length: " + length);
-                return streamedPackage;
-            } catch (IOException e) {
-                throw new ClapException(e);
-            }
-        }
-        return null;
-    }
-
-    private StreamedPackage createStreamedPackage(final byte[] data) {
-        if (data != null) {
-            try {
-                final File tempFile = tempFileService.createTempFile(new ByteArrayInputStream(data));
-                final long length = tempFile.length();
-                final StreamedPackage streamedPackage = new StreamedPackage(new FileInputStream(tempFile), length);
-                LOGGER.debug("Retrieved package as byte[]: " + tempFile.getName() + "; length: " + length);
-                return streamedPackage;
-            } catch (IOException e) {
-                throw new ClapException(e);
-            }
-        }
-        return null;
     }
 
     @Override

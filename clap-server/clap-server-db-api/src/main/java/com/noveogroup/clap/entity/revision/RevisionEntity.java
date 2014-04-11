@@ -1,7 +1,8 @@
 package com.noveogroup.clap.entity.revision;
 
 import com.noveogroup.clap.entity.BaseEntity;
-import com.noveogroup.clap.entity.message.MessageEntity;
+import com.noveogroup.clap.entity.message.BaseMessageEntity;
+import com.noveogroup.clap.entity.message.CrashMessageEntity;
 import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.model.revision.RevisionType;
@@ -51,7 +52,7 @@ public class RevisionEntity extends BaseEntity {
     private Blob specialPackage;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "revision", orphanRemoval = true)
-    private List<MessageEntity> messages;
+    private List<BaseMessageEntity> messages;
 
     @Column(name = "apk_structure", length = COLUMN_LENGTH)
     private String apkStructureJSON;
@@ -79,11 +80,11 @@ public class RevisionEntity extends BaseEntity {
         this.revisionType = revisionType;
     }
 
-    public List<MessageEntity> getMessages() {
+    public List<BaseMessageEntity> getMessages() {
         return messages;
     }
 
-    public void setMessages(final List<MessageEntity> messageEntities) {
+    public void setMessages(final List<BaseMessageEntity> messageEntities) {
         this.messages = messageEntities;
     }
 

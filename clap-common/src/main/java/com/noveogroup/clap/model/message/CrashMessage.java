@@ -54,4 +54,9 @@ public class CrashMessage extends BaseMessage {
         sb.append('}');
         return sb.toString();
     }
+
+    @Override
+    public Class<? extends BaseMessage> getMessageType() {
+        return CrashMessage.class;
+    }
 }

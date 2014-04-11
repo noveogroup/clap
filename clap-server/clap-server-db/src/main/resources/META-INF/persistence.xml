@@ -10,7 +10,7 @@
         <class>com.noveogroup.clap.entity.BaseEntity</class>
         <class>com.noveogroup.clap.entity.project.ProjectEntity</class>
         <class>com.noveogroup.clap.entity.revision.RevisionEntity</class>
-        <class>com.noveogroup.clap.entity.message.MessageEntity</class>
+        <class>com.noveogroup.clap.entity.message.CrashMessageEntity</class>
         <class>com.noveogroup.clap.entity.user.UserEntity</class>
 
         <exclude-unlisted-classes>false</exclude-unlisted-classes>

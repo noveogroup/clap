@@ -1,11 +1,11 @@
 package com.noveogroup.clap.model.revision;
 
 import com.noveogroup.clap.model.BaseModel;
-import com.noveogroup.clap.model.message.CrashMessage;
+import com.noveogroup.clap.model.message.BaseMessage;
 import org.apache.commons.lang.builder.ToStringBuilder;
+
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
-
 import java.util.List;
 
 /**
@@ -18,7 +18,7 @@ public class Revision extends BaseModel {
 
     private RevisionType revisionType;
 
-    private List<CrashMessage> messages;
+    private List<BaseMessage> messages;
 
     private Long projectId;
 
@@ -46,11 +46,11 @@ public class Revision extends BaseModel {
     }
 
     @XmlElement
-    public List<CrashMessage> getMessages() {
+    public List<BaseMessage> getMessages() {
         return messages;
     }
 
-    public void setMessages(final List<CrashMessage> messages) {
+    public void setMessages(final List<BaseMessage> messages) {
         this.messages = messages;
     }
 

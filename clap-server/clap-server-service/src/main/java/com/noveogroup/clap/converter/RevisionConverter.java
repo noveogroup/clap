@@ -1,11 +1,11 @@
 package com.noveogroup.clap.converter;
 
 import com.google.gson.Gson;
-import com.noveogroup.clap.entity.message.MessageEntity;
+import com.noveogroup.clap.entity.message.BaseMessageEntity;
 import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
-import com.noveogroup.clap.model.message.CrashMessage;
+import com.noveogroup.clap.model.message.BaseMessage;
 import com.noveogroup.clap.model.revision.ApkStructure;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
@@ -22,6 +22,12 @@ import java.util.List;
 public class RevisionConverter {
 
     private static final Mapper MAPPER = new DozerBeanMapper();
+
+    private MessagesConverter messagesConverter = new MessagesConverter();
+
+    public void setMessagesConverter(final MessagesConverter messagesConverter) {
+        this.messagesConverter = messagesConverter;
+    }
 
     public RevisionEntity map(final Revision revision) {
         return MAPPER.map(revision, RevisionEntity.class);
@@ -40,7 +46,7 @@ public class RevisionConverter {
         return ret;
     }
 
-    public void updateRevisionData(final RevisionEntity entityToUpdate,final Revision newData){
+    public void updateRevisionData(final RevisionEntity entityToUpdate, final Revision newData) {
         entityToUpdate.setRevisionType(newData.getRevisionType());
     }
 
@@ -48,12 +54,12 @@ public class RevisionConverter {
     private void map(final Revision toMap, final RevisionEntity revision) {
         toMap.setId(revision.getId());
         toMap.setHash(revision.getHash());
-        toMap.setMessages(new ArrayList<CrashMessage>());
+        toMap.setMessages(new ArrayList<BaseMessage>());
 
-        final List<MessageEntity> revisionMessages = revision.getMessages();
+        final List<BaseMessageEntity> revisionMessages = revision.getMessages();
         if (CollectionUtils.isNotEmpty(revisionMessages)) {
-            for (final MessageEntity message : revisionMessages) {
-                CrashMessage map = MAPPER.map(message, CrashMessage.class);
+            for (final BaseMessageEntity message : revisionMessages) {
+                BaseMessage map = messagesConverter.map(message);
                 map.setUploadedBy(message.getUploadedBy().getLogin());
                 toMap.getMessages().add(map);
             }
