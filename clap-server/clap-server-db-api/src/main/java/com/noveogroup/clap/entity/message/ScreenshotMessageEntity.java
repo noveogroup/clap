@@ -1,32 +1,29 @@
 package com.noveogroup.clap.entity.message;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.Table;
-import java.sql.Blob;
 
 /**
  * @author Andrey Sokolov
  */
 @Entity(name = "ScreenshotMessageEntity")
-@Table(name = "screenshotMessages")
+@DiscriminatorValue("screenshot")
 public class ScreenshotMessageEntity extends BaseMessageEntity {
 
     @Column(name = "screenshot",nullable = true)
-    @Lob
-    private Blob screenshot;
+    private String screenshotFileUrl;
 
     @Override
     public Class<? extends BaseMessageEntity> getEntityType() {
         return ScreenshotMessageEntity.class;
     }
 
-    public Blob getScreenshot() {
-        return screenshot;
+    public String getScreenshotFileUrl() {
+        return screenshotFileUrl;
     }
 
-    public void setScreenshot(final Blob screenshot) {
-        this.screenshot = screenshot;
+    public void setScreenshotFileUrl(final String screenshotFileUrl) {
+        this.screenshotFileUrl = screenshotFileUrl;
     }
 }

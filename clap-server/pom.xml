@@ -31,7 +31,7 @@
 
     <properties>
         <!-- glassfish configuration-->
-        <glassfish.home>C:\glassfish3\</glassfish.home>
+        <glassfish.home>C:\glassfish4\</glassfish.home>
         <domain.username>root</domain.username>
         <domain.passwordFile>${glassfish.home}/pwdfile.txt</domain.passwordFile>
         <test.int.skip>false</test.int.skip>

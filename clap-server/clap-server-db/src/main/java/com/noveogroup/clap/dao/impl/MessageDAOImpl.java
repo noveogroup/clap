@@ -9,5 +9,5 @@ import javax.ejb.Stateless;
  * @author Mikhail Demidov
  */
 @Stateless
-public class MessageDAOImpl extends GenericHibernateDAOImpl<BaseMessageEntity, Long> implements MessageDAO {
+public class MessageDAOImpl extends GenericDAOImpl<BaseMessageEntity, Long> implements MessageDAO {
 }

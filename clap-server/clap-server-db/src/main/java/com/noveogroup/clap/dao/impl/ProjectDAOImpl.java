@@ -2,7 +2,6 @@ package com.noveogroup.clap.dao.impl;
 
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.entity.project.ProjectEntity;
-import org.hibernate.Hibernate;
 
 import javax.ejb.Stateless;
 import javax.persistence.Query;
@@ -11,7 +10,7 @@ import javax.persistence.Query;
  * @author
  */
 @Stateless
-public class ProjectDAOImpl extends GenericHibernateDAOImpl<ProjectEntity, Long> implements ProjectDAO {
+public class ProjectDAOImpl extends GenericDAOImpl<ProjectEntity, Long> implements ProjectDAO {
 
     private static final String GET_PROJECT_BY_EXTERNAL_ID = "getProjectByExternalId";
     private static final String GET_PROJECT_BY_EXTERNAL_ID_PARAMETER = "externalId";
@@ -20,7 +19,7 @@ public class ProjectDAOImpl extends GenericHibernateDAOImpl<ProjectEntity, Long>
     public ProjectEntity findById(final Long id) {
         final ProjectEntity projectEntity = super.findById(id);
         if (projectEntity != null) {
-            Hibernate.initialize(projectEntity.getRevisions());
+            entityManager.refresh(projectEntity.getRevisions());
         }
         return projectEntity;
     }

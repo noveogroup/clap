@@ -2,6 +2,7 @@ package com.noveogroup.clap.config;
 
 
 import com.google.common.collect.Lists;
+import com.noveogroup.clap.rest.exception.ClapException;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -46,8 +47,12 @@ public class ConfigBean {
     private int keepDevRevisions;
 
     @PostConstruct
-    protected void setup() throws IOException {
-        properties = ConfigurationUtils.getPropertiesFromConfig(CONFIG_FILE_NAME);
+    protected void setup() {
+        try {
+            properties = ConfigurationUtils.getPropertiesFromConfig(CONFIG_FILE_NAME);
+        } catch (IOException e) {
+            throw new ClapException(e);
+        }
         maxApkSize = Long.parseLong(properties.getProperty("maxApkSize"));
         downloadApkUrl = properties.getProperty("rest.apkDownload");
         authenticationSystemId = properties.getProperty("authenticationSystemId");
@@ -125,6 +130,14 @@ public class ConfigBean {
 
     public int getKeepDevRevisions() {
         return keepDevRevisions;
+    }
+
+    public List<String> getScreenshotFilesDirs() {
+        return screenshotFilesDirs;
+    }
+
+    public List<String> getApkFilesDirs() {
+        return apkFilesDirs;
     }
 
     @Override

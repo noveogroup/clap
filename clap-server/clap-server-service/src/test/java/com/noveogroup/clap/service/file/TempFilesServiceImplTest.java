@@ -2,6 +2,7 @@ package com.noveogroup.clap.service.file;
 
 import com.google.common.collect.Lists;
 import com.noveogroup.clap.config.ConfigBean;
+import com.noveogroup.clap.model.file.FileType;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -41,7 +42,7 @@ public class TempFilesServiceImplTest {
     public void testCreateTempFile() throws Exception {
         when(configBean.getTempFilesDirs()).thenReturn(Lists.newArrayList("blablablaToThrowIOException", "./src/test/resources/tempFiles"));
         final File testFile = new File("./src/test/resources/someFileToCopy.txt");
-        final File tempFile = service.createTempFile(new FileInputStream(testFile));
+        final File tempFile = service.saveFile(FileType.TEMP,new FileInputStream(testFile), null);
         final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(tempFile)));
         assertEquals("blablabla", reader.readLine());
         assertEquals("qweqweqwe", reader.readLine());

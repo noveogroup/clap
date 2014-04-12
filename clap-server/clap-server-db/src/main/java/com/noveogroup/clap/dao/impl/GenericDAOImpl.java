@@ -20,14 +20,14 @@ import java.util.List;
 /**
  * @author mdemidov
  */
-public abstract class GenericHibernateDAOImpl<T, ID extends Serializable> implements GenericDAO<T, ID> {
+public abstract class GenericDAOImpl<T, ID extends Serializable> implements GenericDAO<T, ID> {
 
     @PersistenceContext(unitName = "distribution_pu")
     protected EntityManager entityManager;
 
     private Class<T> persistentClass;
 
-    public GenericHibernateDAOImpl() {
+    public GenericDAOImpl() {
 
     }
 

@@ -14,7 +14,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>org.glassfish.extras</groupId>
+            <groupId>org.glassfish.main.extras</groupId>
             <artifactId>glassfish-embedded-all</artifactId>
         </dependency>
         <dependency>

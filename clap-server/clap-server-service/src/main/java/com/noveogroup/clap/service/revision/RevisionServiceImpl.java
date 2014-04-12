@@ -11,17 +11,14 @@ import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.exception.WrapException;
-import com.noveogroup.clap.model.request.revision.AddOrGetRevisionRequest;
-import com.noveogroup.clap.model.request.revision.BaseRevisionPackagesRequest;
+import com.noveogroup.clap.model.file.FileType;
 import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
-import com.noveogroup.clap.model.request.revision.UpdateRevisionPackagesRequest;
 import com.noveogroup.clap.model.revision.ApkStructure;
 import com.noveogroup.clap.model.revision.ApplicationFile;
 import com.noveogroup.clap.model.revision.ApplicationType;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
-import com.noveogroup.clap.model.revision.StreamedPackage;
 import com.noveogroup.clap.model.user.ClapPermission;
 import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.model.user.UserWithPersistedAuth;
@@ -43,10 +40,8 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.sql.SQLException;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
@@ -95,6 +90,7 @@ public class RevisionServiceImpl implements RevisionService {
         if (revisionEntity == null) {
             revisionEntity = new RevisionEntity();
             revisionEntity.setHash(request.getRevisionHash());
+            revisionEntity.setTimestamp(new Date().getTime());
             needToCheckRevisionsAmount = true;
         }
         if (revisionEntity.getTimestamp() == null) {
@@ -129,14 +125,6 @@ public class RevisionServiceImpl implements RevisionService {
         return outcomeRevision;
     }
 
-    @RequiresAuthentication
-    @WrapException
-    @Override
-    public Revision updateRevisionPackages(final @NotNull UpdateRevisionPackagesRequest request) {
-        final RevisionEntity revisionEntity = revisionDAO.getRevisionByHash(request.getRevisionHash());
-        return updateRevisionPackages(revisionEntity, request);
-    }
-
     @Override
     public void updateRevisionData(final Revision revision) {
         final RevisionEntity revisionByHash = revisionDAO.getRevisionByHash(revision.getHash());
@@ -146,6 +134,7 @@ public class RevisionServiceImpl implements RevisionService {
     @RequiresAuthentication
     @Override
     public ApplicationFile getApplication(final Long revisionId, final ApplicationType applicationType) {
+        /*
         final RevisionEntity revisionEntity = revisionDAO.findById(revisionId);
         if (revisionEntity != null) {
             final ApplicationFile ret = new ApplicationFile();
@@ -168,7 +157,7 @@ public class RevisionServiceImpl implements RevisionService {
             } catch (SQLException e) {
                 LOGGER.error("error getting file", e);
             }
-        }
+        }    */
         return null;
     }
 
@@ -211,15 +200,6 @@ public class RevisionServiceImpl implements RevisionService {
         return revisionTypes;
     }
 
-    private Revision updateRevisionPackages(RevisionEntity revisionEntity, final BaseRevisionPackagesRequest request) {
-        processPackages(revisionEntity, request);
-        revisionEntity = revisionDAO.persist(revisionEntity, request.getMainPackage(), request.getSpecialPackage());
-        revisionDAO.flush();
-        final Revision outcomeRevision = revisionConverter.map(revisionEntity);
-        createUrls(outcomeRevision, revisionEntity);
-        return outcomeRevision;
-    }
-
     /**
      * processes uploaded packages
      * makes copy in temp files dir for writing to DB
@@ -259,7 +239,7 @@ public class RevisionServiceImpl implements RevisionService {
                                            final boolean extractInfo,final boolean isMainPackage) {
         boolean ret = false;
         try {
-            final File file = fileService.saveFile(streamedPackage);
+            final File file = fileService.saveFile(FileType.APK,streamedPackage,"clap_apk_");
             if (extractInfo) {
                 final ApkInfoMainExtractor mainExtractor = new ApkInfoMainExtractor(file);
                 final IconExtractor iconExtractor = new IconExtractor();
@@ -308,8 +288,10 @@ public class RevisionServiceImpl implements RevisionService {
                 }
             });
             final RevisionEntity revisionToRemove = revisions.get(0);
-            fileService.removeFile(revisionToRemove.getMainPackageFileUrl());
-            fileService.removeFile(revisionToRemove.getSpecialPackageFileUrl());
+            if(revisionToRemove != null){
+                fileService.removeFile(revisionToRemove.getMainPackageFileUrl());
+                fileService.removeFile(revisionToRemove.getSpecialPackageFileUrl());
+            }
             revisionDAO.remove(revisionToRemove);
         }
     }

@@ -13,7 +13,7 @@ import static org.mockito.Mockito.when;
 /**
  * @author Andrey Sokolov
  */
-public abstract class AbstractDAOImplTest<T extends GenericHibernateDAOImpl> {
+public abstract class AbstractDAOImplTest<T extends GenericDAOImpl> {
 
     @Mock
     protected EntityManager entityManager;

@@ -6,7 +6,8 @@ import com.noveogroup.clap.model.message.ScreenshotMessage;
 /**
  * @author Andrey Sokolov
  */
-public class ScreenshotMessagesConverter implements OneTypeMessagesConverter<ScreenshotMessage,ScreenshotMessageEntity> {
+public class ScreenshotMessagesConverter
+        implements OneTypeMessagesConverter<ScreenshotMessage, ScreenshotMessageEntity> {
     @Override
     public ScreenshotMessage map(final ScreenshotMessageEntity messageEntity) {
         final ScreenshotMessage screenshotMessage = new ScreenshotMessage();

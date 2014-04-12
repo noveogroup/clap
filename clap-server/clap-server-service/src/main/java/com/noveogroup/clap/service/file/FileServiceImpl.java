@@ -3,6 +3,7 @@ package com.noveogroup.clap.service.file;
 import com.google.common.collect.Lists;
 import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.exception.ClapTempFilesException;
+import com.noveogroup.clap.model.file.FileType;
 import org.apache.commons.io.IOUtils;
 
 import javax.ejb.Stateless;
@@ -25,22 +26,34 @@ public class FileServiceImpl implements FileService {
     @Inject
     private ConfigBean configBean;
 
-    private File createTempFile(final String dir) throws IOException {
-        return File.createTempFile("clap_", "", new File(dir));
+
+    @Override
+    public File saveFile(final FileType fileType, final InputStream content) {
+        return saveFile(fileType, content, null);
     }
 
     @Override
-    public File saveFile(final InputStream content) {
-        return null;
-    }
-
-    @Override
-    public File saveFile(final InputStream content, final String namePrefix) {
-        return null;
+    public File saveFile(final FileType fileType, final InputStream content, final String namePrefix) {
+        List<String> filesDirs;
+        switch (fileType) {
+            case TEMP:
+                filesDirs = configBean.getTempFilesDirs();
+                break;
+            case SCREENSHOT:
+                filesDirs = configBean.getScreenshotFilesDirs();
+                break;
+            case APK:
+                filesDirs = configBean.getApkFilesDirs();
+                break;
+            default:
+                throw new IllegalArgumentException("unknown filetype :" + fileType);
+        }
+        return createFile(content, filesDirs, namePrefix);
     }
 
     @Override
     public File getFile(final String path) {
+
         return null;
     }
 
@@ -49,12 +62,15 @@ public class FileServiceImpl implements FileService {
         return false;
     }
 
-    public File createTempFile(final InputStream content) {
-        final List<String> tempFilesDirs = configBean.getTempFilesDirs();
+    private File createFile(final String dir, final String namePrefix) throws IOException {
+        return File.createTempFile(namePrefix != null ? namePrefix : "clap_", "", new File(dir));
+    }
+
+    private File createFile(final InputStream content, final List<String> filesDirs, final String namePrefix) {
         List<IOException> exceptions = Lists.newArrayList();
-        for (String tempFilesDir : tempFilesDirs) {
+        for (String directory : filesDirs) {
             try {
-                final File file = createTempFile(tempFilesDir);
+                final File file = createFile(directory, namePrefix);
                 final OutputStream outputStream = new FileOutputStream(file);
                 IOUtils.copy(content, outputStream);
                 outputStream.flush();

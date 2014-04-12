@@ -1,5 +1,7 @@
 package com.noveogroup.clap.service.file;
 
+import com.noveogroup.clap.model.file.FileType;
+
 import java.io.File;
 import java.io.InputStream;
 
@@ -13,12 +15,13 @@ public interface FileService {
     /**
      * save file on FS(won't be cleared automatically)
      *
+     * @param fileType to choose folder to save file(temp,apk,screenshot...)
      * @param content to place in file
      * @return file with written content
      */
-    File saveFile(InputStream content);
+    File saveFile(FileType fileType,InputStream content);
 
-    File saveFile(InputStream content,String namePrefix);
+    File saveFile(FileType fileType,InputStream content,String namePrefix);
 
     /**
      *
@@ -29,11 +32,4 @@ public interface FileService {
 
     boolean removeFile(String path);
 
-    /**
-     * creates new temp file and write input stream in it
-     *
-     * @param content to place in temp file
-     * @return temp file with written content
-     */
-    File createTempFile(InputStream content);
 }

@@ -9,6 +9,7 @@ import com.noveogroup.clap.model.request.message.SendMessageRequest;
 import com.noveogroup.clap.rest.MessagesEndpoint;
 import org.apache.http.params.BasicHttpParams;
 
+import java.io.ByteArrayInputStream;
 import java.util.Date;
 
 /**
@@ -23,9 +24,9 @@ public class ScreenshotMessageProcessor extends BaseMessageProcessor {
             BasicHttpParams param = getBasicHttpParams();
             MessagesEndpoint messagesEndpoint = getMessagesEndpoint(param);
             ScreenshotMessage messageDTO = new ScreenshotMessage();
-            messageDTO.setScreenshot(bitmap);
             messageDTO.setTimestamp(new Date());
             ScreenshotMessageRequest sendMessageRequest = new ScreenshotMessageRequest();
+            sendMessageRequest.setScreenshotFileStream(new ByteArrayInputStream(bitmap));
             fillSendMessageRequest(intent, param, sendMessageRequest);
             sendMessageRequest.setMessage(messageDTO);
             Log.d(TAG, "Trying to send: " + sendMessageRequest);

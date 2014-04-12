@@ -14,10 +14,12 @@ import java.util.Map;
  */
 public class MessagesConverter extends BaseConverter {
 
-    private final Map<Class, OneTypeMessagesConverter> converterMapByDTO = new HashMap<Class, OneTypeMessagesConverter>();
-    private final Map<Class, OneTypeMessagesConverter> converterMapByEntity = new HashMap<Class, OneTypeMessagesConverter>();
+    private final Map<Class, OneTypeMessagesConverter> converterMapByDTO;
+    private final Map<Class, OneTypeMessagesConverter> converterMapByEntity;
 
     public MessagesConverter() {
+        converterMapByDTO = new HashMap<Class, OneTypeMessagesConverter>();
+        converterMapByEntity = new HashMap<Class, OneTypeMessagesConverter>();
         final CrashMessagesConverter crashMessagesConverter = new CrashMessagesConverter();
         final ScreenshotMessagesConverter screenshotMessagesConverter = new ScreenshotMessagesConverter();
         converterMapByDTO.put(crashMessagesConverter.getMessageClass(), crashMessagesConverter);

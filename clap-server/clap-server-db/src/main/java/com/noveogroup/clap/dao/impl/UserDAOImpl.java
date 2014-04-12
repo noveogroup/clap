@@ -11,7 +11,7 @@ import javax.persistence.Query;
  * @author Andrey Sokolov
  */
 @Stateless
-public class UserDAOImpl extends GenericHibernateDAOImpl<UserEntity, Long> implements UserDAO {
+public class UserDAOImpl extends GenericDAOImpl<UserEntity, Long> implements UserDAO {
 
     private static final String GET_USER_BY_TOKEN = "getUserByToken";
     private static final String GET_USER_BY_TOKEN_PARAMETER = "token";

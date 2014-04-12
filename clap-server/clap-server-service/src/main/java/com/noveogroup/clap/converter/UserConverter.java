@@ -1,11 +1,10 @@
 package com.noveogroup.clap.converter;
 
 import com.google.common.collect.Lists;
-import com.noveogroup.clap.converter.message.CrashMessagesConverter;
-import com.noveogroup.clap.entity.message.CrashMessageEntity;
+import com.noveogroup.clap.entity.message.BaseMessageEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
-import com.noveogroup.clap.model.message.CrashMessage;
+import com.noveogroup.clap.model.message.BaseMessage;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.user.ClapPermission;
 import com.noveogroup.clap.model.user.User;
@@ -21,7 +20,7 @@ public class UserConverter {
 
     private RevisionConverter revisionConverter = new RevisionConverter();
 
-    private CrashMessagesConverter messagesConverter = new CrashMessagesConverter();
+    private MessagesConverter messagesConverter = new MessagesConverter();
 
     public User map(UserEntity userEntity) {
         final User ret = new User();
@@ -43,7 +42,7 @@ public class UserConverter {
         this.revisionConverter = revisionConverter;
     }
 
-    public void setMessagesConverter(final CrashMessagesConverter messagesConverter) {
+    public void setMessagesConverter(final MessagesConverter messagesConverter) {
         this.messagesConverter = messagesConverter;
     }
 
@@ -61,9 +60,9 @@ public class UserConverter {
         List<ClapPermission> permissions = Lists.newArrayList();
         permissions.addAll(mapWith.getClapPermissions());
         toMap.setClapPermissions(permissions);
-        List<CrashMessage> messages = Lists.newArrayList();
+        List<BaseMessage> messages = Lists.newArrayList();
         toMap.setUploadedMessages(messages);
-        for (CrashMessageEntity messageEntity : mapWith.getUploadedMessages()) {
+        for (BaseMessageEntity messageEntity : mapWith.getUploadedMessages()) {
             messages.add(messagesConverter.map(messageEntity));
         }
         List<Revision> mainRevisions = Lists.newArrayList();

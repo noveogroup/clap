@@ -4,19 +4,20 @@
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 
     <persistence-unit name="distribution_pu" transaction-type="JTA">
-        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <jta-data-source>app/jdbc/distribution</jta-data-source>
 
         <class>com.noveogroup.clap.entity.BaseEntity</class>
         <class>com.noveogroup.clap.entity.project.ProjectEntity</class>
         <class>com.noveogroup.clap.entity.revision.RevisionEntity</class>
+        <class>com.noveogroup.clap.entity.message.BaseMessageEntity</class>
         <class>com.noveogroup.clap.entity.message.CrashMessageEntity</class>
+        <class>com.noveogroup.clap.entity.message.ScreenshotMessageEntity</class>
         <class>com.noveogroup.clap.entity.user.UserEntity</class>
 
         <exclude-unlisted-classes>false</exclude-unlisted-classes>
         <properties>
-            <!--<property name="eclipselink.ddl-generation" value="create-tables" />-->
-            <!--<property name="eclipselink.logging.level" value="FINE" />-->
+            <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform" />
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <property name="hibernate.show_sql" value="true"/>
             <property name="hibernate.hbm2ddl.auto" value="create-drop"/>

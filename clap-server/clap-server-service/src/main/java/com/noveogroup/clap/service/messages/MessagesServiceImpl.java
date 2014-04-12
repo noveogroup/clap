@@ -8,7 +8,10 @@ import com.noveogroup.clap.entity.message.BaseMessageEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.exception.WrapException;
+import com.noveogroup.clap.model.file.FileType;
 import com.noveogroup.clap.model.message.BaseMessage;
+import com.noveogroup.clap.model.message.ScreenshotMessage;
+import com.noveogroup.clap.service.file.FileService;
 import com.noveogroup.clap.service.user.UserService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 
@@ -17,6 +20,8 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
+import java.io.File;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +41,9 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private FileService fileService;
 
     private MessagesConverter messagesConverter = new MessagesConverter();
 
@@ -57,7 +65,20 @@ public class MessagesServiceImpl implements MessagesService {
         messageEntities.add(messageEntity);
         revisionDAO.persist(revisionEntity);
         revisionDAO.flush();
-        messageDAO.flush();
+    }
+
+    @RequiresAuthentication
+    @WrapException
+    @Override
+    public void saveMessage(final String revisionHash, final BaseMessage message, final InputStream inputStream) {
+        if (inputStream != null) {
+            if (message instanceof ScreenshotMessage) {
+                ScreenshotMessage screenshotMessage = (ScreenshotMessage) message;
+                final File file = fileService.saveFile(FileType.SCREENSHOT,inputStream);
+                screenshotMessage.setScreenshotUrl(file.getAbsolutePath());
+            }
+        }
+        saveMessage(revisionHash, message);
     }
 
     public void setMessagesConverter(final MessagesConverter messagesConverter) {

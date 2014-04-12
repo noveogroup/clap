@@ -5,11 +5,7 @@
 
     <interceptors>
         <class>com.noveogroup.clap.security.ShiroSecuredInterceptor</class>
-    </interceptors>
-    <interceptors>
         <class>com.noveogroup.clap.validation.ValidationInterceptor</class>
-    </interceptors>
-    <interceptors>
         <class>com.noveogroup.clap.exception.ExceptionWrapperInterceptor</class>
     </interceptors>
 

@@ -121,9 +121,9 @@
         <hibernate.version>4.2.1.Final</hibernate.version>
         <mockito-all.version>1.9.5</mockito-all.version>
         <powermock.version>1.5</powermock.version>
-        <glassfish-embedded-all.version>3.1.1</glassfish-embedded-all.version>
-        <javaee-api.version>6.0</javaee-api.version>
-        <primefaces.version>3.5</primefaces.version>
+        <glassfish-embedded-all.version>4.0-b72</glassfish-embedded-all.version>
+        <javaee-api.version>7.0</javaee-api.version>
+        <primefaces.version>4.0</primefaces.version>
         <slf4j.version>1.7.5</slf4j.version>
         <logback.version>1.0.12</logback.version>
         <dozer.version>5.4.0</dozer.version>
@@ -138,6 +138,7 @@
         <guava.version>14.0.1</guava.version>
         <cas-client.version>3.2.1</cas-client.version>
         <shiro.version>1.2.2</shiro.version>
+        <hibernate-entitymanager.version>4.3.4.Final</hibernate-entitymanager.version>
     </properties>
 
 
@@ -214,24 +215,20 @@
 
             <dependency>
                 <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-core</artifactId>
-                <version>${hibernate.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-entitymanager</artifactId>
-                <version>${hibernate.version}</version>
+                <version>${hibernate-entitymanager.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-validator</artifactId>
                 <version>${hibernate-validator.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.glassfish.extras</groupId>
+                <groupId>org.glassfish.main.extras</groupId>
                 <artifactId>glassfish-embedded-all</artifactId>
                 <version>${glassfish-embedded-all.version}</version>
-                <scope>provided</scope>
+                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>javax</groupId>
@@ -351,6 +348,7 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+                <scope>provided</scope>
             </dependency>
 
             <dependency>

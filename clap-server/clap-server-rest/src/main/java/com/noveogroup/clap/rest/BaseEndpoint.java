@@ -1,5 +1,6 @@
 package com.noveogroup.clap.rest;
 
+import com.noveogroup.clap.model.file.FileType;
 import com.noveogroup.clap.model.revision.StreamedPackage;
 import com.noveogroup.clap.rest.auth.ClapRestAuthenticationToken;
 import com.noveogroup.clap.rest.exception.ClapException;
@@ -32,7 +33,7 @@ public abstract class BaseEndpoint {
     protected StreamedPackage createStreamedPackage(final InputStream stream) {
         if (stream != null) {
             try {
-                final File tempFile = fileService.createTempFile(stream);
+                final File tempFile = fileService.saveFile(FileType.TEMP,stream);
                 final long length = tempFile.length();
                 final StreamedPackage streamedPackage = new StreamedPackage(new FileInputStream(tempFile), length);
                 LOGGER.debug("Retrieved package as stream: " + tempFile.getName() + "; length: " + length);
@@ -47,7 +48,7 @@ public abstract class BaseEndpoint {
     protected StreamedPackage createStreamedPackage(final byte[] data) {
         if (data != null) {
             try {
-                final File tempFile = fileService.createTempFile(new ByteArrayInputStream(data));
+                final File tempFile = fileService.saveFile(FileType.TEMP,new ByteArrayInputStream(data));
                 final long length = tempFile.length();
                 final StreamedPackage streamedPackage = new StreamedPackage(new FileInputStream(tempFile), length);
                 LOGGER.debug("Retrieved package as byte[]: " + tempFile.getName() + "; length: " + length);

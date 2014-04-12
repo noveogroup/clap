@@ -5,14 +5,14 @@ package com.noveogroup.clap.model.message;
  */
 public class ScreenshotMessage extends BaseMessage {
 
-    private byte[] screenshot;
+    private String screenshotUrl;
 
-    public byte[] getScreenshot() {
-        return screenshot;
+    public String getScreenshotUrl() {
+        return screenshotUrl;
     }
 
-    public void setScreenshot(final byte[] screenshot) {
-        this.screenshot = screenshot;
+    public void setScreenshotUrl(final String screenshotUrl) {
+        this.screenshotUrl = screenshotUrl;
     }
 
     @Override

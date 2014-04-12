@@ -3,11 +3,11 @@ package com.noveogroup.clap.entity.message;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.Table;
 
 @Entity(name = "CrashMessageEntity")
-@Table(name = "crashMessages")
+@DiscriminatorValue("crash")
 public class CrashMessageEntity extends BaseMessageEntity {
 
     @Column(name = "device_info", length = COLUMN_LENGTH)
