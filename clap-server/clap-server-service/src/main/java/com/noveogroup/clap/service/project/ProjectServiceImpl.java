@@ -13,6 +13,8 @@ import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.model.project.ImagedProject;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.user.UserWithPersistedAuth;
+import com.noveogroup.clap.service.file.FileService;
+import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.service.url.UrlService;
 import com.noveogroup.clap.service.user.UserService;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -48,6 +50,12 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Inject
     private UrlService urlService;
+
+    @Inject
+    private RevisionService revisionService;
+
+    @Inject
+    private FileService fileService;
 
     @Inject
     private UserService userService;
@@ -129,8 +137,24 @@ public class ProjectServiceImpl implements ProjectService {
     @RequiresPermissions("DELETE_PROJECTS")
     @Override
     public void deleteProject(final Project project) {
+        List<String> filesToDelete = Lists.newArrayList();
+
+        final ProjectEntity projectEntity = projectDAO.findById(project.getId());
+        for (RevisionEntity revisionEntity : projectEntity.getRevisions()){
+            final String mainPackageFileUrl = revisionEntity.getMainPackageFileUrl();
+            if(mainPackageFileUrl != null){
+                filesToDelete.add(mainPackageFileUrl);
+            }
+            final String specialPackageFileUrl = revisionEntity.getSpecialPackageFileUrl();
+            if(specialPackageFileUrl != null){
+                filesToDelete.add(specialPackageFileUrl);
+            }
+        }
         projectDAO.removeById(project.getId());
         projectDAO.flush();
+        for(String fileToDelete : filesToDelete){
+            fileService.removeFile(fileToDelete);
+        }
     }
 
 

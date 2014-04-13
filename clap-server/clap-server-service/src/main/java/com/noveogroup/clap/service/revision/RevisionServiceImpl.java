@@ -1,5 +1,6 @@
 package com.noveogroup.clap.service.revision;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.noveogroup.clap.config.ConfigBean;
@@ -134,30 +135,23 @@ public class RevisionServiceImpl implements RevisionService {
     @RequiresAuthentication
     @Override
     public ApplicationFile getApplication(final Long revisionId, final ApplicationType applicationType) {
-        /*
         final RevisionEntity revisionEntity = revisionDAO.findById(revisionId);
         if (revisionEntity != null) {
             final ApplicationFile ret = new ApplicationFile();
-            try {
-                switch (applicationType) {
-                    case MAIN:
-                        ret.setContent(fileService.createTempFile(
-                                revisionEntity.getMainPackage().getBinaryStream()));
-                        ret.setFilename(createFileName(revisionEntity.getProject(), true));
-                        return ret;
-                    case SPECIAL:
-                        ret.setContent(fileService.createTempFile(
-                                revisionEntity.getSpecialPackage().getBinaryStream()));
-                        ret.setFilename(createFileName(revisionEntity.getProject(), false));
-                        return ret;
-                    default:
-                        throw new IllegalArgumentException("unknown application type : "
-                                + applicationType);
-                }
-            } catch (SQLException e) {
-                LOGGER.error("error getting file", e);
+            switch (applicationType) {
+                case MAIN:
+                    ret.setContent(fileService.getFile(revisionEntity.getMainPackageFileUrl()));
+                    ret.setFilename(createFileName(revisionEntity.getProject(), true));
+                    return ret;
+                case SPECIAL:
+                    ret.setContent(fileService.getFile(revisionEntity.getSpecialPackageFileUrl()));
+                    ret.setFilename(createFileName(revisionEntity.getProject(), false));
+                    return ret;
+                default:
+                    throw new IllegalArgumentException("unknown application type : "
+                            + applicationType);
             }
-        }    */
+        }
         return null;
     }
 
@@ -184,8 +178,21 @@ public class RevisionServiceImpl implements RevisionService {
     @WrapException
     @Override
     public void deleteRevision(final Long id) {
+        final RevisionEntity revisionEntity = revisionDAO.findById(id);
+        List<String> filesToDelete = Lists.newArrayList();
+        final String mainPackageFileUrl = revisionEntity.getMainPackageFileUrl();
+        if (mainPackageFileUrl != null) {
+            filesToDelete.add(mainPackageFileUrl);
+        }
+        final String specialPackageFileUrl = revisionEntity.getSpecialPackageFileUrl();
+        if (specialPackageFileUrl != null) {
+            filesToDelete.add(specialPackageFileUrl);
+        }
         revisionDAO.removeById(id);
         revisionDAO.flush();
+        for (String fileToDelete : filesToDelete) {
+            fileService.removeFile(fileToDelete);
+        }
     }
 
     @Override
@@ -219,11 +226,11 @@ public class RevisionServiceImpl implements RevisionService {
             userByLogin = userDAO.getUserByLogin(currentUserLogin);
         }
         if (mainPackage != null) {
-            extractInfo = !processStreamedPackage(revisionEntity, mainPackage, extractInfo,true);
+            extractInfo = !processStreamedPackage(revisionEntity, mainPackage, extractInfo, true);
             revisionEntity.setMainPackageUploadedBy(userByLogin);
         }
         if (specialPackage != null) {
-            processStreamedPackage(revisionEntity, specialPackage, extractInfo,false);
+            processStreamedPackage(revisionEntity, specialPackage, extractInfo, false);
             revisionEntity.setSpecialPackageUploadedBy(userByLogin);
         }
     }
@@ -236,10 +243,10 @@ public class RevisionServiceImpl implements RevisionService {
      */
     private boolean processStreamedPackage(final RevisionEntity revisionEntity,
                                            final InputStream streamedPackage,
-                                           final boolean extractInfo,final boolean isMainPackage) {
+                                           final boolean extractInfo, final boolean isMainPackage) {
         boolean ret = false;
         try {
-            final File file = fileService.saveFile(FileType.APK,streamedPackage,"clap_apk_");
+            final File file = fileService.saveFile(FileType.APK, streamedPackage, "clap_apk_");
             if (extractInfo) {
                 final ApkInfoMainExtractor mainExtractor = new ApkInfoMainExtractor(file);
                 final IconExtractor iconExtractor = new IconExtractor();
@@ -250,7 +257,7 @@ public class RevisionServiceImpl implements RevisionService {
                 revisionEntity.setApkStructureJSON(new Gson().toJson(apkStructure, ApkStructure.class));
                 ret = true;
             }
-            if(isMainPackage){
+            if (isMainPackage) {
                 revisionEntity.setMainPackageFileUrl(file.getAbsolutePath());
             } else {
                 revisionEntity.setSpecialPackageFileUrl(file.getAbsolutePath());
@@ -288,7 +295,7 @@ public class RevisionServiceImpl implements RevisionService {
                 }
             });
             final RevisionEntity revisionToRemove = revisions.get(0);
-            if(revisionToRemove != null){
+            if (revisionToRemove != null) {
                 fileService.removeFile(revisionToRemove.getMainPackageFileUrl());
                 fileService.removeFile(revisionToRemove.getSpecialPackageFileUrl());
             }

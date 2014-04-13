@@ -29,7 +29,7 @@ public class MessagesEndpointImpl extends BaseEndpoint implements MessagesEndpoi
     public void saveScreenshot(final ScreenshotMessageRequest request) {
         LOGGER.debug("saving screenshot message " + request);
         login(request.getToken());
-        //TODO
+        messagesService.saveMessage(request.getRevisionHash(), request.getMessage(), request.getScreenshotFileStream());
         LOGGER.debug(request + "saved");
     }
 }

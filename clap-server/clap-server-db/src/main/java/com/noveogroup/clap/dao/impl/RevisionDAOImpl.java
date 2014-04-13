@@ -3,6 +3,7 @@ package com.noveogroup.clap.dao.impl;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.model.revision.RevisionType;
+import org.hibernate.Hibernate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,7 +31,7 @@ public class RevisionDAOImpl extends GenericDAOImpl<RevisionEntity, Long> implem
         query.setParameter(REVISION_BY_HASH_PARAMETER, revisionHash);
         final RevisionEntity revisionEntity = (RevisionEntity) query.getSingleResult();
         if (revisionEntity != null) {
-            entityManager.refresh(revisionEntity.getMessages());
+            Hibernate.initialize(revisionEntity.getMessages());
         }
         return revisionEntity;
     }
@@ -56,7 +57,7 @@ public class RevisionDAOImpl extends GenericDAOImpl<RevisionEntity, Long> implem
     public RevisionEntity findById(final Long aLong) {
         final RevisionEntity revisionEntity = super.findById(aLong);
         if (revisionEntity != null) {
-            entityManager.refresh(revisionEntity.getMessages());
+            Hibernate.initialize(revisionEntity.getMessages());
         }
         return revisionEntity;
     }

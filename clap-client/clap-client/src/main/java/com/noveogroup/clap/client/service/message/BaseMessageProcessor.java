@@ -3,9 +3,7 @@ package com.noveogroup.clap.client.service.message;
 import android.content.Intent;
 import android.util.Log;
 import com.noveogroup.clap.model.auth.Authentication;
-import com.noveogroup.clap.model.message.CrashMessage;
 import com.noveogroup.clap.model.request.message.BaseMessageRequest;
-import com.noveogroup.clap.model.request.message.SendMessageRequest;
 import com.noveogroup.clap.rest.AuthenticationEndpoint;
 import com.noveogroup.clap.rest.MessagesEndpoint;
 import org.apache.http.HttpVersion;
@@ -14,8 +12,6 @@ import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
 import org.jboss.resteasy.client.ProxyFactory;
 import org.jboss.resteasy.client.core.executors.ApacheHttpClient4Executor;
-
-import java.util.Date;
 
 /**
  * @author Andrey Sokolov

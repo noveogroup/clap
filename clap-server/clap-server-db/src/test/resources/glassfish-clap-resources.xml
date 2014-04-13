@@ -12,7 +12,7 @@
             non-transactional-connections="true"
             statement-timeout-in-seconds="30">
         <property name="User" value="root"></property>
-        <property name="Password" value="sroot"></property>
+        <property name="Password" value="123456"></property>
         <property name="portNumber" value="3306"></property>
         <property name="dataBaseName" value="test"></property>
         <property name="serverName" value="localhost"></property>

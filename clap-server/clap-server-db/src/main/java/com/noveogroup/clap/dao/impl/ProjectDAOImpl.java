@@ -2,6 +2,7 @@ package com.noveogroup.clap.dao.impl;
 
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.entity.project.ProjectEntity;
+import org.hibernate.Hibernate;
 
 import javax.ejb.Stateless;
 import javax.persistence.Query;
@@ -19,7 +20,7 @@ public class ProjectDAOImpl extends GenericDAOImpl<ProjectEntity, Long> implemen
     public ProjectEntity findById(final Long id) {
         final ProjectEntity projectEntity = super.findById(id);
         if (projectEntity != null) {
-            entityManager.refresh(projectEntity.getRevisions());
+            Hibernate.initialize(projectEntity.getRevisions());
         }
         return projectEntity;
     }

@@ -53,12 +53,19 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public File getFile(final String path) {
-
+        File file = new File(path);
+        if(file.exists()){
+            return file;
+        }
         return null;
     }
 
     @Override
     public boolean removeFile(final String path) {
+        File file = new File(path);
+        if(file.exists()){
+            return file.delete();
+        }
         return false;
     }
 
