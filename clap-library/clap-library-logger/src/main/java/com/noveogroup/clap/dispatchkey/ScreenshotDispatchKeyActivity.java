@@ -17,7 +17,7 @@ public class ScreenshotDispatchKeyActivity implements DispatchKeyActivity {
     @Override
     public void onKeyPressed(final Activity activity, final KeyEvent event) {
         Log.e(TAG, "screenshot activity 1");
-        final View v1 = activity.getWindow().getDecorView().findViewById(android.R.id.content);
+        final View v1 = activity.getWindow().getDecorView();
         Log.e(TAG, "screenshot activity 2");
         v1.setDrawingCacheEnabled(true);
         Log.e(TAG, "screenshot activity 3");

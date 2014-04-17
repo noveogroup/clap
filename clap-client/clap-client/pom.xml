@@ -30,6 +30,12 @@
         <dependency>
             <groupId>org.jboss.resteasy.mobile</groupId>
             <artifactId>resteasy-mobile</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.apache.httpcomponents</groupId>
+                    <artifactId>httpclient</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.noveogroup.clap</groupId>
@@ -49,6 +55,11 @@
                     <artifactId>jsr311-api</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpmime</artifactId>
+            <version>4.3.3</version>
         </dependency>
     </dependencies>
     <build>

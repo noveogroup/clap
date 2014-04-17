@@ -16,15 +16,16 @@ public interface FileService {
      * save file on FS(won't be cleared automatically)
      *
      * @param fileType to choose folder to save file(temp,apk,screenshot...)
-     * @param content to place in file
+     * @param content  to place in file
      * @return file with written content
      */
-    File saveFile(FileType fileType,InputStream content);
+    File saveFile(FileType fileType, InputStream content);
 
-    File saveFile(FileType fileType,InputStream content,String namePrefix);
+    File saveFile(FileType fileType, InputStream content, String namePrefix);
+
+    File saveFile(FileType fileType, InputStream content, String namePrefix, String nameSuffix);
 
     /**
-     *
      * @param path
      * @return null if not exists
      */

@@ -1,5 +1,6 @@
 package com.noveogroup.clap.rest;
 
+import com.noveogroup.clap.model.message.ScreenshotMessage;
 import com.noveogroup.clap.model.request.message.ScreenshotMessageRequest;
 import com.noveogroup.clap.model.request.message.SendMessageRequest;
 import com.noveogroup.clap.service.messages.MessagesService;
@@ -27,9 +28,10 @@ public class MessagesEndpointImpl extends BaseEndpoint implements MessagesEndpoi
 
     @Override
     public void saveScreenshot(final ScreenshotMessageRequest request) {
-        LOGGER.debug("saving screenshot message " + request);
+        final String revisionHash = request.getRevisionHash();
+        LOGGER.debug("saving screenshot message " + revisionHash);
         login(request.getToken());
-        messagesService.saveMessage(request.getRevisionHash(), request.getMessage(), request.getScreenshotFileStream());
-        LOGGER.debug(request + "saved");
+        messagesService.saveMessage(revisionHash, new ScreenshotMessage(), request.getScreenshotFileStream());
+        LOGGER.debug(revisionHash + "screenshot saved");
     }
 }

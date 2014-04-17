@@ -21,8 +21,6 @@ import java.util.List;
 @Stateless
 public class FileServiceImpl implements FileService {
 
-    //TODO
-
     @Inject
     private ConfigBean configBean;
 
@@ -34,6 +32,12 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public File saveFile(final FileType fileType, final InputStream content, final String namePrefix) {
+        return saveFile(fileType, content, namePrefix, null);
+    }
+
+    @Override
+    public File saveFile(final FileType fileType, final InputStream content,
+                         final String namePrefix, final String nameSuffix) {
         List<String> filesDirs;
         switch (fileType) {
             case TEMP:
@@ -48,13 +52,13 @@ public class FileServiceImpl implements FileService {
             default:
                 throw new IllegalArgumentException("unknown filetype :" + fileType);
         }
-        return createFile(content, filesDirs, namePrefix);
+        return createFile(content, filesDirs, namePrefix, nameSuffix);
     }
 
     @Override
     public File getFile(final String path) {
         File file = new File(path);
-        if(file.exists()){
+        if (file.exists()) {
             return file;
         }
         return null;
@@ -63,21 +67,25 @@ public class FileServiceImpl implements FileService {
     @Override
     public boolean removeFile(final String path) {
         File file = new File(path);
-        if(file.exists()){
+        if (file.exists()) {
             return file.delete();
         }
         return false;
     }
 
-    private File createFile(final String dir, final String namePrefix) throws IOException {
-        return File.createTempFile(namePrefix != null ? namePrefix : "clap_", "", new File(dir));
+    private File createFile(final String dir, final String namePrefix, final String nameSuffix) throws IOException {
+        return File.createTempFile(
+                namePrefix != null ? namePrefix : "clap_",
+                nameSuffix != null ? nameSuffix : "",
+                new File(dir));
     }
 
-    private File createFile(final InputStream content, final List<String> filesDirs, final String namePrefix) {
+    private File createFile(final InputStream content, final List<String> filesDirs,
+                            final String namePrefix, final String nameSuffix) {
         List<IOException> exceptions = Lists.newArrayList();
         for (String directory : filesDirs) {
             try {
-                final File file = createFile(directory, namePrefix);
+                final File file = createFile(directory, namePrefix, nameSuffix);
                 final OutputStream outputStream = new FileOutputStream(file);
                 IOUtils.copy(content, outputStream);
                 outputStream.flush();

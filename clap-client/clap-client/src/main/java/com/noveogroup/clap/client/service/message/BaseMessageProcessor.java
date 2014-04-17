@@ -23,8 +23,12 @@ public abstract class BaseMessageProcessor implements MessageProcessor{
 
     protected void fillSendMessageRequest(final Intent intent, final BasicHttpParams param, final BaseMessageRequest sendMessageRequest) {
         String token = getToken(param);
-        sendMessageRequest.setRevisionHash(intent.getStringExtra("revision"));
+        sendMessageRequest.setRevisionHash(getRevisionHash(intent));
         sendMessageRequest.setToken(token);
+    }
+
+    protected String getRevisionHash(final Intent intent) {
+        return intent.getStringExtra("revision");
     }
 
     protected MessagesEndpoint getMessagesEndpoint(final BasicHttpParams param) {

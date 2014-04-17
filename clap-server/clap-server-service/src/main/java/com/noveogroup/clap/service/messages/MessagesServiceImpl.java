@@ -74,7 +74,7 @@ public class MessagesServiceImpl implements MessagesService {
         if (inputStream != null) {
             if (message instanceof ScreenshotMessage) {
                 ScreenshotMessage screenshotMessage = (ScreenshotMessage) message;
-                final File file = fileService.saveFile(FileType.SCREENSHOT,inputStream);
+                final File file = fileService.saveFile(FileType.SCREENSHOT,inputStream,null,".png");
                 screenshotMessage.setScreenshotUrl(file.getAbsolutePath());
             }
         }
