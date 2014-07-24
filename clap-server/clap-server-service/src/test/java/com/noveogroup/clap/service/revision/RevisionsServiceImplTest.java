@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
 import static org.mockito.Matchers.eq;
@@ -103,15 +104,12 @@ public class RevisionsServiceImplTest {
         revisionEntities.add(re4);
 
         when(revisionDAO.findForProjectAndType(123L, RevisionType.DEVELOP)).thenReturn(revisionEntities);
-        final RevisionEntity persisted = new RevisionEntity();
-        when(revisionDAO.persist(argThat(new RevisionEntityMatcher(mockHash)))).thenReturn(persisted);
-        final Revision mappedFromPersisted = new Revision();
-        when(revisionConverter.map(persisted)).thenReturn(mappedFromPersisted);
-        final Revision revision1 = revisionService.addOrGetRevision(request);
+        final boolean created = revisionService.addOrGetRevision(request);
         verify(fileService).removeFile(re3.getMainPackageFileUrl());
         verify(fileService).removeFile(re3.getSpecialPackageFileUrl());
         verify(revisionDAO).remove(re3);
-        assertEquals(revision1, mappedFromPersisted);
+        verify(revisionDAO).persist(argThat(new RevisionEntityMatcher(mockHash)));
+        assertTrue(created);
     }
 
     private static class RevisionEntityMatcher extends BaseMatcher<RevisionEntity>{

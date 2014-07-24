@@ -7,9 +7,9 @@ import com.google.zxing.WriterException;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
-import com.noveogroup.clap.model.Project;
-import com.noveogroup.clap.model.project.ImagedProject;
-import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
+import com.noveogroup.clap.model.message.BaseMessage;
+import com.noveogroup.clap.model.message.CrashMessage;
+import com.noveogroup.clap.model.message.ScreenshotMessage;
 import com.noveogroup.clap.model.revision.ApkEntry;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
@@ -19,7 +19,6 @@ import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.projects.ProjectsModel;
-import com.noveogroup.clap.web.model.projects.StreamedImagedProject;
 import com.noveogroup.clap.web.model.revisions.RevisionsListDataModel;
 import com.noveogroup.clap.web.model.revisions.RevisionsModel;
 import com.noveogroup.clap.web.model.user.UserSessionData;
@@ -30,7 +29,6 @@ import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.TreeNode;
-import org.primefaces.model.UploadedFile;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,7 +40,6 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -72,42 +69,6 @@ public class RevisionsController extends BaseController {
     @Inject
     private MessageSupport messageSupport;
 
-    /**
-     * adding revision via web-interface functionality will be removed
-     *
-     * @return view name
-     * @throws IOException
-     */
-    public String saveNewRevision() throws IOException {
-        LOGGER.debug("saving new revision");
-        final Project project = projectsModel.getSelectedProject();
-        final long timestamp = new Date().getTime();
-        final String hash = "mock_hash_" + timestamp;
-        final UploadedFile newRevisionCleanApk = revisionsModel.getCleanPackageModel().getUploadApk();
-        final UploadedFile newRevisionHackedApk = revisionsModel.getHackedPackageModel().getUploadApk();
-
-        final CreateOrUpdateRevisionRequest request = new CreateOrUpdateRevisionRequest();
-        request.setProjectExternalId(project.getExternalId());
-        request.setRevisionHash(hash);
-
-        if (newRevisionCleanApk != null) {
-            request.setMainPackage(newRevisionCleanApk.getInputstream());
-        }
-        if (newRevisionHackedApk != null) {
-            request.setSpecialPackage(newRevisionHackedApk.getInputstream());
-        }
-        revisionService.addOrGetRevision(request);
-
-        revisionsModel.reset();
-        LOGGER.debug("revision saved");
-        final ImagedProject updatedProject = projectService.findByIdWithImage(project.getId());
-        if (updatedProject != null) {
-            projectsModel.setSelectedProject(new StreamedImagedProject(updatedProject));
-            revisionsModel.setRevisionsListDataModel(new RevisionsListDataModel(updatedProject.getRevisions()));
-        }
-        return Navigation.SAME_PAGE.getView();
-    }
-
     public void prepareRevisionView() throws IOException, WriterException {
         if (isAjaxRequest()) {
             return;
@@ -119,6 +80,16 @@ public class RevisionsController extends BaseController {
             final RevisionWithApkStructure revWithApkStructure = revisionService.getRevisionWithApkStructure(
                     selectedRevision.getId());
             revisionsModel.setSelectedRevision(revWithApkStructure);
+            revisionsModel.getSelectedRevCrashes().clear();
+            revisionsModel.getSelectedRevScreenshots().clear();
+            for (BaseMessage message : revWithApkStructure.getMessages()) {
+                if (message instanceof CrashMessage) {
+                    revisionsModel.getSelectedRevCrashes().add((CrashMessage) message);
+                }
+                if (message instanceof ScreenshotMessage) {
+                    revisionsModel.getSelectedRevScreenshots().add((ScreenshotMessage) message);
+                }
+            }
             if (revWithApkStructure.getApkStructure() != null) {
                 revisionsModel.setSelectedRevisionApkStructure(
                         createApkStructureTree(null, revWithApkStructure.getApkStructure().getRootEntry()));
@@ -159,24 +130,6 @@ public class RevisionsController extends BaseController {
         revisionService.deleteRevision(id);
         revisionsModel.getRevisionsListDataModel().remove(id);
         redirectTo(Navigation.PROJECT);
-    }
-
-    public String uploadApkToRevision() throws IOException, WriterException {
-        final UploadedFile newRevisionCleanApk = revisionsModel.getCleanPackageModel().getUploadApk();
-        final UploadedFile newRevisionHackedApk = revisionsModel.getHackedPackageModel().getUploadApk();
-        final CreateOrUpdateRevisionRequest request = new CreateOrUpdateRevisionRequest();
-        request.setRevisionHash(revisionsModel.getSelectedRevision().getHash());
-        if (newRevisionCleanApk != null) {
-            request.setMainPackage(newRevisionCleanApk.getInputstream());
-        }
-        if (newRevisionHackedApk != null) {
-            request.setSpecialPackage(newRevisionHackedApk.getInputstream());
-        }
-        final Revision updatedRevision = revisionService.addOrGetRevision(request);
-        revisionsModel.setSelectedRevision(updatedRevision);
-        updateQRCodes(updatedRevision);
-        LOGGER.debug("revision updated");
-        return Navigation.SAME_PAGE.getView();
     }
 
     private void updateQRCodes(final Revision revision) throws IOException, WriterException {

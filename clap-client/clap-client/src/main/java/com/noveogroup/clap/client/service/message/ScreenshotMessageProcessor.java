@@ -28,7 +28,7 @@ public class ScreenshotMessageProcessor extends BaseMessageProcessor {
             ScreenshotMessage messageDTO = new ScreenshotMessage();
             messageDTO.setTimestamp(new Date());
 
-            String url = CLAP_HOST + "/message/screenshot";
+            String url = CLAP_HOST + "/upload/screenshot";
             String token = getToken(param);
             String revisionHash = getRevisionHash(intent);
             Log.d(TAG, "Trying to send screenshot");

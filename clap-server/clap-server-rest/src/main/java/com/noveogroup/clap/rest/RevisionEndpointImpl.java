@@ -1,6 +1,5 @@
 package com.noveogroup.clap.rest;
 
-import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
 import com.noveogroup.clap.model.request.revision.RevisionRequest;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.service.revision.RevisionService;
@@ -17,14 +16,6 @@ public class RevisionEndpointImpl extends BaseEndpoint implements RevisionEndpoi
     @Inject
     private RevisionService revisionService;
 
-
-
-    @Override
-    public Revision createOrUpdateRevision(final CreateOrUpdateRevisionRequest request) {
-        login(request.getToken());
-        return revisionService.addOrGetRevision(request);
-
-    }
 
     @Override
     public Revision getRevision(final RevisionRequest request) {

@@ -25,38 +25,6 @@
             </p:panel>
             <clp:revisionsTable />
 
-            <p:panel header="#{msgs['project.view.uploadRevision.header']}"
-                     rendered="#{userSessionData.isInRole('ADMIN')}">
-                <h:form enctype="multipart/form-data">
-                    <p:messages/>
-                    <p:panelGrid columns="2">
-
-                        <h:outputText value="#{msgs['project.view.uploadRevision.cleanApk']}"/>
-
-                        <p:fileUpload
-                                mode="simple"
-                                id="cleanApkFileUpload"
-                                sizeLimit="#{configBean.maxApkSize}"
-                                value="#{revisionsModel.cleanPackageModel.uploadApk}"/>
-
-                        <h:outputText value="#{msgs['project.view.uploadRevision.hackedApk']}"/>
-
-                        <p:fileUpload
-                                mode="simple"
-                                id="hackedApkFileUpload"
-                                sizeLimit="#{configBean.maxApkSize}"
-                                value="#{revisionsModel.hackedPackageModel.uploadApk}"/>
-
-                        <f:facet name="footer">
-                            <p:commandButton value="#{msgs['common.form.label.add']}"
-                                             ajax="false"
-                                             action="#{revisionsController.saveNewRevision}"/>
-                        </f:facet>
-
-                    </p:panelGrid>
-                </h:form>
-            </p:panel>
-
         </h:panelGroup>
     </ui:define>
 </ui:composition>

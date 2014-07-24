@@ -1,5 +1,6 @@
 package com.noveogroup.clap.converter.message;
 
+import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.entity.message.BaseMessageEntity;
 import com.noveogroup.clap.model.message.BaseMessage;
 
@@ -8,7 +9,7 @@ import com.noveogroup.clap.model.message.BaseMessage;
  */
 public interface OneTypeMessagesConverter<T extends BaseMessage, V extends BaseMessageEntity> {
 
-    T map(V messageEntity);
+    T map(V messageEntity,ConfigBean configBean);
 
     V map(T message);
 

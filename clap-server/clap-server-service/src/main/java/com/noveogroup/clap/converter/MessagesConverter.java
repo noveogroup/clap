@@ -1,12 +1,13 @@
 package com.noveogroup.clap.converter;
 
+import com.google.common.collect.Maps;
+import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.converter.message.CrashMessagesConverter;
 import com.noveogroup.clap.converter.message.OneTypeMessagesConverter;
 import com.noveogroup.clap.converter.message.ScreenshotMessagesConverter;
 import com.noveogroup.clap.entity.message.BaseMessageEntity;
 import com.noveogroup.clap.model.message.BaseMessage;
 
-import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -14,12 +15,10 @@ import java.util.Map;
  */
 public class MessagesConverter extends BaseConverter {
 
-    private final Map<Class, OneTypeMessagesConverter> converterMapByDTO;
-    private final Map<Class, OneTypeMessagesConverter> converterMapByEntity;
+    private final Map<Class, OneTypeMessagesConverter> converterMapByDTO = Maps.newHashMap();
+    private final Map<Class, OneTypeMessagesConverter> converterMapByEntity = Maps.newHashMap();
 
     public MessagesConverter() {
-        converterMapByDTO = new HashMap<Class, OneTypeMessagesConverter>();
-        converterMapByEntity = new HashMap<Class, OneTypeMessagesConverter>();
         final CrashMessagesConverter crashMessagesConverter = new CrashMessagesConverter();
         final ScreenshotMessagesConverter screenshotMessagesConverter = new ScreenshotMessagesConverter();
         converterMapByDTO.put(crashMessagesConverter.getMessageClass(), crashMessagesConverter);
@@ -29,18 +28,18 @@ public class MessagesConverter extends BaseConverter {
         converterMapByEntity.put(screenshotMessagesConverter.getMessageEntityClass(), screenshotMessagesConverter);
     }
 
-    public BaseMessage map(BaseMessageEntity entity) {
+    public BaseMessage map(final BaseMessageEntity entity, final ConfigBean configBean) {
         final Class<? extends BaseMessageEntity> entityClass = entity.getEntityType();
         final OneTypeMessagesConverter messagesConverter = converterMapByEntity.get(entityClass);
         if (messagesConverter != null) {
-            BaseMessage message = messagesConverter.map(entity);
+            BaseMessage message = messagesConverter.map(entity, configBean);
             return message;
         } else {
             throw new IllegalStateException("no converter found for " + entityClass);
         }
     }
 
-    public BaseMessageEntity map(BaseMessage message) {
+    public BaseMessageEntity map(final BaseMessage message) {
         final Class<? extends BaseMessage> messageClass = message.getMessageType();
         final OneTypeMessagesConverter messagesConverter = converterMapByDTO.get(messageClass);
         if (messagesConverter != null) {

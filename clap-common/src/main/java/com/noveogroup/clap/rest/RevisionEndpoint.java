@@ -1,9 +1,7 @@
 package com.noveogroup.clap.rest;
 
-import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
 import com.noveogroup.clap.model.request.revision.RevisionRequest;
 import com.noveogroup.clap.model.revision.Revision;
-import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -16,11 +14,6 @@ import javax.ws.rs.core.MediaType;
  */
 @Path("/revision")
 public interface RevisionEndpoint {
-
-    @POST
-    @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces(MediaType.APPLICATION_JSON)
-    Revision createOrUpdateRevision(@MultipartForm CreateOrUpdateRevisionRequest request);
 
 
     @POST

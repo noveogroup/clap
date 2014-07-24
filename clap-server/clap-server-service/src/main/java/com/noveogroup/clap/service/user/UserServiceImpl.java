@@ -2,6 +2,7 @@ package com.noveogroup.clap.service.user;
 
 import com.google.common.collect.Lists;
 import com.noveogroup.clap.auth.PasswordsHashCalculator;
+import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.converter.UserConverter;
 import com.noveogroup.clap.dao.UserDAO;
 import com.noveogroup.clap.entity.user.UserEntity;
@@ -26,6 +27,7 @@ import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,12 +45,15 @@ public class UserServiceImpl implements UserService {
     @EJB
     private UserDAO userDAO;
 
+    @Inject
+    private ConfigBean configBean;
+
     @Override
     public UserWithPersistedAuth getUserWithToken() {
         final String currentUserLogin = getCurrentUserLogin();
         final UserEntity userEntity = userDAO.getUserByLogin(currentUserLogin);
         if (userEntity != null) {
-            return converter.mapWithPersistedAuth(userEntity);
+            return converter.mapWithPersistedAuth(userEntity,configBean);
         } else {
             throw new ClapUserNotFoundException("requested login == " + currentUserLogin);
         }
@@ -77,7 +82,7 @@ public class UserServiceImpl implements UserService {
     public User getUser(final String login, final boolean autocreate) {
         final UserEntity userEntity = userDAO.getUserByLogin(login);
         if (userEntity != null) {
-            final User user = converter.map(userEntity);
+            final User user = converter.map(userEntity,configBean);
             return user;
         } else if (autocreate) {
             final UserCreationModel userCreationModel = new UserCreationModel();
@@ -123,7 +128,7 @@ public class UserServiceImpl implements UserService {
         final List<UserEntity> userEntities = userDAO.selectAll();
         final List<User> users = Lists.newArrayList();
         for (UserEntity userEntity : userEntities) {
-            users.add(converter.map(userEntity));
+            users.add(converter.map(userEntity,configBean));
         }
         return users;
     }
@@ -151,7 +156,7 @@ public class UserServiceImpl implements UserService {
     public User getUserByToken(final String token) {
         final UserEntity userEntity = userDAO.getUserByToken(token);
         if (userEntity != null) {
-            final User user = converter.map(userEntity);
+            final User user = converter.map(userEntity,configBean);
             return user;
         }
         return null;
@@ -171,7 +176,7 @@ public class UserServiceImpl implements UserService {
         updateToken(userEntity);
         userEntity = userDAO.persist(userEntity);
         userDAO.flush();
-        return converter.map(userEntity);
+        return converter.map(userEntity,configBean);
     }
 
     private void updateToken(final UserEntity userEntity) {
@@ -218,7 +223,7 @@ public class UserServiceImpl implements UserService {
     private User persistFlushAndReturnConverted(final UserEntity userEntity) {
         final UserEntity updatedUserEnity = userDAO.persist(userEntity);
         userDAO.flush();
-        final User updatedUser = converter.map(updatedUserEnity);
+        final User updatedUser = converter.map(updatedUserEnity,configBean);
         return updatedUser;
     }
 

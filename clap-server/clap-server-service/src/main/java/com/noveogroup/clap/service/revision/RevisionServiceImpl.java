@@ -8,6 +8,8 @@ import com.noveogroup.clap.converter.RevisionConverter;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.dao.UserDAO;
+import com.noveogroup.clap.entity.message.BaseMessageEntity;
+import com.noveogroup.clap.entity.message.ScreenshotMessageEntity;
 import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
@@ -85,7 +87,8 @@ public class RevisionServiceImpl implements RevisionService {
     @RequiresAuthentication
     @WrapException
     @Override
-    public Revision addOrGetRevision(final @NotNull CreateOrUpdateRevisionRequest request) {
+    public boolean addOrGetRevision(final @NotNull CreateOrUpdateRevisionRequest request) {
+        boolean ret = false;
         RevisionEntity revisionEntity = revisionDAO.getRevisionByHashOrNull(request.getRevisionHash());
         boolean needToCheckRevisionsAmount = false;
         if (revisionEntity == null) {
@@ -93,6 +96,7 @@ public class RevisionServiceImpl implements RevisionService {
             revisionEntity.setHash(request.getRevisionHash());
             revisionEntity.setTimestamp(new Date().getTime());
             needToCheckRevisionsAmount = true;
+            ret = true;
         }
         if (revisionEntity.getTimestamp() == null) {
             revisionEntity.setTimestamp(new Date().getTime());
@@ -117,13 +121,9 @@ public class RevisionServiceImpl implements RevisionService {
         projectEntity.getRevisions().add(revisionEntity);
 
         processPackages(revisionEntity, request);
-        revisionEntity = revisionDAO.persist(revisionEntity);
-        projectDAO.flush();
+        revisionDAO.persist(revisionEntity);
         revisionDAO.flush();
-        final Revision outcomeRevision = revisionConverter.map(revisionEntity);
-        outcomeRevision.setProjectId(projectEntity.getId());
-        createUrls(outcomeRevision, revisionEntity);
-        return outcomeRevision;
+        return ret;
     }
 
     @Override
@@ -159,7 +159,7 @@ public class RevisionServiceImpl implements RevisionService {
     @Override
     public Revision getRevision(final Long revisionId) {
         final RevisionEntity revisionEntity = revisionDAO.findById(revisionId);
-        final Revision revision = revisionConverter.map(revisionEntity);
+        final Revision revision = revisionConverter.map(revisionEntity, true, configBean);
         createUrls(revision, revisionEntity);
         return revision;
     }
@@ -168,7 +168,8 @@ public class RevisionServiceImpl implements RevisionService {
     @Override
     public RevisionWithApkStructure getRevisionWithApkStructure(final Long revisionId) {
         final RevisionEntity revisionEntity = revisionDAO.findById(revisionId);
-        final RevisionWithApkStructure revision = revisionConverter.mapWithApkStructure(revisionEntity);
+        final RevisionWithApkStructure revision = revisionConverter.mapWithApkStructure(revisionEntity,
+                true, configBean);
         createUrls(revision, revisionEntity);
         return revision;
     }
@@ -188,10 +189,23 @@ public class RevisionServiceImpl implements RevisionService {
         if (specialPackageFileUrl != null) {
             filesToDelete.add(specialPackageFileUrl);
         }
+        markRevisionScreenshotsToDelete(revisionEntity, filesToDelete);
         revisionDAO.removeById(id);
         revisionDAO.flush();
         for (String fileToDelete : filesToDelete) {
             fileService.removeFile(fileToDelete);
+        }
+    }
+
+    private void markRevisionScreenshotsToDelete(final RevisionEntity revisionEntity,
+                                                 final List<String> filesToDelete) {
+        final List<BaseMessageEntity> messages = revisionEntity.getMessages();
+        if (CollectionUtils.isNotEmpty(messages)) {
+            for (BaseMessageEntity messageEntity : messages) {
+                if (messageEntity instanceof ScreenshotMessageEntity) {
+                    filesToDelete.add(((ScreenshotMessageEntity) messageEntity).getScreenshotFileUrl());
+                }
+            }
         }
     }
 

@@ -1,6 +1,7 @@
 package com.noveogroup.clap.converter;
 
 import com.google.common.collect.Lists;
+import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.entity.message.BaseMessageEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
@@ -22,9 +23,9 @@ public class UserConverter {
 
     private MessagesConverter messagesConverter = new MessagesConverter();
 
-    public User map(UserEntity userEntity) {
+    public User map(final UserEntity userEntity,final ConfigBean configBean) {
         final User ret = new User();
-        map(ret, userEntity);
+        map(ret, userEntity,configBean);
         return ret;
     }
 
@@ -46,14 +47,14 @@ public class UserConverter {
         this.messagesConverter = messagesConverter;
     }
 
-    public UserWithPersistedAuth mapWithPersistedAuth(final UserEntity userEntity) {
+    public UserWithPersistedAuth mapWithPersistedAuth(final UserEntity userEntity,final ConfigBean configBean) {
         final UserWithPersistedAuth ret = new UserWithPersistedAuth();
-        map(ret, userEntity);
+        map(ret, userEntity,configBean);
         ret.setToken(userEntity.getToken());
         return ret;
     }
 
-    private void map(final User toMap, final UserEntity mapWith) {
+    private void map(final User toMap, final UserEntity mapWith,final ConfigBean configBean) {
         toMap.setLogin(mapWith.getLogin());
         toMap.setFullName(mapWith.getFullName());
         toMap.setRole(mapWith.getRole());
@@ -63,17 +64,17 @@ public class UserConverter {
         List<BaseMessage> messages = Lists.newArrayList();
         toMap.setUploadedMessages(messages);
         for (BaseMessageEntity messageEntity : mapWith.getUploadedMessages()) {
-            messages.add(messagesConverter.map(messageEntity));
+            messages.add(messagesConverter.map(messageEntity,configBean));
         }
         List<Revision> mainRevisions = Lists.newArrayList();
         toMap.setUploadedMainRevisions(mainRevisions);
         for (RevisionEntity revisionEntity : mapWith.getUploadedMainRevisions()) {
-            mainRevisions.add(revisionConverter.map(revisionEntity));
+            mainRevisions.add(revisionConverter.map(revisionEntity,false,configBean));
         }
         List<Revision> specialRevisions = Lists.newArrayList();
         toMap.setUploadedSpecialRevisions(specialRevisions);
         for (RevisionEntity revisionEntity : mapWith.getUploadedSpecialRevisions()) {
-            specialRevisions.add(revisionConverter.map(revisionEntity));
+            specialRevisions.add(revisionConverter.map(revisionEntity,false,configBean));
         }
     }
 }

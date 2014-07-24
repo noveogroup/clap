@@ -28,6 +28,12 @@ public class ClapService extends IntentService {
     }
 
     @Override
+    public void onCreate() {
+        super.onCreate();
+        android.os.Debug.waitForDebugger();
+    }
+
+    @Override
     protected void onHandleIntent(final Intent intent) {
         Log.d(TAG, "SERVICE START");
         try {
@@ -44,7 +50,7 @@ public class ClapService extends IntentService {
             }
 
         } catch (Throwable e) {
-            Log.e("ClapService", "Error while sending message to server " + e.getMessage(), e);
+            Log.e(TAG, "Error while sending message to server " + e.getMessage(), e);
         }
 
     }

@@ -28,6 +28,8 @@ public class ConfigBean {
 
     private String downloadApkUrl;
 
+    private String downloadScreenshotUrl;
+
     private Properties properties;
 
     private String authenticationSystemId;
@@ -63,6 +65,7 @@ public class ConfigBean {
         updateConfigInterval = Long.parseLong(properties.getProperty("config.update.interval"));
         keepDevRevisions = Integer.parseInt(properties.getProperty("keep.dev.revisions"));
         configFileLastModified = getConfigFileLastModified();
+        downloadScreenshotUrl = properties.getProperty("rest.screenshotDownload");
     }
 
     private void fillStringArrayConfig(final String property, final List<String> configList) {
@@ -138,6 +141,10 @@ public class ConfigBean {
 
     public List<String> getApkFilesDirs() {
         return apkFilesDirs;
+    }
+
+    public String getDownloadScreenshotUrl(final long id) {
+        return downloadScreenshotUrl.replace("{id}",Long.toString(id));
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.noveogroup.clap.converter;
 
 import com.google.gson.Gson;
+import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.entity.message.BaseMessageEntity;
 import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
@@ -33,15 +34,16 @@ public class RevisionConverter {
         return MAPPER.map(revision, RevisionEntity.class);
     }
 
-    public Revision map(final RevisionEntity revision) {
+    public Revision map(final RevisionEntity revision, final boolean mapMessages, final ConfigBean configBean) {
         final Revision ret = new Revision();
-        map(ret, revision);
+        map(ret, revision, mapMessages, configBean);
         return ret;
     }
 
-    public RevisionWithApkStructure mapWithApkStructure(final RevisionEntity revision) {
+    public RevisionWithApkStructure mapWithApkStructure(final RevisionEntity revision,
+                                                        final boolean mapMessages, final ConfigBean configBean) {
         final RevisionWithApkStructure ret = new RevisionWithApkStructure();
-        map(ret, revision);
+        map(ret, revision, mapMessages, configBean);
         ret.setApkStructure(new Gson().fromJson(revision.getApkStructureJSON(), ApkStructure.class));
         return ret;
     }
@@ -51,15 +53,16 @@ public class RevisionConverter {
     }
 
 
-    private void map(final Revision toMap, final RevisionEntity revision) {
+    private void map(final Revision toMap, final RevisionEntity revision,
+                     final boolean mapMessages,  final ConfigBean configBean) {
         toMap.setId(revision.getId());
         toMap.setHash(revision.getHash());
         toMap.setMessages(new ArrayList<BaseMessage>());
 
         final List<BaseMessageEntity> revisionMessages = revision.getMessages();
-        if (CollectionUtils.isNotEmpty(revisionMessages)) {
+        if (mapMessages && CollectionUtils.isNotEmpty(revisionMessages)) {
             for (final BaseMessageEntity message : revisionMessages) {
-                BaseMessage map = messagesConverter.map(message);
+                BaseMessage map = messagesConverter.map(message, configBean);
                 map.setUploadedBy(message.getUploadedBy().getLogin());
                 toMap.getMessages().add(map);
             }

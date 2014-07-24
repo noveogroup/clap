@@ -137,24 +137,12 @@ public class ProjectServiceImpl implements ProjectService {
     @RequiresPermissions("DELETE_PROJECTS")
     @Override
     public void deleteProject(final Project project) {
-        List<String> filesToDelete = Lists.newArrayList();
-
         final ProjectEntity projectEntity = projectDAO.findById(project.getId());
         for (RevisionEntity revisionEntity : projectEntity.getRevisions()){
-            final String mainPackageFileUrl = revisionEntity.getMainPackageFileUrl();
-            if(mainPackageFileUrl != null){
-                filesToDelete.add(mainPackageFileUrl);
-            }
-            final String specialPackageFileUrl = revisionEntity.getSpecialPackageFileUrl();
-            if(specialPackageFileUrl != null){
-                filesToDelete.add(specialPackageFileUrl);
-            }
+            revisionService.deleteRevision(revisionEntity.getId());
         }
         projectDAO.removeById(project.getId());
         projectDAO.flush();
-        for(String fileToDelete : filesToDelete){
-            fileService.removeFile(fileToDelete);
-        }
     }
 
 

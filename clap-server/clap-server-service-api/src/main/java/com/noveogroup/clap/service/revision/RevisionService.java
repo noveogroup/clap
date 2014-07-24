@@ -16,7 +16,12 @@ import java.util.Set;
  */
 public interface RevisionService {
 
-    Revision addOrGetRevision(@NotNull CreateOrUpdateRevisionRequest request);
+    /**
+     *
+     * @param request
+     * @return true if new created
+     */
+    boolean addOrGetRevision(@NotNull CreateOrUpdateRevisionRequest request);
 
     void updateRevisionData(Revision revision);
 

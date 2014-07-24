@@ -1,10 +1,12 @@
 package com.noveogroup.clap.service.messages;
 
+import com.google.common.collect.Lists;
 import com.noveogroup.clap.converter.MessagesConverter;
 import com.noveogroup.clap.dao.MessageDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.dao.UserDAO;
 import com.noveogroup.clap.entity.message.BaseMessageEntity;
+import com.noveogroup.clap.entity.message.ScreenshotMessageEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.exception.WrapException;
@@ -22,7 +24,6 @@ import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.List;
 
 @Stateless
@@ -59,7 +60,7 @@ public class MessagesServiceImpl implements MessagesService {
         messageEntity = messageDAO.persist(messageEntity);
         List<BaseMessageEntity> messageEntities = revisionEntity.getMessages();
         if (messageEntities == null) {
-            messageEntities = new ArrayList<BaseMessageEntity>();
+            messageEntities = Lists.newArrayList();
             revisionEntity.setMessages(messageEntities);
         }
         messageEntities.add(messageEntity);
@@ -74,11 +75,21 @@ public class MessagesServiceImpl implements MessagesService {
         if (inputStream != null) {
             if (message instanceof ScreenshotMessage) {
                 ScreenshotMessage screenshotMessage = (ScreenshotMessage) message;
-                final File file = fileService.saveFile(FileType.SCREENSHOT,inputStream,null,".png");
+                final File file = fileService.saveFile(FileType.SCREENSHOT, inputStream, null, ".png");
                 screenshotMessage.setScreenshotUrl(file.getAbsolutePath());
             }
         }
         saveMessage(revisionHash, message);
+    }
+
+    @Override
+    public File getScreenshot(final long messageId) {
+        final BaseMessageEntity byId = messageDAO.findById(messageId);
+        if (byId instanceof ScreenshotMessageEntity) {
+            return fileService.getFile(((ScreenshotMessageEntity) byId).getScreenshotFileUrl());
+        } else {
+            return null;
+        }
     }
 
     public void setMessagesConverter(final MessagesConverter messagesConverter) {

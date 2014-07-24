@@ -3,8 +3,15 @@ package com.noveogroup.clap.client.service.message;
 import android.content.Intent;
 import android.util.Log;
 import com.noveogroup.clap.model.message.CrashMessage;
+import com.noveogroup.clap.model.message.ScreenshotMessage;
 import com.noveogroup.clap.model.request.message.SendMessageRequest;
 import com.noveogroup.clap.rest.MessagesEndpoint;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.ByteArrayBody;
+import org.apache.http.entity.mime.content.StringBody;
+import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 
 import java.util.Date;
@@ -17,12 +24,9 @@ public class CrashMessageProcessor extends BaseMessageProcessor {
 
     @Override
     public void processIntent(final Intent intent) {
-
-
+        Log.d(TAG, "START CRASH MESSAGE SENT");
         BasicHttpParams param = getBasicHttpParams();
-
         MessagesEndpoint messagesEndpoint = getMessagesEndpoint(param);
-
         CrashMessage messageDTO = new CrashMessage();
         messageDTO.setLogCat(intent.getStringExtra("logCat"));
         messageDTO.setStackTraceInfo(intent.getStringExtra("stackTraceInfo"));
@@ -34,7 +38,6 @@ public class CrashMessageProcessor extends BaseMessageProcessor {
         sendMessageRequest.setMessage(messageDTO);
         Log.d(TAG, "Trying to send: " + sendMessageRequest);
         messagesEndpoint.saveCrashMessage(sendMessageRequest);
-
         Log.d(TAG, "MESSAGE SENT");
     }
 }

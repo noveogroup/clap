@@ -1,7 +1,5 @@
 package com.noveogroup.clap.rest;
 
-import com.noveogroup.clap.model.message.ScreenshotMessage;
-import com.noveogroup.clap.model.request.message.ScreenshotMessageRequest;
 import com.noveogroup.clap.model.request.message.SendMessageRequest;
 import com.noveogroup.clap.service.messages.MessagesService;
 import org.slf4j.Logger;
@@ -9,6 +7,8 @@ import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
+import javax.ws.rs.core.Response;
+import java.io.File;
 
 @ApplicationScoped
 public class MessagesEndpointImpl extends BaseEndpoint implements MessagesEndpoint {
@@ -26,12 +26,14 @@ public class MessagesEndpointImpl extends BaseEndpoint implements MessagesEndpoi
         LOGGER.debug(request + "saved");
     }
 
-    @Override
-    public void saveScreenshot(final ScreenshotMessageRequest request) {
-        final String revisionHash = request.getRevisionHash();
-        LOGGER.debug("saving screenshot message " + revisionHash);
-        login(request.getToken());
-        messagesService.saveMessage(revisionHash, new ScreenshotMessage(), request.getScreenshotFileStream());
-        LOGGER.debug(revisionHash + "screenshot saved");
+
+    public Response getScreenshot(final long messageId) {
+        final File screenshot = messagesService.getScreenshot(messageId);
+        if (screenshot != null) {
+            return Response.ok(screenshot).header("Content-Disposition",
+                    "attachment; filename=\"" + screenshot.getName() + "\"").build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 }

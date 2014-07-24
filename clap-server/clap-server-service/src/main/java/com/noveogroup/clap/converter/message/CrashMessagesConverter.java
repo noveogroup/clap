@@ -1,19 +1,26 @@
 package com.noveogroup.clap.converter.message;
 
+import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.entity.message.CrashMessageEntity;
 import com.noveogroup.clap.model.message.CrashMessage;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
+import javax.ejb.Stateless;
+import javax.ejb.TransactionManagement;
+import javax.ejb.TransactionManagementType;
+
 /**
  * @author Andrey Sokolov
  */
+@Stateless
+@TransactionManagement(TransactionManagementType.CONTAINER)
 public class CrashMessagesConverter implements OneTypeMessagesConverter<CrashMessage, CrashMessageEntity> {
 
     private static final Mapper MAPPER = new DozerBeanMapper();
 
     @Override
-    public CrashMessage map(CrashMessageEntity messageEntity) {
+    public CrashMessage map(CrashMessageEntity messageEntity,final ConfigBean configBean) {
         return MAPPER.map(messageEntity, CrashMessage.class);
     }
 

@@ -2,9 +2,8 @@ package com.noveogroup.clap;
 
 import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
-import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.rest.AuthenticationEndpoint;
-import com.noveogroup.clap.rest.RevisionEndpoint;
+import com.noveogroup.clap.rest.UploadFileEndpoint;
 import org.apache.commons.lang.StringUtils;
 import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.plugin.MojoFailureException;
@@ -50,7 +49,7 @@ public class UploaderMojo extends AbstractClapMojo {
         } else {
             try {
                 final FileInputStream data = new FileInputStream(artifactFile);
-                final RevisionEndpoint revisionEndpoint = ProxyFactory.create(RevisionEndpoint.class, serviceUrl);
+                final UploadFileEndpoint uploadFileEndpoint = ProxyFactory.create(UploadFileEndpoint.class, serviceUrl);
                 final AuthenticationEndpoint authenticationEndpoint = ProxyFactory.create(AuthenticationEndpoint.class,
                         serviceUrl);
 
@@ -69,8 +68,8 @@ public class UploaderMojo extends AbstractClapMojo {
                 }
                 createOrUpdateRevisionRequest.setRevisionHash(revisionId);
                 createOrUpdateRevisionRequest.setProjectExternalId(projectId);
-                Revision revision = revisionEndpoint.createOrUpdateRevision(createOrUpdateRevisionRequest);
-                getLog().info("HASH " + revision.getHash());
+                final boolean created = uploadFileEndpoint.createOrUpdateRevision(createOrUpdateRevisionRequest);
+                getLog().info("HASH new revision created: " + created);
             } catch (FileNotFoundException e) {
                 getLog().error("Error while uploading artifact " + e.getMessage(), e);
             } catch (IOException e) {

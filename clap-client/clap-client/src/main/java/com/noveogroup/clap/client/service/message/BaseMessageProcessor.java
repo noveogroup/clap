@@ -1,6 +1,7 @@
 package com.noveogroup.clap.client.service.message;
 
 import android.content.Intent;
+import android.net.http.AndroidHttpClient;
 import android.util.Log;
 import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.request.message.BaseMessageRequest;
@@ -32,7 +33,7 @@ public abstract class BaseMessageProcessor implements MessageProcessor{
     }
 
     protected MessagesEndpoint getMessagesEndpoint(final BasicHttpParams param) {
-        return ProxyFactory.create(MessagesEndpoint.class, CLAP_HOST, new ApacheHttpClient4Executor(param));
+        return ProxyFactory.create(MessagesEndpoint.class, CLAP_HOST, new ApacheHttpClient4Executor(AndroidHttpClient.newInstance("someUserAgent")));
     }
 
     protected BasicHttpParams getBasicHttpParams() {

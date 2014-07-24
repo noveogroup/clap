@@ -15,6 +15,7 @@
             com.noveogroup.clap.rest.PackageEndpointImpl,
             com.noveogroup.clap.rest.ProjectEndpointImpl,
             com.noveogroup.clap.rest.RevisionEndpointImpl,
+            com.noveogroup.clap.rest.UploadFileEndpointImpl,
             com.noveogroup.clap.rest.TestEndpointImpl
         </param-value>
     </context-param>
