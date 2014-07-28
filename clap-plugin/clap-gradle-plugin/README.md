@@ -1,17 +1,22 @@
 To use this plugin add to build.gradle following:
 
+repositories {
+    mavenLocal() //repo where aar will be published
+}
+
 buildscript {
     repositories {
         mavenLocal()//mavenCentral/NoveoNexus/etc. - where plugin will be published
     }
     dependencies {
-        classpath group: 'com.noveogroup.clap', name: 'clap-gradle-plugin', version: '1.0-SNAPSHOT'
+        classpath 'com.noveogroup.clap:clap-gradle-plugin:0.1-SNAPSHOT'
     }
 }
-apply plugin: 'clap'
+apply plugin: 'com.noveogroup.clap'
 
 //clap plugin settings(will be extended)
 clap {
     instrumenting = ['addLogs','sendLogs']
     enableInstrumenting = true //shortcut to disable instrumenting
+    clapProjectId = "testProjectId"
 }

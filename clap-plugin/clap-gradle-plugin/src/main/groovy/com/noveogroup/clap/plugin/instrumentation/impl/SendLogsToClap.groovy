@@ -15,6 +15,7 @@ class SendLogsToClap implements Instrumentor{
 
     @Override
     void instrument(final ClassPool classPool, final CtClass aClass) {
+
         //TODO
     }
 }

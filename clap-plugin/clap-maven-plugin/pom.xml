@@ -30,26 +30,14 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.codehaus.plexus</groupId>
-            <artifactId>plexus-utils</artifactId>
-        </dependency>
-        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>com.sun.codemodel</groupId>
-            <artifactId>codemodel</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.maven</groupId>
             <artifactId>maven-project</artifactId>
 
-        </dependency>
-        <dependency>
-            <groupId>com.noveogroup.clap</groupId>
-            <artifactId>clap-common</artifactId>
         </dependency>
 
         <dependency>
@@ -68,12 +56,10 @@
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jackson-provider</artifactId>
         </dependency>
-
         <dependency>
             <groupId>com.noveogroup.clap</groupId>
-            <artifactId>clap-library-common</artifactId>
+            <artifactId>plugin-common</artifactId>
         </dependency>
-
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
@@ -81,6 +67,11 @@
         <dependency>
             <groupId>commons-logging</groupId>
             <artifactId>commons-logging</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.jcabi</groupId>
+            <artifactId>jcabi-maven-slf4j</artifactId>
+            <version>0.8</version>
         </dependency>
     </dependencies>
 

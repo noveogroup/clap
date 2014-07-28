@@ -10,6 +10,7 @@
         <groupId>com.noveogroup.clap</groupId>
         <artifactId>clap-application-parent</artifactId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../clap-application-parent/pom.xml</relativePath>
     </parent>
     <modules>
         <module>clap-application</module>
