@@ -2,6 +2,7 @@ package com.noveogroup.clap.plugin
 
 import com.noveogroup.clap.plugin.config.Clap
 import com.noveogroup.clap.plugin.tasks.ClapUploadTask
+import com.noveogroup.clap.plugin.tasks.GenerateVersionTask
 import com.noveogroup.clap.plugin.tasks.InstrumentationTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -16,12 +17,26 @@ class ClapPlugin implements Plugin<Project> {
 
     public static final String CLAP_AAR_VERSION = '1.0-SNAPSHOT'
 
+    public static final String GENERATED_SOURCES_DIR_KEY = "clapGeneratedSourceDir";
     //TODO check if gradle has plugin context like maven
     public static final Map<String,Object> PLUGIN_CONTEXT = new HashMap<>();
 
     @Override
     void apply(final Project project) {
+        String generatedSourcePath = project.buildDir.absolutePath + '/src-generated/java'
+        project.sourceSets {
+            generated {
+                //compileClasspath += sourceSets.main.runtimeClasspath
+                java {
+                    srcDir generatedSourcePath
+                }
+            }
+        }
+        PLUGIN_CONTEXT.put(GENERATED_SOURCES_DIR_KEY,generatedSourcePath)
+
+
         project.task('clapUpload', type: ClapUploadTask)
+        project.task('clapGenerateVersion', type: GenerateVersionTask)
         project.extensions.create("clap", Clap)
         project.dependencies {
             compile 'com.noveogroup.clap:clap-client:'+CLAP_AAR_VERSION
@@ -36,6 +51,7 @@ class ClapPlugin implements Plugin<Project> {
                 exclude 'META-INF/NOTICE'
             }
         }
+
         project.afterEvaluate {
             def clap = project.extensions.getByType(Clap)
             project.logger.info("clap = " + clap)
@@ -43,6 +59,7 @@ class ClapPlugin implements Plugin<Project> {
             if (clap.enableInstrumenting) {
                 project.tasks.each { Task task ->
                     if (task instanceof JavaCompile) {
+                        task.dependsOn << 'clapGenerateVersion'
                         JavaCompile javaCompile = task
                         javaCompile.doLast {
                             new InstrumentationTask(clap.instrumenting).instrument(javaCompile, logger)

@@ -3,23 +3,17 @@ package com.noveogroup.clap.plugin.tasks
 import com.noveogroup.clap.model.auth.Authentication
 import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest
 import com.noveogroup.clap.model.revision.Revision
-import com.noveogroup.clap.plugin.ClapPlugin
 import com.noveogroup.clap.plugin.config.Clap
 import com.noveogroup.clap.rest.AuthenticationEndpoint
 import com.noveogroup.clap.rest.RevisionEndpoint
-import com.noveogroup.clap.utils.Constants
-import com.noveogroup.clap.utils.HashCalculator
-import org.apache.commons.lang.StringUtils
-import org.gradle.api.DefaultTask
 import org.gradle.api.tasks.TaskAction
 import org.jboss.resteasy.client.ProxyFactory
 
 /**
  * @author Andrey Sokolov
  */
-class ClapUploadTask extends DefaultTask {
+class ClapUploadTask extends AbstractClapTask {
 
-    def checksumAlgorithm = "MD5"
 
     @TaskAction
     def uploadArchives(){
@@ -80,34 +74,6 @@ class ClapUploadTask extends DefaultTask {
             } catch (IOException e) {
                 logger.error("Error while uploading artifact " + e.getMessage(), e);
             }
-        }
-    }
-
-
-    public String getProjectExternalId() {
-        String projectId = (String) ClapPlugin.PLUGIN_CONTEXT.get(Constants.PROJECT_ID);
-        if (StringUtils.isEmpty(projectId)) {
-            def clap = project.extensions.getByType(Clap)
-            def projectExternalId = clap.clapProjectId
-            ClapPlugin.PLUGIN_CONTEXT.put(Constants.PROJECT_ID,projectExternalId)
-            return projectExternalId;
-        } else {
-            return projectId;
-        }
-    }
-
-
-    protected String getRevisionId() {
-        String revisionId = (String) ClapPlugin.PLUGIN_CONTEXT.get(Constants.REVISION_ID);
-        if (StringUtils.isEmpty(revisionId)) {
-            def clap = project.extensions.getByType(Clap)
-            def config = clap.hashCalculatorConfig
-            HashCalculator hashCalculator = new HashCalculator(config.baseDir, config.folders, config.excludes);
-            def calculateHash = hashCalculator.calculateHash(checksumAlgorithm)
-            ClapPlugin.PLUGIN_CONTEXT.put(Constants.REVISION_ID,calculateHash);
-            return calculateHash;
-        } else {
-            return revisionId;
         }
     }
 }
