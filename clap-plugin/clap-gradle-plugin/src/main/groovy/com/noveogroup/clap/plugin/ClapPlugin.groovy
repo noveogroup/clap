@@ -24,22 +24,14 @@ class ClapPlugin implements Plugin<Project> {
     @Override
     void apply(final Project project) {
         String generatedSourcePath = project.buildDir.absolutePath + '/src-generated/java'
-        project.sourceSets {
-            generated {
-                //compileClasspath += sourceSets.main.runtimeClasspath
-                java {
-                    srcDir generatedSourcePath
-                }
-            }
-        }
         PLUGIN_CONTEXT.put(GENERATED_SOURCES_DIR_KEY,generatedSourcePath)
-
 
         project.task('clapUpload', type: ClapUploadTask)
         project.task('clapGenerateVersion', type: GenerateVersionTask)
         project.extensions.create("clap", Clap)
         project.dependencies {
             compile 'com.noveogroup.clap:clap-client:'+CLAP_AAR_VERSION
+            compile 'com.noveogroup.clap:clap-library-logger:'+CLAP_AAR_VERSION
         }
 
         //TODO check
@@ -49,6 +41,14 @@ class ClapPlugin implements Plugin<Project> {
                 exclude 'META-INF/ASL2.0'
                 exclude 'META-INF/LICENSE'
                 exclude 'META-INF/NOTICE'
+            }
+            //adding generated version-provider class to apk
+            sourceSets {
+                main {
+                    java {
+                        srcDir generatedSourcePath
+                    }
+                }
             }
         }
 

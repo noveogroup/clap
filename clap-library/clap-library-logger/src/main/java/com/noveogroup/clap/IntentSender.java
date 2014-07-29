@@ -3,6 +3,7 @@ package com.noveogroup.clap;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 public final class IntentSender {
 
@@ -66,14 +67,8 @@ public final class IntentSender {
             intent.putExtra("revision", revision.getRevisionId());
             intent.putExtra("project", revision.getProjectId());
             context.startService(intent);
-        } catch (ClassNotFoundException e) {
-            // TODO fix this
-        } catch (InstantiationException e) {
-            // TODO fix this
-        } catch (IllegalAccessException e) {
-            // TODO fix this
         } catch (Exception e) {
-            // TODO fix this
+            Log.e("INTENT_SENDER","error sending crash info",e);
         }
 
 
