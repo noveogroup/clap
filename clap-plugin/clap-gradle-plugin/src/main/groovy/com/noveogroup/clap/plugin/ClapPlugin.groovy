@@ -26,7 +26,6 @@ class ClapPlugin implements Plugin<Project> {
         String generatedSourcePath = project.buildDir.absolutePath + '/src-generated/java'
         PLUGIN_CONTEXT.put(GENERATED_SOURCES_DIR_KEY,generatedSourcePath)
 
-        project.task('clapUpload', type: ClapUploadTask)
         project.task('clapGenerateVersion', type: GenerateVersionTask)
         project.extensions.create("clap", Clap)
         project.dependencies {
@@ -67,6 +66,14 @@ class ClapPlugin implements Plugin<Project> {
                     }
                 }
             }
+        }
+
+        //project.task('clapUpload', type: ClapUploadTask)
+        project.android.applicationVariants.all { variant ->
+            def task = project.tasks.create("clapUpload${variant.name}Apk", ClapUploadTask)
+            task.artifactFile = variant.outputFile
+            task.variantName = variant.name
+            task.dependsOn variant.assemble
         }
     }
 }

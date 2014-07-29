@@ -14,6 +14,8 @@ import org.jboss.resteasy.client.ProxyFactory
  */
 class ClapUploadTask extends AbstractClapTask {
 
+    File artifactFile
+    String variantName
 
     @TaskAction
     def uploadArchives(){
@@ -26,22 +28,7 @@ class ClapUploadTask extends AbstractClapTask {
         logger.info("generated projectId: " + projectId);
 
 
-        //TODO get artifact file(s)
-        StringBuilder artifactPathBuilder = new StringBuilder();
-        /*artifactPathBuilder
-                .append(project.getBasedir())
-                .append("/target/");
-
-        if (StringUtils.isEmpty(artifactName)) {
-            artifactPathBuilder
-                    .append(project.getBuild().getFinalName())
-                    .append(".")
-                    .append(project.getPackaging());
-        } else {
-            artifactPathBuilder.append(artifactName);
-        } */
-        File artifactFile = new File(artifactPathBuilder.toString());
-        if (!artifactFile.exists()) {
+        if (artifactFile == null || !artifactFile.exists()) {
             logger.error("Artifact not exists");
         } else {
             try {
