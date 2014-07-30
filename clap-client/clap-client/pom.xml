@@ -7,7 +7,7 @@
         <version>1.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
-    <packaging>apk</packaging>
+    <packaging>aar</packaging>
     <modelVersion>4.0.0</modelVersion>
 
 
@@ -17,15 +17,6 @@
             <groupId>android</groupId>
             <artifactId>android</artifactId>
             <scope>provided</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.google.android</groupId>
-            <artifactId>support-v4</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.holoeverywhere</groupId>
-            <artifactId>library</artifactId>
-            <type>apklib</type>
         </dependency>
         <dependency>
             <groupId>org.jboss.resteasy.mobile</groupId>

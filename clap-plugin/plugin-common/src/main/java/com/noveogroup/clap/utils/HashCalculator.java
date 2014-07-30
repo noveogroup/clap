@@ -1,7 +1,5 @@
 package com.noveogroup.clap.utils;
 
-import org.apache.maven.plugin.logging.Log;
-import org.apache.maven.plugin.logging.SystemStreamLog;
 import org.codehaus.plexus.util.DirectoryWalkListener;
 import org.codehaus.plexus.util.DirectoryWalker;
 import org.codehaus.plexus.util.IOUtil;
@@ -12,9 +10,9 @@ import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
+//TODO logging
 public class HashCalculator {
 
-    private static final Log LOG = new SystemStreamLog();
     private static final String ALPHABET = "0123456789ABCDEF";
 
     private DirectoryWalker directoryWalker;
@@ -45,9 +43,9 @@ public class HashCalculator {
 
             return getHexHash(messageDigest);
         } catch (NoSuchAlgorithmException e) {
-            LOG.error("Error while creating message digest " + e.getMessage(), e);
+            //logger.error("Error while creating message digest " + e.getMessage(), e);
         } catch (Exception e) {
-            LOG.error("Error while calculating hash " + e.getMessage(), e);
+            //logger.error("Error while calculating hash " + e.getMessage(), e);
         }
         return null;
     }
@@ -67,13 +65,13 @@ public class HashCalculator {
 
         @Override
         public void directoryWalkStep(final int percentage, final File file) {
-            LOG.info("Please wait: " + percentage + "%");
+            //logger.info("Please wait: " + percentage + "%");
             if (file.isFile()) {
                 try {
                     byte[] data = IOUtil.toByteArray(new FileInputStream(file));
                     messageDigest.update(data);
                 } catch (IOException e) {
-                    LOG.error("Error while hashing directory " + e.getMessage(), e);
+                    //logger.error("Error while hashing directory " + e.getMessage(), e);
                 }
             }
         }
@@ -85,7 +83,7 @@ public class HashCalculator {
 
         @Override
         public void debug(final String message) {
-            LOG.info(message);
+            //logger.info(message);
         }
     }
 

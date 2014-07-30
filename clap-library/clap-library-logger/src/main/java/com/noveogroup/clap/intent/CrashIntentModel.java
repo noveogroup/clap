@@ -2,6 +2,7 @@ package com.noveogroup.clap.intent;
 
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 import com.noveogroup.clap.ProjectInfo;
 
 /**
@@ -55,6 +56,11 @@ public class CrashIntentModel extends IntentModel {
             intent.putExtra("stackTraceInfo", stackTraceInfo);
             intent.putExtra("logCat", logCat);
             intent.putExtra("activityLog", activityLog);
+            intent.putExtra("revision", revision.getRevisionId());
+            intent.putExtra("project", revision.getProjectId());
+            context.startService(intent);
+        } catch (Exception e) {
+            Log.e("INTENT_SENDER","error sending crash info",e);
         }
         return intent;
     }

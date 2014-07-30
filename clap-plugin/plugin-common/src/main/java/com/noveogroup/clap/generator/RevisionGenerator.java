@@ -31,7 +31,7 @@ public class RevisionGenerator {
     }
 
     private void createDirectory(final File file) {
-        if (!file.exists()) {
+        if (file != null && !file.exists()) {
             createDirectory(file.getParentFile());
             file.mkdir();
         }

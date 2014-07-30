@@ -93,4 +93,8 @@ public class ActivityTraceLogger {
     public Activity getLastContext() {
         return lastContext;
     }
+
+    public void setLastContext(final Activity lastContext) {
+        this.lastContext = lastContext;
+    }
 }
