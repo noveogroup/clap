@@ -57,8 +57,12 @@ public class ExceptionHandler {
                     public void run() {
                         try {
                             Log.i(ExceptionHandler.TAG, "send error report ...");
-                            sender.send();
-                            Log.i(ExceptionHandler.TAG, "done [send error report]");
+                            if(sender.send()){
+                                Log.i(ExceptionHandler.TAG, "done [send error report]");
+                            } else {
+                                Log.i(ExceptionHandler.TAG, "fail [send error report] - context, " +
+                                        "intent model or created intent == null");
+                            }
                         } catch (Throwable throwable) {
                             Log.i(ExceptionHandler.TAG, "fail [send error report]", throwable);
                         }

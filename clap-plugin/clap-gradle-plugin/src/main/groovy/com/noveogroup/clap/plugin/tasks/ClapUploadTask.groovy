@@ -6,6 +6,7 @@ import com.noveogroup.clap.model.revision.Revision
 import com.noveogroup.clap.plugin.config.Clap
 import com.noveogroup.clap.rest.AuthenticationEndpoint
 import com.noveogroup.clap.rest.RevisionEndpoint
+import com.noveogroup.clap.rest.UploadFileEndpoint
 import org.gradle.api.tasks.TaskAction
 import org.jboss.resteasy.client.ProxyFactory
 
@@ -35,7 +36,7 @@ class ClapUploadTask extends AbstractClapTask {
                 def clap = project.extensions.getByType(Clap)
 
                 final FileInputStream data = new FileInputStream(artifactFile);
-                final RevisionEndpoint revisionEndpoint = ProxyFactory.create(RevisionEndpoint.class, clap.serviceUrl);
+                final UploadFileEndpoint uploadFileEndpoint = ProxyFactory.create(UploadFileEndpoint.class, clap.serviceUrl);
                 final AuthenticationEndpoint authenticationEndpoint = ProxyFactory.create(AuthenticationEndpoint.class,
                         clap.serviceUrl);
 
@@ -54,8 +55,8 @@ class ClapUploadTask extends AbstractClapTask {
                 }
                 createOrUpdateRevisionRequest.setRevisionHash(revisionId);
                 createOrUpdateRevisionRequest.setProjectExternalId(projectId);
-                Revision revision = revisionEndpoint.createOrUpdateRevision(createOrUpdateRevisionRequest);
-                logger.info("HASH " + revision.getHash());
+                boolean created = uploadFileEndpoint.createOrUpdateRevision(createOrUpdateRevisionRequest);
+                logger.info("Revision created:  " + created);
             } catch (FileNotFoundException e) {
                 logger.error("Error while uploading artifact " + e.getMessage(), e);
             } catch (IOException e) {

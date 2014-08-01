@@ -27,7 +27,7 @@ public class CrashMessageEntity extends BaseMessageEntity {
 
     @Override
     public Class<? extends BaseMessageEntity> getEntityType() {
-        return BaseMessageEntity.class;
+        return CrashMessageEntity.class;
     }
 
     public String getDeviceInfo() {

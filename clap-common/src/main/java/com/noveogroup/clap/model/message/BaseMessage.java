@@ -11,8 +11,6 @@ public abstract class BaseMessage extends BaseModel {
     protected Date timestamp;
     private String uploadedBy;
 
-    public abstract Class<? extends BaseMessage> getMessageType();
-
     public Date getTimestamp() {
         return timestamp;
     }

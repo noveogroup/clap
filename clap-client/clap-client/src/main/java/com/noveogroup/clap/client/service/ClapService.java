@@ -28,12 +28,6 @@ public class ClapService extends IntentService {
     }
 
     @Override
-    public void onCreate() {
-        super.onCreate();
-        android.os.Debug.waitForDebugger();
-    }
-
-    @Override
     protected void onHandleIntent(final Intent intent) {
         Log.d(TAG, "SERVICE START");
         try {

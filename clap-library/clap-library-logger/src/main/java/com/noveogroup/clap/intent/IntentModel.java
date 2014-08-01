@@ -1,6 +1,7 @@
 package com.noveogroup.clap.intent;
 
 import android.content.Intent;
+import android.util.Log;
 import com.noveogroup.clap.ProjectInfo;
 
 /**
@@ -19,14 +20,8 @@ public abstract class IntentModel {
             intent.putExtra("project", revision.getProjectId());
             intent.putExtra("traceType", getModelType());
             return intent;
-        } catch (ClassNotFoundException e) {
-            // TODO fix this
-        } catch (InstantiationException e) {
-            // TODO fix this
-        } catch (IllegalAccessException e) {
-            // TODO fix this
-        } catch (Exception e) {
-            // TODO fix this
+        }  catch (Exception e) {
+            Log.e("INTENT_SENDER", "error sending crash info", e);
         }
         return null;
     }

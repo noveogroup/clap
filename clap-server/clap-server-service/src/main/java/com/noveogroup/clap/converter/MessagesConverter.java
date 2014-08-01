@@ -40,8 +40,16 @@ public class MessagesConverter extends BaseConverter {
     }
 
     public BaseMessageEntity map(final BaseMessage message) {
-        final Class<? extends BaseMessage> messageClass = message.getMessageType();
-        final OneTypeMessagesConverter messagesConverter = converterMapByDTO.get(messageClass);
+        final Class<? extends BaseMessage> messageClass = message.getClass();
+        OneTypeMessagesConverter messagesConverter = converterMapByDTO.get(messageClass);
+        if(messagesConverter == null){
+            for(Class messageType: converterMapByDTO.keySet()){
+                if(messageType.isAssignableFrom(message.getClass())){
+                    messagesConverter = converterMapByDTO.get(messageType);
+                    break;
+                }
+            }
+        }
         if (messagesConverter != null) {
             BaseMessageEntity messageEntity = messagesConverter.map(message);
             return messageEntity;

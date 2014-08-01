@@ -15,8 +15,4 @@ public class ScreenshotMessage extends BaseMessage {
         this.screenshotUrl = screenshotUrl;
     }
 
-    @Override
-    public Class<? extends BaseMessage> getMessageType() {
-        return ScreenshotMessage.class;
-    }
 }

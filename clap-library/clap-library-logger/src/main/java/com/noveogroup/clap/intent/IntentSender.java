@@ -26,12 +26,14 @@ public final class IntentSender {
         this.context = context;
     }
 
-    public void send() {
+    public boolean send() {
         if(intentModel != null && context != null){
             final Intent intent = intentModel.createIntent();
             if(intent != null){
                 context.startService(intent);
+                return true;
             }
         }
+        return false;
     }
 }
