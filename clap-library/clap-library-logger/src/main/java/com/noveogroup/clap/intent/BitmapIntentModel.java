@@ -1,5 +1,6 @@
 package com.noveogroup.clap.intent;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 
@@ -31,9 +32,9 @@ public class BitmapIntentModel extends IntentModel {
     }
 
     @Override
-    public Intent createIntent() {
+    public Intent createIntent(Context context) {
         if (bitmap != null) {
-            final Intent intent = super.createIntent();
+            final Intent intent = super.createIntent(context);
             if (intent != null) {
                 ByteArrayOutputStream bs = new ByteArrayOutputStream();
                 bitmap.compress(Bitmap.CompressFormat.PNG, 50, bs);

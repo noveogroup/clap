@@ -14,9 +14,6 @@
         <service
                 android:name=".service.ClapService"
                 android:process=":remote">
-            <intent-filter>
-                <action android:name="com.noveogroup.clap.SEND_MESSAGE"/>
-            </intent-filter>
         </service>
     </application>
 

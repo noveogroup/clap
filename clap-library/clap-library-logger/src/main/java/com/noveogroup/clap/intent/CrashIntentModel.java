@@ -49,8 +49,8 @@ public class CrashIntentModel extends IntentModel {
 
 
 
-    public Intent createIntent(){
-        final Intent intent = super.createIntent();
+    public Intent createIntent(Context context){
+        final Intent intent = super.createIntent(context);
         if(intent != null){
             intent.putExtra("deviceInfo", deviceInfo);
             intent.putExtra("stackTraceInfo", stackTraceInfo);

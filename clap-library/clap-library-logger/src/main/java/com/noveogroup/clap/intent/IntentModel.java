@@ -1,5 +1,6 @@
 package com.noveogroup.clap.intent;
 
+import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import com.noveogroup.clap.ProjectInfo;
@@ -10,12 +11,12 @@ import com.noveogroup.clap.ProjectInfo;
 public abstract class IntentModel {
 
 
-    public Intent createIntent() {
+    public Intent createIntent(Context context) {
         Class<?> c = null;
         try {
             c = Class.forName("com.noveogroup.clap.RevisionImpl");
             ProjectInfo revision = (ProjectInfo) c.newInstance();
-            Intent intent = new Intent("com.noveogroup.clap.SEND_MESSAGE");
+            Intent intent = new Intent(context, Class.forName("com.noveogroup.clap.client.service.ClapService"));
             intent.putExtra("revision", revision.getRevisionId());
             intent.putExtra("project", revision.getProjectId());
             intent.putExtra("traceType", getModelType());

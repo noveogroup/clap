@@ -28,7 +28,7 @@ public final class IntentSender {
 
     public boolean send() {
         if(intentModel != null && context != null){
-            final Intent intent = intentModel.createIntent();
+            final Intent intent = intentModel.createIntent(context);
             if(intent != null){
                 context.startService(intent);
                 return true;
