@@ -20,8 +20,6 @@ class ClapUploadTask extends AbstractClapTask {
 
     @TaskAction
     def uploadArchives(){
-        //TODO check how to get clean apk in gradle
-        boolean isMainPackage = false;
 
         String revisionId = getRevisionId();
         logger.info("generated revisionId: " + revisionId);
@@ -34,7 +32,13 @@ class ClapUploadTask extends AbstractClapTask {
         } else {
             try {
                 def clap = project.extensions.getByType(Clap)
-
+                boolean isMainPackage = true;
+                for(String instrumentingVariantName : clap.instrumentingVariants){
+                    if(variantName.toLowerCase().endsWith(instrumentingVariantName)){
+                        isMainPackage = false;
+                        break
+                    }
+                }
                 final FileInputStream data = new FileInputStream(artifactFile);
                 final UploadFileEndpoint uploadFileEndpoint = ProxyFactory.create(UploadFileEndpoint.class, clap.serviceUrl);
                 final AuthenticationEndpoint authenticationEndpoint = ProxyFactory.create(AuthenticationEndpoint.class,

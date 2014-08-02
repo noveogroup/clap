@@ -18,7 +18,6 @@ class ClapPlugin implements Plugin<Project> {
     public static final String CLAP_AAR_VERSION = '1.0-SNAPSHOT'
 
     public static final String GENERATED_SOURCES_DIR_KEY = "clapGeneratedSourceDir";
-    //TODO check if gradle has plugin context like maven
     public static final Map<String,Object> PLUGIN_CONTEXT = new HashMap<>();
 
     @Override
@@ -29,8 +28,8 @@ class ClapPlugin implements Plugin<Project> {
         project.task('clapGenerateVersion', type: GenerateVersionTask)
         project.extensions.create("clap", Clap)
         project.dependencies {
-            compile 'com.noveogroup.clap:clap-client:'+CLAP_AAR_VERSION
-            compile 'com.noveogroup.clap:clap-library-logger:'+CLAP_AAR_VERSION
+            debugCompile 'com.noveogroup.clap:clap-client:'+CLAP_AAR_VERSION
+            debugCompile 'com.noveogroup.clap:clap-library-logger:'+CLAP_AAR_VERSION
         }
 
         //TODO check
@@ -43,7 +42,7 @@ class ClapPlugin implements Plugin<Project> {
             }
             //adding generated version-provider class to apk
             sourceSets {
-                main {
+                debug {
                     java {
                         srcDir generatedSourcePath
                     }
@@ -53,15 +52,26 @@ class ClapPlugin implements Plugin<Project> {
 
         project.afterEvaluate {
             def clap = project.extensions.getByType(Clap)
-            project.logger.info("clap = " + clap)
-            project.logger.info("enableInstrumenting = " + clap.enableInstrumenting)
+            if(clap.hashCalculatorConfig.baseDir == null){
+                clap.hashCalculatorConfig.baseDir = project.projectDir
+            }
+            project.logger.lifecycle("clap = " + clap)
             if (clap.enableInstrumenting) {
                 project.tasks.each { Task task ->
                     if (task instanceof JavaCompile) {
-                        task.dependsOn << 'clapGenerateVersion'
-                        JavaCompile javaCompile = task
-                        javaCompile.doLast {
-                            new InstrumentationTask(clap.instrumenting).instrument(javaCompile, logger)
+                        boolean included = false
+                        for(String variant : clap.instrumentingVariants){
+                            if(task.name.toLowerCase().endsWith(variant+"java")){
+                                included = true;
+                                break
+                            }
+                        }
+                        if(included){
+                            task.dependsOn << 'clapGenerateVersion'
+                            JavaCompile javaCompile = task
+                            javaCompile.doLast {
+                                new InstrumentationTask(clap.instrumenting).instrument(javaCompile, logger)
+                            }
                         }
                     }
                 }

@@ -28,13 +28,7 @@ class GenerateVersionTask extends AbstractClapTask{
 
             File generatedSourcesDirectory = new File(generatedSourcePath)
 
-
-
             revisionGenerator.generate(generatedSourcesDirectory, className, packageName, projectInfo);
-
-            //project.addCompileSourceRoot(generatedSourcesDirectory.getAbsolutePath());
-
-
 
         } catch (JClassAlreadyExistsException e) {
             logger.error("Error while generating revision class " + e.getMessage(), e);

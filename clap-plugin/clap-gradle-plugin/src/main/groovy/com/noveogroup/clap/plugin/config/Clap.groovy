@@ -1,5 +1,7 @@
 package com.noveogroup.clap.plugin.config
 
+import org.apache.commons.lang.builder.ToStringBuilder
+
 /**
  * @author Andrey Sokolov
  */
@@ -12,8 +14,22 @@ class Clap {
     String clapLogin = "test"
     String clapPassword = "123"
 
-    HashCalculatorConfig hashCalculatorConfig
+    HashCalculatorConfig hashCalculatorConfig = new HashCalculatorConfig()
 
-    boolean enableInstrumenting
-    Collection<String> instrumenting
+    boolean enableInstrumenting = true
+    Collection<String> instrumenting = ['addLogs','sendLogs']
+    Collection<String> instrumentingVariants = ['debug']
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("serviceUrl", serviceUrl)
+                .append("clapProjectId", clapProjectId)
+                .append("clapLogin", clapLogin)
+                .append("clapPassword", clapPassword)
+                .append("hashCalculatorConfig", hashCalculatorConfig)
+                .append("enableInstrumenting", enableInstrumenting)
+                .append("instrumenting", instrumenting)
+                .toString();
+    }
 }

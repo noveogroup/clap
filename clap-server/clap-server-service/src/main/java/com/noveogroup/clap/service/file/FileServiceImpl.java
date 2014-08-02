@@ -66,9 +66,11 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public boolean removeFile(final String path) {
-        File file = new File(path);
-        if (file.exists()) {
-            return file.delete();
+        if(path != null){
+            final File file = new File(path);
+            if (file.exists()) {
+                return file.delete();
+            }
         }
         return false;
     }
