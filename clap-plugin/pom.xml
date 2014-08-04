@@ -6,7 +6,8 @@
     <artifactId>clap-plugin</artifactId>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>clap-maven-plugin</module>
+        <!-- aspectj way not working now
+        <module>clap-maven-plugin</module>-->
         <module>plugin-common</module>
     </modules>
     <packaging>pom</packaging>

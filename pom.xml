@@ -8,11 +8,12 @@
     <modules>
         <module>clap-server</module>
         <module>clap-common</module>
-        <module>clap-application-parent</module>
-        <module>clap-client</module>
+        <!-- aspectj way not working now
+        <module>clap-test</module>
+        <module>clap-application-parent</module>-->
+        <module>clap-android</module>
         <module>clap-library</module>
         <module>clap-plugin</module>
-        <module>clap-test</module>
     </modules>
     <packaging>pom</packaging>
     <name>CLAP</name>

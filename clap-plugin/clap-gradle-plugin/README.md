@@ -1,5 +1,9 @@
 To use this plugin add to build.gradle following:
 
+dependencies {
+    %instrumentingVariant%Compile 'com.noveogroup.clap:clap-client:0.1-SNAPSHOT'
+}
+
 repositories {
     mavenLocal() //repo where aar will be published
 }
@@ -16,7 +20,7 @@ apply plugin: 'com.noveogroup.clap'
 
 //clap plugin settings(will be extended)
 clap {
-    instrumenting = ['addLogs','sendLogs']
-    enableInstrumenting = true //shortcut to disable instrumenting
+    instrumenting = ['addLogs','sendLogs']  //all by default
+    instrumentingVariants = ['debug']
     clapProjectId = "testProjectId"
 }

@@ -14,9 +14,6 @@ import org.gradle.api.tasks.compile.JavaCompile
  */
 class ClapPlugin implements Plugin<Project> {
 
-
-    public static final String CLAP_AAR_VERSION = '1.0-SNAPSHOT'
-
     public static final String GENERATED_SOURCES_DIR_KEY = "clapGeneratedSourceDir";
     public static final Map<String,Object> PLUGIN_CONTEXT = new HashMap<>();
 
@@ -27,10 +24,7 @@ class ClapPlugin implements Plugin<Project> {
 
         project.task('clapGenerateVersion', type: GenerateVersionTask)
         project.extensions.create("clap", Clap)
-        project.dependencies {
-            debugCompile 'com.noveogroup.clap:clap-client:'+CLAP_AAR_VERSION
-            debugCompile 'com.noveogroup.clap:clap-library-logger:'+CLAP_AAR_VERSION
-        }
+
 
         //TODO check
         // without following gradle/android throws error connected to jackson-mapper
@@ -42,7 +36,7 @@ class ClapPlugin implements Plugin<Project> {
             }
             //adding generated version-provider class to apk
             sourceSets {
-                debug {
+                main {
                     java {
                         srcDir generatedSourcePath
                     }
@@ -60,9 +54,11 @@ class ClapPlugin implements Plugin<Project> {
                 project.tasks.each { Task task ->
                     if (task instanceof JavaCompile) {
                         boolean included = false
+                        String taskVariant = null;
                         for(String variant : clap.instrumentingVariants){
                             if(task.name.toLowerCase().endsWith(variant+"java")){
                                 included = true;
+                                taskVariant = variant;
                                 break
                             }
                         }
@@ -70,7 +66,7 @@ class ClapPlugin implements Plugin<Project> {
                             task.dependsOn << 'clapGenerateVersion'
                             JavaCompile javaCompile = task
                             javaCompile.doLast {
-                                new InstrumentationTask(clap.instrumenting).instrument(javaCompile, logger)
+                                new InstrumentationTask(clap.instrumenting.get(taskVariant)).instrument(javaCompile, logger)
                             }
                         }
                     }

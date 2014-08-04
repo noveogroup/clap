@@ -17,7 +17,7 @@ class Clap {
     HashCalculatorConfig hashCalculatorConfig = new HashCalculatorConfig()
 
     boolean enableInstrumenting = true
-    Collection<String> instrumenting = ['addLogs','sendLogs']
+    Map<String,Collection<String>> instrumenting = new HashMap<>()
     Collection<String> instrumentingVariants = ['debug']
 
     @Override

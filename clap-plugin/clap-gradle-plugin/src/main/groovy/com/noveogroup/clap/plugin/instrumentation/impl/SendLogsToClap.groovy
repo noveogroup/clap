@@ -24,7 +24,7 @@ class SendLogsToClap implements Instrumentor{
             CtClass voidClass = classPool.getCtClass("void")
             CtClass bundleClass = classPool.getCtClass("android.os.Bundle")
             CtMethod method = InstrumentationUtils.getMethodToInstrument(classPool,aClass,true,"onCreate",voidClass, [bundleClass] as CtClass[])
-            method.insertBefore("com.noveogroup.clap.ActivityTraceLogger.getInstance().setLastContext(this);")
+            method.insertBefore("com.noveogroup.clap.aspect.ActivityTraceLogger.getInstance().setLastContext(this);")
         }
 
         if (InstrumentationUtils.findSuperclass(aClass, classPool.getCtClass("android.app.Service"))) {
@@ -37,6 +37,6 @@ class SendLogsToClap implements Instrumentor{
         if (!initializer) {
             initializer = aClass.makeClassInitializer()
         }
-        initializer.insertBefore("com.noveogroup.clap.ExceptionHandler.replaceHandler();")
+        initializer.insertBefore("com.noveogroup.clap.aspect.ExceptionHandler.replaceHandler();")
     }
 }
