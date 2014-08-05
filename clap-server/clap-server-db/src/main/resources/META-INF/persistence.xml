@@ -13,6 +13,8 @@
         <class>com.noveogroup.clap.entity.message.BaseMessageEntity</class>
         <class>com.noveogroup.clap.entity.message.CrashMessageEntity</class>
         <class>com.noveogroup.clap.entity.message.ScreenshotMessageEntity</class>
+        <class>com.noveogroup.clap.entity.message.LogsBunchMessageEntity</class>
+        <class>com.noveogroup.clap.entity.message.log.LogEntryEntity</class>
         <class>com.noveogroup.clap.entity.user.UserEntity</class>
 
         <exclude-unlisted-classes>false</exclude-unlisted-classes>

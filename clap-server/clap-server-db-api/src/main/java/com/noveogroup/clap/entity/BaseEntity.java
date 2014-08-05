@@ -15,6 +15,7 @@ import java.io.Serializable;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class BaseEntity implements Serializable {
+    protected static final int COLUMN_LENGTH = 16777215;
 
     private static final long serialVersionUID = 6726259138874256564L;
 

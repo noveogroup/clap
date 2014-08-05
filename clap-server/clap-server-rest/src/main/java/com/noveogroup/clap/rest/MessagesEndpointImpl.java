@@ -29,7 +29,9 @@ public class MessagesEndpointImpl extends BaseEndpoint implements MessagesEndpoi
 
     @Override
     public void saveLogsBunchMessage(final LogsBunchMessageRequest request) {
-        //TODO
+        LOGGER.debug("saving logs bunch message " + request);
+        login(request.getToken());
+        messagesService.saveMessage(request.getRevisionHash(), request.getMessage());
         LOGGER.debug(request + "saved");
     }
 

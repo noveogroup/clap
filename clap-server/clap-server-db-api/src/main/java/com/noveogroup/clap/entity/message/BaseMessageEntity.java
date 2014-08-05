@@ -22,7 +22,6 @@ import java.util.Date;
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="TYPE", discriminatorType= DiscriminatorType.STRING,length=20)
 public abstract class BaseMessageEntity extends BaseEntity {
-    protected static final int COLUMN_LENGTH = 16777215;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "time")
     private Date timestamp;

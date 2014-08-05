@@ -3,6 +3,7 @@ package com.noveogroup.clap.web.model.revisions;
 
 import com.google.common.collect.Lists;
 import com.noveogroup.clap.model.message.CrashMessage;
+import com.noveogroup.clap.model.message.LogsBunchMessage;
 import com.noveogroup.clap.model.message.ScreenshotMessage;
 import com.noveogroup.clap.model.revision.Revision;
 import org.primefaces.model.TreeNode;
@@ -24,6 +25,7 @@ public class RevisionsModel implements Serializable {
 
     private final List<CrashMessage> selectedRevCrashes = Lists.newArrayList();
     private final List<ScreenshotMessage> selectedRevScreenshots = Lists.newArrayList();
+    private final List<LogsBunchMessage> selectedRevLogs = Lists.newArrayList();
 
     private RevisionPackageModel cleanPackageModel = new RevisionPackageModel();
     private RevisionPackageModel hackedPackageModel = new RevisionPackageModel();
@@ -84,4 +86,7 @@ public class RevisionsModel implements Serializable {
         return selectedRevScreenshots;
     }
 
+    public List<LogsBunchMessage> getSelectedRevLogs() {
+        return selectedRevLogs;
+    }
 }

@@ -1,15 +1,23 @@
-package com.noveogroup.clap.model.message.log;
+package com.noveogroup.clap.entity.message.log;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import com.noveogroup.clap.entity.BaseEntity;
 
-import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 
 /**
  * @author Andrey Sokolov
  */
-public class LogEntry implements Serializable{
+@Entity(name = "LogEntry")
+@Table(name = "logs")
+public class LogEntryEntity extends BaseEntity{
+
+    @Column(name = "message", length = COLUMN_LENGTH)
     private String message;
+    @Column(name = "timestamp", length = COLUMN_LENGTH)
     private Long timestamp;
+    @Column(name = "level", length = COLUMN_LENGTH)
     private int level;
 
     public String getMessage() {
@@ -34,14 +42,5 @@ public class LogEntry implements Serializable{
 
     public void setLevel(final int level) {
         this.level = level;
-    }
-
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("message", message)
-                .append("timestamp", timestamp)
-                .append("level", level)
-                .toString();
     }
 }

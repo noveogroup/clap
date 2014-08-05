@@ -6,15 +6,9 @@ import com.noveogroup.clap.model.message.CrashMessage;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
-import javax.ejb.Stateless;
-import javax.ejb.TransactionManagement;
-import javax.ejb.TransactionManagementType;
-
 /**
  * @author Andrey Sokolov
  */
-@Stateless
-@TransactionManagement(TransactionManagementType.CONTAINER)
 public class CrashMessagesConverter implements OneTypeMessagesConverter<CrashMessage, CrashMessageEntity> {
 
     private static final Mapper MAPPER = new DozerBeanMapper();

@@ -9,6 +9,7 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.noveogroup.clap.model.message.BaseMessage;
 import com.noveogroup.clap.model.message.CrashMessage;
+import com.noveogroup.clap.model.message.LogsBunchMessage;
 import com.noveogroup.clap.model.message.ScreenshotMessage;
 import com.noveogroup.clap.model.revision.ApkEntry;
 import com.noveogroup.clap.model.revision.Revision;
@@ -82,12 +83,16 @@ public class RevisionsController extends BaseController {
             revisionsModel.setSelectedRevision(revWithApkStructure);
             revisionsModel.getSelectedRevCrashes().clear();
             revisionsModel.getSelectedRevScreenshots().clear();
+            revisionsModel.getSelectedRevLogs().clear();
             for (BaseMessage message : revWithApkStructure.getMessages()) {
                 if (message instanceof CrashMessage) {
                     revisionsModel.getSelectedRevCrashes().add((CrashMessage) message);
                 }
                 if (message instanceof ScreenshotMessage) {
                     revisionsModel.getSelectedRevScreenshots().add((ScreenshotMessage) message);
+                }
+                if (message instanceof LogsBunchMessage) {
+                    revisionsModel.getSelectedRevLogs().add((LogsBunchMessage) message);
                 }
             }
             if (revWithApkStructure.getApkStructure() != null) {

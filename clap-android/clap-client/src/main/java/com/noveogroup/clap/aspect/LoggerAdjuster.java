@@ -14,7 +14,7 @@ public class LoggerAdjuster {
     private static final String APPENDER = "clapAppender";
     private static final String TAG = "ClapLoggerAdjuster";
 
-    public static void adjustLogger() {
+    public synchronized static void adjustLogger() {
         org.slf4j.Logger logger = LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
         if (logger instanceof Logger) {
             LoggerContext lc = (LoggerContext) LoggerFactory.getILoggerFactory();
@@ -25,6 +25,7 @@ public class LoggerAdjuster {
                 newAppender.setName(APPENDER);
                 newAppender.start();
                 ((Logger)logger).addAppender(newAppender);
+                Log.e(TAG,"logger added");
             }
         } else {
             Log.e(TAG,"logger not received - have you setup logback?");

@@ -99,6 +99,39 @@
 
         </p:dataTable>
 
+
+        <p:dataTable var="logMessage"
+                     value="#{revisionsModel.selectedRevLogs}"
+                     paginator="true" rows="10"
+                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                     rowsPerPageTemplate="5,10,15">
+
+            <p:column style="width:2%">
+                <p:rowToggler/>
+            </p:column>
+            <p:column headerText="#{msgs['message.label.time']}">
+                <h:outputText value="#{logMessage.timestamp}"/>
+            </p:column>
+            <p:column headerText="#{msgs['message.label.uploadedBy']}">
+                <h:outputText value="#{logMessage.uploadedBy}"/>
+            </p:column>
+
+            <p:rowExpansion>
+                <ul>
+                    <ui:repeat value="#{logMessage.logEntries}" var="logEntry">
+                        <li>
+                            <h:outputText value="#{logEntry.timestamp}">
+                                <f:converter converterId="TimestampConverter"/>
+                            </h:outputText>
+                            - #{logEntry.message}
+                        </li>
+                    </ui:repeat>
+                </ul>
+
+            </p:rowExpansion>
+
+        </p:dataTable>
+
         <p:dataTable var="scrMessage"
                      value="#{revisionsModel.selectedRevScreenshots}"
                      paginator="true" rows="10"
@@ -116,7 +149,7 @@
             </p:column>
 
             <p:rowExpansion>
-                <img src="#{scrMessage.screenshotUrl}" alt="" />
+                <img src="#{scrMessage.screenshotUrl}" alt=""/>
 
             </p:rowExpansion>
 
