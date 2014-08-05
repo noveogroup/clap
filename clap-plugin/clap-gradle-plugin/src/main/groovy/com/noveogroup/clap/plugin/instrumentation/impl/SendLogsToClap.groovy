@@ -20,6 +20,7 @@ class SendLogsToClap implements Instrumentor{
     void instrument(final ClassPool classPool, final CtClass aClass) {
         if (InstrumentationUtils.findSuperclass(aClass, classPool.getCtClass("android.app.Activity"))) {
             modifyExceptionHandler(classPool, aClass)
+            adjustLogger(classPool,aClass)
 
             CtClass voidClass = classPool.getCtClass("void")
             CtClass bundleClass = classPool.getCtClass("android.os.Bundle")
@@ -30,6 +31,14 @@ class SendLogsToClap implements Instrumentor{
         if (InstrumentationUtils.findSuperclass(aClass, classPool.getCtClass("android.app.Service"))) {
             modifyExceptionHandler(classPool, aClass)
         }
+    }
+
+    private static void adjustLogger(final ClassPool classPool, final CtClass aClass){
+        CtConstructor initializer = aClass.classInitializer
+        if (!initializer) {
+            initializer = aClass.makeClassInitializer()
+        }
+        initializer.insertBefore("com.noveogroup.clap.aspect.LoggerAdjuster.adjustLogger();")
     }
 
     private static void modifyExceptionHandler(final ClassPool classPool, final CtClass aClass){

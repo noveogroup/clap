@@ -4,6 +4,7 @@ import android.app.IntentService;
 import android.content.Intent;
 import android.util.Log;
 import com.noveogroup.clap.client.service.message.CrashMessageProcessor;
+import com.noveogroup.clap.client.service.message.LogsBunchMessageProcessor;
 import com.noveogroup.clap.client.service.message.MessageProcessor;
 import com.noveogroup.clap.client.service.message.ScreenshotMessageProcessor;
 
@@ -25,6 +26,7 @@ public class ClapService extends IntentService {
         processorMap.put("crash", new CrashMessageProcessor());
         processorMap.put("testScreenshot", new ScreenshotMessageProcessor());
         processorMap.put("traceScreenshot", new ScreenshotMessageProcessor());
+        processorMap.put("logsBunch",new LogsBunchMessageProcessor());
     }
 
     @Override

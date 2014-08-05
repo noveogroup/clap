@@ -25,6 +25,8 @@
         <resteasy-mobile.version>1.0.0</resteasy-mobile.version>
         <maven-compiler-plugin.version>2.5.1</maven-compiler-plugin.version>
         <aspectjrt.version>1.6.11</aspectjrt.version>
+        <slf4j.version>1.7.5</slf4j.version>
+        <logback.version>1.0.12</logback.version>
     </properties>
 
     <dependencyManagement>
@@ -70,6 +72,25 @@
                 <groupId>com.noveogroup.clap</groupId>
                 <artifactId>clap-library-logger</artifactId>
                 <version>${project.version}</version>
+            </dependency>
+
+
+            <!--LOGGING DEPENDENCIES-->
+
+            <dependency>
+                <groupId>org.slf4j</groupId>
+                <artifactId>slf4j-api</artifactId>
+                <version>${slf4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-classic</artifactId>
+                <version>${logback.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>ch.qos.logback</groupId>
+                <artifactId>logback-core</artifactId>
+                <version>${logback.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
