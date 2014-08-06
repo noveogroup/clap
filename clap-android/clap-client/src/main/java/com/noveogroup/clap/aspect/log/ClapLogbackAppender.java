@@ -11,17 +11,27 @@ import com.noveogroup.clap.model.message.log.LogEntry;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
 /**
  * @author Andrey Sokolov
  */
 public class ClapLogbackAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
-    public static final String TAG = "CLAP_LOGBACK_APPENDER";
-    private static final int LOGS_THRESHOLD = 20;
+    private static final String TAG = "CLAP_LOGBACK_APPENDER";
 
-    private ArrayList<LogEntry> logEntries = new ArrayList<LogEntry>();
+    private static final int QUEUE_CAPACITY = 2000;
+    private BlockingQueue<LogEntry> queue = new ArrayBlockingQueue<LogEntry>(QUEUE_CAPACITY);
 
+    private final LogsConsumer logsConsumer = new LogsConsumer(queue);
+    private final Thread consumerThread = new Thread(logsConsumer);
+
+    @Override
+    public void start() {
+        super.start();
+        consumerThread.start();
+    }
 
     @Override
     protected void append(final ILoggingEvent iLoggingEvent) {
@@ -29,52 +39,17 @@ public class ClapLogbackAppender extends UnsynchronizedAppenderBase<ILoggingEven
         logEntry.setLevel(iLoggingEvent.getLevel().toInt());
         logEntry.setMessage(iLoggingEvent.getMessage());
         logEntry.setTimestamp(iLoggingEvent.getTimeStamp());
-        logEntries.add(logEntry);
-        int count = logEntries.size();
-        if (count >= LOGS_THRESHOLD) {
-            sendLogs();
+        try {
+            queue.put(logEntry);
+        } catch (InterruptedException e) {
+            Log.e(TAG,"Log consumer thread interrupted",e);
         }
     }
 
     @Override
     public void stop() {
         super.stop();
+        logsConsumer.setEnabled(false);
     }
 
-    private void sendLogs() {
-        try {
-            final Thread senderThread = new Thread() {
-                @Override
-                public void run() {
-                    if (executeSending(logEntries)) {
-                        logEntries.clear();
-                    }
-                }
-            };
-            senderThread.start();
-        } catch (Throwable e) {
-            Log.i(TAG, "fail [send logs bunch]", e);
-        }
-    }
-
-    private boolean executeSending(final ArrayList<LogEntry> logEntries) {
-        final IntentSender sender = new IntentSender();
-        final Activity lastContext = ActivityTraceLogger.getInstance().getLastContext();
-        sender.setContext(lastContext);
-        sender.setIntentModel(new LogsBunchIntentModel(new ArrayList<LogEntry>(logEntries)));
-        try {
-            Log.i(TAG, "lastContext == null :" + (lastContext == null));
-            Log.i(TAG, "send logs bunch ...");
-            if (sender.send()) {
-                Log.i(TAG, "done [send logs bunch]");
-                return true;
-            } else {
-                Log.i(TAG, "fail [send logs bunch] - context, " +
-                        "intent model or created intent == null");
-            }
-        } catch (Throwable throwable) {
-            Log.i(TAG, "fail [send logs bunch]", throwable);
-        }
-        return false;
-    }
 }
