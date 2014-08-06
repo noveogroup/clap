@@ -11,8 +11,8 @@ class Clap {
     String clapProjectId
 
     //TODO check how to properly get auth
-    String clapLogin = "test"
-    String clapPassword = "123"
+    String clapLogin = "unnamed"
+    String clapPassword = "unnamed_password"
 
     HashCalculatorConfig hashCalculatorConfig = new HashCalculatorConfig()
 

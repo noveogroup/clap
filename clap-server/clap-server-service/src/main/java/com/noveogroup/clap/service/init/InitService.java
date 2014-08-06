@@ -53,12 +53,13 @@ public class InitService {
             return;
         }
         UserEntity user = new UserEntity();
-        user.setLogin("test");
-        user.setHashedPassword(PasswordsHashCalculator.calculatePasswordHash("123"));
+        user.setLogin("unnamed");
+        user.setHashedPassword(PasswordsHashCalculator.calculatePasswordHash("unnamed_password"));
         user.setToken(UUID.randomUUID().toString());
-        user.setRole(Role.ADMIN);
+        user.setRole(Role.DEVELOPER);
         user.setClapPermissions(Lists.newArrayList(ClapPermission.values()));
         user = userDAO.persist(user);
+        LOGGER.debug("user created = " + user);
 
         user = new UserEntity();
         user.setLogin("asokolov");
@@ -67,21 +68,7 @@ public class InitService {
         user.setClapPermissions(Lists.newArrayList(ClapPermission.values()));
         user.setRole(Role.ADMIN);
         user = userDAO.persist(user);
-
         LOGGER.debug("user created = " + user);
-        ProjectEntity project = new ProjectEntity();
-        project.setName("test_project");
-        project.setExternalId("test_ext_id");
-        project.setCreationDate(new Date(1368308474));
-        project = projectDAO.persist(project);
-        LOGGER.debug("project created : " + project);
-        RevisionEntity revision = new RevisionEntity();
-        revision.setTimestamp(1368318776L);
-        revision.setHash("test_hash");
-        revision.setProject(project);
-        revision.setRevisionType(RevisionType.DEVELOP);
-        revision = revisionDAO.persist(revision);
-        LOGGER.debug("revision created : " + revision);
     }
 
 }
