@@ -5,10 +5,7 @@ import com.noveogroup.clap.auth.PasswordsHashCalculator;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.dao.UserDAO;
-import com.noveogroup.clap.entity.project.ProjectEntity;
-import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
-import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.model.user.ClapPermission;
 import com.noveogroup.clap.model.user.Role;
 import org.apache.commons.collections.CollectionUtils;
@@ -22,7 +19,6 @@ import javax.ejb.Startup;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.ExcludeDefaultInterceptors;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 

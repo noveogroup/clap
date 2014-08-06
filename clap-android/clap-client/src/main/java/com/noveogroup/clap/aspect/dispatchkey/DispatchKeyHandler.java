@@ -30,23 +30,27 @@ public class DispatchKeyHandler {
         activityMap.put(KeyEvent.KEYCODE_VOLUME_DOWN, new ScreenshotDispatchKeyActivity());
     }
 
+    public void dispatchKey(final KeyEvent event, final Activity activity) {
+        int action = event.getAction();
+        int keyCode = event.getKeyCode();
+        if (action == KeyEvent.ACTION_DOWN) {
+            final DispatchKeyActivity dispatchKeyActivity = activityMap.get(keyCode);
+            Log.e(TAG, "dispatch keyCode in aspect = " + keyCode);
+            if (dispatchKeyActivity != null) {
+                Log.e(TAG, "starting dispatch activity " + dispatchKeyActivity);
+                dispatchKeyActivity.onKeyPressed(activity, event);
+            }
+        }
+    }
+
 
     public void dispatchKey(final Object[] args, final Object aspectThis) {
         if (args != null && args.length > 0
                 && args[0] instanceof KeyEvent
                 && aspectThis instanceof Activity) {
             KeyEvent event = (KeyEvent) args[0];
-            int action = event.getAction();
-            int keyCode = event.getKeyCode();
             Activity activity = (Activity) aspectThis;
-            if (action == KeyEvent.ACTION_DOWN) {
-                final DispatchKeyActivity dispatchKeyActivity = activityMap.get(keyCode);
-                Log.e(TAG, "dispatch keyCode in aspect = " + keyCode);
-                if (dispatchKeyActivity != null) {
-                    Log.e(TAG, "starting dispatch activity " + dispatchKeyActivity);
-                    dispatchKeyActivity.onKeyPressed(activity, event);
-                }
-            }
+            dispatchKey(event,activity);
         } else {
             Log.e(TAG, "something gone wrong with aspect dispatching key, args:" + args + ", this" + aspectThis);
 

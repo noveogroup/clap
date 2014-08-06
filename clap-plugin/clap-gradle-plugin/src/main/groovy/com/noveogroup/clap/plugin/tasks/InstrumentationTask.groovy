@@ -2,6 +2,7 @@ package com.noveogroup.clap.plugin.tasks
 
 import com.noveogroup.clap.plugin.instrumentation.impl.AddLifecycleLogs
 import com.noveogroup.clap.plugin.instrumentation.impl.SendLogsToClap
+import com.noveogroup.clap.plugin.instrumentation.impl.SendScreenshots
 import com.noveogroup.clap.plugin.instrumentation.utils.InstrumentationUtils
 import com.noveogroup.clap.plugin.instrumentation.Instrumentor
 import javassist.ClassPool
@@ -12,9 +13,10 @@ import javassist.CtClass
 class InstrumentationTask {
 
     Collection<Instrumentor> instrumentors = [new AddLifecycleLogs(),new SendLogsToClap()]
+    //Collection<Instrumentor> instrumentors = [new AddLifecycleLogs(),new SendLogsToClap(),new SendScreenshots()]
 
     InstrumentationTask(Collection<String> functionalityToInstrument) {
-        if(functionalityToInstrument?.isEmpty()){
+        if(functionalityToInstrument != null && !functionalityToInstrument.isEmpty()){
             def toDelete = []
             for(Instrumentor instr:instrumentors){
                 if(!functionalityToInstrument.contains(instr.getName())){
