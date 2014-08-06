@@ -10,7 +10,6 @@ import javassist.NotFoundException
 import java.util.zip.ZipFile
 
 /**
- * @author Andrey Sokolov
  */
 class InstrumentationUtils {
     static void eachClass(File file, Closure closure) {

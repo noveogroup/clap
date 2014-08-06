@@ -8,7 +8,6 @@ import org.apache.commons.lang.StringUtils
 import org.gradle.api.DefaultTask
 
 /**
- * @author Andrey Sokolov
  */
 abstract class AbstractClapTask  extends DefaultTask {
 

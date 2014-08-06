@@ -12,7 +12,6 @@ import javassist.Modifier
 import javassist.NotFoundException;
 
 /**
- * @author Andrey Sokolov
  */
 class AddLifecycleLogs implements Instrumentor {
     @Override

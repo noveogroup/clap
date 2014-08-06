@@ -7,7 +7,6 @@ import com.sun.codemodel.JClassAlreadyExistsException
 import org.gradle.api.tasks.TaskAction
 
 /**
- * @author Andrey Sokolov
  */
 class GenerateVersionTask extends AbstractClapTask{
 

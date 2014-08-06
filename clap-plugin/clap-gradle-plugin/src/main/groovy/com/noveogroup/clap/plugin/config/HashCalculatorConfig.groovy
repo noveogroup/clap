@@ -3,7 +3,6 @@ package com.noveogroup.clap.plugin.config
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
- * @author Andrey Sokolov
  */
 public class HashCalculatorConfig {
     String checksumAlgorithm = "MD5"

@@ -10,7 +10,6 @@ import org.gradle.api.Task
 import org.gradle.api.tasks.compile.JavaCompile
 
 /**
- * @author Andrey Sokolov
  */
 class ClapPlugin implements Plugin<Project> {
 
@@ -25,6 +24,9 @@ class ClapPlugin implements Plugin<Project> {
         project.task('clapGenerateVersion', type: GenerateVersionTask)
         project.extensions.create("clap", Clap)
 
+        project.dependencies {
+            compile 'com.noveogroup.clap:clap-library-common:0.1-SNAPSHOT'
+        }
 
         //TODO check
         // without following gradle/android throws error connected to jackson-mapper

@@ -8,7 +8,6 @@ import javassist.ClassPool
 import javassist.CtClass
 
 /**
- * @author Andrey Sokolov
  */
 class InstrumentationTask {
 

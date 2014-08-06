@@ -13,7 +13,7 @@ repositories {
 dependencies {
     compile gradleApi()
     compile localGroovy()
-    compile 'com.noveogroup.clap:plugin-common:1.0-SNAPSHOT'
+    compile 'com.noveogroup.clap:plugin-common:0.1-SNAPSHOT'
     compile 'org.javassist:javassist:3.18.1-GA'
     testCompile 'junit:junit:4.11'
 }
