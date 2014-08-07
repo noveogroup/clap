@@ -9,6 +9,8 @@ import org.gradle.api.Project
 import org.gradle.api.Task
 import org.gradle.api.tasks.compile.JavaCompile
 
+import java.beans.Introspector
+
 /**
  */
 class ClapPlugin implements Plugin<Project> {
@@ -34,7 +36,9 @@ class ClapPlugin implements Plugin<Project> {
             packagingOptions {
                 exclude 'META-INF/ASL2.0'
                 exclude 'META-INF/LICENSE'
+                exclude 'META-INF/LICENSE.txt'
                 exclude 'META-INF/NOTICE'
+                exclude 'META-INF/NOTICE.txt'
             }
             //adding generated version-provider class to apk
             sourceSets {
@@ -58,9 +62,11 @@ class ClapPlugin implements Plugin<Project> {
                         boolean included = false
                         String taskVariant = null;
                         for(String variant : clap.instrumentingVariants){
-                            if(task.name.toLowerCase().endsWith(variant+"java")){
+                            def taskName = task.name
+                            if(taskName.toLowerCase().endsWith(variant+"java")){
                                 included = true;
-                                taskVariant = variant;
+                                //extracting build variant from task name, eg. compileFlavor1DebugJava -> flavor1Debug
+                                taskVariant = Introspector.decapitalize(taskName.substring(7,taskName.length()-4));
                                 break
                             }
                         }
@@ -68,7 +74,7 @@ class ClapPlugin implements Plugin<Project> {
                             task.dependsOn << 'clapGenerateVersion'
                             JavaCompile javaCompile = task
                             javaCompile.doLast {
-                                new InstrumentationTask(clap.instrumenting.get(taskVariant)).instrument(javaCompile, logger)
+                                new InstrumentationTask(clap.instrumenting.get(taskVariant)).instrument(javaCompile, project.logger)
                             }
                         }
                     }

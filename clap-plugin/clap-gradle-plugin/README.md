@@ -42,6 +42,17 @@ clap {
 }
 ```
 
+If you specify instrumenting functionality, you need to put full variant name, eg: you have flavor1 and flavor2 - you need to put both
+```
+instrumenting.flavor1Debug = ['sendLogs']
+instrumenting.flavor2Debug = ['sendLogs']
+```
+combining as follows WON'T WORK
+```
+instrumenting.debug = ['sendLogs']
+```
+
+
 Possible instrumenting functionality:
 * addLogs - adding SLF4J logs for lifecycle method calls
 * sendLogs - sending logs to CLAP(by bunches and at force-close case)

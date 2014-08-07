@@ -3,15 +3,8 @@ package com.noveogroup.clap.client.service.message;
 import android.content.Intent;
 import android.util.Log;
 import com.noveogroup.clap.model.message.CrashMessage;
-import com.noveogroup.clap.model.message.ScreenshotMessage;
 import com.noveogroup.clap.model.request.message.SendMessageRequest;
 import com.noveogroup.clap.rest.MessagesEndpoint;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.ByteArrayBody;
-import org.apache.http.entity.mime.content.StringBody;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 
 import java.util.Date;

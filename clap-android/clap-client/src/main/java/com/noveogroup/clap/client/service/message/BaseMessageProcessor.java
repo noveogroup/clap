@@ -48,8 +48,8 @@ public abstract class BaseMessageProcessor implements MessageProcessor{
         AuthenticationEndpoint authenticationEndpoint = ProxyFactory.create(AuthenticationEndpoint.class, CLAP_HOST, new ApacheHttpClient4Executor(param));
         Authentication authentication = new Authentication();
         //TODO think about convenient acquiring auth token
-        authentication.setLogin("test");
-        authentication.setPassword("123");
+        authentication.setLogin("unnamed");
+        authentication.setPassword("unnamed_password");
         String token = authenticationEndpoint.getToken(authentication);
         Log.d("TAG", "TOKEN " + token);
         return token;

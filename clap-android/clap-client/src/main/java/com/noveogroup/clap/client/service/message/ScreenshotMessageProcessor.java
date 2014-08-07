@@ -5,7 +5,7 @@ import android.util.Log;
 import com.noveogroup.clap.model.message.ScreenshotMessage;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.MultipartEntity;
 import org.apache.http.entity.mime.content.ByteArrayBody;
 import org.apache.http.entity.mime.content.StringBody;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -37,17 +37,17 @@ public class ScreenshotMessageProcessor extends BaseMessageProcessor {
 
             try {
                 HttpPost post = new HttpPost(url);
-                final MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
+                final MultipartEntity multipartEntity = new MultipartEntity();
                 ByteArrayBody bitmapBody = new ByteArrayBody(bitmap, "screen.png");
-                multipartEntityBuilder.addPart("token", new StringBody(token));
-                multipartEntityBuilder.addPart("revisionHash", new StringBody(revisionHash));
-                multipartEntityBuilder.addPart("screenshotFile", bitmapBody);
-                post.setEntity(multipartEntityBuilder.build());
+                multipartEntity.addPart("token", new StringBody(token));
+                multipartEntity.addPart("revisionHash", new StringBody(revisionHash));
+                multipartEntity.addPart("screenshotFile", bitmapBody);
+                post.setEntity(multipartEntity);
                 client.execute(post);
+                Log.d(TAG, "MESSAGE SENT");
             } catch (Throwable t) {
-                t.printStackTrace();
+                Log.e(TAG, "error sending screenshot", t);
             }
-            Log.d(TAG, "MESSAGE SENT");
         } else {
             Log.d(TAG, "no bitmap");
         }

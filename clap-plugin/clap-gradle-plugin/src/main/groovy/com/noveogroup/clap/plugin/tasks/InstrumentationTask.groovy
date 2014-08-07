@@ -12,11 +12,10 @@ import javassist.CtClass
  */
 class InstrumentationTask {
 
-    Collection<Instrumentor> instrumentors = [new AddLifecycleLogs(),new SendLogsToClap()]
-    //Collection<Instrumentor> instrumentors = [new AddLifecycleLogs(),new SendLogsToClap(),new SendScreenshots()]
+    Collection<Instrumentor> instrumentors = [new AddLifecycleLogs(),new SendLogsToClap(),new SendScreenshots()]
 
     InstrumentationTask(Collection<String> functionalityToInstrument) {
-        if(functionalityToInstrument != null && !functionalityToInstrument.isEmpty()){
+        if(functionalityToInstrument != null){
             def toDelete = []
             for(Instrumentor instr:instrumentors){
                 if(!functionalityToInstrument.contains(instr.getName())){
@@ -28,8 +27,11 @@ class InstrumentationTask {
     }
 
     def instrument(def javaCompile,def logger) {
-        logger.lifecycle ":$javaCompile.project.name:instrumentLogger[${javaCompile.name}]"
-
+        def names = []
+        instrumentors.each { instr ->
+            names << instr.getName();
+        }
+        logger.lifecycle ":$javaCompile.project.name:instrumenting[${javaCompile.name}] with "+names
         ClassPool classPool = new ClassPool()
         classPool.appendClassPath(javaCompile.options.bootClasspath)
         javaCompile.classpath.each {
