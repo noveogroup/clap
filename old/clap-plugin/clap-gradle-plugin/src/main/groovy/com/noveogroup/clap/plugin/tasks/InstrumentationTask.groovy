@@ -45,7 +45,9 @@ class InstrumentationTask {
             for(Instrumentor instr: instrumentors){
                 instr.instrument(classPool, aClass)
             }
-            aClass.writeFile(javaCompile.destinationDir.absolutePath)
+            if(aClass.isModified()){
+                aClass.writeFile(javaCompile.destinationDir.absolutePath)
+            }
             aClass.detach()
         }
     }

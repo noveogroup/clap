@@ -14,6 +14,9 @@ import javassist.NotFoundException;
 /**
  */
 class AddLifecycleLogs implements Instrumentor {
+
+    public static final String LOGGER_FIELD_NAME = "COM_NOVEOGROUP_ANDROID_LOGGER"
+
     @Override
     String getName() {
         return "addLogs";
@@ -23,7 +26,7 @@ class AddLifecycleLogs implements Instrumentor {
     void instrument(final ClassPool classPool, final CtClass aClass) {
 
         CtClass loggerClass = classPool.getCtClass("org.slf4j.Logger")
-        CtField loggerField = new CtField(loggerClass, "COM_NOVEOGROUP_ANDROID_LOGGER", aClass)
+        CtField loggerField = new CtField(loggerClass, LOGGER_FIELD_NAME, aClass)
         loggerField.setModifiers(Modifier.PRIVATE | Modifier.STATIC | Modifier.FINAL)
         aClass.addField(loggerField)
 
@@ -96,7 +99,7 @@ class AddLifecycleLogs implements Instrumentor {
             aClass.addMethod(method)
         }
 
-        method.insertBefore("COM_NOVEOGROUP_ANDROID_LOGGER.info(\"call $aClass.name[\" + hashCode() + \"]::$methodName \" + $infoCode);")
+        method.insertBefore(LOGGER_FIELD_NAME+".info(\"call $aClass.name[\" + hashCode() + \"]::$methodName \" + $infoCode);")
     }
 
     static void instrumentOnClickListener(ClassPool classPool, CtClass listenerClass) {
