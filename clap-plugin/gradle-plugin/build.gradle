@@ -1,4 +1,5 @@
 apply plugin: 'groovy'
+apply plugin: 'maven-publish'
 
 repositories {
     mavenCentral()
@@ -6,4 +7,72 @@ repositories {
 
 dependencies {
     compile gradleApi()
+}
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId 'com.noveogroup.clap'
+            artifactId 'gradle-plugin'
+            version '0.1'
+
+            from components.java
+            artifact sourcesJar
+
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    name 'CLAP Gradle Plugin'
+                    description 'TODO write a description'
+                    url 'http://noveogroup.github.io/clap/'
+                    licenses {
+                        license {
+                            name 'The MIT License (MIT)'
+                            url 'http://opensource.org/licenses/MIT'
+                            distribution 'repo'
+                        }
+                    }
+                    scm {
+                        url 'https://github.com/noveogroup/clap'
+                        connection 'scm:git@github.com:noveogroup/clap.git'
+                        developerConnection 'scm:git@github.com:noveogroup/clap.git'
+                    }
+                    developers {
+                        developer {
+                            name 'Pavel Stepanov'
+                            url 'https://github.com/stefan-nsk'
+                            roles {
+                                role 'architect'
+                                role 'developer'
+                            }
+                        }
+                        developer {
+                            name 'Andrey Sokolov'
+                            url 'https://github.com/RagnarNSK'
+                            roles {
+                                role 'developer'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            String sonatypeReleaseRepository = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+            String sonatypeUsername = project.properties['username']
+            String sonatypePassword = project.properties['password']
+            url sonatypeReleaseRepository
+            credentials {
+                username = sonatypeUsername
+                password = sonatypePassword
+            }
+        }
+    }
 }
