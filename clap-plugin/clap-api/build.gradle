@@ -1,4 +1,4 @@
-apply plugin: 'groovy'
+apply plugin: 'java'
 apply plugin: 'maven-publish'
 
 repositories {
@@ -7,8 +7,6 @@ repositories {
 }
 
 dependencies {
-    compile gradleApi()
-    compile 'com.noveogroup.clap:clap-api:0.1'
 }
 
 task sourcesJar(type: Jar, dependsOn: classes) {
@@ -16,20 +14,26 @@ task sourcesJar(type: Jar, dependsOn: classes) {
     from sourceSets.main.allSource
 }
 
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
 publishing {
     publications {
         maven(MavenPublication) {
             groupId 'com.noveogroup.clap'
-            artifactId 'gradle-plugin'
+            artifactId 'clap-api'
             version '0.1'
 
             from components.java
             artifact sourcesJar
+            artifact javadocJar
 
             pom.withXml {
                 asNode().children().last() + {
                     resolveStrategy = Closure.DELEGATE_FIRST
-                    name 'CLAP Gradle Plugin'
+                    name 'CLAP API'
                     description 'TODO write a description'
                     url 'http://noveogroup.github.io/clap/'
                     licenses {
