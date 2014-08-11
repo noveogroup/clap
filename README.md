@@ -15,6 +15,7 @@ Developed By
 * [Noveo Group](http://noveogroup.com/)
 * [Andrey Sokolov](https://github.com/RagnarNSK) - <asokolov@noveogroup.com>
 * [Mikhail Demidov](https://github.com/mihaildemidoff) - <mdemidov@noveogroup.com>
+* [Oleg Isupov](https://github.com/cypt) - <oisupov@noveogroup.com>
 * [Pavel Stepanov](https://github.com/stefan-nsk) - <pstepanov@noveogroup.com>
 
 License
