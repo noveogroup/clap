@@ -1,0 +1,36 @@
+apply plugin: 'com.android.application'
+apply plugin: 'com.noveogroup.clap'
+
+dependencies {
+    compile 'com.noveogroup.clap:clap-api:0.1'
+}
+
+android {
+    compileSdkVersion project.compileSdkVersion
+    buildToolsVersion project.buildToolsVersion
+
+    defaultConfig {
+        versionCode 1
+        versionName '1.0'
+        minSdkVersion 7
+        targetSdkVersion project.compileSdkVersion
+    }
+
+    buildTypes { release { signingConfig debug.signingConfig } }
+
+    lintOptions { abortOnError false }
+}
+
+clap {
+
+    projectId 'com.noveogroup.clap.test'
+    serverUrl 'http://10.0.14.53:8080/clap-rest'
+    username 'pstepanov'
+    password 'password'
+    instrument 'module1', 'module2'
+
+    custom {
+        debug { instrument 'module1', 'module2' }
+    }
+
+}
