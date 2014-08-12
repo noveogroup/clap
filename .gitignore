@@ -1,5 +1,13 @@
-.idea
+# Android
+local.properties
+
+# Gradle
 .gradle
-*.iml
-target
 build
+
+# IntelliJ Idea
+.idea
+*.iml
+
+# Maven
+target
