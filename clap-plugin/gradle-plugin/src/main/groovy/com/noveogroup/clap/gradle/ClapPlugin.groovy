@@ -37,6 +37,15 @@ class ClapPlugin implements Plugin<Project> {
     void apply(Project project) {
         project.extensions.create('clap', ClapOptions, project)
 
+        project.gradle.afterProject {
+            ClapOptions clap = project.extensions.findByType(ClapOptions)
+
+            // modify dependencies
+            clap.custom.each {
+                project.dependencies.add("${it.name}Compile", 'com.noveogroup.clap:library:0.1')
+            }
+        }
+
         project.afterEvaluate {
             ClapOptions clap = project.extensions.findByType(ClapOptions)
 
