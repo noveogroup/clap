@@ -30,4 +30,12 @@ class CustomOptions extends Options {
 
     String name
 
+    void projectId(String projectId) { this.projectId = projectId }
+
+    void serverUrl(String serverUrl) { this.serverUrl = serverUrl }
+
+    void username(String username) { this.username = username }
+
+    void password(String password) { this.password = password }
+
 }
