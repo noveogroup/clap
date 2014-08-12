@@ -5,16 +5,18 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/ttt"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/button_crash"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="CLAP" />
+        android:text="@string/button_crash"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <Button
-        android:id="@+id/bbb"
-        android:layout_width="wrap_content"
+        android:id="@+id/button_test"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Some text" />
+        android:text="@string/button_test"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
 </LinearLayout>

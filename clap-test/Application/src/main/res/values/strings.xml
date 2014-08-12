@@ -2,6 +2,9 @@
 
 <resources>
 
-    <string name="app_name">clap-test</string>
+    <string name="application_name">clap-test</string>
+
+    <string name="button_crash">Crash</string>
+    <string name="button_test">Test</string>
 
 </resources>
