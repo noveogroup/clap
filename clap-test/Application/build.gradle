@@ -16,6 +16,11 @@ android {
         targetSdkVersion project.compileSdkVersion
     }
 
+    productFlavors {
+        production
+        prototype
+    }
+
     buildTypes { release { signingConfig debug.signingConfig } }
 
     lintOptions { abortOnError false }
@@ -30,7 +35,13 @@ clap {
     instrument 'module1', 'module2'
 
     custom {
-        debug { instrument 'module1', 'module2' }
+        debug {
+            username 'pstepanov-debug'
+            instrument 'module1', 'module2'
+        }
+        release {
+            projectId 'release'
+        }
     }
 
 }

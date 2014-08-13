@@ -6,7 +6,7 @@ import android.view.View;
 
 import com.noveogroup.clap.api.Trace;
 
-import java.text.SimpleDateFormat;
+import java.text.DateFormat;
 import java.util.Date;
 
 public class TestActivity extends Activity {
@@ -32,7 +32,7 @@ public class TestActivity extends Activity {
         findViewById(R.id.button_test).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                test(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()));
+                test(DateFormat.getDateTimeInstance().format(new Date()));
             }
         });
     }
