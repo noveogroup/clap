@@ -26,11 +26,40 @@
 
 package com.noveogroup.clap.api;
 
+import java.lang.reflect.Field;
+import java.util.HashMap;
+import java.util.Map;
+
 public class BuildConfigHelper {
 
     public static final String FIELD_CLAP_PROJECT_ID = "CLAP_PROJECT_ID";
     public static final String FIELD_CLAP_SERVER_URL = "CLAP_SERVER_URL";
     public static final String FIELD_CLAP_USERNAME = "CLAP_USERNAME";
     public static final String FIELD_CLAP_PASSWORD = "CLAP_PASSWORD";
+
+    private static final Map<String, String> FIELD_CACHE = new HashMap<>();
+
+    private static String getValue(String packageName, String fieldName) {
+        String buildConfigClassName = packageName + ".BuildConfig";
+        try {
+            Class<?> buildConfigClass = Class.forName(buildConfigClassName);
+            Field field = buildConfigClass.getField(fieldName);
+            return (String) field.get(null);
+        } catch (Exception e) {
+            throw new RuntimeException("wrong " + buildConfigClassName, e);
+        }
+    }
+
+    public static synchronized String get(String packageName, String fieldName) {
+        String key = String.format("%s$%s", packageName, fieldName);
+
+        String value = FIELD_CACHE.get(key);
+        if (value == null) {
+            value = getValue(packageName, fieldName);
+            FIELD_CACHE.put(key, value);
+        }
+
+        return value;
+    }
 
 }
