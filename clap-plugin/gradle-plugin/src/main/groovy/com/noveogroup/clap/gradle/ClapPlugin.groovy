@@ -37,27 +37,14 @@ class ClapPlugin implements Plugin<Project> {
     void apply(Project project) {
         project.extensions.create('clap', ClapOptions, project)
 
+        // check names of custom clap options
         project.gradle.afterProject {
-            ClapOptions clap = project.extensions.findByType(ClapOptions)
-
-            // modify dependencies
-            clap.custom.each {
-                project.dependencies.add("${it.name}Compile", 'com.noveogroup.clap:library:0.1')
-            }
-        }
-
-        project.afterEvaluate {
-            ClapOptions clap = project.extensions.findByType(ClapOptions)
-
-            // load android configuration
             def android = project.extensions.findByName('android')
-
-            // check each custom option corresponds to some type, flavor or variant
-            List<String> allowedNames = android.applicationVariants*.name +
-                    android.buildTypes*.name + android.productFlavors*.name
+            ClapOptions clap = project.extensions.findByType(ClapOptions)
             clap.custom.each {
+                List<String> allowedNames = android.buildTypes*.name
                 if (!allowedNames.contains(it.name)) {
-                    throw new GradleException("clap cannot configure '${it.name}'. allowed configurations are: $allowedNames")
+                    throw new GradleException("clap cannot configure '${it.name}'. only build types allowed: $allowedNames")
                 }
             }
         }
