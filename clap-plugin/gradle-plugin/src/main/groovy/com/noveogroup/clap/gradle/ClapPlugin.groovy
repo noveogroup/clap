@@ -26,26 +26,52 @@
 
 package com.noveogroup.clap.gradle
 
+import com.noveogroup.clap.api.BuildConfigHelper
 import com.noveogroup.clap.gradle.config.ClapOptions
+import com.noveogroup.clap.gradle.config.Options
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 
 class ClapPlugin implements Plugin<Project> {
 
+    private static void addBuildConfigFields(def config, Options options, boolean isDefault) {
+        Closure set = { String field, String value ->
+            if (value) {
+                config.buildConfigField("String", field, "\"$value\"")
+            } else {
+                if (isDefault) config.buildConfigField("String", field, "null")
+            }
+        }
+        set BuildConfigHelper.FIELD_CLAP_PROJECT_ID, options.projectId
+        set BuildConfigHelper.FIELD_CLAP_SERVER_URL, options.serverUrl
+        set BuildConfigHelper.FIELD_CLAP_USERNAME, options.username
+        set BuildConfigHelper.FIELD_CLAP_PASSWORD, options.password
+    }
+
     @Override
     void apply(Project project) {
         project.extensions.create('clap', ClapOptions, project)
 
-        // check names of custom clap options
         project.gradle.afterProject {
             def android = project.extensions.findByName('android')
             ClapOptions clap = project.extensions.findByType(ClapOptions)
+
+            // add default build config fields
+            addBuildConfigFields(android.defaultConfig, clap, true)
+
             clap.custom.each {
+                // check names of custom clap options
                 List<String> allowedNames = android.buildTypes*.name
                 if (!allowedNames.contains(it.name)) {
                     throw new GradleException("clap cannot configure '${it.name}'. only build types allowed: $allowedNames")
                 }
+
+                // add build config fields for build type
+                addBuildConfigFields(android.buildTypes[it.name], it, false)
+
+                // add dependencies
+                project.dependencies.add("${it.name}Compile", 'com.noveogroup.clap:library:0.1')
             }
         }
     }
