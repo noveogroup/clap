@@ -36,7 +36,7 @@ class Options {
 
     String password
 
-    List<String> instrument
+    Set<String> instrument = []
 
     void instrument(String... array) { instrument = array }
 
