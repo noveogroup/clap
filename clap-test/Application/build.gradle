@@ -37,7 +37,7 @@ clap {
     custom {
         debug {
             username 'pstepanov-debug'
-            instrument 'module1', 'module2'
+            instrument 'debug-module1', 'debug-module2'
         }
         release {
             projectId 'release'
