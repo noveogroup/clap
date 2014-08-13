@@ -36,6 +36,7 @@ public class BuildConfigHelper {
     public static final String FIELD_CLAP_SERVER_URL = "CLAP_SERVER_URL";
     public static final String FIELD_CLAP_USERNAME = "CLAP_USERNAME";
     public static final String FIELD_CLAP_PASSWORD = "CLAP_PASSWORD";
+    public static final String FIELD_CLAP_SOURCE_HASH = "CLAP_SOURCE_HASH";
 
     private static final Map<String, String> FIELD_CACHE = new HashMap<>();
 

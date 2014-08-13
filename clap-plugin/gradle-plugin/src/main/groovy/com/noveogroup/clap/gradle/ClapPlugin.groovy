@@ -32,6 +32,7 @@ import com.noveogroup.clap.gradle.config.Options
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.FileTree
 import org.gradle.api.tasks.compile.JavaCompile
 
 class ClapPlugin implements Plugin<Project> {
@@ -53,6 +54,7 @@ class ClapPlugin implements Plugin<Project> {
         set BuildConfigHelper.FIELD_CLAP_SERVER_URL, options.serverUrl
         set BuildConfigHelper.FIELD_CLAP_USERNAME, options.username
         set BuildConfigHelper.FIELD_CLAP_PASSWORD, options.password
+        set BuildConfigHelper.FIELD_CLAP_SOURCE_HASH, null
     }
 
     @Override
@@ -93,6 +95,16 @@ class ClapPlugin implements Plugin<Project> {
 
                 javaCompileTask.doLast {
                     logger.lifecycle ":$javaCompileTask.project.name:instrument${variant.name.capitalize()}"
+
+                    // calculate hash code of sources
+                    FileTree fileTree = Utils.getFileTree(project, variant)
+                    String hash = Utils.calculateHash(fileTree) as String
+                    println "-----------------------------------"
+                    fileTree.each { println it }
+                    println "${variant.packageName}.BuildConfig.${BuildConfigHelper.FIELD_CLAP_SOURCE_HASH} = '$hash'"
+                    println "-----------------------------------"
+
+                    // todo set source hash to proper value using javassist
 
                     Set<String> instrument = clap.instrument + options.instrument
                     // todo instrument code according to instruments
