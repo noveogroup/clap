@@ -32,6 +32,7 @@ import com.noveogroup.clap.gradle.config.Options
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.tasks.compile.JavaCompile
 
 class ClapPlugin implements Plugin<Project> {
 
@@ -72,6 +73,25 @@ class ClapPlugin implements Plugin<Project> {
 
                 // add dependencies
                 project.dependencies.add("${it.name}Compile", 'com.noveogroup.clap:library:0.1')
+                Set<String> instrument = clap.instrument + it.instrument
+                // todo collect dependencies from instruments
+            }
+        }
+
+        project.afterEvaluate {
+            def android = project.extensions.findByName('android')
+            ClapOptions clap = project.extensions.findByType(ClapOptions)
+
+            android.applicationVariants.each { variant ->
+                Options options = clap.custom[variant.buildType.name as String]
+                JavaCompile javaCompileTask = variant.variantData.javaCompileTask
+
+                javaCompileTask.doLast {
+                    logger.lifecycle ":$javaCompileTask.project.name:instrument${variant.name.capitalize()}"
+
+                    Set<String> instrument = clap.instrument + options.instrument
+                    // todo instrument code according to instruments
+                }
             }
         }
     }
