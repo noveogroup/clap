@@ -41,7 +41,12 @@ class ClapPlugin implements Plugin<Project> {
             if (value) {
                 config.buildConfigField("String", field, "\"$value\"")
             } else {
-                if (isDefault) config.buildConfigField("String", field, "null")
+                if (isDefault) {
+                    if (field in [BuildConfigHelper.FIELD_CLAP_PROJECT_ID, BuildConfigHelper.FIELD_CLAP_SERVER_URL]) {
+                        throw new GradleException("default value of field '$field' should be set")
+                    }
+                    config.buildConfigField("String", field, "null")
+                }
             }
         }
         set BuildConfigHelper.FIELD_CLAP_PROJECT_ID, options.projectId
