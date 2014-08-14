@@ -28,6 +28,7 @@ package com.noveogroup.clap.gradle
 
 import com.noveogroup.clap.api.BuildConfigHelper
 import com.noveogroup.clap.gradle.config.ClapOptions
+import com.noveogroup.clap.gradle.config.CustomOptions
 import com.noveogroup.clap.gradle.config.Options
 import javassist.ClassPool
 import org.gradle.api.GradleException
@@ -68,19 +69,19 @@ class ClapPlugin implements Plugin<Project> {
             // add default build config fields
             addBuildConfigFields(android.defaultConfig, clap, true)
 
-            clap.custom.each {
+            clap.custom.each { CustomOptions customOptions ->
                 // check names of custom clap options
                 List<String> allowedNames = android.buildTypes*.name
-                if (!allowedNames.contains(it.name)) {
+                if (!allowedNames.contains(customOptions.name)) {
                     throw new GradleException("clap cannot configure '${it.name}'. only build types allowed: $allowedNames")
                 }
 
                 // add build config fields for build type
-                addBuildConfigFields(android.buildTypes[it.name], it, false)
+                addBuildConfigFields(android.buildTypes[customOptions.name], customOptions, false)
 
                 // add dependencies
-                project.dependencies.add("${it.name}Compile", 'com.noveogroup.clap:library:0.1')
-                Set<String> instrument = clap.instrument + it.instrument
+                project.dependencies.add("${customOptions.name}Compile", 'com.noveogroup.clap:clap-api:0.1')
+                Set<String> instrument = clap.instrument + customOptions.instrument
                 // todo collect dependencies from instruments
             }
         }
@@ -104,6 +105,7 @@ class ClapPlugin implements Plugin<Project> {
                     String hash = Utils.calculateHash(fileTree) as String
                     Utils.setHashField(classPool, javaCompileTask.destinationDir, variant, hash)
 
+                    // instrument classes
                     Set<String> instrument = clap.instrument + options.instrument
                     // todo instrument code according to instruments
 
