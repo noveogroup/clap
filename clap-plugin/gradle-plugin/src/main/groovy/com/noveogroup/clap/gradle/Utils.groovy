@@ -71,13 +71,13 @@ class Utils {
     static List<String> getClassNamesFromDirectory(File directory) {
         List<String> list = []
         directory.eachFileRecurse {
-            def path = it.absolutePath
+            String path = it.absolutePath as String
             def matcher = (path =~ /(.*)\.class/)
             if (it.isFile() && matcher.matches()) {
-                def className = matcher.group(1)
+                String className = matcher.group(1)
                         .substring(directory.absolutePath.length() + 1)
                         .replaceAll('/', '.')
-                        .replaceAll('\\\\', '.')
+                        .replaceAll('\\\\', '.') as String
                 list << className
             }
         }
@@ -89,7 +89,7 @@ class Utils {
         new ZipFile(jarFile).entries().each {
             def matcher = (it.name =~ /(.*)\.class/)
             if (!it.isDirectory() && matcher.matches()) {
-                def className = matcher.group(1).replaceAll('/', '.')
+                String className = matcher.group(1).replaceAll('/', '.') as String
                 list << className
             }
         }
