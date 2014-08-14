@@ -106,6 +106,10 @@ class ClapPlugin implements Plugin<Project> {
 
                     Set<String> instrument = clap.instrument + options.instrument
                     // todo instrument code according to instruments
+
+                    println "----- ===== CLASSES ===== -----"
+                    println Utils.getClassNames(javaCompileTask).join("\n")
+                    println "----- ===== CLASSES ===== -----"
                 }
             }
         }

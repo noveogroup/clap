@@ -10,6 +10,7 @@ import org.gradle.api.file.FileTree
 import org.gradle.api.tasks.compile.JavaCompile
 
 import java.security.MessageDigest
+import java.util.zip.ZipFile
 
 class Utils {
 
@@ -65,6 +66,49 @@ class Utils {
 
         buildConfigClass.writeFile(destinationDir.absolutePath)
         buildConfigClass.detach()
+    }
+
+    static List<String> getClassNamesFromDirectory(File directory) {
+        List<String> list = []
+        directory.eachFileRecurse {
+            def path = it.absolutePath
+            def matcher = (path =~ /(.*)\.class/)
+            if (it.isFile() && matcher.matches()) {
+                def className = matcher.group(1)
+                        .substring(directory.absolutePath.length() + 1)
+                        .replaceAll('/', '.')
+                        .replaceAll('\\\\', '.')
+                list << className
+            }
+        }
+        return list
+    }
+
+    static List<String> getClassNamesFromJar(File jarFile) {
+        List<String> list = []
+        new ZipFile(jarFile).entries().each {
+            def matcher = (it.name =~ /(.*)\.class/)
+            if (!it.isDirectory() && matcher.matches()) {
+                def className = matcher.group(1).replaceAll('/', '.')
+                list << className
+            }
+        }
+        return list
+    }
+
+    static List<String> getClassNames(File file) {
+        if (file.isDirectory()) {
+            getClassNamesFromDirectory(file)
+        } else {
+            getClassNamesFromJar(file)
+        }
+    }
+
+    static List<String> getClassNames(JavaCompile javaCompileTask) {
+        List<String> list = getClassNamesFromDirectory(javaCompileTask.destinationDir)
+        javaCompileTask.classpath.inject(list) { List<String> classNames, File jarFile ->
+            classNames + getClassNames(jarFile)
+        }
     }
 
 }
