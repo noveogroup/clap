@@ -9,6 +9,7 @@ repositories {
 dependencies {
     compile gradleApi()
     compile 'com.noveogroup.clap:clap-api:0.1'
+    compile 'org.javassist:javassist:3.18.2-GA'
 }
 
 task sourcesJar(type: Jar) {

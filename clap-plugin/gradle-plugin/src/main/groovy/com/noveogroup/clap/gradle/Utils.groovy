@@ -1,7 +1,13 @@
 package com.noveogroup.clap.gradle
 
+import com.noveogroup.clap.api.BuildConfigHelper
+import javassist.ClassPool
+import javassist.CtClass
+import javassist.CtField
+import javassist.Modifier
 import org.gradle.api.Project
 import org.gradle.api.file.FileTree
+import org.gradle.api.tasks.compile.JavaCompile
 
 import java.security.MessageDigest
 
@@ -39,6 +45,26 @@ class Utils {
             sourcesTree += project.fileTree(dir: it)
         }
         return sourcesTree
+    }
+
+    static ClassPool prepareClassPool(JavaCompile javaCompileTask) {
+        ClassPool classPool = new ClassPool()
+        classPool.appendClassPath(javaCompileTask.options.bootClasspath)
+        javaCompileTask.classpath.each { classPool.appendClassPath(it.absolutePath) }
+        classPool.appendClassPath(javaCompileTask.destinationDir.absolutePath)
+        return classPool
+    }
+
+    static void setHashField(ClassPool classPool, File destinationDir, def variant, String hashValue) {
+        CtClass buildConfigClass = classPool.getCtClass("${variant.packageName}.BuildConfig")
+
+        CtClass stringClass = classPool.getCtClass("java.lang.String")
+        CtField hashField = new CtField(stringClass, BuildConfigHelper.FIELD_CLAP_SOURCE_HASH, buildConfigClass)
+        hashField.setModifiers(Modifier.PUBLIC | Modifier.STATIC | Modifier.FINAL)
+        buildConfigClass.addField(hashField, CtField.Initializer.constant(hashValue))
+
+        buildConfigClass.writeFile(destinationDir.absolutePath)
+        buildConfigClass.detach()
     }
 
 }
