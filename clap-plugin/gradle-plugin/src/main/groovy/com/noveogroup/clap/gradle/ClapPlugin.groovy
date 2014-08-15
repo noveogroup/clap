@@ -34,6 +34,7 @@ import javassist.ClassPool
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.Task
 import org.gradle.api.file.FileTree
 import org.gradle.api.tasks.compile.JavaCompile
 
@@ -56,6 +57,53 @@ class ClapPlugin implements Plugin<Project> {
         set BuildConfigHelper.FIELD_CLAP_SERVER_URL, options.serverUrl
         set BuildConfigHelper.FIELD_CLAP_USERNAME, options.username
         set BuildConfigHelper.FIELD_CLAP_PASSWORD, options.password
+    }
+
+    Map<String, Task> hashTasks = [:]
+    Map<String, String> hashValues = [:]
+
+    private Task createCalculateHashTask(Project project, def variant) {
+        String name = variant.name as String
+        Task hashTask = project.task("calculate${name.capitalize()}Hash",
+                group: "CLAP",
+                description: "Calculates hash of sources of ${name.capitalize()} build.")
+        hashTasks[name] = hashTask
+
+        hashTask << {
+            // calculate and update hash code of sources
+            FileTree fileTree = Utils.getFileTree(project, variant)
+            String hash = Utils.calculateHash(fileTree) as String
+            hashValues[name] = hash
+        }
+
+        return hashTask
+    }
+
+    private Task createUploadTask(Project project, ClapOptions clap, def variant) {
+        def zipAlignTask = variant.variantData.zipAlignTask
+        if (!zipAlignTask) return null
+
+        String name = variant.name as String
+
+        Task uploadTask = project.task("upload${name.capitalize()}",
+                group: "CLAP",
+                description: "Uploads ${name.capitalize()} APK on CLAP server.",
+                dependsOn: [zipAlignTask, hashTasks[name]])
+
+        uploadTask << {
+            Options options = clap.resolve(variant.buildType.name as String)
+            String hash = hashValues[name] as String
+            File apkFile = variant.variantData.outputFile
+
+            println "VARIANT: ${variant.name}"
+            println "OUTPUT FILE: $apkFile"
+            println "SERVER URL: ${options.serverUrl}"
+            println "USERNAME: ${options.username}"
+            println "PASSWORD: ${options.password}"
+            println "HASH: ${hash}"
+        }
+
+        return uploadTask
     }
 
     @Override
@@ -97,20 +145,28 @@ class ClapPlugin implements Plugin<Project> {
                 Options customOptions = clap.resolve(variant.buildType.name as String)
                 JavaCompile javaCompileTask = variant.variantData.javaCompileTask
 
-                javaCompileTask.doLast {
+                // create calculate hash task
+                Task hashTask = createCalculateHashTask(project, variant)
+                hashTask.dependsOn javaCompileTask.getDependsOn().clone()
+                javaCompileTask.dependsOn hashTask
+
+                // instrument classes after compilation
+                javaCompileTask << {
                     logger.lifecycle ":$javaCompileTask.project.name:instrument${variant.name.capitalize()}"
 
                     // prepare class pool
                     ClassPool classPool = Utils.prepareClassPool(javaCompileTask)
 
                     // calculate and update hash code of sources
-                    FileTree fileTree = Utils.getFileTree(project, variant)
-                    String hash = Utils.calculateHash(fileTree) as String
+                    String hash = hashValues[variant.name as String] as String
                     Utils.setHashField(classPool, javaCompileTask.destinationDir, variant, hash)
 
                     // instrument classes
                     Instrumentation.instrument(project, javaCompileTask, classPool, customOptions.instrument)
                 }
+
+                // create upload task
+                createUploadTask(project, clap, variant)
             }
         }
     }
