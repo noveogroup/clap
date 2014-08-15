@@ -28,7 +28,6 @@ package com.noveogroup.clap.gradle
 
 import com.noveogroup.clap.api.BuildConfigHelper
 import com.noveogroup.clap.gradle.config.ClapOptions
-import com.noveogroup.clap.gradle.config.CustomOptions
 import com.noveogroup.clap.gradle.config.Options
 import com.noveogroup.clap.gradle.instrument.Instrumentation
 import javassist.ClassPool
@@ -70,21 +69,22 @@ class ClapPlugin implements Plugin<Project> {
             // add default build config fields
             addBuildConfigFields(android.defaultConfig, clap, true)
 
-            clap.custom.each { CustomOptions customOptions ->
+            clap.custom.names.each { String customName ->
+                Options customOptions = clap.resolve(customName)
+
                 // check names of custom clap options
                 List<String> allowedNames = android.buildTypes*.name
-                if (!allowedNames.contains(customOptions.name)) {
-                    throw new GradleException("clap cannot configure '${it.name}'. only build types allowed: $allowedNames")
+                if (!allowedNames.contains(customName)) {
+                    throw new GradleException("clap cannot configure '${customName}'. only build types allowed: $allowedNames")
                 }
 
                 // add build config fields for build type
-                addBuildConfigFields(android.buildTypes[customOptions.name], customOptions, false)
+                addBuildConfigFields(android.buildTypes[customName], customOptions, false)
 
                 // add dependencies
-                project.dependencies.add("${customOptions.name}Compile", 'com.noveogroup.clap:clap-api:0.1')
-                Set<String> instrument = clap.instrument + customOptions.instrument
-                Instrumentation.getDependencies(instrument).each {
-                    project.dependencies.add("${customOptions.name}Compile", it)
+                project.dependencies.add("${customName}Compile", 'com.noveogroup.clap:clap-api:0.1')
+                Instrumentation.getDependencies(customOptions.instrument).each {
+                    project.dependencies.add("${customName}Compile", it)
                 }
             }
         }
@@ -94,7 +94,7 @@ class ClapPlugin implements Plugin<Project> {
             ClapOptions clap = project.extensions.findByType(ClapOptions)
 
             android.applicationVariants.each { variant ->
-                Options options = clap.custom[variant.buildType.name as String]
+                Options customOptions = clap.resolve(variant.buildType.name as String)
                 JavaCompile javaCompileTask = variant.variantData.javaCompileTask
 
                 javaCompileTask.doLast {
@@ -109,8 +109,7 @@ class ClapPlugin implements Plugin<Project> {
                     Utils.setHashField(classPool, javaCompileTask.destinationDir, variant, hash)
 
                     // instrument classes
-                    Set<String> instrument = clap.instrument + options.instrument
-                    Instrumentation.instrument(project, javaCompileTask, classPool, instrument)
+                    Instrumentation.instrument(project, javaCompileTask, classPool, customOptions.instrument)
                 }
             }
         }

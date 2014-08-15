@@ -43,4 +43,15 @@ class ClapOptions extends Options {
 
     void custom(Action<NamedDomainObjectContainer<CustomOptions>> action) { action.execute(custom) }
 
+    Options resolve(String name) {
+        Options customOptions = custom[name]
+        return new Options(
+                projectId: customOptions.projectId ?: this.projectId,
+                serverUrl: customOptions.serverUrl ?: this.serverUrl,
+                username: customOptions.username ?: this.username,
+                password: customOptions.password ?: this.password,
+                instrument: customOptions.instrument + this.instrument,
+        )
+    }
+
 }
