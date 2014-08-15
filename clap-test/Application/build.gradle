@@ -1,10 +1,6 @@
 apply plugin: 'com.android.application'
 apply plugin: 'com.noveogroup.clap'
 
-dependencies {
-    compile 'com.noveogroup.clap:clap-api:0.1'
-}
-
 android {
     compileSdkVersion project.compileSdkVersion
     buildToolsVersion project.buildToolsVersion
@@ -32,12 +28,12 @@ clap {
     serverUrl 'http://10.0.14.53:8080/clap-rest'
     username 'pstepanov'
     password 'password'
-    instrument 'module1', 'module2'
+    instrument 'addLogs'
 
     custom {
         debug {
             username 'pstepanov-debug'
-            instrument 'debug-module1', 'debug-module2'
+            instrument 'sendLogs'
         }
         release {
             projectId 'release'
