@@ -10,7 +10,6 @@ import org.gradle.api.file.FileTree
 import org.gradle.api.tasks.compile.JavaCompile
 
 import java.security.MessageDigest
-import java.util.zip.ZipFile
 
 class Utils {
 
@@ -68,7 +67,7 @@ class Utils {
         buildConfigClass.detach()
     }
 
-    static List<String> getClassNamesFromDirectory(File directory) {
+    static List<String> getClassNames(File directory) {
         List<String> list = []
         directory.eachFileRecurse {
             String path = it.absolutePath as String
@@ -82,33 +81,6 @@ class Utils {
             }
         }
         return list
-    }
-
-    static List<String> getClassNamesFromJar(File jarFile) {
-        List<String> list = []
-        new ZipFile(jarFile).entries().each {
-            def matcher = (it.name =~ /(.*)\.class/)
-            if (!it.isDirectory() && matcher.matches()) {
-                String className = matcher.group(1).replaceAll('/', '.') as String
-                list << className
-            }
-        }
-        return list
-    }
-
-    static List<String> getClassNames(File file) {
-        if (file.isDirectory()) {
-            getClassNamesFromDirectory(file)
-        } else {
-            getClassNamesFromJar(file)
-        }
-    }
-
-    static List<String> getClassNames(JavaCompile javaCompileTask) {
-        List<String> list = getClassNamesFromDirectory(javaCompileTask.destinationDir)
-        javaCompileTask.classpath.inject(list) { List<String> classNames, File jarFile ->
-            classNames + getClassNames(jarFile)
-        }
     }
 
 }

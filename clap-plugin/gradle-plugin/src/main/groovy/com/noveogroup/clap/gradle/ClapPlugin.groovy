@@ -30,6 +30,7 @@ import com.noveogroup.clap.api.BuildConfigHelper
 import com.noveogroup.clap.gradle.config.ClapOptions
 import com.noveogroup.clap.gradle.config.CustomOptions
 import com.noveogroup.clap.gradle.config.Options
+import com.noveogroup.clap.gradle.instrument.Instrumentation
 import javassist.ClassPool
 import org.gradle.api.GradleException
 import org.gradle.api.Plugin
@@ -82,7 +83,9 @@ class ClapPlugin implements Plugin<Project> {
                 // add dependencies
                 project.dependencies.add("${customOptions.name}Compile", 'com.noveogroup.clap:clap-api:0.1')
                 Set<String> instrument = clap.instrument + customOptions.instrument
-                // todo collect dependencies from instruments
+                Instrumentation.getDependencies(instrument).each {
+                    project.dependencies.add("${customOptions.name}Compile", it)
+                }
             }
         }
 
@@ -107,11 +110,7 @@ class ClapPlugin implements Plugin<Project> {
 
                     // instrument classes
                     Set<String> instrument = clap.instrument + options.instrument
-                    // todo instrument code according to instruments
-
-                    println "----- ===== CLASSES ===== -----"
-                    println Utils.getClassNames(javaCompileTask).join("\n")
-                    println "----- ===== CLASSES ===== -----"
+                    Instrumentation.instrument(project, javaCompileTask, classPool, instrument)
                 }
             }
         }
