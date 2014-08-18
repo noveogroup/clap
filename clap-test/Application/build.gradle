@@ -25,14 +25,13 @@ android {
 clap {
 
     projectId 'com.noveogroup.clap.test'
-    serverUrl 'http://10.0.14.53:8080/clap-rest'
+    serverUrl 'http://10.0.14.53:8080/clap-rest/'
     username 'pstepanov'
     password 'password'
     instrument 'addLogs'
 
     custom {
         debug {
-            username 'pstepanov-debug'
             instrument 'sendLogs'
         }
         release {
