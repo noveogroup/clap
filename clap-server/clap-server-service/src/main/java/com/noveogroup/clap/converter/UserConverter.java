@@ -23,9 +23,9 @@ public class UserConverter {
 
     private MessagesConverter messagesConverter = new MessagesConverter();
 
-    public User map(final UserEntity userEntity,final ConfigBean configBean) {
+    public User map(final UserEntity userEntity, final ConfigBean configBean) {
         final User ret = new User();
-        map(ret, userEntity,configBean);
+        map(ret, userEntity, configBean);
         return ret;
     }
 
@@ -47,34 +47,51 @@ public class UserConverter {
         this.messagesConverter = messagesConverter;
     }
 
-    public UserWithPersistedAuth mapWithPersistedAuth(final UserEntity userEntity,final ConfigBean configBean) {
+    public UserWithPersistedAuth mapWithPersistedAuth(final UserEntity userEntity, final ConfigBean configBean) {
         final UserWithPersistedAuth ret = new UserWithPersistedAuth();
-        map(ret, userEntity,configBean);
+        map(ret, userEntity, configBean);
         ret.setToken(userEntity.getToken());
         return ret;
     }
 
-    private void map(final User toMap, final UserEntity mapWith,final ConfigBean configBean) {
+    private void map(final User toMap, final UserEntity mapWith, final ConfigBean configBean) {
         toMap.setLogin(mapWith.getLogin());
         toMap.setFullName(mapWith.getFullName());
         toMap.setRole(mapWith.getRole());
         List<ClapPermission> permissions = Lists.newArrayList();
-        permissions.addAll(mapWith.getClapPermissions());
+        if (mapWith.getClapPermissions() != null) {
+            permissions.addAll(mapWith.getClapPermissions());
+        }
         toMap.setClapPermissions(permissions);
         List<BaseMessage> messages = Lists.newArrayList();
         toMap.setUploadedMessages(messages);
-        for (BaseMessageEntity messageEntity : mapWith.getUploadedMessages()) {
-            messages.add(messagesConverter.map(messageEntity,configBean));
+        if (mapWith.getUploadedMessages() != null) {
+            for (BaseMessageEntity messageEntity : mapWith.getUploadedMessages()) {
+                final BaseMessage message = messagesConverter.map(messageEntity, configBean);
+                if (message != null) {
+                    messages.add(message);
+                }
+            }
         }
         List<Revision> mainRevisions = Lists.newArrayList();
         toMap.setUploadedMainRevisions(mainRevisions);
-        for (RevisionEntity revisionEntity : mapWith.getUploadedMainRevisions()) {
-            mainRevisions.add(revisionConverter.map(revisionEntity,false,configBean));
+        if (mapWith.getUploadedMainRevisions() != null) {
+            for (RevisionEntity revisionEntity : mapWith.getUploadedMainRevisions()) {
+                final Revision revision = revisionConverter.map(revisionEntity, false, configBean);
+                if (revision != null) {
+                    mainRevisions.add(revision);
+                }
+            }
         }
         List<Revision> specialRevisions = Lists.newArrayList();
         toMap.setUploadedSpecialRevisions(specialRevisions);
-        for (RevisionEntity revisionEntity : mapWith.getUploadedSpecialRevisions()) {
-            specialRevisions.add(revisionConverter.map(revisionEntity,false,configBean));
+        if (mapWith.getUploadedSpecialRevisions() != null) {
+            for (RevisionEntity revisionEntity : mapWith.getUploadedSpecialRevisions()) {
+                final Revision revision = revisionConverter.map(revisionEntity, false, configBean);
+                if (revision != null) {
+                    specialRevisions.add(revision);
+                }
+            }
         }
     }
 }
