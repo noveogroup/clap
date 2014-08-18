@@ -1,10 +1,18 @@
 package com.noveogroup.clap.gradle
 
 import com.noveogroup.clap.api.BuildConfigHelper
+import com.noveogroup.clap.gradle.config.Options
+import groovyx.net.http.ContentType
+import groovyx.net.http.HTTPBuilder
+import groovyx.net.http.Method
+import groovyx.net.http.RESTClient
 import javassist.ClassPool
 import javassist.CtClass
 import javassist.CtField
 import javassist.Modifier
+import org.apache.http.entity.mime.MultipartEntityBuilder
+import org.apache.http.entity.mime.content.FileBody
+import org.apache.http.entity.mime.content.StringBody
 import org.gradle.api.Project
 import org.gradle.api.file.FileTree
 import org.gradle.api.tasks.compile.JavaCompile
@@ -81,6 +89,28 @@ class Utils {
             }
         }
         return list
+    }
+
+    static boolean uploadApk(File apkFile, Options options, String hash) {
+        RESTClient clapREST = new RESTClient(options.serverUrl)
+        def authResponse = clapREST.post(path: 'auth',
+                body: [login: options.username, password: options.password],
+                requestContentType: ContentType.JSON)
+        String token = authResponse.data.text as String
+
+        HTTPBuilder httpBuilder = new HTTPBuilder("${options.serverUrl}")
+        def uploadResponse = httpBuilder.request(Method.POST, ContentType.TEXT) { request ->
+            uri.path = 'upload/revision'
+            requestContentType: 'multipart/form-data'
+            headers = ['Accept': 'application/json']
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create()
+            builder.addPart('projectExternalId', new StringBody(options.projectId))
+            builder.addPart('revisionHash', new StringBody(hash))
+            builder.addPart('token', new StringBody(token))
+            builder.addPart('mainPackage', new FileBody(apkFile))
+            request.entity = builder.build()
+        }
+        return uploadResponse.text != "true"
     }
 
 }

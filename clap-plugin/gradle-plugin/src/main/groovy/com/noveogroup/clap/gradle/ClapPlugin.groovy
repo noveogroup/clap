@@ -94,13 +94,7 @@ class ClapPlugin implements Plugin<Project> {
             Options options = clap.resolve(variant.buildType.name as String)
             String hash = hashValues[name] as String
             File apkFile = variant.variantData.outputFile
-
-            println "VARIANT: ${variant.name}"
-            println "OUTPUT FILE: $apkFile"
-            println "SERVER URL: ${options.serverUrl}"
-            println "USERNAME: ${options.username}"
-            println "PASSWORD: ${options.password}"
-            println "HASH: ${hash}"
+            Utils.uploadApk(apkFile, options, hash)
         }
 
         return uploadTask
