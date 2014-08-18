@@ -12,6 +12,7 @@ import com.noveogroup.clap.exception.WrapException;
 import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.model.project.ImagedProject;
 import com.noveogroup.clap.model.revision.Revision;
+import com.noveogroup.clap.model.revision.RevisionVariant;
 import com.noveogroup.clap.model.user.UserWithPersistedAuth;
 import com.noveogroup.clap.service.file.FileService;
 import com.noveogroup.clap.service.revision.RevisionService;
@@ -81,8 +82,8 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project save(final Project project) {
         final ProjectEntity projectEntity = projectDAO.findProjectByExternalIdOrReturnNull(project.getExternalId());
-        if(projectEntity != null){
-            projectConverter.updateEntity(project,projectEntity);
+        if (projectEntity != null) {
+            projectConverter.updateEntity(project, projectEntity);
             final ProjectEntity persisted = projectDAO.persist(projectEntity);
             projectDAO.flush();
             final Project ret = projectConverter.map(persisted);
@@ -138,7 +139,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void deleteProject(final Project project) {
         final ProjectEntity projectEntity = projectDAO.findById(project.getId());
-        for (RevisionEntity revisionEntity : projectEntity.getRevisions()){
+        for (final RevisionEntity revisionEntity : projectEntity.getRevisions()) {
             revisionService.deleteRevision(revisionEntity.getId());
         }
         projectDAO.removeById(project.getId());
@@ -153,15 +154,10 @@ public class ProjectServiceImpl implements ProjectService {
         final String token = userWithToken.getToken();
         final List<Revision> revisions = project.getRevisions();
         if (revisions != null) {
-            for (int i = 0; i < revisions.size(); i++) {
-                final Revision revision = revisions.get(i);
-                final RevisionEntity revisionEntityOrigin = projectEntity.getRevisions().get(i);
+            for (final Revision revision : revisions) {
                 revision.setProjectId(project.getId());
-                if (revisionEntityOrigin.isMainPackageLoaded()) {
-                    revision.setMainPackageUrl(urlService.createUrl(revision.getId(), true, token));
-                }
-                if (revisionEntityOrigin.isSpecialPackageLoaded()) {
-                    revision.setSpecialPackageUrl(urlService.createUrl(revision.getId(), false, token));
+                for (final RevisionVariant variant : revision.getVariants()) {
+                    variant.setPackageUrl(urlService.createUrl(revision.getId(), variant.getId(), token));
                 }
             }
         }

@@ -3,7 +3,7 @@ package com.noveogroup.clap.model.user;
 
 import com.google.common.collect.Lists;
 import com.noveogroup.clap.model.message.BaseMessage;
-import com.noveogroup.clap.model.revision.Revision;
+import com.noveogroup.clap.model.revision.RevisionVariant;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.List;
@@ -18,9 +18,7 @@ public class User extends BaseUser {
 
     private List<ClapPermission> clapPermissions;
 
-    private List<Revision> uploadedMainRevisions = Lists.newArrayList();
-
-    private List<Revision> uploadedSpecialRevisions = Lists.newArrayList();
+    private List<RevisionVariant> uploadedRevisionVariants = Lists.newArrayList();
 
     private List<BaseMessage> uploadedMessages = Lists.newArrayList();
 
@@ -48,20 +46,12 @@ public class User extends BaseUser {
         this.clapPermissions = clapPermissions;
     }
 
-    public List<Revision> getUploadedMainRevisions() {
-        return uploadedMainRevisions;
+    public List<RevisionVariant> getUploadedRevisionVariants() {
+        return uploadedRevisionVariants;
     }
 
-    public void setUploadedMainRevisions(final List<Revision> uploadedMainRevisions) {
-        this.uploadedMainRevisions = uploadedMainRevisions;
-    }
-
-    public List<Revision> getUploadedSpecialRevisions() {
-        return uploadedSpecialRevisions;
-    }
-
-    public void setUploadedSpecialRevisions(final List<Revision> uploadedSpecialRevisions) {
-        this.uploadedSpecialRevisions = uploadedSpecialRevisions;
+    public void setUploadedRevisionVariants(final List<RevisionVariant> uploadedRevisionVariants) {
+        this.uploadedRevisionVariants = uploadedRevisionVariants;
     }
 
     public List<BaseMessage> getUploadedMessages() {

@@ -3,7 +3,6 @@ package com.noveogroup.clap.entity.revision;
 import com.noveogroup.clap.entity.BaseEntity;
 import com.noveogroup.clap.entity.message.BaseMessageEntity;
 import com.noveogroup.clap.entity.project.ProjectEntity;
-import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.model.revision.RevisionType;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
@@ -40,26 +39,15 @@ public class RevisionEntity extends BaseEntity {
     @Column(name = "hash", unique = true, nullable = false)
     private String hash;
 
-    @Column(name = "main_package", nullable = true)
-    private String mainPackageFileUrl;
-
-    @Column(name = "special_package", nullable = true)
-    private String specialPackageFileUrl;
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "revision", orphanRemoval = true)
     private List<BaseMessageEntity> messages;
 
-    @Column(name = "apk_structure", length = COLUMN_LENGTH)
-    private String apkStructureJSON;
 
     @ManyToOne(optional = false)
     private ProjectEntity project;
 
-    @ManyToOne(optional = true)
-    private UserEntity mainPackageUploadedBy;
-
-    @ManyToOne(optional = true)
-    private UserEntity specialPackageUploadedBy;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "revision", orphanRemoval = true)
+    private List<RevisionVariantEntity> variants;
 
     /**
      * Constructor
@@ -91,13 +79,6 @@ public class RevisionEntity extends BaseEntity {
         this.project = projectEntity;
     }
 
-    public boolean isMainPackageLoaded() {
-        return mainPackageFileUrl != null;
-    }
-
-    public boolean isSpecialPackageLoaded() {
-        return specialPackageFileUrl != null;
-    }
 
     public String getHash() {
         return hash;
@@ -116,44 +97,14 @@ public class RevisionEntity extends BaseEntity {
         this.timestamp = timestamp;
     }
 
-    public String getApkStructureJSON() {
-        return apkStructureJSON;
+
+
+    public List<RevisionVariantEntity> getVariants() {
+        return variants;
     }
 
-    public void setApkStructureJSON(final String apkStructureJSON) {
-        this.apkStructureJSON = apkStructureJSON;
-    }
-
-    public UserEntity getMainPackageUploadedBy() {
-        return mainPackageUploadedBy;
-    }
-
-    public void setMainPackageUploadedBy(final UserEntity mainPackageUploadedBy) {
-        this.mainPackageUploadedBy = mainPackageUploadedBy;
-    }
-
-    public UserEntity getSpecialPackageUploadedBy() {
-        return specialPackageUploadedBy;
-    }
-
-    public void setSpecialPackageUploadedBy(final UserEntity specialPackageUploadedBy) {
-        this.specialPackageUploadedBy = specialPackageUploadedBy;
-    }
-
-    public String getMainPackageFileUrl() {
-        return mainPackageFileUrl;
-    }
-
-    public void setMainPackageFileUrl(final String mainPackageFileUrl) {
-        this.mainPackageFileUrl = mainPackageFileUrl;
-    }
-
-    public String getSpecialPackageFileUrl() {
-        return specialPackageFileUrl;
-    }
-
-    public void setSpecialPackageFileUrl(final String specialPackageFileUrl) {
-        this.specialPackageFileUrl = specialPackageFileUrl;
+    public void setVariants(final List<RevisionVariantEntity> variants) {
+        this.variants = variants;
     }
 
     @Override
@@ -162,13 +113,8 @@ public class RevisionEntity extends BaseEntity {
                 .append("timestamp", timestamp)
                 .append("revisionType", revisionType)
                 .append("hash", hash)
-                .append("mainPackage", mainPackageFileUrl)
-                .append("specialPackage", specialPackageFileUrl)
                 .append("messages", messages)
-                .append("apkStructureJSON", apkStructureJSON)
                 .append("project", project)
-                .append("mainPackageUploadedBy", mainPackageUploadedBy)
-                .append("specialPackageUploadedBy", specialPackageUploadedBy)
                 .toString();
     }
 }

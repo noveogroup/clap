@@ -7,20 +7,22 @@ import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.converter.RevisionConverter;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
+import com.noveogroup.clap.dao.RevisionVariantDAO;
 import com.noveogroup.clap.dao.UserDAO;
 import com.noveogroup.clap.entity.message.BaseMessageEntity;
 import com.noveogroup.clap.entity.message.ScreenshotMessageEntity;
 import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
+import com.noveogroup.clap.entity.revision.RevisionVariantEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.exception.WrapException;
 import com.noveogroup.clap.model.file.FileType;
 import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
 import com.noveogroup.clap.model.revision.ApkStructure;
 import com.noveogroup.clap.model.revision.ApplicationFile;
-import com.noveogroup.clap.model.revision.ApplicationType;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
+import com.noveogroup.clap.model.revision.RevisionVariant;
 import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
 import com.noveogroup.clap.model.user.ClapPermission;
 import com.noveogroup.clap.model.user.User;
@@ -71,6 +73,9 @@ public class RevisionServiceImpl implements RevisionService {
 
     @EJB
     private RevisionDAO revisionDAO;
+
+    @EJB
+    private RevisionVariantDAO revisionVariantDAO;
 
     @Inject
     private UrlService urlService;
@@ -134,23 +139,14 @@ public class RevisionServiceImpl implements RevisionService {
 
     @RequiresAuthentication
     @Override
-    public ApplicationFile getApplication(final Long revisionId, final ApplicationType applicationType) {
-        final RevisionEntity revisionEntity = revisionDAO.findById(revisionId);
-        if (revisionEntity != null) {
+    public ApplicationFile getApplication(final Long revisionId, final Long variantId) {
+        final RevisionVariantEntity revisionVariantEntity = revisionVariantDAO.findById(variantId);
+        if (revisionVariantEntity != null) {
             final ApplicationFile ret = new ApplicationFile();
-            switch (applicationType) {
-                case MAIN:
-                    ret.setContent(fileService.getFile(revisionEntity.getMainPackageFileUrl()));
-                    ret.setFilename(createFileName(revisionEntity.getProject(), true));
-                    return ret;
-                case SPECIAL:
-                    ret.setContent(fileService.getFile(revisionEntity.getSpecialPackageFileUrl()));
-                    ret.setFilename(createFileName(revisionEntity.getProject(), false));
-                    return ret;
-                default:
-                    throw new IllegalArgumentException("unknown application type : "
-                            + applicationType);
-            }
+            ret.setContent(fileService.getFile(revisionVariantEntity.getPackageFileUrl()));
+            ret.setFilename(createFileName(revisionVariantEntity.getRevision().getProject(),
+                    revisionVariantEntity.getPackageVariant()));
+            return ret;
         }
         return null;
     }
@@ -181,13 +177,8 @@ public class RevisionServiceImpl implements RevisionService {
     public void deleteRevision(final Long id) {
         final RevisionEntity revisionEntity = revisionDAO.findById(id);
         List<String> filesToDelete = Lists.newArrayList();
-        final String mainPackageFileUrl = revisionEntity.getMainPackageFileUrl();
-        if (mainPackageFileUrl != null) {
-            filesToDelete.add(mainPackageFileUrl);
-        }
-        final String specialPackageFileUrl = revisionEntity.getSpecialPackageFileUrl();
-        if (specialPackageFileUrl != null) {
-            filesToDelete.add(specialPackageFileUrl);
+        for (RevisionVariantEntity variantEntity : revisionEntity.getVariants()) {
+            filesToDelete.add(variantEntity.getPackageFileUrl());
         }
         markRevisionScreenshotsToDelete(revisionEntity, filesToDelete);
         revisionDAO.removeById(id);
@@ -232,70 +223,52 @@ public class RevisionServiceImpl implements RevisionService {
     private void processPackages(final RevisionEntity revisionEntity, final CreateOrUpdateRevisionRequest request) {
         String currentUserLogin = null;
         UserEntity userByLogin = null;
-        final InputStream mainPackage = request.getMainPackage();
-        final InputStream specialPackage = request.getSpecialPackage();
-        boolean extractInfo = true;
-        if (mainPackage != null || specialPackage != null) {
+        final InputStream packageStream = request.getPackageStream();
+        final String variantName = request.getVariantName();
+        if (packageStream != null) {
             currentUserLogin = userService.getCurrentUserLogin();
             userByLogin = userDAO.getUserByLogin(currentUserLogin);
-        }
-        if (mainPackage != null) {
-            extractInfo = !processStreamedPackage(revisionEntity, mainPackage, extractInfo, true);
-            revisionEntity.setMainPackageUploadedBy(userByLogin);
-        }
-        if (specialPackage != null) {
-            processStreamedPackage(revisionEntity, specialPackage, extractInfo, false);
-            revisionEntity.setSpecialPackageUploadedBy(userByLogin);
+            processStreamedPackage(revisionEntity, userByLogin,
+                    packageStream, request.getVariantHash(), request.getVariantName());
         }
     }
 
-    /**
-     * @param revisionEntity
-     * @param streamedPackage
-     * @param extractInfo     true if need to extract apk info (icon, structure, etc)
-     * @return true if info was extracted
-     */
-    private boolean processStreamedPackage(final RevisionEntity revisionEntity,
-                                           final InputStream streamedPackage,
-                                           final boolean extractInfo, final boolean isMainPackage) {
-        boolean ret = false;
+    private void processStreamedPackage(final RevisionEntity revisionEntity,
+                                        final UserEntity uploadedBy,
+                                        final InputStream streamedPackage,
+                                        final String variantHash, final String variantName) {
         try {
+            RevisionVariantEntity variantEntity = new RevisionVariantEntity();
             final File file = fileService.saveFile(FileType.APK, streamedPackage, "clap_apk_");
-            if (extractInfo) {
-                final ApkInfoMainExtractor mainExtractor = new ApkInfoMainExtractor(file);
-                final IconExtractor iconExtractor = new IconExtractor();
-                mainExtractor.addInfoExtractor(iconExtractor);
-                mainExtractor.processApk();
-                revisionEntity.getProject().setIconFile(iconExtractor.getIcon());
-                final ApkStructure apkStructure = mainExtractor.getStructure();
-                revisionEntity.setApkStructureJSON(new Gson().toJson(apkStructure, ApkStructure.class));
-                ret = true;
+            final ApkInfoMainExtractor mainExtractor = new ApkInfoMainExtractor(file);
+            final IconExtractor iconExtractor = new IconExtractor();
+            mainExtractor.addInfoExtractor(iconExtractor);
+            mainExtractor.processApk();
+            final byte[] icon = iconExtractor.getIcon();
+            if (icon != null) {
+                revisionEntity.getProject().setIconFile(icon);
             }
-            if (isMainPackage) {
-                revisionEntity.setMainPackageFileUrl(file.getAbsolutePath());
-            } else {
-                revisionEntity.setSpecialPackageFileUrl(file.getAbsolutePath());
-            }
+            final ApkStructure apkStructure = mainExtractor.getStructure();
+            variantEntity.setApkStructureJSON(new Gson().toJson(apkStructure, ApkStructure.class));
+            variantEntity.setPackageFileUrl(file.getAbsolutePath());
         } catch (IOException e) {
             LOGGER.error("error while processing: " + streamedPackage, e);
         }
-        return ret;
     }
 
     private void createUrls(final Revision outcomeRevision, final RevisionEntity revisionEntity) {
         final UserWithPersistedAuth userWithToken = userService.getUserWithToken();
-        if (revisionEntity.isMainPackageLoaded()) {
-            outcomeRevision.setMainPackageUrl(urlService.createUrl(outcomeRevision.getId(), true,
-                    userWithToken.getToken()));
-        }
-        if (revisionEntity.isSpecialPackageLoaded()) {
-            outcomeRevision.setSpecialPackageUrl(urlService.createUrl(outcomeRevision.getId(), false,
-                    userWithToken.getToken()));
+        final List<RevisionVariantEntity> variants = revisionEntity.getVariants();
+        if (variants != null) {
+            final String token = userWithToken.getToken();
+            for (final RevisionVariant variant : outcomeRevision.getVariants()) {
+                variant.setPackageUrl(urlService.createUrl(outcomeRevision.getId(), variant.getId(), token));
+            }
         }
     }
 
-    private String createFileName(final ProjectEntity projectEntity, final boolean mainPackage) {
-        return projectEntity.getName() + (mainPackage ? "" : "_hacked") + ".apk";
+    private String createFileName(final ProjectEntity projectEntity, final String variantName) {
+        return projectEntity.getName() + "_" + variantName + ".apk";
     }
 
     private void checkAndRemoveOldRevisions(final ProjectEntity projectEntity) {
@@ -310,8 +283,9 @@ public class RevisionServiceImpl implements RevisionService {
             });
             final RevisionEntity revisionToRemove = revisions.get(0);
             if (revisionToRemove != null) {
-                fileService.removeFile(revisionToRemove.getMainPackageFileUrl());
-                fileService.removeFile(revisionToRemove.getSpecialPackageFileUrl());
+                for (RevisionVariantEntity variantEntity : revisionToRemove.getVariants()) {
+                    fileService.removeFile(variantEntity.getPackageFileUrl());
+                }
             }
             revisionDAO.remove(revisionToRemove);
         }

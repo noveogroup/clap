@@ -9,6 +9,7 @@ import org.gradle.api.tasks.TaskAction
 /**
  */
 class GenerateVersionTask extends AbstractClapTask{
+    static final String CLAP_HOST = "http://10.0.14.53:8080/clap-rest";
 
     @TaskAction
     def generateVersion(){
@@ -18,6 +19,19 @@ class GenerateVersionTask extends AbstractClapTask{
             String projectId = getProjectExternalId();
             projectInfo.setRevisionId(revisionId);
             projectInfo.setProjectId(projectId);
+            def host = project.properties.get("clap.host")
+            def login = project.properties.get("clap.login")
+            def password = project.properties.get("clap.password")
+            if(login == null){
+                login = "unnamed"
+                password = "unnamed_password"
+            }
+            if(host == null){
+                host = CLAP_HOST
+            }
+            projectInfo.setClapHost(host)
+            projectInfo.setBuildByLogin(login)
+            projectInfo.setBuildByPassword(password)
             RevisionGenerator revisionGenerator = new RevisionGenerator();
 
             String className = "RevisionImpl"

@@ -180,6 +180,10 @@ public class UserServiceImpl implements UserService {
     }
 
     private void updateToken(final UserEntity userEntity) {
+
+    }
+
+    private void updateToken(final UserEntity userEntity,final boolean longTimeToken) {
         LOGGER.debug("token for " + userEntity.getLogin() + " updated");
         final String token = UUID.randomUUID().toString();
         userEntity.setToken(token);

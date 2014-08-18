@@ -14,12 +14,14 @@ import com.noveogroup.clap.model.message.ScreenshotMessage;
 import com.noveogroup.clap.model.revision.ApkEntry;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
+import com.noveogroup.clap.model.revision.RevisionVariantWithApkStructure;
 import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
 import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.projects.ProjectsModel;
+import com.noveogroup.clap.web.model.revisions.RevisionPackageModel;
 import com.noveogroup.clap.web.model.revisions.RevisionsListDataModel;
 import com.noveogroup.clap.web.model.revisions.RevisionsModel;
 import com.noveogroup.clap.web.model.user.UserSessionData;
@@ -74,7 +76,6 @@ public class RevisionsController extends BaseController {
         if (isAjaxRequest()) {
             return;
         }
-        revisionsModel.reset();
         final Revision selectedRevision = revisionsModel.getSelectedRevision();
         if (selectedRevision != null) {
             projectsController.setSelectedProject(selectedRevision.getProjectId());
@@ -84,7 +85,8 @@ public class RevisionsController extends BaseController {
             revisionsModel.getSelectedRevCrashes().clear();
             revisionsModel.getSelectedRevScreenshots().clear();
             revisionsModel.getSelectedRevLogs().clear();
-            for (BaseMessage message : revWithApkStructure.getMessages()) {
+            revisionsModel.getVariants().clear();
+            for (final BaseMessage message : revWithApkStructure.getMessages()) {
                 if (message instanceof CrashMessage) {
                     revisionsModel.getSelectedRevCrashes().add((CrashMessage) message);
                 }
@@ -95,11 +97,12 @@ public class RevisionsController extends BaseController {
                     revisionsModel.getSelectedRevLogs().add((LogsBunchMessage) message);
                 }
             }
-            if (revWithApkStructure.getApkStructure() != null) {
-                revisionsModel.setSelectedRevisionApkStructure(
-                        createApkStructureTree(null, revWithApkStructure.getApkStructure().getRootEntry()));
+            for(final RevisionVariantWithApkStructure var : revWithApkStructure.getVariantWithApkStructureList()){
+                final RevisionPackageModel packageModel = new RevisionPackageModel();
+                packageModel.setApkQRCode(getQRCodeFromUrl(var.getPackageUrl()));
+                createApkStructureTree(null, var.getApkStructure().getRootEntry());
+                revisionsModel.getVariants().add(packageModel);
             }
-            updateQRCodes(revisionsModel.getSelectedRevision());
             populateRevisionTypesList();
             LOGGER.debug(selectedRevision.getId() + " revision preparing finished");
         } else {
@@ -137,13 +140,6 @@ public class RevisionsController extends BaseController {
         redirectTo(Navigation.PROJECT);
     }
 
-    private void updateQRCodes(final Revision revision) throws IOException, WriterException {
-        if (revision != null) {
-            revisionsModel.getCleanPackageModel().setApkQRCode(getQRCodeFromUrl(revision.getMainPackageUrl()));
-            revisionsModel.getHackedPackageModel().setApkQRCode(getQRCodeFromUrl(revision.getSpecialPackageUrl()));
-        }
-    }
-
     private StreamedContent getQRCodeFromUrl(final String url) throws WriterException, IOException {
         if (StringUtils.isNotEmpty(url)) {
             final ByteArrayOutputStream buf = new ByteArrayOutputStream();
@@ -167,8 +163,7 @@ public class RevisionsController extends BaseController {
         final User user = userSessionData.getUser();
         if (user != null) {
             final List<Revision> userRevisions = Lists.newArrayList();
-            userRevisions.addAll(user.getUploadedMainRevisions());
-            userRevisions.addAll(user.getUploadedSpecialRevisions());
+            //TODO it
             revisionsModel.setRevisionsListDataModel(
                     new RevisionsListDataModel(userRevisions));
         } else {

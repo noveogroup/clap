@@ -18,13 +18,17 @@ public class CreateOrUpdateRevisionRequest {
     @PartType("text/plain")
     private String revisionHash;
 
-    @FormParam("mainPackage")
-    @PartType("application/octet-stream")
-    private InputStream mainPackage;
+    @FormParam("variantHash")
+    @PartType("text/plain")
+    private String variantHash;
 
-    @FormParam("specialPackage")
+    @FormParam("packageStream")
     @PartType("application/octet-stream")
-    private InputStream specialPackage;
+    private InputStream packageStream;
+
+    @FormParam("token")
+    @PartType("text/plain")
+    private String variantName;
 
     @FormParam("token")
     @PartType("text/plain")
@@ -54,20 +58,27 @@ public class CreateOrUpdateRevisionRequest {
         this.revisionHash = revisionHash;
     }
 
-    public InputStream getMainPackage() {
-        return mainPackage;
+    public InputStream getPackageStream() {
+        return packageStream;
     }
 
-    public void setMainPackage(final InputStream mainPackage) {
-        this.mainPackage = mainPackage;
+    public void setPackageStream(final InputStream packageStream) {
+        this.packageStream = packageStream;
     }
 
-    public InputStream getSpecialPackage() {
-        return specialPackage;
+    public String getVariantName() {
+        return variantName;
     }
 
-    public void setSpecialPackage(final InputStream specialPackage) {
-        this.specialPackage = specialPackage;
+    public void setVariantName(final String variantName) {
+        this.variantName = variantName;
     }
 
+    public String getVariantHash() {
+        return variantHash;
+    }
+
+    public void setVariantHash(final String variantHash) {
+        this.variantHash = variantHash;
+    }
 }

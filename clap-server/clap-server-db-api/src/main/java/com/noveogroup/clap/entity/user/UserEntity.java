@@ -2,7 +2,7 @@ package com.noveogroup.clap.entity.user;
 
 import com.noveogroup.clap.entity.BaseEntity;
 import com.noveogroup.clap.entity.message.BaseMessageEntity;
-import com.noveogroup.clap.entity.revision.RevisionEntity;
+import com.noveogroup.clap.entity.revision.RevisionVariantEntity;
 import com.noveogroup.clap.model.user.ClapPermission;
 import com.noveogroup.clap.model.user.Role;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -48,11 +48,8 @@ public class UserEntity extends BaseEntity {
     @ElementCollection(targetClass = ClapPermission.class)
     private List<ClapPermission> clapPermissions;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "mainPackageUploadedBy")
-    private List<RevisionEntity> uploadedMainRevisions;
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "specialPackageUploadedBy")
-    private List<RevisionEntity> uploadedSpecialRevisions;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "packageUploadedBy")
+    private List<RevisionVariantEntity> uploadedRevisionVariants;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "uploadedBy")
     private List<BaseMessageEntity> uploadedMessages;
@@ -97,22 +94,6 @@ public class UserEntity extends BaseEntity {
         this.hashedPassword = hashedPassword;
     }
 
-    public List<RevisionEntity> getUploadedMainRevisions() {
-        return uploadedMainRevisions;
-    }
-
-    public void setUploadedMainRevisions(final List<RevisionEntity> uploadedMainRevisions) {
-        this.uploadedMainRevisions = uploadedMainRevisions;
-    }
-
-    public List<RevisionEntity> getUploadedSpecialRevisions() {
-        return uploadedSpecialRevisions;
-    }
-
-    public void setUploadedSpecialRevisions(final List<RevisionEntity> uploadedSpecialRevisions) {
-        this.uploadedSpecialRevisions = uploadedSpecialRevisions;
-    }
-
     public List<BaseMessageEntity> getUploadedMessages() {
         return uploadedMessages;
     }
@@ -127,6 +108,14 @@ public class UserEntity extends BaseEntity {
 
     public void setClapPermissions(final List<ClapPermission> clapPermissions) {
         this.clapPermissions = clapPermissions;
+    }
+
+    public List<RevisionVariantEntity> getUploadedRevisionVariants() {
+        return uploadedRevisionVariants;
+    }
+
+    public void setUploadedRevisionVariants(final List<RevisionVariantEntity> uploadedRevisionVariants) {
+        this.uploadedRevisionVariants = uploadedRevisionVariants;
     }
 
     @Override

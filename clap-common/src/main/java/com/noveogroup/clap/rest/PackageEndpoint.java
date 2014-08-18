@@ -14,7 +14,8 @@ import javax.ws.rs.core.Response;
 public interface PackageEndpoint {
 
     @GET
-    @Path("/{id}/{type}")
+    @Path("/{revId}/{variantId}")
     @Produces("application/vnd.android.package-archive")
-    Response downloadAPK(@PathParam("id") long id, @PathParam("type") int type, @QueryParam("token") String token);
+    Response downloadAPK(@PathParam("revId") long revId,
+                         @PathParam("variantId") long variantId, @QueryParam("token") String token);
 }

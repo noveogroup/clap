@@ -33,7 +33,7 @@ public abstract class MethodGenerator {
 
     public abstract void generateMethodBody();
 
-    protected void generateDefaultVersion() {
+    protected void generateDefaultImplementation() {
         JFieldVar field = jDefinedClass.field(JMod.PRIVATE | JMod.STATIC | JMod.FINAL, method.getReturnType(), annotation.parameterName(), dataProvider.getData(projectInfo));
         JMethod jMethod = jDefinedClass.method(JMod.PUBLIC, method.getReturnType(), method.getName());
         jMethod.annotate(Override.class);

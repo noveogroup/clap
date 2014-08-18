@@ -61,11 +61,12 @@ public class UploaderMojo extends AbstractClapMojo {
 
                 CreateOrUpdateRevisionRequest createOrUpdateRevisionRequest = new CreateOrUpdateRevisionRequest();
                 createOrUpdateRevisionRequest.setToken(token);
+                /*
                 if (isMainPackage) {
                     createOrUpdateRevisionRequest.setMainPackage(data);
                 } else {
                     createOrUpdateRevisionRequest.setSpecialPackage(data);
-                }
+                } */
                 createOrUpdateRevisionRequest.setRevisionHash(revisionId);
                 createOrUpdateRevisionRequest.setProjectExternalId(projectId);
                 final boolean created = uploadFileEndpoint.createOrUpdateRevision(createOrUpdateRevisionRequest);

@@ -6,7 +6,6 @@ import com.noveogroup.clap.model.message.CrashMessage;
 import com.noveogroup.clap.model.message.LogsBunchMessage;
 import com.noveogroup.clap.model.message.ScreenshotMessage;
 import com.noveogroup.clap.model.revision.Revision;
-import org.primefaces.model.TreeNode;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.SelectItem;
@@ -20,23 +19,12 @@ public class RevisionsModel implements Serializable {
 
     private RevisionsListDataModel revisionsListDataModel;
     private Revision selectedRevision;
-    private TreeNode selectedRevisionApkStructure;
     private List<SelectItem> revisionTypes;
 
     private final List<CrashMessage> selectedRevCrashes = Lists.newArrayList();
     private final List<ScreenshotMessage> selectedRevScreenshots = Lists.newArrayList();
     private final List<LogsBunchMessage> selectedRevLogs = Lists.newArrayList();
-
-    private RevisionPackageModel cleanPackageModel = new RevisionPackageModel();
-    private RevisionPackageModel hackedPackageModel = new RevisionPackageModel();
-
-
-    public void reset() {
-        cleanPackageModel = new RevisionPackageModel();
-        hackedPackageModel = new RevisionPackageModel();
-        selectedRevisionApkStructure = null;
-    }
-
+    private final List<RevisionPackageModel> variants = Lists.newArrayList();
 
     public RevisionsListDataModel getRevisionsListDataModel() {
         return revisionsListDataModel;
@@ -52,22 +40,6 @@ public class RevisionsModel implements Serializable {
 
     public void setSelectedRevision(final Revision selectedRevision) {
         this.selectedRevision = selectedRevision;
-    }
-
-    public TreeNode getSelectedRevisionApkStructure() {
-        return selectedRevisionApkStructure;
-    }
-
-    public void setSelectedRevisionApkStructure(final TreeNode selectedRevisionApkStructure) {
-        this.selectedRevisionApkStructure = selectedRevisionApkStructure;
-    }
-
-    public RevisionPackageModel getCleanPackageModel() {
-        return cleanPackageModel;
-    }
-
-    public RevisionPackageModel getHackedPackageModel() {
-        return hackedPackageModel;
     }
 
     public List<SelectItem> getRevisionTypes() {
@@ -88,5 +60,9 @@ public class RevisionsModel implements Serializable {
 
     public List<LogsBunchMessage> getSelectedRevLogs() {
         return selectedRevLogs;
+    }
+
+    public List<RevisionPackageModel> getVariants() {
+        return variants;
     }
 }

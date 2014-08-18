@@ -1,7 +1,6 @@
 package com.noveogroup.clap.rest;
 
 import com.noveogroup.clap.model.revision.ApplicationFile;
-import com.noveogroup.clap.model.revision.ApplicationType;
 import com.noveogroup.clap.service.revision.RevisionService;
 
 import javax.enterprise.context.ApplicationScoped;
@@ -18,10 +17,9 @@ public class PackageEndpointImpl extends BaseEndpoint implements PackageEndpoint
     private RevisionService revisionService;
 
     @Override
-    public Response downloadAPK(final long id, final int type, final String token) {
-        final ApplicationType applicationType = type == 0 ? ApplicationType.MAIN : ApplicationType.SPECIAL;
+    public Response downloadAPK(final long revId, final long variantId, final String token) {
         login(token);
-        final ApplicationFile application = revisionService.getApplication(id, applicationType);
+        final ApplicationFile application = revisionService.getApplication(revId, variantId);
         return Response.ok(application.getContent()).header("Content-Disposition",
                 "attachment; filename=\"" + application.getFilename() + "\"").build();
     }

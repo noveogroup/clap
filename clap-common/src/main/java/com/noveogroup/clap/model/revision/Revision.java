@@ -4,14 +4,11 @@ import com.noveogroup.clap.model.BaseModel;
 import com.noveogroup.clap.model.message.BaseMessage;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;
 
 /**
  * @author Mikhail Demidov
  */
-@XmlRootElement
 public class Revision extends BaseModel {
 
     private Long timestamp;
@@ -24,19 +21,8 @@ public class Revision extends BaseModel {
 
     private String hash;
 
-    private String mainPackageUrl;
+    private List<RevisionVariant> variants;
 
-    private String specialPackageUrl;
-
-    private String mainPackageUploadedBy;
-
-    private String specialPackageUploadedBy;
-
-
-    public Revision() {
-    }
-
-    @XmlElement
     public RevisionType getRevisionType() {
         return revisionType;
     }
@@ -45,7 +31,6 @@ public class Revision extends BaseModel {
         this.revisionType = revisionType;
     }
 
-    @XmlElement
     public List<BaseMessage> getMessages() {
         return messages;
     }
@@ -54,7 +39,6 @@ public class Revision extends BaseModel {
         this.messages = messages;
     }
 
-    @XmlElement
     public Long getProjectId() {
         return projectId;
     }
@@ -63,25 +47,6 @@ public class Revision extends BaseModel {
         this.projectId = projectId;
     }
 
-    @XmlElement
-    public String getMainPackageUrl() {
-        return mainPackageUrl;
-    }
-
-    public void setMainPackageUrl(final String mainPackageUrl) {
-        this.mainPackageUrl = mainPackageUrl;
-    }
-
-    @XmlElement
-    public String getSpecialPackageUrl() {
-        return specialPackageUrl;
-    }
-
-    public void setSpecialPackageUrl(final String specialPackageUrl) {
-        this.specialPackageUrl = specialPackageUrl;
-    }
-
-    @XmlElement
     public Long getTimestamp() {
         return timestamp;
     }
@@ -90,7 +55,6 @@ public class Revision extends BaseModel {
         this.timestamp = timestamp;
     }
 
-    @XmlElement
     public String getHash() {
         return hash;
     }
@@ -100,24 +64,13 @@ public class Revision extends BaseModel {
     }
 
 
-    @XmlElement
-    public String getMainPackageUploadedBy() {
-        return mainPackageUploadedBy;
+    public List<RevisionVariant> getVariants() {
+        return variants;
     }
 
-    public void setMainPackageUploadedBy(final String mainPackageUploadedBy) {
-        this.mainPackageUploadedBy = mainPackageUploadedBy;
+    public void setVariants(final List<RevisionVariant> variants) {
+        this.variants = variants;
     }
-
-    @XmlElement
-    public String getSpecialPackageUploadedBy() {
-        return specialPackageUploadedBy;
-    }
-
-    public void setSpecialPackageUploadedBy(final String specialPackageUploadedBy) {
-        this.specialPackageUploadedBy = specialPackageUploadedBy;
-    }
-
 
     @Override
     public String toString() {
@@ -127,10 +80,6 @@ public class Revision extends BaseModel {
                 .append("messages", messages)
                 .append("projectId", projectId)
                 .append("hash", hash)
-                .append("mainPackageUrl", mainPackageUrl)
-                .append("specialPackageUrl", specialPackageUrl)
-                .append("mainPackageUploadedBy", mainPackageUploadedBy)
-                .append("specialPackageUploadedBy", specialPackageUploadedBy)
                 .toString();
     }
 }

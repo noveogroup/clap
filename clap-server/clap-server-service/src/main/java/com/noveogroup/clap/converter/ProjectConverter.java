@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * @author Andrey Sokolov
  */
-public class ProjectConverter extends BaseConverter{
+public class ProjectConverter extends BaseConverter<Project,ProjectEntity>{
 
     private RevisionConverter revisionConverter = new RevisionConverter();
 

@@ -3,10 +3,10 @@ package com.noveogroup.clap.converter;
 import com.google.common.collect.Lists;
 import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.entity.message.BaseMessageEntity;
-import com.noveogroup.clap.entity.revision.RevisionEntity;
+import com.noveogroup.clap.entity.revision.RevisionVariantEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.model.message.BaseMessage;
-import com.noveogroup.clap.model.revision.Revision;
+import com.noveogroup.clap.model.revision.RevisionVariant;
 import com.noveogroup.clap.model.user.ClapPermission;
 import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.model.user.UserCreationModel;
@@ -20,6 +20,7 @@ import java.util.List;
 public class UserConverter {
 
     private RevisionConverter revisionConverter = new RevisionConverter();
+    private RevisionVariantConverter variantConverter = new RevisionVariantConverter();
 
     private MessagesConverter messagesConverter = new MessagesConverter();
 
@@ -73,23 +74,13 @@ public class UserConverter {
                 }
             }
         }
-        List<Revision> mainRevisions = Lists.newArrayList();
-        toMap.setUploadedMainRevisions(mainRevisions);
-        if (mapWith.getUploadedMainRevisions() != null) {
-            for (RevisionEntity revisionEntity : mapWith.getUploadedMainRevisions()) {
-                final Revision revision = revisionConverter.map(revisionEntity, false, configBean);
+        List<RevisionVariant> uploadedVariants = Lists.newArrayList();
+        toMap.setUploadedRevisionVariants(uploadedVariants);
+        if (mapWith.getUploadedRevisionVariants() != null) {
+            for (RevisionVariantEntity revisionEntity : mapWith.getUploadedRevisionVariants()) {
+                final RevisionVariant revision = variantConverter.map(revisionEntity);
                 if (revision != null) {
-                    mainRevisions.add(revision);
-                }
-            }
-        }
-        List<Revision> specialRevisions = Lists.newArrayList();
-        toMap.setUploadedSpecialRevisions(specialRevisions);
-        if (mapWith.getUploadedSpecialRevisions() != null) {
-            for (RevisionEntity revisionEntity : mapWith.getUploadedSpecialRevisions()) {
-                final Revision revision = revisionConverter.map(revisionEntity, false, configBean);
-                if (revision != null) {
-                    specialRevisions.add(revision);
+                    uploadedVariants.add(revision);
                 }
             }
         }
