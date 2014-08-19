@@ -1,30 +1,26 @@
 package com.noveogroup.clap.model.message;
 
 
+import com.noveogroup.clap.model.message.log.LogEntry;
+
+import java.util.List;
+
 /**
  * @author Mikhail Demidov
  */
 public class CrashMessage extends BaseMessage {
 
-    private String deviceInfo;
-    private String stackTraceInfo;
+    private String exception;
     private String logCat;
-    private String activityTraceLog;
+    private List<ThreadInfo> threads;
+    private List<LogEntry> logs;
 
-    public String getDeviceInfo() {
-        return deviceInfo;
+    public String getException() {
+        return exception;
     }
 
-    public void setDeviceInfo(final String deviceInfo) {
-        this.deviceInfo = deviceInfo;
-    }
-
-    public String getStackTraceInfo() {
-        return stackTraceInfo;
-    }
-
-    public void setStackTraceInfo(final String stackTraceInfo) {
-        this.stackTraceInfo = stackTraceInfo;
+    public void setException(final String exception) {
+        this.exception = exception;
     }
 
     public String getLogCat() {
@@ -35,24 +31,19 @@ public class CrashMessage extends BaseMessage {
         this.logCat = logCat;
     }
 
-    public String getActivityTraceLog() {
-        return activityTraceLog;
+    public List<ThreadInfo> getThreads() {
+        return threads;
     }
 
-    public void setActivityTraceLog(final String activityTraceLog) {
-        this.activityTraceLog = activityTraceLog;
+    public void setThreads(final List<ThreadInfo> threads) {
+        this.threads = threads;
     }
 
-    @Override
-    public String toString() {
-        final StringBuilder sb = new StringBuilder("Message{");
-        sb.append("timestamp=").append(timestamp);
-        sb.append(", deviceInfo='").append(deviceInfo).append('\'');
-        sb.append(", stackTraceInfo='").append(stackTraceInfo).append('\'');
-        sb.append(", logCat='").append(logCat).append('\'');
-        sb.append(", activityTraceLog='").append(activityTraceLog).append('\'');
-        sb.append('}');
-        return sb.toString();
+    public List<LogEntry> getLogs() {
+        return logs;
     }
 
+    public void setLogs(final List<LogEntry> logs) {
+        this.logs = logs;
+    }
 }

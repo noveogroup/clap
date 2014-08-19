@@ -9,20 +9,29 @@ import java.util.List;
  * @author Andrey Sokolov
  */
 public class LogsBunchMessage extends BaseMessage {
-    private List<LogEntry> logEntries;
+    private List<LogEntry> logs;
+    private String logCat;
 
-    public List<LogEntry> getLogEntries() {
-        return logEntries;
+    public List<LogEntry> getLogs() {
+        return logs;
     }
 
-    public void setLogEntries(final List<LogEntry> logEntries) {
-        this.logEntries = logEntries;
+    public void setLogs(final List<LogEntry> logs) {
+        this.logs = logs;
+    }
+
+    public String getLogCat() {
+        return logCat;
+    }
+
+    public void setLogCat(final String logCat) {
+        this.logCat = logCat;
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .append("logEntries", logEntries)
+                .append("logs", logs)
                 .toString();
     }
 }

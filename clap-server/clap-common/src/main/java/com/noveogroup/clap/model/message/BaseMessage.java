@@ -3,27 +3,37 @@ package com.noveogroup.clap.model.message;
 import com.noveogroup.clap.model.BaseModel;
 
 import java.util.Date;
+import java.util.Map;
 
 /**
  * @author Andrey Sokolov
  */
 public abstract class BaseMessage extends BaseModel {
-    protected Date timestamp;
-    private String uploadedBy;
+    private String deviceId;
+    private long timestamp;
+    private Map<String,String> deviceInfo;
 
-    public Date getTimestamp() {
+    public String getDeviceId() {
+        return deviceId;
+    }
+
+    public void setDeviceId(final String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(final Date timestamp) {
+    public void setTimestamp(final long timestamp) {
         this.timestamp = timestamp;
     }
 
-    public String getUploadedBy() {
-        return uploadedBy;
+    public Map<String, String> getDeviceInfo() {
+        return deviceInfo;
     }
 
-    public void setUploadedBy(final String uploadedBy) {
-        this.uploadedBy = uploadedBy;
+    public void setDeviceInfo(final Map<String, String> deviceInfo) {
+        this.deviceInfo = deviceInfo;
     }
 }

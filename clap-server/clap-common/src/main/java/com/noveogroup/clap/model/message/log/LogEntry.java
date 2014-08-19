@@ -8,23 +8,17 @@ import java.io.Serializable;
  * @author Andrey Sokolov
  */
 public class LogEntry implements Serializable{
-    private String message;
-    private Long timestamp;
+    private long timestamp;
     private int level;
+    private String loggerName;
+    private String threadName;
+    private String message;
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(final String message) {
-        this.message = message;
-    }
-
-    public Long getTimestamp() {
+    public long getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(final Long timestamp) {
+    public void setTimestamp(final long timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -36,12 +30,27 @@ public class LogEntry implements Serializable{
         this.level = level;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("message", message)
-                .append("timestamp", timestamp)
-                .append("level", level)
-                .toString();
+    public String getLoggerName() {
+        return loggerName;
+    }
+
+    public void setLoggerName(final String loggerName) {
+        this.loggerName = loggerName;
+    }
+
+    public String getThreadName() {
+        return threadName;
+    }
+
+    public void setThreadName(final String threadName) {
+        this.threadName = threadName;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(final String message) {
+        this.message = message;
     }
 }

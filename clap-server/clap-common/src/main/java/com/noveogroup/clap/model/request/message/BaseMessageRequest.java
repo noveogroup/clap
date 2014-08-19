@@ -2,11 +2,14 @@ package com.noveogroup.clap.model.request.message;
 
 import com.noveogroup.clap.model.request.BaseRequest;
 
+import java.util.Map;
+
 /**
  * @author Andrey Sokolov
  */
 public class BaseMessageRequest extends BaseRequest {
-    protected String revisionHash;
+    private String revisionHash;
+    private String variantHash;
 
     public String getRevisionHash() {
         return revisionHash;
@@ -14,5 +17,13 @@ public class BaseMessageRequest extends BaseRequest {
 
     public void setRevisionHash(final String revisionHash) {
         this.revisionHash = revisionHash;
+    }
+
+    public String getVariantHash() {
+        return variantHash;
+    }
+
+    public void setVariantHash(final String variantHash) {
+        this.variantHash = variantHash;
     }
 }

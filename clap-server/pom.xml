@@ -8,8 +8,6 @@
     <modules>
         <module>clap-server</module>
         <module>clap-common</module>
-        <!--<module>clap-android</module>-->
-        <!--<module>clap-plugin</module>-->
     </modules>
     <packaging>pom</packaging>
     <name>CLAP</name>

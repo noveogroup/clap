@@ -1,7 +1,7 @@
 package com.noveogroup.clap.rest;
 
+import com.noveogroup.clap.model.request.message.CrashMessageRequest;
 import com.noveogroup.clap.model.request.message.LogsBunchMessageRequest;
-import com.noveogroup.clap.model.request.message.SendMessageRequest;
 import com.noveogroup.clap.service.messages.MessagesService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +20,7 @@ public class MessagesEndpointImpl extends BaseEndpoint implements MessagesEndpoi
     private MessagesService messagesService;
 
     @Override
-    public void saveCrashMessage(final SendMessageRequest request) {
+    public void saveCrashMessage(final CrashMessageRequest request) {
         LOGGER.debug("saving crash message " + request);
         login(request.getToken());
         messagesService.saveMessage(request.getRevisionHash(), request.getMessage());

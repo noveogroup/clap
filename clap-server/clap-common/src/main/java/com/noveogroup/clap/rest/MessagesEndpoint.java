@@ -1,7 +1,7 @@
 package com.noveogroup.clap.rest;
 
+import com.noveogroup.clap.model.request.message.CrashMessageRequest;
 import com.noveogroup.clap.model.request.message.LogsBunchMessageRequest;
-import com.noveogroup.clap.model.request.message.SendMessageRequest;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -17,7 +17,7 @@ public interface MessagesEndpoint {
     @Path("/crash")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    void saveCrashMessage(SendMessageRequest request);
+    void saveCrashMessage(CrashMessageRequest request);
 
     @Path("/logs")
     @POST

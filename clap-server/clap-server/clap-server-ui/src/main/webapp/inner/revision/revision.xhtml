@@ -118,7 +118,7 @@
 
             <p:rowExpansion>
                 <ul>
-                    <ui:repeat value="#{logMessage.logEntries}" var="logEntry">
+                    <ui:repeat value="#{logMessage.logs}" var="logEntry">
                         <li>
                             <h:outputText value="#{logEntry.timestamp}">
                                 <f:converter converterId="TimestampConverter"/>
