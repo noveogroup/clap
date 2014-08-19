@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  */
 
-package com.noveogroup.clap.library.api;
+package test;
 
 import android.app.Activity;
 
