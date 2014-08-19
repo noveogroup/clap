@@ -104,6 +104,16 @@ class ClapPlugin implements Plugin<Project> {
     void apply(Project project) {
         project.extensions.create('clap', ClapOptions, project)
 
+        project.android {
+            packagingOptions {
+                exclude 'META-INF/ASL2.0'
+                exclude 'META-INF/LICENSE'
+                exclude 'META-INF/LICENSE.txt'
+                exclude 'META-INF/NOTICE'
+                exclude 'META-INF/NOTICE.txt'
+            }
+        }
+
         project.gradle.afterProject {
             def android = project.extensions.findByName('android')
             ClapOptions clap = project.extensions.findByType(ClapOptions)

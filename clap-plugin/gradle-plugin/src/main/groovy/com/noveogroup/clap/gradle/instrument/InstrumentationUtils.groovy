@@ -1,41 +1,19 @@
-package com.noveogroup.clap.plugin.instrumentation.utils
+package com.noveogroup.clap.gradle.instrument
 
-import javassist.ClassPool
-import javassist.CtClass
-import javassist.CtMethod
-import javassist.CtNewMethod
-import javassist.Modifier
-import javassist.NotFoundException
+import javassist.*
 
-import java.util.zip.ZipFile
-
-/**
- */
 class InstrumentationUtils {
-    static void eachClass(File file, Closure closure) {
-        if (file.isDirectory()) {
-            // it is a classpath directory
-            file.eachFileRecurse {
-                String path = it.absolutePath
-                def matcher = (path =~ /(.*)\.class/)
-                if (it.isFile() && matcher.matches()) {
-                    String className = matcher.group(1)
-                            .substring(file.absolutePath.length() + 1)
-                            .replaceAll('/', '.')
-                            .replaceAll('\\\\', '.')
-                    closure className
-                }
-            }
-        } else {
-            // it is a JAR file
-            new ZipFile(file).entries().each {
-                def matcher = (it.name =~ /(.*)\.class/)
-                if (!it.isDirectory() && matcher.matches()) {
-                    String className = matcher.group(1).replaceAll('/', '.')
-                    closure className
-                }
-            }
+
+    static CtClass getClass(ClassPool classPool, String className) {
+        try {
+            return classPool.getCtClass(className)
+        } catch (NotFoundException ignored) {
+            return null
         }
+    }
+
+    static boolean findSuperclass(ClassPool classPool, CtClass aClass, String className) {
+        return findSuperclass(aClass, getClass(classPool, className))
     }
 
     static boolean findSuperclass(CtClass aClass, CtClass superClass) {
@@ -50,7 +28,7 @@ class InstrumentationUtils {
     }
 
     static CtMethod findMethod(CtClass aClass, String methodName, CtClass[] parameters) {
-        while(aClass != null) {
+        while (aClass != null) {
             try {
                 return aClass.getDeclaredMethod(methodName, parameters)
             } catch (NotFoundException ignored) {
@@ -60,7 +38,7 @@ class InstrumentationUtils {
         return null
     }
 
-    static CtMethod getMethodToInstrument(ClassPool classPool, CtClass aClass, boolean override, String methodName, CtClass returnType, CtClass[] parameters){
+    static CtMethod getMethodToInstrument(ClassPool classPool, CtClass aClass, boolean override, String methodName, CtClass returnType, CtClass[] parameters) {
         CtMethod method
 
         try {
@@ -96,4 +74,5 @@ class InstrumentationUtils {
         }
         return method
     }
+
 }

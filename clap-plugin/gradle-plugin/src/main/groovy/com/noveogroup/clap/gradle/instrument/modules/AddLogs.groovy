@@ -1,30 +1,17 @@
-package com.noveogroup.clap.plugin.instrumentation.impl;
+package com.noveogroup.clap.gradle.instrument.modules
 
-import com.noveogroup.clap.plugin.instrumentation.Instrumentor
-import com.noveogroup.clap.plugin.instrumentation.utils.InstrumentationUtils;
-import javassist.ClassPool;
-import javassist.CtClass
-import javassist.CtConstructor
-import javassist.CtField
-import javassist.CtMethod
-import javassist.CtNewMethod
-import javassist.Modifier
-import javassist.NotFoundException;
+import com.noveogroup.clap.gradle.instrument.InstrumentationUtils
+import com.noveogroup.clap.gradle.instrument.Module
+import javassist.*
+import javassist.bytecode.LocalVariableAttribute
+import javassist.bytecode.MethodInfo
 
-/**
- */
-class AddLifecycleLogs implements Instrumentor {
+class AddLogs extends Module {
 
     public static final String LOGGER_FIELD_NAME = "COM_NOVEOGROUP_ANDROID_LOGGER"
 
     @Override
-    String getName() {
-        return "addLogs";
-    }
-
-    @Override
-    void instrument(final ClassPool classPool, final CtClass aClass) {
-
+    void instrumentClass(final ClassPool classPool, final CtClass aClass) {
         CtClass loggerClass = classPool.getCtClass("org.slf4j.Logger")
         CtField loggerField = new CtField(loggerClass, LOGGER_FIELD_NAME, aClass)
         loggerField.setModifiers(Modifier.PRIVATE | Modifier.STATIC | Modifier.FINAL)
@@ -42,23 +29,22 @@ class AddLifecycleLogs implements Instrumentor {
             instrumentOnClickListener(classPool, aClass)
         }
 
-        if (InstrumentationUtils.findSuperclass(aClass, classPool.getCtClass("android.app.Activity"))) {
+        if (InstrumentationUtils.findSuperclass(classPool, aClass, "android.app.Activity")) {
             instrumentActivity(classPool, aClass)
         }
 
-        if (InstrumentationUtils.findSuperclass(aClass, classPool.getCtClass("android.app.Fragment"))) {
+        if (InstrumentationUtils.findSuperclass(classPool, aClass, "android.app.Fragment")) {
             instrumentFragment(classPool, aClass)
         }
 
-        if (InstrumentationUtils.findSuperclass(aClass, classPool.getCtClass("android.support.v4.app.Fragment"))) {
+        if (InstrumentationUtils.findSuperclass(classPool, aClass, "android.support.v4.app.Fragment")) {
             instrumentFragment(classPool, aClass)
         }
 
-        if (InstrumentationUtils.findSuperclass(aClass, classPool.getCtClass("android.app.Service"))) {
+        if (InstrumentationUtils.findSuperclass(classPool, aClass, "android.app.Service")) {
             instrumentService(classPool, aClass)
         }
     }
-
 
     static void addLogMessage(ClassPool classPool, CtClass aClass, boolean override, String methodName, CtClass returnType, CtClass[] parameters) {
         addLogMessage(classPool, aClass, override, methodName, returnType, parameters, "\"\"")
@@ -99,13 +85,27 @@ class AddLifecycleLogs implements Instrumentor {
             aClass.addMethod(method)
         }
 
-        method.insertBefore(LOGGER_FIELD_NAME+".info(\"call $aClass.name[\" + hashCode() + \"]::$methodName \" + $infoCode);")
+        method.insertBefore(LOGGER_FIELD_NAME + ".info(\"call $aClass.name[\" + hashCode() + \"]::$methodName \" + $infoCode);")
     }
 
     static void instrumentOnClickListener(ClassPool classPool, CtClass listenerClass) {
         CtClass voidClass = classPool.getCtClass("void")
         CtClass viewClass = classPool.getCtClass("android.view.View")
-        addLogMessage(classPool, listenerClass, true, "onClick", voidClass, [viewClass] as CtClass[], "\" \" + v.getContext().getResources().getResourceName(v.getId())")
+
+        CtMethod method
+
+        try {
+            method = listenerClass.getDeclaredMethod("onClick", [viewClass] as CtClass[])
+        } catch (NotFoundException ignored) {
+            return
+        }
+
+        MethodInfo methodInfo = method.getMethodInfo();
+        LocalVariableAttribute table = methodInfo.getCodeAttribute().getAttribute(LocalVariableAttribute.tag);
+        int frameWithNameAtConstantPool = table.nameIndex(1);
+        String variableName = methodInfo.getConstPool().getUtf8Info(frameWithNameAtConstantPool) as String
+
+        method.insertBefore(LOGGER_FIELD_NAME + ".info(\"call ${listenerClass.name}[\" + hashCode() + \"]::onClick \" + ${variableName}.getContext().getResources().getResourceName(${variableName}.getId()));")
     }
 
     static void instrumentActivity(ClassPool classPool, CtClass activityClass) {
