@@ -1,0 +1,21 @@
+apply plugin: 'com.android.application'
+
+dependencies {
+    compile('org.apache.httpcomponents:httpmime:4.2.1') {
+        exclude group: 'org.apache.httpcomponents'
+    }
+}
+
+android {
+    compileSdkVersion project.compileSdkVersion
+    buildToolsVersion project.buildToolsVersion
+
+    defaultConfig {
+        versionCode 1
+        versionName '1.0'
+        minSdkVersion 7
+        targetSdkVersion project.compileSdkVersion
+    }
+
+    lintOptions { abortOnError false }
+}
