@@ -11,7 +11,7 @@ import javax.persistence.Query;
  */
 @Stateless
 public class RevisionVariantDAOImpl extends GenericDAOImpl<RevisionVariantEntity,Long> implements RevisionVariantDAO {
-    private static final String REVISION_BY_HASH = "getRevisionByHash";
+    private static final String REVISION_BY_HASH = "getRevisionVariantByHash";
     private static final String REVISION_BY_HASH_PARAMETER = "hash";
 
 

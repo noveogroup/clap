@@ -16,7 +16,7 @@ import javax.persistence.Table;
 @Entity(name = "RevisionVariantEntity")
 @Table(name = "revision_variants")
 @NamedQueries({
-        @NamedQuery(name = "getRevisionByHash",
+        @NamedQuery(name = "getRevisionVariantByHash",
                 query = "SELECT rev FROM RevisionVariantEntity rev WHERE rev.fullHash = :hash")
 })
 public class RevisionVariantEntity extends BaseEntity {
