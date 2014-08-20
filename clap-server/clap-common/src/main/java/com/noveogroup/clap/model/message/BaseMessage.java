@@ -2,7 +2,6 @@ package com.noveogroup.clap.model.message;
 
 import com.noveogroup.clap.model.BaseModel;
 
-import java.util.Date;
 import java.util.Map;
 
 /**

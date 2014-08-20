@@ -69,7 +69,6 @@ public class RevisionConverter {
         if (mapMessages && CollectionUtils.isNotEmpty(revisionMessages)) {
             for (final BaseMessageEntity message : revisionMessages) {
                 BaseMessage map = messagesConverter.map(message, configBean);
-                map.setUploadedBy(message.getUploadedBy().getLogin());
                 toMap.getMessages().add(map);
             }
         }

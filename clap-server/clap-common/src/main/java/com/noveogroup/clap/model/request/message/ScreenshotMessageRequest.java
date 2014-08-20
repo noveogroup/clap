@@ -5,7 +5,6 @@ import org.jboss.resteasy.annotations.providers.multipart.PartType;
 
 import javax.ws.rs.FormParam;
 import java.io.InputStream;
-import java.util.Map;
 
 /**
  * @author Andrey Sokolov

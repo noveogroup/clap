@@ -2,8 +2,9 @@ package com.noveogroup.clap.converter.message;
 
 import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.entity.message.ScreenshotMessageEntity;
-import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.model.message.ScreenshotMessage;
+
+import java.util.Date;
 
 /**
  * @author Andrey Sokolov
@@ -16,10 +17,9 @@ public class ScreenshotMessagesConverter
         final Long id = messageEntity.getId();
         screenshotMessage.setId(id);
         screenshotMessage.setScreenshotUrl(configBean.getDownloadScreenshotUrl(id));
-        screenshotMessage.setTimestamp(messageEntity.getTimestamp());
-        final UserEntity uploadedBy = messageEntity.getUploadedBy();
-        if(uploadedBy != null){
-            screenshotMessage.setUploadedBy(uploadedBy.getLogin());
+        final Date timestamp = messageEntity.getTimestamp();
+        if(timestamp != null){
+            screenshotMessage.setTimestamp(timestamp.getTime());
         }
         return screenshotMessage;
     }
@@ -28,7 +28,7 @@ public class ScreenshotMessagesConverter
     public ScreenshotMessageEntity map(final ScreenshotMessage message) {
         final ScreenshotMessageEntity screenshotMessageEntity = new ScreenshotMessageEntity();
         screenshotMessageEntity.setScreenshotFileUrl(message.getScreenshotUrl());
-        screenshotMessageEntity.setTimestamp(message.getTimestamp());
+        screenshotMessageEntity.setTimestamp(new Date(message.getTimestamp()));
         return screenshotMessageEntity;
     }
 

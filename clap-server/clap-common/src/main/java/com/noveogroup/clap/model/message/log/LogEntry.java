@@ -1,7 +1,5 @@
 package com.noveogroup.clap.model.message.log;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
-
 import java.io.Serializable;
 
 /**

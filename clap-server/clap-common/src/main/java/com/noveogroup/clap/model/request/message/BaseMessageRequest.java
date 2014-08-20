@@ -2,7 +2,6 @@ package com.noveogroup.clap.model.request.message;
 
 import com.noveogroup.clap.model.request.BaseRequest;
 
-import java.util.Map;
 
 /**
  * @author Andrey Sokolov
