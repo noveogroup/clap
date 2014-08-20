@@ -26,9 +26,13 @@ public class CreateOrUpdateRevisionRequest {
     @PartType("application/octet-stream")
     private InputStream packageStream;
 
-    @FormParam("token")
+    @FormParam("variantName")
     @PartType("text/plain")
     private String variantName;
+
+    @FormParam("random")
+    @PartType("text/plain")
+    private String random;
 
     @FormParam("token")
     @PartType("text/plain")
@@ -80,5 +84,13 @@ public class CreateOrUpdateRevisionRequest {
 
     public void setVariantHash(final String variantHash) {
         this.variantHash = variantHash;
+    }
+
+    public String getRandom() {
+        return random;
+    }
+
+    public void setRandom(final String random) {
+        this.random = random;
     }
 }

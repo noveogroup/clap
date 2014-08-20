@@ -33,6 +33,8 @@ public class RevisionVariantEntity extends BaseEntity {
     private String packageVariant;
     @Column(name = "apk_structure", length = COLUMN_LENGTH)
     private String apkStructureJSON;
+    @Column(name = "random", nullable = false)
+    private String random;
 
     public String getFullHash() {
         return fullHash;
@@ -80,5 +82,13 @@ public class RevisionVariantEntity extends BaseEntity {
 
     public void setApkStructureJSON(final String apkStructureJSON) {
         this.apkStructureJSON = apkStructureJSON;
+    }
+
+    public String getRandom() {
+        return random;
+    }
+
+    public void setRandom(final String random) {
+        this.random = random;
     }
 }

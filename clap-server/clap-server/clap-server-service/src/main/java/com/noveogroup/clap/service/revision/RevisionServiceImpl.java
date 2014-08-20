@@ -229,14 +229,16 @@ public class RevisionServiceImpl implements RevisionService {
             currentUserLogin = userService.getCurrentUserLogin();
             userByLogin = userDAO.getUserByLogin(currentUserLogin);
             processStreamedPackage(revisionEntity, userByLogin,
-                    packageStream, request.getVariantHash(), request.getVariantName());
+                    packageStream, request.getVariantHash(), request.getVariantName(),request.getRandom());
         }
     }
 
     private void processStreamedPackage(final RevisionEntity revisionEntity,
                                         final UserEntity uploadedBy,
                                         final InputStream streamedPackage,
-                                        final String variantHash, final String variantName) {
+                                        final String variantHash,
+                                        final String variantName,
+                                        final String random) {
         try {
             RevisionVariantEntity variantEntity = new RevisionVariantEntity();
             final File file = fileService.saveFile(FileType.APK, streamedPackage, "clap_apk_");
@@ -248,9 +250,19 @@ public class RevisionServiceImpl implements RevisionService {
             if (icon != null) {
                 revisionEntity.getProject().setIconFile(icon);
             }
+            List<RevisionVariantEntity> variants = revisionEntity.getVariants();
+            if(variants == null){
+                variants = Lists.newArrayList();
+                revisionEntity.setVariants(variants);
+            }
+            variants.add(variantEntity);
             final ApkStructure apkStructure = mainExtractor.getStructure();
             variantEntity.setApkStructureJSON(new Gson().toJson(apkStructure, ApkStructure.class));
             variantEntity.setPackageFileUrl(file.getAbsolutePath());
+            variantEntity.setFullHash(variantHash);
+            variantEntity.setPackageUploadedBy(uploadedBy);
+            variantEntity.setPackageVariant(variantName);
+            variantEntity.setRandom(random);
         } catch (IOException e) {
             LOGGER.error("error while processing: " + streamedPackage, e);
         }
