@@ -1,15 +1,27 @@
-package com.noveogroup.clap.model.request.message;
+package com.noveogroup.clap.model.auth;
 
-import com.noveogroup.clap.model.request.BaseRequest;
-
+import javax.validation.constraints.NotNull;
 
 /**
  * @author Andrey Sokolov
  */
-public class BaseMessageRequest extends BaseRequest {
+public class ApkAuthentication {
+    @NotNull
     private String projectId;
+    @NotNull
     private String revisionHash;
+    @NotNull
     private String variantHash;
+    @NotNull
+    private String random;
+
+    public String getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(final String projectId) {
+        this.projectId = projectId;
+    }
 
     public String getRevisionHash() {
         return revisionHash;
@@ -27,11 +39,11 @@ public class BaseMessageRequest extends BaseRequest {
         this.variantHash = variantHash;
     }
 
-    public String getProjectId() {
-        return projectId;
+    public String getRandom() {
+        return random;
     }
 
-    public void setProjectId(final String projectId) {
-        this.projectId = projectId;
+    public void setRandom(final String random) {
+        this.random = random;
     }
 }
