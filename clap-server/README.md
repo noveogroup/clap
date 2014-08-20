@@ -17,7 +17,7 @@ Old README file
     <profile>
       <id>clap-profile</id>
       <properties>
-        <clap.serviceUrl>http://10.0.14.53:8080/clap-rest</clap.serviceUrl>
+        <clap.serviceUrl>http://10.0.14.53:8080/clap-rest/v1</clap.serviceUrl>
         <clap.login>Uasya</clap.login>
         <clap.password>uasinPassword</clap.password>
       </properties>
