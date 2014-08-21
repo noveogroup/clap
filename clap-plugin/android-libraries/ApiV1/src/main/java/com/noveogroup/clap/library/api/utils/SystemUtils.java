@@ -48,7 +48,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SystemUtils {
+public final class SystemUtils {
 
     private SystemUtils() {
         throw new UnsupportedOperationException();
