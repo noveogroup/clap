@@ -24,9 +24,23 @@
  * THE SOFTWARE.
  */
 
-package test;
+package com.noveogroup.clap.library.api.server.beans;
 
-import android.app.Activity;
+public class InfoRequest extends BaseRequest<InfoRequest.InfoMessage> {
 
-public class TestActivity extends Activity {
+    public static class InfoMessage extends BaseRequest.BaseMessage {
+
+        public InfoMessage() {
+        }
+
+    }
+
+    public InfoRequest() {
+    }
+
+    @Override
+    public InfoMessage createMessage() {
+        return new InfoMessage();
+    }
+
 }
