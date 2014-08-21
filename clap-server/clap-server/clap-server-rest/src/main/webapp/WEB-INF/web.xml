@@ -21,6 +21,14 @@
     </context-param>
 
     <context-param>
+        <param-name>resteasy.providers</param-name>
+        <param-value>
+            com.noveogroup.clap.rest.exception.AuthExceptionMapper,
+            com.noveogroup.clap.rest.exception.GlobalExceptionMapper
+        </param-value>
+    </context-param>
+
+    <context-param>
         <param-name>resteasy.servlet.mapping.prefix</param-name>
         <param-value>/v1</param-value>
     </context-param>

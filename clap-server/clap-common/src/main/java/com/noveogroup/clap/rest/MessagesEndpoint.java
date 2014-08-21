@@ -3,6 +3,7 @@ package com.noveogroup.clap.rest;
 import com.noveogroup.clap.model.request.message.CrashMessageRequest;
 import com.noveogroup.clap.model.request.message.InfoMessageRequest;
 import com.noveogroup.clap.model.request.message.LogsBunchMessageRequest;
+import com.noveogroup.clap.model.response.ClapResponse;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -18,12 +19,12 @@ public interface MessagesEndpoint {
     @Path("/crash")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    void saveCrashMessage(CrashMessageRequest request);
+    ClapResponse saveCrashMessage(CrashMessageRequest request);
 
     @Path("/logs")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    void saveLogsBunchMessage(LogsBunchMessageRequest request);
+    ClapResponse saveLogsBunchMessage(LogsBunchMessageRequest request);
 
 
     @GET
@@ -33,5 +34,5 @@ public interface MessagesEndpoint {
     @Path("/info")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    void saveInfoMessage(InfoMessageRequest request);
+    ClapResponse saveInfoMessage(InfoMessageRequest request);
 }

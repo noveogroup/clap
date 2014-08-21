@@ -6,6 +6,7 @@ import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.converter.UserConverter;
 import com.noveogroup.clap.dao.UserDAO;
 import com.noveogroup.clap.entity.user.UserEntity;
+import com.noveogroup.clap.exception.ClapAuthenticationFailedException;
 import com.noveogroup.clap.exception.ClapUserNotFoundException;
 import com.noveogroup.clap.exception.WrapException;
 import com.noveogroup.clap.model.auth.Authentication;
@@ -15,7 +16,6 @@ import com.noveogroup.clap.model.user.UserCreationModel;
 import com.noveogroup.clap.model.user.UserWithPersistedAuth;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
@@ -145,7 +145,7 @@ public class UserServiceImpl implements UserService {
                 userDAO.persist(userByLogin);
                 return userByLogin.getToken();
             } else {
-                throw new IncorrectCredentialsException();
+                throw new ClapAuthenticationFailedException("login or password incorrect");
             }
         } else {
             throw new ClapUserNotFoundException("user " + login + " not found");

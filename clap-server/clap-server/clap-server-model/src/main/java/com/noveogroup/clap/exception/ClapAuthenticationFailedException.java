@@ -6,9 +6,7 @@ import javax.ejb.ApplicationException;
  * @author Andrey Sokolov
  */
 @ApplicationException
-public class ClapAuthenticationFailedException extends ClapException {
-    public ClapAuthenticationFailedException() {
-    }
+public class ClapAuthenticationFailedException extends ClapAuthenticationException {
 
     public ClapAuthenticationFailedException(final String message) {
         super(message);

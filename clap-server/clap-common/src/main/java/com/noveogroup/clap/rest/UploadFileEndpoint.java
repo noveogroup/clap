@@ -2,6 +2,7 @@ package com.noveogroup.clap.rest;
 
 import com.noveogroup.clap.model.request.message.ScreenshotMessageRequest;
 import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
+import com.noveogroup.clap.model.response.ClapResponse;
 import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
 
 import javax.ws.rs.Consumes;
@@ -23,11 +24,11 @@ public interface UploadFileEndpoint {
     @Path("/revision")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    boolean createOrUpdateRevision(@MultipartForm CreateOrUpdateRevisionRequest request);
+    ClapResponse createOrUpdateRevision(@MultipartForm CreateOrUpdateRevisionRequest request);
 
     @POST
     @Path("/screenshot")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
     @Produces(MediaType.APPLICATION_JSON)
-    void saveScreenshot(@MultipartForm ScreenshotMessageRequest request);
+    ClapResponse saveScreenshot(@MultipartForm ScreenshotMessageRequest request);
 }

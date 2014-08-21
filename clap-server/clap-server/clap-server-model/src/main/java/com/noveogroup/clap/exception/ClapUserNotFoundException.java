@@ -6,10 +6,7 @@ import javax.ejb.ApplicationException;
  * @author Andrey Sokolov
  */
 @ApplicationException(rollback = false)
-public class ClapUserNotFoundException extends ClapException {
-
-    public ClapUserNotFoundException() {
-    }
+public class ClapUserNotFoundException extends ClapAuthenticationException {
 
     public ClapUserNotFoundException(String message) {
         super(message);

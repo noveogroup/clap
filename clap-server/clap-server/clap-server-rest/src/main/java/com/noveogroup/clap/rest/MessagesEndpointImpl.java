@@ -3,6 +3,7 @@ package com.noveogroup.clap.rest;
 import com.noveogroup.clap.model.request.message.CrashMessageRequest;
 import com.noveogroup.clap.model.request.message.InfoMessageRequest;
 import com.noveogroup.clap.model.request.message.LogsBunchMessageRequest;
+import com.noveogroup.clap.model.response.ClapResponse;
 import com.noveogroup.clap.service.messages.MessagesService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,19 +22,21 @@ public class MessagesEndpointImpl extends BaseEndpoint implements MessagesEndpoi
     private MessagesService messagesService;
 
     @Override
-    public void saveCrashMessage(final CrashMessageRequest request) {
+    public ClapResponse saveCrashMessage(final CrashMessageRequest request) {
         LOGGER.debug("saving crash message " + request);
         login(request.getToken());
         messagesService.saveMessage(request.getRevisionHash(), request.getMessage());
         LOGGER.debug(request + "saved");
+        return new ClapResponse();
     }
 
     @Override
-    public void saveLogsBunchMessage(final LogsBunchMessageRequest request) {
+    public ClapResponse saveLogsBunchMessage(final LogsBunchMessageRequest request) {
         LOGGER.debug("saving logs bunch message " + request);
         login(request.getToken());
         messagesService.saveMessage(request.getRevisionHash(), request.getMessage());
         LOGGER.debug(request + "saved");
+        return new ClapResponse();
     }
 
 
@@ -48,10 +51,11 @@ public class MessagesEndpointImpl extends BaseEndpoint implements MessagesEndpoi
     }
 
     @Override
-    public void saveInfoMessage(final InfoMessageRequest request) {
+    public ClapResponse saveInfoMessage(final InfoMessageRequest request) {
         LOGGER.debug("saving logs bunch message " + request);
         login(request.getToken());
         messagesService.saveMessage(request.getRevisionHash(), request.getMessage());
         LOGGER.debug(request + "saved");
+        return new ClapResponse();
     }
 }
