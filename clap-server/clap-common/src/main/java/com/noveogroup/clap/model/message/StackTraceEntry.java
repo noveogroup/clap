@@ -6,7 +6,7 @@ package com.noveogroup.clap.model.message;
 public class StackTraceEntry {
     private String className;
     private String methodName;
-    private int line;
+    private int lineNumber;
 
     public String getClassName() {
         return className;
@@ -24,11 +24,11 @@ public class StackTraceEntry {
         this.methodName = methodName;
     }
 
-    public int getLine() {
-        return line;
+    public int getLineNumber() {
+        return lineNumber;
     }
 
-    public void setLine(final int line) {
-        this.line = line;
+    public void setLineNumber(final int lineNumber) {
+        this.lineNumber = lineNumber;
     }
 }

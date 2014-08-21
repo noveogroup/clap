@@ -1,6 +1,7 @@
 package com.noveogroup.clap.rest;
 
 import com.noveogroup.clap.model.request.message.CrashMessageRequest;
+import com.noveogroup.clap.model.request.message.InfoMessageRequest;
 import com.noveogroup.clap.model.request.message.LogsBunchMessageRequest;
 
 import javax.ws.rs.Consumes;
@@ -28,4 +29,9 @@ public interface MessagesEndpoint {
     @GET
     @Path("/screenshot/{messageId}")
     Response getScreenshot(@PathParam("messageId") long messageId);
+
+    @Path("/info")
+    @POST
+    @Consumes(MediaType.APPLICATION_JSON)
+    void saveInfoMessage(InfoMessageRequest request);
 }

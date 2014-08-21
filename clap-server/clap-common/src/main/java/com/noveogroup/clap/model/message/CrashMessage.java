@@ -10,6 +10,7 @@ import java.util.List;
  */
 public class CrashMessage extends BaseMessage {
 
+    private long threadId;
     private String exception;
     private String logCat;
     private List<ThreadInfo> threads;
@@ -45,5 +46,13 @@ public class CrashMessage extends BaseMessage {
 
     public void setLogs(final List<LogEntry> logs) {
         this.logs = logs;
+    }
+
+    public long getThreadId() {
+        return threadId;
+    }
+
+    public void setThreadId(final long threadId) {
+        this.threadId = threadId;
     }
 }

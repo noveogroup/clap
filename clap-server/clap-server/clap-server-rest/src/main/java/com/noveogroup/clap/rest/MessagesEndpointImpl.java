@@ -1,6 +1,7 @@
 package com.noveogroup.clap.rest;
 
 import com.noveogroup.clap.model.request.message.CrashMessageRequest;
+import com.noveogroup.clap.model.request.message.InfoMessageRequest;
 import com.noveogroup.clap.model.request.message.LogsBunchMessageRequest;
 import com.noveogroup.clap.service.messages.MessagesService;
 import org.slf4j.Logger;
@@ -44,5 +45,13 @@ public class MessagesEndpointImpl extends BaseEndpoint implements MessagesEndpoi
         } else {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
+    }
+
+    @Override
+    public void saveInfoMessage(final InfoMessageRequest request) {
+        LOGGER.debug("saving logs bunch message " + request);
+        login(request.getToken());
+        messagesService.saveMessage(request.getRevisionHash(), request.getMessage());
+        LOGGER.debug(request + "saved");
     }
 }

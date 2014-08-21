@@ -51,4 +51,32 @@ public class LogEntry implements Serializable{
     public void setMessage(final String message) {
         this.message = message;
     }
+
+    public static enum Level {
+        TRACE(0),
+        DEBUG(1),
+        INFO(2),
+        WARN(3),
+        ERROR(4),
+        FATAL(5),;
+
+        private final int level;
+
+        Level(final int level) {
+            this.level = level;
+        }
+
+        public int getInt(){
+            return level;
+        }
+
+        public Level getByInt(final int level){
+            for(Level l: Level.values()){
+                if(level == l.getInt()){
+                    return l;
+                }
+            }
+            return null;
+        }
+    }
 }
