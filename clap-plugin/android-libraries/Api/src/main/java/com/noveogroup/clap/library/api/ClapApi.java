@@ -93,20 +93,29 @@ public class ClapApi {
         return request;
     }
 
-    public void sendInfo() {
-        String token = apiService.getToken(prepareAuth());
-        InfoRequest request = prepare(new InfoRequest(), token);
+    public String retrieveToken() {
+        return apiService.getToken(prepareAuth());
+    }
+
+    public InfoRequest prepareInfoRequest(String token) {
+        return prepare(new InfoRequest(), token);
+    }
+
+    public void sendInfo(InfoRequest request) {
         apiService.sendInfo(request);
     }
 
-    public void sendCrash(Thread thread, Throwable throwable, String logcat, List<LogEntry> logs) {
-        String token = apiService.getToken(prepareAuth());
+    public CrashRequest prepareCrashRequest(String token, Thread thread, Throwable throwable, String logcat, List<LogEntry> logs) {
         CrashRequest request = prepare(new CrashRequest(), token);
         request.getMessage().setThreadId(thread.getId());
         request.getMessage().setException(SystemUtils.getStackTrace(throwable));
         request.getMessage().setLogCat(logcat);
         request.getMessage().setLogs(logs);
         request.getMessage().setThreads(SystemUtils.getThreadsInfo());
+        return request;
+    }
+
+    public void sendCrash(CrashRequest request) {
         apiService.sendCrash(request);
     }
 

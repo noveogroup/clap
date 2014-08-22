@@ -1,3 +1,1 @@
-//include ':Api'
-//include ':Logs'
-include ':ApiV1'
+include ':Api'
