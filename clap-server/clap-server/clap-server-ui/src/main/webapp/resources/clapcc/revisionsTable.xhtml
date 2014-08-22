@@ -7,29 +7,7 @@
 <cc:implementation>
     <h:form>
         <p:commandButton id="tableSettingsButton" value="#{msgs['common.table.settings']}" type="button"/>
-        <p:overlayPanel id="tableSettings" for="tableSettingsButton">
-            <h:outputText value="#{msgs['common.table.show.columns']}"/><br/>
-            <p:selectBooleanCheckbox id="showColumnId" value="true"  binding="#{showColumnId}"
-                                     itemLabel="#{msgs['revision.label.id']}">
-                <p:ajax event="change" update="revisions"/>
-            </p:selectBooleanCheckbox><br/>
-            <p:selectBooleanCheckbox id="showColumnHash" value="false" binding="#{showColumnHash}"
-                                     itemLabel="#{msgs['revision.label.hash']}">
-                <p:ajax event="change" update="revisions"/>
-            </p:selectBooleanCheckbox><br/>
-            <p:selectBooleanCheckbox id="showColumnDate" value="true" binding="#{showColumnDate}"
-                                     itemLabel="#{msgs['revision.label.date']}">
-                <p:ajax event="change" update="revisions"/>
-            </p:selectBooleanCheckbox><br/>
-            <p:selectBooleanCheckbox id="showColumnType" value="true" binding="#{showColumnType}"
-                                     itemLabel="#{msgs['revision.label.type']}">
-                <p:ajax event="change" update="revisions"/>
-            </p:selectBooleanCheckbox><br/>
-            <p:selectBooleanCheckbox id="showColumnUploaded" value="false" binding="#{showColumnUploaded}"
-                                     itemLabel="#{msgs['revision.label.uploadedBy']}">
-                <p:ajax event="change" update="revisions"/>
-            </p:selectBooleanCheckbox><br/>
-        </p:overlayPanel>
+        <p:columnToggler datasource="revisions" trigger="tableSettingsButton" />
         <p:dataTable id="revisions"
                      var="revision"
                      selectionMode="single"
@@ -40,27 +18,25 @@
             <p:ajax event="rowSelect"
                     listener="#{revisionsController.onRevisionSelected}"/>
 
-            <p:column headerText="#{msgs['revision.label.id']}" rendered="#{showColumnId.value}">
-                <h:outputText value="#{revision.id}"/>
+            <p:column headerText="#{msgs['revision.label.id']}">
+                <h:link outcome="/inner/revision/revision" value="#{revision.id}">
+                    <f:param name="id" value="#{revision.id}"/>
+                </h:link>
             </p:column>
-            <p:column headerText="#{msgs['revision.label.hash']}" rendered="#{showColumnHash.value}">
-                <h:outputText value="#{revision.hash}"/>
+            <p:column headerText="#{msgs['revision.label.hash']}" >
+                <h:link outcome="/inner/revision/revision" value="#{revision.hash}">
+                    <f:param name="id" value="#{revision.id}"/>
+                </h:link>
             </p:column>
-            <p:column headerText="#{msgs['revision.label.date']}" rendered="#{showColumnDate.value}">
+            <p:column headerText="#{msgs['revision.label.date']}" >
                 <h:outputText value="#{revision.timestamp}">
                     <f:converter converterId="TimestampConverter"/>
                 </h:outputText>
             </p:column>
-            <p:column headerText="#{msgs['revision.label.type']}" rendered="#{showColumnType.value}">
+            <p:column headerText="#{msgs['revision.label.type']}" >
                 <h:outputText value="#{revision.revisionType}"/>
             </p:column>
-            <p:column headerText="#{msgs['revision.label.mainUploadedBy']}" rendered="#{showColumnUploaded.value}">
-                <h:outputText value="#{revision.mainPackageUploadedBy}"/>
-            </p:column>
-            <p:column headerText="#{msgs['revision.label.specialUploadedBy']}" rendered="#{showColumnUploaded.value}">
-                <h:outputText value="#{revision.specialPackageUploadedBy}"/>
-            </p:column>
-            <p:column rendered="#{userSessionData.hasPermission('DELETE_REVISIONS')}">
+            <p:column  headerText="#{msgs['common.table.label.control']}" rendered="#{userSessionData.hasPermission('DELETE_REVISIONS')}">
                 <p:commandButton value="#{msgs['common.form.label.delete']}"
                                  update="@form"
                                  immediate="true"

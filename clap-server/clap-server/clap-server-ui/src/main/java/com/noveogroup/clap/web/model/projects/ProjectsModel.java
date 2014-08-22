@@ -2,12 +2,12 @@ package com.noveogroup.clap.web.model.projects;
 
 import com.noveogroup.clap.model.Project;
 
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import java.io.Serializable;
 
 @Named
-@SessionScoped
+@RequestScoped
 public class ProjectsModel implements Serializable {
 
     private Project newProject = new Project();

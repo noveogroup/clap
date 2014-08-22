@@ -23,7 +23,23 @@ public enum Navigation {
     }
 
     public String getView() {
-        return view + (facesRedirect ? "?faces-redirect=true" : "");
+        return getView(true);
+    }
+
+    public String getView(boolean includeViewParams) {
+        final StringBuilder builder = new StringBuilder().append(view);
+        if (facesRedirect) {
+            builder.append("?faces-redirect=true");
+        }
+        if(includeViewParams){
+            if(!facesRedirect){
+                builder.append("?");
+            } else {
+                builder.append("&");
+            }
+            builder.append("includeViewParams=true");
+        }
+        return builder.toString();
     }
 
 }

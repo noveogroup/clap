@@ -5,7 +5,10 @@ import com.noveogroup.clap.auth.PasswordsHashCalculator;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.dao.UserDAO;
+import com.noveogroup.clap.entity.project.ProjectEntity;
+import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
+import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.model.user.ClapPermission;
 import com.noveogroup.clap.model.user.Role;
 import org.apache.commons.collections.CollectionUtils;
@@ -19,6 +22,7 @@ import javax.ejb.Startup;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.ExcludeDefaultInterceptors;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -65,6 +69,20 @@ public class InitService {
         user.setRole(Role.ADMIN);
         user = userDAO.persist(user);
         LOGGER.debug("user created = " + user);
+
+        ProjectEntity project = new ProjectEntity();
+        project.setName("test_project");
+        project.setExternalId("test_ext_id");
+        project.setCreationDate(new Date(1368308474));
+        project = projectDAO.persist(project);
+        LOGGER.debug("project created : " + project);
+        RevisionEntity revision = new RevisionEntity();
+        revision.setTimestamp(1368318776L);
+        revision.setHash("test_hash");
+        revision.setProject(project);
+        revision.setRevisionType(RevisionType.DEVELOP);
+        revision = revisionDAO.persist(revision);
+        LOGGER.debug("revision created : " + revision);
     }
 
 }

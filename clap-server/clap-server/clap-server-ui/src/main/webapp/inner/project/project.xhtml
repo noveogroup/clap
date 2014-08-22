@@ -8,7 +8,12 @@
       xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/template.xhtml">
     <ui:define name="content">
-        <f:event type="preRenderView" listener="#{projectsController.prepareProjectView}"/>
+        <f:metadata>
+            <f:viewParam name="id" value="#{projectsModel.selectedProject}"
+                         converter="#{projectConverter}" converterMessage="Bad request. Unknown project."
+                         required="true" requiredMessage="Bad request. Please use a link from within the system."/>
+            <f:viewAction action="#{projectsController.prepareProjectView}"/>
+        </f:metadata>
         <h:panelGroup rendered="#{not empty projectsModel.selectedProject}">
 
             <p:panel id="projectSummary" header="#{projectsModel.selectedProject.name}">

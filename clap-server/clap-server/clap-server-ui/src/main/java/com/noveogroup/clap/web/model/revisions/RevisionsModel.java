@@ -6,19 +6,21 @@ import com.noveogroup.clap.model.message.CrashMessage;
 import com.noveogroup.clap.model.message.LogsBunchMessage;
 import com.noveogroup.clap.model.message.ScreenshotMessage;
 import com.noveogroup.clap.model.revision.Revision;
+import com.noveogroup.clap.model.revision.RevisionVariant;
 
-import javax.enterprise.context.SessionScoped;
+import javax.enterprise.context.RequestScoped;
 import javax.faces.model.SelectItem;
 import javax.inject.Named;
 import java.io.Serializable;
 import java.util.List;
 
 @Named
-@SessionScoped
+@RequestScoped
 public class RevisionsModel implements Serializable {
 
     private RevisionsListDataModel revisionsListDataModel;
     private Revision selectedRevision;
+    private RevisionVariant selectedRevisionVariant;
     private List<SelectItem> revisionTypes;
 
     private final List<CrashMessage> selectedRevCrashes = Lists.newArrayList();
@@ -64,5 +66,13 @@ public class RevisionsModel implements Serializable {
 
     public List<RevisionPackageModel> getVariants() {
         return variants;
+    }
+
+    public RevisionVariant getSelectedRevisionVariant() {
+        return selectedRevisionVariant;
+    }
+
+    public void setSelectedRevisionVariant(final RevisionVariant selectedRevisionVariant) {
+        this.selectedRevisionVariant = selectedRevisionVariant;
     }
 }

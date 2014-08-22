@@ -73,19 +73,13 @@ public class RevisionsController extends BaseController {
     private MessageSupport messageSupport;
 
     public void prepareRevisionView() throws IOException, WriterException {
-        if (isAjaxRequest()) {
-            return;
-        }
         final Revision selectedRevision = revisionsModel.getSelectedRevision();
-        if (selectedRevision != null) {
-            projectsController.setSelectedProject(selectedRevision.getProjectId());
-            final RevisionWithApkStructure revWithApkStructure = revisionService.getRevisionWithApkStructure(
-                    selectedRevision.getId());
-            revisionsModel.setSelectedRevision(revWithApkStructure);
+        if (selectedRevision != null && selectedRevision instanceof RevisionWithApkStructure) {
             revisionsModel.getSelectedRevCrashes().clear();
             revisionsModel.getSelectedRevScreenshots().clear();
             revisionsModel.getSelectedRevLogs().clear();
             revisionsModel.getVariants().clear();
+            final RevisionWithApkStructure revWithApkStructure = (RevisionWithApkStructure) selectedRevision;
             for (final BaseMessage message : revWithApkStructure.getMessages()) {
                 if (message instanceof CrashMessage) {
                     revisionsModel.getSelectedRevCrashes().add((CrashMessage) message);
