@@ -51,7 +51,7 @@ public final class InfoSpyModule implements Module {
                         String token = clapApi.retrieveToken();
                         clapApi.sendInfo(clapApi.prepareInfoRequest(token));
                         context.getPreferences().edit().putBoolean(KEY_INFO_SENT, true).commit();
-                    } catch (Exception ignored) {
+                    } catch (Throwable ignored) {
                     }
                 }
             }.start();
