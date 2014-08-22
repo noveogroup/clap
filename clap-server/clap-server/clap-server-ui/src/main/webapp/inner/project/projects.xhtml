@@ -7,41 +7,40 @@
       xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/template.xhtml">
     <ui:define name="content">
-        <f:event type="preRenderView" listener="#{projectsController.prepareProjectsListView}"/>
+        <f:view transient="true">
+            <f:metadata>
+                <f:viewAction action="#{projectsController.prepareProjectsListView}"/>
+            </f:metadata>
+            <h:panelGroup>
+                <p:commandButton value="#{msgs['menu.project.add']}"
+                                 immediate="true"
+                                 rendered="#{userSessionData.hasPermission('ADD_PROJECTS')}"
+                                 action="#{projectsController.toAddProjectView()}"/>
+            </h:panelGroup>
+            <p:dataTable id="projects"
+                         var="project"
+                         value="#{projectsModel.projectsListDataModel}">
+                <p:column>
+                    <p:graphicImage value="#{project.streamedIconFile}">
+                        <f:param name="contentEL"
+                                 value="projectsModel.projectsListDataModel.getRowData(#{project.id}).streamedIconFile"/>
+                    </p:graphicImage>
+                </p:column>
+                <p:column headerText="#{msgs['project.label.name']}">
+                    <h:link outcome="project" value="#{project.name}">
+                        <f:param name="id" value="#{project.id}"/>
+                    </h:link>
+                </p:column>
+                <p:column headerText="#{msgs['project.label.creationDate']}">
+                    <h:outputText value="#{project.creationDate}"/>
+                </p:column>
+                <p:column headerText="#{msgs['project.label.description']}">
+                    <h:outputText value="#{project.description}"/>
+                </p:column>
 
-        <h:panelGroup>
-            <p:commandButton value="#{msgs['menu.project.add']}"
-                             immediate="true"
-                             rendered="#{userSessionData.hasPermission('ADD_PROJECTS')}"
-                             action="#{projectsController.toAddProjectView()}"/>
-        </h:panelGroup>
+            </p:dataTable>
 
-        <p:dataTable id="projects"
-                     var="project"
-                     value="#{projectsModel.projectsListDataModel}"
-                     selection="#{projectsModel.selectedProject}"
-                     selectionMode="single">
-
-            <p:ajax event="rowSelect" listener="#{projectsController.onProjectSelect}"/>
-
-            <p:column>
-                <p:graphicImage value="#{project.streamedIconFile}">
-                    <f:param name="contentEL"
-                             value="projectsModel.projectsListDataModel.getRowData(#{project.id}).streamedIconFile"/>
-                </p:graphicImage>
-            </p:column>
-            <p:column headerText="#{msgs['project.label.name']}">
-                <h:outputText value="#{project.name}"/>
-            </p:column>
-            <p:column headerText="#{msgs['project.label.creationDate']}">
-                <h:outputText value="#{project.creationDate}"/>
-            </p:column>
-            <p:column headerText="#{msgs['project.label.description']}">
-                <h:outputText value="#{project.description}"/>
-            </p:column>
-
-        </p:dataTable>
-
+        </f:view>
     </ui:define>
 </ui:composition>
 </html>

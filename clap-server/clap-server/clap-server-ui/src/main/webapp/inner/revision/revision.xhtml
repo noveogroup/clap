@@ -8,10 +8,17 @@
       xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/template.xhtml">
     <ui:define name="sideMenuItems">
-        <p:menuitem value="#{msgs['menu.project.view']}" outcome="/inner/project/project"/>
+        <p:menuitem value="#{msgs['menu.project.view']}" outcome="/inner/project/project">
+            <f:param name="id" value="#{revisionsModel.selectedRevision.projectId}"/>
+        </p:menuitem>
     </ui:define>
     <ui:define name="content">
-        <f:event type="preRenderView" listener="#{revisionsController.prepareRevisionView}"/>
+        <f:metadata>
+            <f:viewParam name="id" value="#{revisionsModel.selectedRevision}"
+                         converter="#{revisionConverter}" converterMessage="Bad request. Unknown revision."
+                         required="true" requiredMessage="Bad request. Please use a link from within the system."/>
+            <f:viewAction action="#{revisionsController.prepareRevisionView}"/>
+        </f:metadata>
 
         <p:panelGrid id="revisionDetails"
                      styleClass="packagesBlock"
@@ -55,105 +62,7 @@
                 </h:panelGrid>
             </h:form>
         </p:panel>
-
-        <p:panel rendered="#{not empty revisionsModel.selectedRevisionApkStructure}">
-            <p:tree value="#{revisionsModel.selectedRevisionApkStructure}" var="node" id="tree">
-                <p:treeNode id="treeNode">
-                    <h:outputText value="#{node.entryName}" id="lblNode"/>
-                </p:treeNode>
-            </p:tree>
-        </p:panel>
-
-        <p:dataTable var="crashMessage"
-                     value="#{revisionsModel.selectedRevCrashes}"
-                     paginator="true" rows="10"
-                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                     rowsPerPageTemplate="5,10,15">
-
-            <p:column style="width:2%">
-                <p:rowToggler/>
-            </p:column>
-            <p:column headerText="#{msgs['message.label.time']}">
-                <h:outputText value="#{crashMessage.timestamp}"/>
-            </p:column>
-            <p:column headerText="#{msgs['message.label.uploadedBy']}">
-                <h:outputText value="#{crashMessage.uploadedBy}"/>
-            </p:column>
-
-            <p:rowExpansion>
-                <p:panelGrid columns="2">
-                    <h:outputText value="#{msgs['message.label.deviceInfo']}"/>
-                    <h:inputTextarea disabled="true" rows="6" cols="50" value="#{crashMessage.deviceInfo}"/>
-
-                    <h:outputText value="#{msgs['message.label.activityTraceLog']}"/>
-                    <h:inputTextarea disabled="true" rows="6" cols="50" value="#{crashMessage.activityTraceLog}"/>
-
-                    <h:outputText value="#{msgs['message.label.logCat']}"/>
-                    <h:inputTextarea disabled="true" rows="6" cols="50" value="#{crashMessage.logCat}"/>
-
-                    <h:outputText value="#{msgs['message.label.stackTraceInfo']}"/>
-                    <h:inputTextarea disabled="true" rows="6" cols="50" value="#{crashMessage.stackTraceInfo}"/>
-                </p:panelGrid>
-
-            </p:rowExpansion>
-
-        </p:dataTable>
-
-
-        <p:dataTable var="logMessage"
-                     value="#{revisionsModel.selectedRevLogs}"
-                     paginator="true" rows="10"
-                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                     rowsPerPageTemplate="5,10,15">
-
-            <p:column style="width:2%">
-                <p:rowToggler/>
-            </p:column>
-            <p:column headerText="#{msgs['message.label.time']}">
-                <h:outputText value="#{logMessage.timestamp}"/>
-            </p:column>
-            <p:column headerText="#{msgs['message.label.uploadedBy']}">
-                <h:outputText value="#{logMessage.uploadedBy}"/>
-            </p:column>
-
-            <p:rowExpansion>
-                <ul>
-                    <ui:repeat value="#{logMessage.logs}" var="logEntry">
-                        <li>
-                            <h:outputText value="#{logEntry.timestamp}">
-                                <f:converter converterId="TimestampConverter"/>
-                            </h:outputText>
-                            - #{logEntry.message}
-                        </li>
-                    </ui:repeat>
-                </ul>
-
-            </p:rowExpansion>
-
-        </p:dataTable>
-
-        <p:dataTable var="scrMessage"
-                     value="#{revisionsModel.selectedRevScreenshots}"
-                     paginator="true" rows="10"
-                     paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                     rowsPerPageTemplate="5,10,15">
-
-            <p:column style="width:2%">
-                <p:rowToggler/>
-            </p:column>
-            <p:column headerText="#{msgs['message.label.time']}">
-                <h:outputText value="#{scrMessage.timestamp}"/>
-            </p:column>
-            <p:column headerText="#{msgs['message.label.uploadedBy']}">
-                <h:outputText value="#{scrMessage.uploadedBy}"/>
-            </p:column>
-
-            <p:rowExpansion>
-                <img src="#{scrMessage.screenshotUrl}" alt=""/>
-
-            </p:rowExpansion>
-
-        </p:dataTable>
+        <!-- TODO display variants -->
     </ui:define>
 </ui:composition>
 </html>

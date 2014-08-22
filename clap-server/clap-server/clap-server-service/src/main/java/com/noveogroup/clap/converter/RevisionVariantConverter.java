@@ -34,6 +34,8 @@ public class RevisionVariantConverter extends BaseConverter<RevisionVariant, Rev
     @Override
     public void map(final RevisionVariant model, final RevisionVariantEntity entity) {
         super.map(model, entity);
+        model.setRevisionId(entity.getRevision().getId());
+        model.setProjectId(entity.getRevision().getProject().getId());
         model.setFullHash(entity.getFullHash());
         model.setPackageVariant(entity.getPackageVariant());
         model.setPackageUploadedBy(entity.getPackageUploadedBy().getLogin());

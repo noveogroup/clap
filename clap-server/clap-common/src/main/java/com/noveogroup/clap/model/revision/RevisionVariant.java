@@ -11,6 +11,8 @@ public class RevisionVariant extends BaseModel {
     private String packageUrl;
     private String packageUploadedBy;
     private String packageVariant;
+    private Long revisionId;
+    private Long projectId;
 
     public String getFullHash() {
         return fullHash;
@@ -42,5 +44,21 @@ public class RevisionVariant extends BaseModel {
 
     public void setPackageVariant(final String packageVariant) {
         this.packageVariant = packageVariant;
+    }
+
+    public Long getRevisionId() {
+        return revisionId;
+    }
+
+    public void setRevisionId(final Long revisionId) {
+        this.revisionId = revisionId;
+    }
+
+    public Long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(final Long projectId) {
+        this.projectId = projectId;
     }
 }

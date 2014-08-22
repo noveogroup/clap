@@ -17,6 +17,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
@@ -64,9 +65,6 @@ public class ProjectsController extends BaseController {
     }
 
     public void prepareProjectsListView() {
-        if (isAjaxRequest()) {
-            return;
-        }
         LOGGER.debug("call project service");
         final List<ImagedProject> projectList = projectService.findAllImagedProjects();
         LOGGER.debug("project service ret " + projectList);
@@ -81,18 +79,14 @@ public class ProjectsController extends BaseController {
     }
 
     public void prepareProjectView() {
-        if (isAjaxRequest()) {
-            return;
-        }
         final Project selectedProject = projectsModel.getSelectedProject();
         if (selectedProject != null) {
-            final ImagedProject projectWithRevisions = projectService.findByIdWithImage(selectedProject.getId());
-            if (projectWithRevisions != null) {
-                projectsModel.setSelectedProject(new StreamedImagedProject(projectWithRevisions));
                 revisionsModel.setRevisionsListDataModel(
-                        new RevisionsListDataModel(projectWithRevisions.getRevisions()));
-            }
+                        new RevisionsListDataModel(selectedProject.getRevisions()));
         } else {
+            messageSupport.addMessage(null,
+                    new FacesMessage(messageSupport.getMessage("error.badRequest",
+                            new Object[]{"no project id"})));
             LOGGER.error("project not selected");
         }
     }
