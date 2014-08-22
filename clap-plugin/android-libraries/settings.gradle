@@ -1,3 +1,4 @@
 include ':LibraryCommon'
 include ':Api'
 include ':ModuleInfoSpy'
+include ':ModuleCrashSpy'
