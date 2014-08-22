@@ -105,7 +105,7 @@ public class ClapApi {
         apiService.sendInfo(request);
     }
 
-    public CrashRequest prepareCrashRequest(String token, Thread thread, Throwable throwable, String logcat, List<LogEntry> logs) {
+    public CrashRequest prepareCrashRequest(String token, Thread thread, Throwable throwable, List<String> logcat, List<LogEntry> logs) {
         CrashRequest request = prepare(new CrashRequest(), token);
         request.getMessage().setThreadId(thread.getId());
         request.getMessage().setException(SystemUtils.getStackTrace(throwable));

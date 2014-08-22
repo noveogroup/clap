@@ -34,7 +34,7 @@ public class CrashRequest extends BaseRequest<CrashRequest.CrashMessage> {
 
         private long threadId;
         private String exception;
-        private String logCat;
+        private List<String> logCat;
         private List<ThreadInfo> threads;
         private List<LogEntry> logs;
 
@@ -57,11 +57,11 @@ public class CrashRequest extends BaseRequest<CrashRequest.CrashMessage> {
             this.exception = exception;
         }
 
-        public String getLogCat() {
+        public List<String> getLogCat() {
             return logCat;
         }
 
-        public void setLogCat(String logCat) {
+        public void setLogCat(List<String> logCat) {
             this.logCat = logCat;
         }
 
