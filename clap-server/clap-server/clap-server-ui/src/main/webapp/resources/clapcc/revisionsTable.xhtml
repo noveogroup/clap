@@ -10,13 +10,8 @@
         <p:columnToggler datasource="revisions" trigger="tableSettingsButton" />
         <p:dataTable id="revisions"
                      var="revision"
-                     selectionMode="single"
                      resizableColumns="true"
-                     selection="#{revisionsModel.selectedRevision}"
                      value="#{revisionsModel.revisionsListDataModel}">
-
-            <p:ajax event="rowSelect"
-                    listener="#{revisionsController.onRevisionSelected}"/>
 
             <p:column headerText="#{msgs['revision.label.id']}">
                 <h:link outcome="/inner/revision/revision" value="#{revision.id}">

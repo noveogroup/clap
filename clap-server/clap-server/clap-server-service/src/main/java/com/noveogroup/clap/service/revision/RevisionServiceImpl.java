@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import com.google.gson.Gson;
 import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.converter.RevisionConverter;
+import com.noveogroup.clap.converter.RevisionVariantConverter;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.dao.RevisionVariantDAO;
@@ -23,6 +24,7 @@ import com.noveogroup.clap.model.revision.ApplicationFile;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.model.revision.RevisionVariant;
+import com.noveogroup.clap.model.revision.RevisionVariantWithApkStructure;
 import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
 import com.noveogroup.clap.model.user.ClapPermission;
 import com.noveogroup.clap.model.user.User;
@@ -89,11 +91,23 @@ public class RevisionServiceImpl implements RevisionService {
     @EJB
     private UserDAO userDAO;
 
+    @Inject
+    private RevisionVariantConverter revisionVariantConverter;
+
     @RequiresAuthentication
     @WrapException
     @Override
-    public boolean addOrGetRevision(final @NotNull CreateOrUpdateRevisionRequest request) {
+    public boolean createOrUpdateRevision(final @NotNull CreateOrUpdateRevisionRequest request) {
         boolean ret = false;
+        ProjectEntity projectEntity = projectDAO.findProjectByExternalIdOrReturnNull(request.getProjectExternalId());
+        if (projectEntity == null) {
+            projectEntity = new ProjectEntity();
+            projectEntity.setExternalId(request.getProjectExternalId());
+            projectEntity.setName(request.getProjectExternalId());
+            projectEntity.setDescription("Description empty");
+            projectEntity.setCreationDate(new Date());
+            projectEntity = projectDAO.persist(projectEntity);
+        }
         RevisionEntity revisionEntity = revisionDAO.getRevisionByHashOrNull(request.getRevisionHash());
         boolean needToCheckRevisionsAmount = false;
         if (revisionEntity == null) {
@@ -102,6 +116,9 @@ public class RevisionServiceImpl implements RevisionService {
             revisionEntity.setTimestamp(new Date().getTime());
             needToCheckRevisionsAmount = true;
             ret = true;
+            revisionDAO.persist(revisionEntity);
+            revisionEntity.setProject(projectEntity);
+            projectEntity.getRevisions().add(revisionEntity);
         }
         if (revisionEntity.getTimestamp() == null) {
             revisionEntity.setTimestamp(new Date().getTime());
@@ -109,25 +126,27 @@ public class RevisionServiceImpl implements RevisionService {
         if (revisionEntity.getRevisionType() == null) {
             revisionEntity.setRevisionType(RevisionType.DEVELOP);
         }
-        ProjectEntity projectEntity = null;
-
-        projectEntity = projectDAO.findProjectByExternalIdOrReturnNull(request.getProjectExternalId());
-        if (projectEntity == null) {
-            projectEntity = new ProjectEntity();
-            projectEntity.setExternalId(request.getProjectExternalId());
-            projectEntity.setName(request.getProjectExternalId());
-            projectEntity.setDescription("Description empty");
-            projectEntity.setCreationDate(new Date());
-            projectEntity = projectDAO.persist(projectEntity);
-        } else if (needToCheckRevisionsAmount) {
+        if (needToCheckRevisionsAmount) {
             checkAndRemoveOldRevisions(projectEntity);
         }
-        revisionEntity.setProject(projectEntity);
-        projectEntity.getRevisions().add(revisionEntity);
+        RevisionVariantEntity revisionVariantEntity = revisionVariantDAO.getRevisionByHash(request.getVariantHash());
+        if (revisionVariantEntity == null) {
+            revisionVariantEntity = new RevisionVariantEntity();
+            revisionVariantEntity.setFullHash(request.getVariantHash());
+            ret = true;
+            List<RevisionVariantEntity> variants = revisionEntity.getVariants();
+            if (variants == null) {
+                variants = Lists.newArrayList();
+                revisionEntity.setVariants(variants);
+            }
+            variants.add(revisionVariantEntity);
+        }
+        revisionVariantEntity.setPackageVariant(request.getVariantName());
+        revisionVariantEntity.setRandom(request.getRandom());
 
-        processPackages(revisionEntity, request);
-        revisionDAO.persist(revisionEntity);
-        revisionDAO.flush();
+        processPackages(revisionVariantEntity, request);
+        revisionVariantDAO.persist(revisionVariantEntity);
+        revisionVariantDAO.flush();
         return ret;
     }
 
@@ -190,11 +209,13 @@ public class RevisionServiceImpl implements RevisionService {
 
     private void markRevisionScreenshotsToDelete(final RevisionEntity revisionEntity,
                                                  final List<String> filesToDelete) {
-        final List<BaseMessageEntity> messages = revisionEntity.getMessages();
-        if (CollectionUtils.isNotEmpty(messages)) {
-            for (BaseMessageEntity messageEntity : messages) {
-                if (messageEntity instanceof ScreenshotMessageEntity) {
-                    filesToDelete.add(((ScreenshotMessageEntity) messageEntity).getScreenshotFileUrl());
+        for (RevisionVariantEntity revisionVariantEntity : revisionEntity.getVariants()) {
+            final List<BaseMessageEntity> messages = revisionVariantEntity.getMessages();
+            if (CollectionUtils.isNotEmpty(messages)) {
+                for (BaseMessageEntity messageEntity : messages) {
+                    if (messageEntity instanceof ScreenshotMessageEntity) {
+                        filesToDelete.add(((ScreenshotMessageEntity) messageEntity).getScreenshotFileUrl());
+                    }
                 }
             }
         }
@@ -212,33 +233,35 @@ public class RevisionServiceImpl implements RevisionService {
         return revisionTypes;
     }
 
+    @Override
+    public RevisionVariantWithApkStructure getRevisionVariantWithApkStructure(final Long variantId) {
+        final RevisionVariantEntity entity = revisionVariantDAO.findById(variantId);
+        return revisionVariantConverter.mapWithApkStructure(entity, configBean);
+    }
+
     /**
      * processes uploaded packages
      * makes copy in temp files dir for writing to DB
      * sets boolean flags in revision entity
      *
-     * @param revisionEntity to modify flags
-     * @param request        request object, updates stream references in it
+     * @param revisionVariantEntity to modify flags
+     * @param request               request object, updates stream references in it
      */
-    private void processPackages(final RevisionEntity revisionEntity, final CreateOrUpdateRevisionRequest request) {
+    private void processPackages(final RevisionVariantEntity revisionVariantEntity,
+                                 final CreateOrUpdateRevisionRequest request) {
         String currentUserLogin = null;
         UserEntity userByLogin = null;
         final InputStream packageStream = request.getPackageStream();
-        final String variantName = request.getVariantName();
         if (packageStream != null) {
             currentUserLogin = userService.getCurrentUserLogin();
             userByLogin = userDAO.getUserByLogin(currentUserLogin);
-            processStreamedPackage(revisionEntity, userByLogin,
-                    packageStream, request.getVariantHash(), request.getVariantName(),request.getRandom());
+            processStreamedPackage(revisionVariantEntity, userByLogin, packageStream);
         }
     }
 
-    private void processStreamedPackage(final RevisionEntity revisionEntity,
+    private void processStreamedPackage(final RevisionVariantEntity revisionVariantEntity,
                                         final UserEntity uploadedBy,
-                                        final InputStream streamedPackage,
-                                        final String variantHash,
-                                        final String variantName,
-                                        final String random) {
+                                        final InputStream streamedPackage) {
         try {
             RevisionVariantEntity variantEntity = new RevisionVariantEntity();
             final File file = fileService.saveFile(FileType.APK, streamedPackage, "clap_apk_");
@@ -248,21 +271,12 @@ public class RevisionServiceImpl implements RevisionService {
             mainExtractor.processApk();
             final byte[] icon = iconExtractor.getIcon();
             if (icon != null) {
-                revisionEntity.getProject().setIconFile(icon);
+                revisionVariantEntity.getRevision().getProject().setIconFile(icon);
             }
-            List<RevisionVariantEntity> variants = revisionEntity.getVariants();
-            if(variants == null){
-                variants = Lists.newArrayList();
-                revisionEntity.setVariants(variants);
-            }
-            variants.add(variantEntity);
             final ApkStructure apkStructure = mainExtractor.getStructure();
             variantEntity.setApkStructureJSON(new Gson().toJson(apkStructure, ApkStructure.class));
             variantEntity.setPackageFileUrl(file.getAbsolutePath());
-            variantEntity.setFullHash(variantHash);
             variantEntity.setPackageUploadedBy(uploadedBy);
-            variantEntity.setPackageVariant(variantName);
-            variantEntity.setRandom(random);
         } catch (IOException e) {
             LOGGER.error("error while processing: " + streamedPackage, e);
         }

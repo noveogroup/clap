@@ -31,7 +31,7 @@ public class RevisionDAOImpl extends GenericDAOImpl<RevisionEntity, Long> implem
         query.setParameter(REVISION_BY_HASH_PARAMETER, revisionHash);
         final RevisionEntity revisionEntity = (RevisionEntity) query.getSingleResult();
         if (revisionEntity != null) {
-            Hibernate.initialize(revisionEntity.getMessages());
+            Hibernate.initialize(revisionEntity.getVariants());
         }
         return revisionEntity;
     }
@@ -57,7 +57,7 @@ public class RevisionDAOImpl extends GenericDAOImpl<RevisionEntity, Long> implem
     public RevisionEntity findById(final Long aLong) {
         final RevisionEntity revisionEntity = super.findById(aLong);
         if (revisionEntity != null) {
-            Hibernate.initialize(revisionEntity.getMessages());
+            Hibernate.initialize(revisionEntity.getVariants());
         }
         return revisionEntity;
     }

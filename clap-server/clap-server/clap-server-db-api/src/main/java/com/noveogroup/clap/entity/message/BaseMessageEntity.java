@@ -1,7 +1,7 @@
 package com.noveogroup.clap.entity.message;
 
 import com.noveogroup.clap.entity.BaseEntity;
-import com.noveogroup.clap.entity.revision.RevisionEntity;
+import com.noveogroup.clap.entity.revision.RevisionVariantEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
 
 import javax.persistence.Column;
@@ -26,7 +26,7 @@ public abstract class BaseMessageEntity extends BaseEntity {
     @Column(name = "time")
     private Date timestamp;
     @ManyToOne(optional = false)
-    private RevisionEntity revision;
+    private RevisionVariantEntity revisionVariant;
     @ManyToOne(optional = false)
     private UserEntity uploadedBy;
 
@@ -41,12 +41,12 @@ public abstract class BaseMessageEntity extends BaseEntity {
         this.uploadedBy = uploadedBy;
     }
 
-    public void setRevision(final RevisionEntity revision) {
-        this.revision = revision;
+    public void setRevisionVariant(final RevisionVariantEntity revisionVariant) {
+        this.revisionVariant = revisionVariant;
     }
 
-    public RevisionEntity getRevision() {
-        return revision;
+    public RevisionVariantEntity getRevisionVariant() {
+        return revisionVariant;
     }
 
     public Date getTimestamp() {

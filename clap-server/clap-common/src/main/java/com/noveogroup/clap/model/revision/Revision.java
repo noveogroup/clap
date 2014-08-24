@@ -1,7 +1,6 @@
 package com.noveogroup.clap.model.revision;
 
 import com.noveogroup.clap.model.BaseModel;
-import com.noveogroup.clap.model.message.BaseMessage;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import java.util.List;
@@ -15,8 +14,6 @@ public class Revision extends BaseModel {
 
     private RevisionType revisionType;
 
-    private List<BaseMessage> messages;
-
     private Long projectId;
 
     private String hash;
@@ -29,14 +26,6 @@ public class Revision extends BaseModel {
 
     public void setRevisionType(final RevisionType revisionType) {
         this.revisionType = revisionType;
-    }
-
-    public List<BaseMessage> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(final List<BaseMessage> messages) {
-        this.messages = messages;
     }
 
     public Long getProjectId() {
@@ -77,7 +66,6 @@ public class Revision extends BaseModel {
         return new ToStringBuilder(this)
                 .append("timestamp", timestamp)
                 .append("revisionType", revisionType)
-                .append("messages", messages)
                 .append("projectId", projectId)
                 .append("hash", hash)
                 .toString();
