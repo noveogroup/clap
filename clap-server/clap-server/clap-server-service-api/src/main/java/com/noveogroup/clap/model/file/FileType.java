@@ -4,5 +4,5 @@ package com.noveogroup.clap.model.file;
  * @author Andrey Sokolov
  */
 public enum FileType {
-    APK,SCREENSHOT,TEMP;
+    APK,SCREENSHOT,PROJECT_ICON,TEMP;
 }

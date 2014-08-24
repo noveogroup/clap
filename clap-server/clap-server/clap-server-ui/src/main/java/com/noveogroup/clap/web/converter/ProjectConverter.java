@@ -1,7 +1,6 @@
 package com.noveogroup.clap.web.converter;
 
 import com.noveogroup.clap.service.project.ProjectService;
-import com.noveogroup.clap.web.model.projects.StreamedImagedProject;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.faces.convert.Converter;
@@ -20,6 +19,6 @@ public class ProjectConverter extends BaseModelConverter implements Converter {
 
     @Override
     protected Object getObject(final Long id) {
-        return new StreamedImagedProject(projectService.findByIdWithImage(id));
+        return projectService.findByIdWithImage(id);
     }
 }

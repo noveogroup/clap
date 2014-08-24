@@ -1,6 +1,7 @@
 package com.noveogroup.clap.service.project;
 
 import com.google.common.collect.Lists;
+import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.converter.ProjectConverter;
 import com.noveogroup.clap.dao.MessageDAO;
 import com.noveogroup.clap.dao.ProjectDAO;
@@ -28,6 +29,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
+import java.io.File;
 import java.util.Date;
 import java.util.List;
 
@@ -60,6 +62,9 @@ public class ProjectServiceImpl implements ProjectService {
 
     @Inject
     private UserService userService;
+
+    @Inject
+    private ConfigBean configBean;
 
     private ProjectConverter projectConverter = new ProjectConverter();
 
@@ -106,7 +111,7 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public ImagedProject findByIdWithImage(final Long id) {
         final ProjectEntity projectEntity = projectDAO.findById(id);
-        final ImagedProject project = projectConverter.mapToImagedProject(projectEntity);
+        final ImagedProject project = projectConverter.mapToImagedProject(projectEntity, configBean);
         updateRevisionUrls(id, projectEntity, project);
         return project;
     }
@@ -128,7 +133,7 @@ public class ProjectServiceImpl implements ProjectService {
         final List<ProjectEntity> projectEntityList = projectDAO.selectAll();
         final List<ImagedProject> projectList = Lists.newArrayList();
         for (final ProjectEntity projectEntity : projectEntityList) {
-            projectList.add(projectConverter.mapToImagedProject(projectEntity, false));
+            projectList.add(projectConverter.mapToImagedProject(projectEntity, configBean, false));
         }
         return projectList;
     }
@@ -144,6 +149,17 @@ public class ProjectServiceImpl implements ProjectService {
         }
         projectDAO.removeById(project.getId());
         projectDAO.flush();
+    }
+
+    @Override
+    public File getProjectIcon(final long id) {
+
+        final ProjectEntity byId = projectDAO.findById(id);
+        if (byId != null) {
+            return fileService.getFile(byId.getIconFilePath());
+        } else {
+            return null;
+        }
     }
 
 

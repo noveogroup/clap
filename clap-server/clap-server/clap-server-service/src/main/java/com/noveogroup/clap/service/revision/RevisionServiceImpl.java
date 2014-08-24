@@ -46,6 +46,7 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.validation.constraints.NotNull;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -114,19 +115,14 @@ public class RevisionServiceImpl implements RevisionService {
             revisionEntity = new RevisionEntity();
             revisionEntity.setHash(request.getRevisionHash());
             revisionEntity.setTimestamp(new Date().getTime());
+            revisionEntity.setRevisionType(RevisionType.DEVELOP);
             needToCheckRevisionsAmount = true;
             ret = true;
-            revisionDAO.persist(revisionEntity);
             revisionEntity.setProject(projectEntity);
-            projectEntity.getRevisions().add(revisionEntity);
         }
-        if (revisionEntity.getTimestamp() == null) {
-            revisionEntity.setTimestamp(new Date().getTime());
-        }
-        if (revisionEntity.getRevisionType() == null) {
-            revisionEntity.setRevisionType(RevisionType.DEVELOP);
-        }
+        revisionDAO.persist(revisionEntity);
         if (needToCheckRevisionsAmount) {
+            projectEntity.getRevisions().add(revisionEntity);
             checkAndRemoveOldRevisions(projectEntity);
         }
         RevisionVariantEntity revisionVariantEntity = revisionVariantDAO.getRevisionByHash(request.getVariantHash());
@@ -140,6 +136,7 @@ public class RevisionServiceImpl implements RevisionService {
                 revisionEntity.setVariants(variants);
             }
             variants.add(revisionVariantEntity);
+            revisionVariantEntity.setRevision(revisionEntity);
         }
         revisionVariantEntity.setPackageVariant(request.getVariantName());
         revisionVariantEntity.setRandom(request.getRandom());
@@ -263,7 +260,6 @@ public class RevisionServiceImpl implements RevisionService {
                                         final UserEntity uploadedBy,
                                         final InputStream streamedPackage) {
         try {
-            RevisionVariantEntity variantEntity = new RevisionVariantEntity();
             final File file = fileService.saveFile(FileType.APK, streamedPackage, "clap_apk_");
             final ApkInfoMainExtractor mainExtractor = new ApkInfoMainExtractor(file);
             final IconExtractor iconExtractor = new IconExtractor();
@@ -271,12 +267,13 @@ public class RevisionServiceImpl implements RevisionService {
             mainExtractor.processApk();
             final byte[] icon = iconExtractor.getIcon();
             if (icon != null) {
-                revisionVariantEntity.getRevision().getProject().setIconFile(icon);
+                final File iconFile = fileService.saveFile(FileType.PROJECT_ICON, new ByteArrayInputStream(icon));
+                revisionVariantEntity.getRevision().getProject().setIconFilePath(iconFile.getAbsolutePath());
             }
             final ApkStructure apkStructure = mainExtractor.getStructure();
-            variantEntity.setApkStructureJSON(new Gson().toJson(apkStructure, ApkStructure.class));
-            variantEntity.setPackageFileUrl(file.getAbsolutePath());
-            variantEntity.setPackageUploadedBy(uploadedBy);
+            revisionVariantEntity.setApkStructureJSON(new Gson().toJson(apkStructure, ApkStructure.class));
+            revisionVariantEntity.setPackageFileUrl(file.getAbsolutePath());
+            revisionVariantEntity.setPackageUploadedBy(uploadedBy);
         } catch (IOException e) {
             LOGGER.error("error while processing: " + streamedPackage, e);
         }

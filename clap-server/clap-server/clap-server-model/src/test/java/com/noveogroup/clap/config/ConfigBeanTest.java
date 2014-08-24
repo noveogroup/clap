@@ -51,6 +51,8 @@ public class ConfigBeanTest {
 
         assertEquals("DEFAULT", configBean.getAuthenticationSystemId());
         assertEquals("http://localhost:8080/clap-rest/v1/apk/{revId}/{varId}?token={token}", configBean.getDownloadApkUrl());
+        assertEquals("http://localhost:8080/clap-rest/v1/message/screenshot/1/", configBean.getDownloadScreenshotUrl(1));
+        assertEquals("http://localhost:8080/clap-rest/v1/project/icon/2/", configBean.getDownloadProjectIconUrl(2));
         assertEquals(30000000, configBean.getMaxApkSize());
         assertEquals(60000, configBean.getTempFilesCleanInterval());
         assertEquals(180000, configBean.getUpdateConfigInterval());

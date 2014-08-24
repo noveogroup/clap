@@ -1,10 +1,12 @@
 package com.noveogroup.clap.web.model.projects;
 
 import com.noveogroup.clap.model.Project;
+import com.noveogroup.clap.model.project.ImagedProject;
 
 import javax.enterprise.context.RequestScoped;
 import javax.inject.Named;
 import java.io.Serializable;
+import java.util.List;
 
 @Named
 @RequestScoped
@@ -12,9 +14,9 @@ public class ProjectsModel implements Serializable {
 
     private Project newProject = new Project();
 
-    private ProjectsListDataModel projectsListDataModel;
+    private List<ImagedProject> projectList;
 
-    private StreamedImagedProject selectedProject;
+    private ImagedProject selectedProject;
 
     public Project getNewProject() {
         return newProject;
@@ -24,20 +26,19 @@ public class ProjectsModel implements Serializable {
         this.newProject = newProject;
     }
 
-    public ProjectsListDataModel getProjectsListDataModel() {
-        return projectsListDataModel;
+    public List<ImagedProject> getProjectList() {
+        return projectList;
     }
 
-    public void setProjectsListDataModel(final ProjectsListDataModel projectsListDataModel) {
-        this.projectsListDataModel = projectsListDataModel;
+    public void setProjectList(final List<ImagedProject> projectList) {
+        this.projectList = projectList;
     }
 
-    public StreamedImagedProject getSelectedProject() {
+    public ImagedProject getSelectedProject() {
         return selectedProject;
     }
 
-    public void setSelectedProject(final StreamedImagedProject selectedProject) {
+    public void setSelectedProject(final ImagedProject selectedProject) {
         this.selectedProject = selectedProject;
     }
-
 }

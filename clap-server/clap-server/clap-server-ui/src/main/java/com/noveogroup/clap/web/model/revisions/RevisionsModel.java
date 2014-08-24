@@ -7,6 +7,7 @@ import com.noveogroup.clap.model.message.LogsBunchMessage;
 import com.noveogroup.clap.model.message.ScreenshotMessage;
 import com.noveogroup.clap.model.revision.RevisionVariantWithApkStructure;
 import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
+import org.primefaces.model.TreeNode;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.model.SelectItem;
@@ -23,6 +24,8 @@ public class RevisionsModel implements Serializable {
     private RevisionVariantWithApkStructure selectedRevisionVariant;
     private RevisionPackageModel selectedVariantPackageModel;
     private List<SelectItem> revisionTypes;
+
+    private TreeNode selectedVariantApkStructure;
 
     private final List<CrashMessage> selectedRevCrashes = Lists.newArrayList();
     private final List<ScreenshotMessage> selectedRevScreenshots = Lists.newArrayList();
@@ -78,5 +81,13 @@ public class RevisionsModel implements Serializable {
 
     public void setSelectedVariantPackageModel(final RevisionPackageModel selectedVariantPackageModel) {
         this.selectedVariantPackageModel = selectedVariantPackageModel;
+    }
+
+    public TreeNode getSelectedVariantApkStructure() {
+        return selectedVariantApkStructure;
+    }
+
+    public void setSelectedVariantApkStructure(final TreeNode selectedVariantApkStructure) {
+        this.selectedVariantApkStructure = selectedVariantApkStructure;
     }
 }

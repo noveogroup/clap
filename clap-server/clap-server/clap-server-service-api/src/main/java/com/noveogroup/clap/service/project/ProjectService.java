@@ -3,6 +3,7 @@ package com.noveogroup.clap.service.project;
 import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.model.project.ImagedProject;
 
+import java.io.File;
 import java.util.List;
 
 /**
@@ -37,5 +38,6 @@ public interface ProjectService {
 
     void deleteProject(Project project);
 
+    File getProjectIcon(long id);
 
 }

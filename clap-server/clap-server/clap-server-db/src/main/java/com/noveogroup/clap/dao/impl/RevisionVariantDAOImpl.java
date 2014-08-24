@@ -20,7 +20,7 @@ public class RevisionVariantDAOImpl extends GenericDAOImpl<RevisionVariantEntity
     public RevisionVariantEntity getRevisionByHash(final String revisionHash) {
         final Query query = entityManager.createNamedQuery(REVISION_BY_HASH);
         query.setParameter(REVISION_BY_HASH_PARAMETER, revisionHash);
-        final RevisionVariantEntity revisionEntity = (RevisionVariantEntity) query.getSingleResult();
+        final RevisionVariantEntity revisionEntity = getSingleResultOrNull(query);
         if (revisionEntity != null) {
             Hibernate.initialize(revisionEntity.getMessages());
         }

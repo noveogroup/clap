@@ -25,7 +25,7 @@ public class IntegrationTest {
         final String token = authenticationEndpoint.getToken(authentication);
         final UploadFileEndpoint uploadFileEndpoint = ProxyFactory.create(UploadFileEndpoint.class,BASE);
         final CreateOrUpdateRevisionRequest request = new CreateOrUpdateRevisionRequest();
-        request.setPackageStream(getClass().getResourceAsStream("com.noveogroup.clap-clap-application_hacked.apk"));
+        request.setPackageStream(getClass().getResourceAsStream("/com.noveogroup.clap-clap-application_hacked.apk"));
         request.setProjectExternalId("testProjectExternalId");
         request.setRandom("random");
         request.setRevisionHash("testRevisionHash");
