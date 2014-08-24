@@ -33,7 +33,7 @@
                     header="#{msgs['revisionVariant.label.download']}"/>
 
             <p:panel rendered="#{not empty revisionsModel.selectedRevisionVariant}">
-                <p:tree value="#{revisionsModel.selectedRevisionVariant.apkStructure}" var="node" id="tree">
+                <p:tree value="#{revisionsModel.selectedVariantApkStructure}" var="node" id="tree">
                     <p:treeNode id="treeNode">
                         <h:outputText value="#{node.entryName}" id="lblNode"/>
                     </p:treeNode>
@@ -125,8 +125,7 @@
                 </p:column>
 
                 <p:rowExpansion>
-                    <img src="#{scrMessage.screenshotUrl}" alt=""/>
-
+                    <p:graphicImage url="#{scrMessage.screenshotUrl}"/>
                 </p:rowExpansion>
 
             </p:dataTable>

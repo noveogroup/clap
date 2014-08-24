@@ -30,6 +30,8 @@ public class ConfigBean {
 
     private String downloadScreenshotUrl;
 
+    private String downloadProjectIconUrl;
+
     private Properties properties;
 
     private String authenticationSystemId;
@@ -37,6 +39,8 @@ public class ConfigBean {
     private List<String> apkFilesDirs = Lists.newArrayList();
 
     private List<String> screenshotFilesDirs = Lists.newArrayList();
+
+    private List<String> otherFilesDirs = Lists.newArrayList();
 
     private List<String> tempFilesDirs = Lists.newArrayList();
 
@@ -61,11 +65,13 @@ public class ConfigBean {
         fillStringArrayConfig("files.directory.apk", apkFilesDirs);
         fillStringArrayConfig("files.directory.screenshots", screenshotFilesDirs);
         fillStringArrayConfig("files.directory.temp", tempFilesDirs);
+        fillStringArrayConfig("files.directory.others", otherFilesDirs);
         tempFilesCleanInterval = Long.parseLong(properties.getProperty("temp.files.clean.interval"));
         updateConfigInterval = Long.parseLong(properties.getProperty("config.update.interval"));
         keepDevRevisions = Integer.parseInt(properties.getProperty("keep.dev.revisions"));
         configFileLastModified = getConfigFileLastModified();
         downloadScreenshotUrl = properties.getProperty("rest.screenshotDownload");
+        downloadProjectIconUrl = properties.getProperty("rest.projectIconDownload");
     }
 
     private void fillStringArrayConfig(final String property, final List<String> configList) {
@@ -77,7 +83,7 @@ public class ConfigBean {
             }
         }
         if (configList.isEmpty()) {
-            throw new IllegalArgumentException("No files directory is set for" + property);
+            throw new IllegalArgumentException("No files directory is set for " + property);
         }
     }
 
@@ -145,6 +151,14 @@ public class ConfigBean {
 
     public String getDownloadScreenshotUrl(final long id) {
         return downloadScreenshotUrl.replace("{id}",Long.toString(id));
+    }
+
+    public String getDownloadProjectIconUrl(final long id) {
+        return downloadProjectIconUrl.replace("{id}",Long.toString(id));
+    }
+
+    public List<String> getOtherFilesDirs() {
+        return otherFilesDirs;
     }
 
     @Override

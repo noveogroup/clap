@@ -7,7 +7,7 @@ import com.noveogroup.clap.model.Project;
  */
 public class ImagedProject extends Project {
 
-    private byte[] iconFile;
+    private String iconFileUrl;
 
     public ImagedProject() {
     }
@@ -17,14 +17,14 @@ public class ImagedProject extends Project {
      */
     public ImagedProject(final ImagedProject imagedProject) {
         super(imagedProject);
-        this.iconFile = imagedProject.iconFile;
+        this.iconFileUrl = imagedProject.iconFileUrl;
     }
 
-    public byte[] getIconFile() {
-        return iconFile;
+    public String getIconFileUrl() {
+        return iconFileUrl;
     }
 
-    public void setIconFile(final byte[] iconFile) {
-        this.iconFile = iconFile;
+    public void setIconFileUrl(final String iconFileUrl) {
+        this.iconFileUrl = iconFileUrl;
     }
 }

@@ -50,7 +50,7 @@ public class FileServiceImpl implements FileService {
                 filesDirs = configBean.getApkFilesDirs();
                 break;
             default:
-                throw new IllegalArgumentException("unknown filetype :" + fileType);
+                filesDirs = configBean.getOtherFilesDirs();
         }
         return createFile(content, filesDirs, namePrefix, nameSuffix);
     }

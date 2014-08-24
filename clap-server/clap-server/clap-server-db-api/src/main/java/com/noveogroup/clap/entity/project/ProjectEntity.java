@@ -6,7 +6,6 @@ import com.noveogroup.clap.entity.revision.RevisionEntity;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.Lob;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -39,9 +38,8 @@ public class ProjectEntity extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "project",orphanRemoval = true)
     private List<RevisionEntity> revisions;
 
-    @Lob
     @Column(name = "icon")
-    private byte[] iconFile;
+    private String iconFilePath;
 
     public ProjectEntity() {
         revisions = new ArrayList<RevisionEntity>();
@@ -89,12 +87,12 @@ public class ProjectEntity extends BaseEntity {
         this.externalId = externalId;
     }
 
-    public byte[] getIconFile() {
-        return iconFile;
+    public String getIconFilePath() {
+        return iconFilePath;
     }
 
-    public void setIconFile(final byte[] iconFile) {
-        this.iconFile = iconFile;
+    public void setIconFilePath(final String iconFilePath) {
+        this.iconFilePath = iconFilePath;
     }
 
     @Override

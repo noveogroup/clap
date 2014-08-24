@@ -18,7 +18,7 @@
             <h:panelGroup rendered="#{not empty projectsModel.selectedProject}">
 
                 <p:panel id="projectSummary" header="#{projectsModel.selectedProject.name}">
-                    <p:graphicImage value="#{projectsModel.selectedProject.streamedIconFile}"/>
+                    <p:graphicImage url="#{projectsModel.selectedProject.iconFileUrl}" rendered="#{not empty projectsModel.selectedProject.iconFileUrl}"/>
                     <h:outputText value="#{projectsModel.selectedProject.description}"/>
                     <p:commandButton value="#{msgs['menu.project.edit']}"
                                      immediate="true"

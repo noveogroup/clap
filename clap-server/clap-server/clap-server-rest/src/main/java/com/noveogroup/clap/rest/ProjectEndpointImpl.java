@@ -8,6 +8,8 @@ import org.dozer.Mapper;
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Response;
+import java.io.File;
 
 /**
  * @author Mikhail Demidov
@@ -30,5 +32,12 @@ public class ProjectEndpointImpl extends BaseEndpoint implements ProjectEndpoint
     @Override
     public Project getProject(@QueryParam("id") final Long id) {
         return projectService.findById(id);
+    }
+
+
+    @Override
+    public Response getProjectIcon(final long projectId) {
+        final File screenshot = projectService.getProjectIcon(projectId);
+        return returnImage(screenshot);
     }
 }

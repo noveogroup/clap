@@ -42,12 +42,7 @@ public class MessagesEndpointImpl extends BaseEndpoint implements MessagesEndpoi
 
     public Response getScreenshot(final long messageId) {
         final File screenshot = messagesService.getScreenshot(messageId);
-        if (screenshot != null) {
-            return Response.ok(screenshot).header("Content-Disposition",
-                    "attachment; filename=\"" + screenshot.getName() + "\"").build();
-        } else {
-            return Response.status(Response.Status.NOT_FOUND).build();
-        }
+        return returnImage(screenshot);
     }
 
     @Override

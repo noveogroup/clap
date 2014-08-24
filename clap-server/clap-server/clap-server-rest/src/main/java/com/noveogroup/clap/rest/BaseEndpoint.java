@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import javax.ws.rs.core.Response;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -58,5 +59,14 @@ public abstract class BaseEndpoint {
             }
         }
         return null;
+    }
+
+    protected Response returnImage(final File imageFile) {
+        if (imageFile != null) {
+            return Response.ok(imageFile).header("Content-Disposition",
+                    "attachment; filename=\"" + imageFile.getName() + "\"").build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
     }
 }

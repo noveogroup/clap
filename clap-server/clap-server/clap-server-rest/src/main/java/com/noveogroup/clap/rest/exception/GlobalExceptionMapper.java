@@ -15,7 +15,7 @@ public class GlobalExceptionMapper implements ExceptionMapper<Exception> {
         final ClapResponse clapResponse = new ClapResponse();
         clapResponse.setCode(ClapResponse.ERROR_CODE_UNIDENTIFIED_ERROR);
         clapResponse.setMessage(e.getMessage());
-        return Response.status(Response.Status.FORBIDDEN)
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                 .entity(clapResponse)
                 .type(MediaType.APPLICATION_JSON_TYPE).build();
     }

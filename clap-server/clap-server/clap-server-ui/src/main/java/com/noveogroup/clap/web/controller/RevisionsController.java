@@ -100,7 +100,8 @@ public class RevisionsController extends BaseController {
             final RevisionPackageModel packageModel = new RevisionPackageModel();
             packageModel.setApkQRCode(getQRCodeFromUrl(selectedRevisionVariant.getPackageUrl()));
             if (selectedRevisionVariant.getApkStructure() != null) {
-                createApkStructureTree(null, selectedRevisionVariant.getApkStructure().getRootEntry());
+                revisionsModel.setSelectedVariantApkStructure(
+                        createApkStructureTree(null, selectedRevisionVariant.getApkStructure().getRootEntry()));
             }
             revisionsModel.setSelectedVariantPackageModel(packageModel);
             LOGGER.debug(selectedRevisionVariant.getId() + " revision preparing finished");
