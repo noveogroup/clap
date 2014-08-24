@@ -2,20 +2,16 @@ package com.noveogroup.clap.converter;
 
 import com.google.common.collect.Lists;
 import com.noveogroup.clap.config.ConfigBean;
-import com.noveogroup.clap.entity.message.BaseMessageEntity;
 import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.revision.RevisionVariantEntity;
-import com.noveogroup.clap.model.message.BaseMessage;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionVariant;
 import com.noveogroup.clap.model.revision.RevisionVariantWithApkStructure;
 import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
-import org.apache.commons.collections.CollectionUtils;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,13 +21,9 @@ public class RevisionConverter {
 
     private static final Mapper MAPPER = new DozerBeanMapper();
 
-    private MessagesConverter messagesConverter = new MessagesConverter();
 
     private RevisionVariantConverter variantConverter = new RevisionVariantConverter();
 
-    public void setMessagesConverter(final MessagesConverter messagesConverter) {
-        this.messagesConverter = messagesConverter;
-    }
 
     public void setVariantConverter(final RevisionVariantConverter variantConverter) {
         this.variantConverter = variantConverter;
@@ -63,15 +55,6 @@ public class RevisionConverter {
                      final boolean mapMessages, final ConfigBean configBean, final boolean mapWithApkStructure) {
         toMap.setId(revision.getId());
         toMap.setHash(revision.getHash());
-        toMap.setMessages(new ArrayList<BaseMessage>());
-
-        final List<BaseMessageEntity> revisionMessages = revision.getMessages();
-        if (mapMessages && CollectionUtils.isNotEmpty(revisionMessages)) {
-            for (final BaseMessageEntity message : revisionMessages) {
-                BaseMessage map = messagesConverter.map(message, configBean);
-                toMap.getMessages().add(map);
-            }
-        }
         final ProjectEntity project = revision.getProject();
         if (project != null) {
             toMap.setProjectId(project.getId());
@@ -88,16 +71,19 @@ public class RevisionConverter {
                 ((RevisionWithApkStructure) toMap).setVariantWithApkStructureList(variantWithApkStructureList);
             }
             for (RevisionVariantEntity variantEntity : variantEntities) {
-                mapVariant(toMap,variantEntity,mapWithApkStructure);
+                mapVariant(toMap,variantEntity,mapWithApkStructure,configBean);
             }
         }
     }
 
     private void mapVariant(final Revision toMap,
-                            final RevisionVariantEntity variantEntity, final boolean mapWithApkStructure) {
+                            final RevisionVariantEntity variantEntity,
+                            final boolean mapWithApkStructure,
+                            final ConfigBean configBean) {
         RevisionVariant variant = null;
         if(mapWithApkStructure) {
-            RevisionVariantWithApkStructure withApkStructure = variantConverter.mapWithApkStructure(variantEntity);
+            RevisionVariantWithApkStructure withApkStructure = variantConverter
+                    .mapWithApkStructure(variantEntity,configBean);
             ((RevisionWithApkStructure) toMap).getVariantWithApkStructureList().add(withApkStructure);
             variant = withApkStructure;
         }

@@ -4,6 +4,7 @@ import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
 import com.noveogroup.clap.model.revision.ApplicationFile;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
+import com.noveogroup.clap.model.revision.RevisionVariantWithApkStructure;
 import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
 import com.noveogroup.clap.model.user.User;
 
@@ -16,11 +17,10 @@ import java.util.Set;
 public interface RevisionService {
 
     /**
-     *
      * @param request
      * @return true if new created
      */
-    boolean addOrGetRevision(@NotNull CreateOrUpdateRevisionRequest request);
+    boolean createOrUpdateRevision(@NotNull CreateOrUpdateRevisionRequest request);
 
     void updateRevisionData(Revision revision);
 
@@ -32,5 +32,7 @@ public interface RevisionService {
 
     void deleteRevision(Long id);
 
-    Set<RevisionType> getAvailableTypesToChange(User user,Revision revision);
+    Set<RevisionType> getAvailableTypesToChange(User user, Revision revision);
+
+    RevisionVariantWithApkStructure getRevisionVariantWithApkStructure(Long variantId);
 }

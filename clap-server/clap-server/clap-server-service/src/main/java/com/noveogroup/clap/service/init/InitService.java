@@ -4,9 +4,11 @@ import com.google.common.collect.Lists;
 import com.noveogroup.clap.auth.PasswordsHashCalculator;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
+import com.noveogroup.clap.dao.RevisionVariantDAO;
 import com.noveogroup.clap.dao.UserDAO;
 import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
+import com.noveogroup.clap.entity.revision.RevisionVariantEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.model.user.ClapPermission;
@@ -22,6 +24,7 @@ import javax.ejb.Startup;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.interceptor.ExcludeDefaultInterceptors;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -45,6 +48,9 @@ public class InitService {
 
     @EJB
     private RevisionDAO revisionDAO;
+
+    @EJB
+    private RevisionVariantDAO revisionVariantDAO;
 
     @PostConstruct
     public void initDB() {
@@ -81,7 +87,16 @@ public class InitService {
         revision.setHash("test_hash");
         revision.setProject(project);
         revision.setRevisionType(RevisionType.DEVELOP);
+        revision.setVariants(new ArrayList<RevisionVariantEntity>());
         revision = revisionDAO.persist(revision);
+        final RevisionVariantEntity revisionVariantEntity = new RevisionVariantEntity();
+        revisionVariantEntity.setFullHash("testFullHash");
+        revisionVariantEntity.setPackageVariant("testPackageVariant");
+        revisionVariantEntity.setPackageFileUrl("testPackageUrl");
+        revisionVariantEntity.setRandom("testRandom");
+        revisionVariantEntity.setRevision(revision);
+        revision.getVariants().add(revisionVariantEntity);
+        revisionVariantDAO.persist(revisionVariantEntity);
         LOGGER.debug("revision created : " + revision);
     }
 

@@ -4,7 +4,6 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:clp="http://xmlns.jcp.org/jsf/composite/clapcc"
       xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/template.xhtml">
     <ui:define name="sideMenuItems">
@@ -13,56 +12,64 @@
         </p:menuitem>
     </ui:define>
     <ui:define name="content">
-        <f:metadata>
-            <f:viewParam name="id" value="#{revisionsModel.selectedRevision}"
-                         converter="#{revisionConverter}" converterMessage="Bad request. Unknown revision."
-                         required="true" requiredMessage="Bad request. Please use a link from within the system."/>
-            <f:viewAction action="#{revisionsController.prepareRevisionView}"/>
-        </f:metadata>
+        <f:view transient="true">
 
-        <p:panelGrid id="revisionDetails"
-                     styleClass="packagesBlock"
-                     columnClasses="packagesBlockColumn,packagesBlockColumn"
-                     columns="2"
-                     rendered="#{not empty revisionsModel.selectedRevision}">
-            <clp:packageForm
-                    id="clean"
-                    packageUrl="#{revisionsModel.selectedRevision.mainPackageUrl}"
-                    packageModel="#{revisionsModel.cleanPackageModel}"
-                    packageModelEL="revisionsModel.cleanPackageModel"
-                    header="#{msgs['revision.label.exp.clean']}"/>
-            <clp:packageForm
-                    id="hacked"
-                    packageUrl="#{revisionsModel.selectedRevision.specialPackageUrl}"
-                    packageModel="#{revisionsModel.hackedPackageModel}"
-                    packageModelEL="revisionsModel.hackedPackageModel"
-                    header="#{msgs['revision.label.exp.hacked']}"/>
-        </p:panelGrid>
-        <p:panel header="#{msgs['revision.label.control.header']}">
+            <f:metadata>
+                <f:viewParam name="id" value="#{revisionsModel.selectedRevision}"
+                             converter="#{revisionConverter}" converterMessage="Bad request. Unknown revision."
+                             required="true" requiredMessage="Bad request. Please use a link from within the system."/>
+                <f:viewAction action="#{revisionsController.prepareRevisionView}"/>
+            </f:metadata>
+            <p:panel header="#{msgs['revision.label.control.header']}">
+                <h:form>
+                    <p:messages id="revisionControlMessages"/>
+                    <h:panelGrid columns="2">
+                        <h:outputText value="#{msgs['revision.label.control.remove']}"
+                                      rendered="#{userSessionData.hasPermission('DELETE_REVISIONS')}"/>
+                        <p:commandButton value="#{msgs['common.form.label.delete']}"
+                                         ajax="false"
+                                         immediate="true"
+                                         rendered="#{userSessionData.hasPermission('DELETE_REVISIONS')}"
+                                         action="#{revisionsController.removeSelectedRevision}"/>
+
+                        <p:outputLabel value="#{msgs['revision.label.control.change.type']}"
+                                       for="changeTypeMenu"
+                                       rendered="#{not empty revisionsModel.revisionTypes}"/>
+                        <p:selectOneMenu id="changeTypeMenu"
+                                         value="#{revisionsModel.selectedRevision.revisionType}"
+                                         rendered="#{not empty revisionsModel.revisionTypes}">
+                            <f:selectItems value="#{revisionsModel.revisionTypes}"/>
+                            <p:ajax listener="#{revisionsController.onRevisionTypeSelected}" update="@form"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                </h:form>
+            </p:panel>
             <h:form>
-                <p:messages id="revisionControlMessages"/>
-                <h:panelGrid columns="2">
-                    <h:outputText value="#{msgs['revision.label.control.remove']}"
-                                  rendered="#{userSessionData.hasPermission('DELETE_REVISIONS')}"/>
-                    <p:commandButton value="#{msgs['common.form.label.delete']}"
-                                     ajax="false"
-                                     immediate="true"
-                                     rendered="#{userSessionData.hasPermission('DELETE_REVISIONS')}"
-                                     action="#{revisionsController.removeSelectedRevision}"/>
+                <p:commandButton id="tableSettingsButton" value="#{msgs['common.table.settings']}" type="button"/>
+                <p:columnToggler datasource="revisionVariants" trigger="tableSettingsButton"/>
+                <p:dataTable id="revisionVariants"
+                             var="revisionVariant"
+                             resizableColumns="true"
+                             value="#{revisionsModel.selectedRevision.variants}">
 
-                    <p:outputLabel value="#{msgs['revision.label.control.change.type']}"
-                                   for="changeTypeMenu"
-                                   rendered="#{not empty revisionsModel.revisionTypes}"/>
-                    <p:selectOneMenu id="changeTypeMenu"
-                                     value="#{revisionsModel.selectedRevision.revisionType}"
-                                     rendered="#{not empty revisionsModel.revisionTypes}">
-                        <f:selectItems value="#{revisionsModel.revisionTypes}"/>
-                        <p:ajax listener="#{revisionsController.onRevisionTypeSelected}" update="@form"/>
-                    </p:selectOneMenu>
-                </h:panelGrid>
+                    <p:column headerText="#{msgs['revision.label.id']}">
+                        <h:link outcome="/inner/revision/revisionVariant" value="#{revisionVariant.id}">
+                            <f:param name="id" value="#{revisionVariant.id}"/>
+                        </h:link>
+                    </p:column>
+                    <p:column headerText="#{msgs['revisionVariant.label.hash']}">
+                        <h:link outcome="/inner/revision/revisionVariant" value="#{revisionVariant.fullHash}">
+                            <f:param name="id" value="#{revisionVariant.id}"/>
+                        </h:link>
+                    </p:column>
+                    <p:column headerText="#{msgs['revisionVariant.label.name']}">
+                        <h:link outcome="/inner/revision/revisionVariant" value="#{revisionVariant.packageVariant}">
+                            <f:param name="id" value="#{revisionVariant.id}"/>
+                        </h:link>
+                    </p:column>
+                </p:dataTable>
             </h:form>
-        </p:panel>
-        <!-- TODO display variants -->
+        </f:view>
     </ui:define>
 </ui:composition>
 </html>

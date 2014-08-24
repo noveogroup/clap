@@ -29,7 +29,7 @@ public class UploadFileEndpointImpl extends BaseEndpoint implements UploadFileEn
     @Override
     public ClapResponse createOrUpdateRevision(final CreateOrUpdateRevisionRequest request) {
         login(request.getToken());
-        final boolean result = revisionService.addOrGetRevision(request);
+        final boolean result = revisionService.createOrUpdateRevision(request);
         final ClapResponse response = new ClapResponse();
         response.setMessage(result ? "saved" : "not saved");
         return response;

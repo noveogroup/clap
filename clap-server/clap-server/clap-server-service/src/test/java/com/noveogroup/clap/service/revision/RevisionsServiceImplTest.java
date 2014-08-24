@@ -5,11 +5,11 @@ import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.converter.RevisionConverter;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
+import com.noveogroup.clap.dao.RevisionVariantDAO;
 import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.revision.RevisionVariantEntity;
 import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
-import com.noveogroup.clap.model.revision.StreamedPackage;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.service.file.FileService;
@@ -44,6 +44,9 @@ public class RevisionsServiceImplTest {
 
     @Mock
     private RevisionDAO revisionDAO;
+
+    @Mock
+    private RevisionVariantDAO revisionVariantDAO;
 
     @Mock
     private ProjectDAO projectDAO;
@@ -111,7 +114,7 @@ public class RevisionsServiceImplTest {
         revisionEntities.add(re4);
 
         when(revisionDAO.findForProjectAndType(123L, RevisionType.DEVELOP)).thenReturn(revisionEntities);
-        final boolean created = revisionService.addOrGetRevision(request);
+        final boolean created = revisionService.createOrUpdateRevision(request);
         verify(fileService).removeFile("mockFileUrl1");
         verify(fileService).removeFile("mockFileUrl2");
         verify(revisionDAO).remove(re3);

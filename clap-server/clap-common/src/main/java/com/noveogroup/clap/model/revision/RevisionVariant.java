@@ -1,6 +1,9 @@
 package com.noveogroup.clap.model.revision;
 
 import com.noveogroup.clap.model.BaseModel;
+import com.noveogroup.clap.model.message.BaseMessage;
+
+import java.util.List;
 
 /**
  * @author Andrey Sokolov
@@ -13,6 +16,8 @@ public class RevisionVariant extends BaseModel {
     private String packageVariant;
     private Long revisionId;
     private Long projectId;
+
+    private List<BaseMessage> messages;
 
     public String getFullHash() {
         return fullHash;
@@ -60,5 +65,13 @@ public class RevisionVariant extends BaseModel {
 
     public void setProjectId(final Long projectId) {
         this.projectId = projectId;
+    }
+
+    public List<BaseMessage> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(final List<BaseMessage> messages) {
+        this.messages = messages;
     }
 }

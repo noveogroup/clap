@@ -5,8 +5,8 @@ import com.google.common.collect.Lists;
 import com.noveogroup.clap.model.message.CrashMessage;
 import com.noveogroup.clap.model.message.LogsBunchMessage;
 import com.noveogroup.clap.model.message.ScreenshotMessage;
-import com.noveogroup.clap.model.revision.Revision;
-import com.noveogroup.clap.model.revision.RevisionVariant;
+import com.noveogroup.clap.model.revision.RevisionVariantWithApkStructure;
+import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
 
 import javax.enterprise.context.RequestScoped;
 import javax.faces.model.SelectItem;
@@ -19,14 +19,14 @@ import java.util.List;
 public class RevisionsModel implements Serializable {
 
     private RevisionsListDataModel revisionsListDataModel;
-    private Revision selectedRevision;
-    private RevisionVariant selectedRevisionVariant;
+    private RevisionWithApkStructure selectedRevision;
+    private RevisionVariantWithApkStructure selectedRevisionVariant;
+    private RevisionPackageModel selectedVariantPackageModel;
     private List<SelectItem> revisionTypes;
 
     private final List<CrashMessage> selectedRevCrashes = Lists.newArrayList();
     private final List<ScreenshotMessage> selectedRevScreenshots = Lists.newArrayList();
     private final List<LogsBunchMessage> selectedRevLogs = Lists.newArrayList();
-    private final List<RevisionPackageModel> variants = Lists.newArrayList();
 
     public RevisionsListDataModel getRevisionsListDataModel() {
         return revisionsListDataModel;
@@ -36,11 +36,11 @@ public class RevisionsModel implements Serializable {
         this.revisionsListDataModel = revisionsListDataModel;
     }
 
-    public Revision getSelectedRevision() {
+    public RevisionWithApkStructure getSelectedRevision() {
         return selectedRevision;
     }
 
-    public void setSelectedRevision(final Revision selectedRevision) {
+    public void setSelectedRevision(final RevisionWithApkStructure selectedRevision) {
         this.selectedRevision = selectedRevision;
     }
 
@@ -64,15 +64,19 @@ public class RevisionsModel implements Serializable {
         return selectedRevLogs;
     }
 
-    public List<RevisionPackageModel> getVariants() {
-        return variants;
-    }
-
-    public RevisionVariant getSelectedRevisionVariant() {
+    public RevisionVariantWithApkStructure getSelectedRevisionVariant() {
         return selectedRevisionVariant;
     }
 
-    public void setSelectedRevisionVariant(final RevisionVariant selectedRevisionVariant) {
+    public void setSelectedRevisionVariant(final RevisionVariantWithApkStructure selectedRevisionVariant) {
         this.selectedRevisionVariant = selectedRevisionVariant;
+    }
+
+    public RevisionPackageModel getSelectedVariantPackageModel() {
+        return selectedVariantPackageModel;
+    }
+
+    public void setSelectedVariantPackageModel(final RevisionPackageModel selectedVariantPackageModel) {
+        this.selectedVariantPackageModel = selectedVariantPackageModel;
     }
 }

@@ -15,7 +15,6 @@ import com.noveogroup.clap.model.revision.ApkEntry;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.model.revision.RevisionVariantWithApkStructure;
-import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
 import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.service.revision.RevisionService;
@@ -27,7 +26,6 @@ import com.noveogroup.clap.web.model.revisions.RevisionsModel;
 import com.noveogroup.clap.web.model.user.UserSessionData;
 import com.noveogroup.clap.web.util.message.MessageSupport;
 import org.apache.commons.lang3.StringUtils;
-import org.primefaces.event.SelectEvent;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DefaultTreeNode;
 import org.primefaces.model.StreamedContent;
@@ -74,13 +72,21 @@ public class RevisionsController extends BaseController {
 
     public void prepareRevisionView() throws IOException, WriterException {
         final Revision selectedRevision = revisionsModel.getSelectedRevision();
-        if (selectedRevision != null && selectedRevision instanceof RevisionWithApkStructure) {
+        if (selectedRevision != null) {
+            populateRevisionTypesList();
+            LOGGER.debug(selectedRevision.getId() + " revision preparing finished");
+        } else {
+            LOGGER.error("revision not selected");
+        }
+    }
+
+    public void prepareRevisionVariantView() throws IOException, WriterException {
+        final RevisionVariantWithApkStructure selectedRevisionVariant = revisionsModel.getSelectedRevisionVariant();
+        if (selectedRevisionVariant != null) {
             revisionsModel.getSelectedRevCrashes().clear();
             revisionsModel.getSelectedRevScreenshots().clear();
             revisionsModel.getSelectedRevLogs().clear();
-            revisionsModel.getVariants().clear();
-            final RevisionWithApkStructure revWithApkStructure = (RevisionWithApkStructure) selectedRevision;
-            for (final BaseMessage message : revWithApkStructure.getMessages()) {
+            for (final BaseMessage message : selectedRevisionVariant.getMessages()) {
                 if (message instanceof CrashMessage) {
                     revisionsModel.getSelectedRevCrashes().add((CrashMessage) message);
                 }
@@ -91,14 +97,13 @@ public class RevisionsController extends BaseController {
                     revisionsModel.getSelectedRevLogs().add((LogsBunchMessage) message);
                 }
             }
-            for(final RevisionVariantWithApkStructure var : revWithApkStructure.getVariantWithApkStructureList()){
-                final RevisionPackageModel packageModel = new RevisionPackageModel();
-                packageModel.setApkQRCode(getQRCodeFromUrl(var.getPackageUrl()));
-                createApkStructureTree(null, var.getApkStructure().getRootEntry());
-                revisionsModel.getVariants().add(packageModel);
+            final RevisionPackageModel packageModel = new RevisionPackageModel();
+            packageModel.setApkQRCode(getQRCodeFromUrl(selectedRevisionVariant.getPackageUrl()));
+            if (selectedRevisionVariant.getApkStructure() != null) {
+                createApkStructureTree(null, selectedRevisionVariant.getApkStructure().getRootEntry());
             }
-            populateRevisionTypesList();
-            LOGGER.debug(selectedRevision.getId() + " revision preparing finished");
+            revisionsModel.setSelectedVariantPackageModel(packageModel);
+            LOGGER.debug(selectedRevisionVariant.getId() + " revision preparing finished");
         } else {
             LOGGER.error("revision not selected");
         }
@@ -113,13 +118,6 @@ public class RevisionsController extends BaseController {
             }
         }
         return ret;
-    }
-
-    public void onRevisionSelected(final SelectEvent event) {
-        final Revision revision = (Revision) event.getObject();
-        revisionsModel.setSelectedRevision(revision);
-        LOGGER.debug(revision.getId() + " revision selected");
-        redirectTo(Navigation.REVISION);
     }
 
     public String removeSelectedRevision() {

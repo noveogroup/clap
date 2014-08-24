@@ -1,14 +1,18 @@
 package com.noveogroup.clap.entity.revision;
 
 import com.noveogroup.clap.entity.BaseEntity;
+import com.noveogroup.clap.entity.message.BaseMessageEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import java.util.List;
 
 /**
  * @author Andrey Sokolov
@@ -35,6 +39,9 @@ public class RevisionVariantEntity extends BaseEntity {
     private String apkStructureJSON;
     @Column(name = "random", nullable = false)
     private String random;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "revisionVariant", orphanRemoval = true)
+    private List<BaseMessageEntity> messages;
 
     public String getFullHash() {
         return fullHash;
@@ -90,5 +97,13 @@ public class RevisionVariantEntity extends BaseEntity {
 
     public void setRandom(final String random) {
         this.random = random;
+    }
+
+    public List<BaseMessageEntity> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(final List<BaseMessageEntity> messageEntities) {
+        this.messages = messageEntities;
     }
 }

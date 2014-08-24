@@ -3,11 +3,11 @@ package com.noveogroup.clap.service.messages;
 import com.google.common.collect.Lists;
 import com.noveogroup.clap.converter.MessagesConverter;
 import com.noveogroup.clap.dao.MessageDAO;
-import com.noveogroup.clap.dao.RevisionDAO;
+import com.noveogroup.clap.dao.RevisionVariantDAO;
 import com.noveogroup.clap.dao.UserDAO;
 import com.noveogroup.clap.entity.message.BaseMessageEntity;
 import com.noveogroup.clap.entity.message.ScreenshotMessageEntity;
-import com.noveogroup.clap.entity.revision.RevisionEntity;
+import com.noveogroup.clap.entity.revision.RevisionVariantEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.exception.WrapException;
 import com.noveogroup.clap.model.file.FileType;
@@ -32,7 +32,7 @@ public class MessagesServiceImpl implements MessagesService {
 
 
     @EJB
-    private RevisionDAO revisionDAO;
+    private RevisionVariantDAO revisionDAO;
 
     @EJB
     private MessageDAO messageDAO;
@@ -51,11 +51,11 @@ public class MessagesServiceImpl implements MessagesService {
     @RequiresAuthentication
     @WrapException
     @Override
-    public void saveMessage(final String revisionHash, final BaseMessage message) {
-        final RevisionEntity revisionEntity = revisionDAO.getRevisionByHash(revisionHash);
+    public void saveMessage(final String variantHash, final BaseMessage message) {
+        final RevisionVariantEntity revisionEntity = revisionDAO.getRevisionByHash(variantHash);
         UserEntity userByLogin = userDAO.getUserByLogin(userService.getCurrentUserLogin());
         BaseMessageEntity messageEntity = messagesConverter.map(message);
-        messageEntity.setRevision(revisionEntity);
+        messageEntity.setRevisionVariant(revisionEntity);
         messageEntity.setUploadedBy(userByLogin);
         messageEntity = messageDAO.persist(messageEntity);
         List<BaseMessageEntity> messageEntities = revisionEntity.getMessages();
@@ -71,7 +71,7 @@ public class MessagesServiceImpl implements MessagesService {
     @RequiresAuthentication
     @WrapException
     @Override
-    public void saveMessage(final String revisionHash, final BaseMessage message, final InputStream inputStream) {
+    public void saveMessage(final String variantHash, final BaseMessage message, final InputStream inputStream) {
         if (inputStream != null) {
             if (message instanceof ScreenshotMessage) {
                 ScreenshotMessage screenshotMessage = (ScreenshotMessage) message;
@@ -79,7 +79,7 @@ public class MessagesServiceImpl implements MessagesService {
                 screenshotMessage.setScreenshotUrl(file.getAbsolutePath());
             }
         }
-        saveMessage(revisionHash, message);
+        saveMessage(variantHash, message);
     }
 
     @Override

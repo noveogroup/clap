@@ -1,7 +1,6 @@
 package com.noveogroup.clap.entity.revision;
 
 import com.noveogroup.clap.entity.BaseEntity;
-import com.noveogroup.clap.entity.message.BaseMessageEntity;
 import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.model.revision.RevisionType;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -39,10 +38,6 @@ public class RevisionEntity extends BaseEntity {
     @Column(name = "hash", unique = true, nullable = false)
     private String hash;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "revision", orphanRemoval = true)
-    private List<BaseMessageEntity> messages;
-
-
     @ManyToOne(optional = false)
     private ProjectEntity project;
 
@@ -63,13 +58,6 @@ public class RevisionEntity extends BaseEntity {
         this.revisionType = revisionType;
     }
 
-    public List<BaseMessageEntity> getMessages() {
-        return messages;
-    }
-
-    public void setMessages(final List<BaseMessageEntity> messageEntities) {
-        this.messages = messageEntities;
-    }
 
     public ProjectEntity getProject() {
         return project;
@@ -113,7 +101,6 @@ public class RevisionEntity extends BaseEntity {
                 .append("timestamp", timestamp)
                 .append("revisionType", revisionType)
                 .append("hash", hash)
-                .append("messages", messages)
                 .append("project", project)
                 .toString();
     }
