@@ -8,7 +8,8 @@ repositories {
 
 dependencies {
     compile gradleApi()
-    compile 'com.noveogroup.clap:clap-api:0.1'
+    compile 'com.noveogroup.clap:library-common:0.1'
+    compile 'com.noveogroup.clap:library-api:0.1'
     compile 'org.javassist:javassist:3.18.2-GA'
     compile 'org.codehaus.groovy.modules.http-builder:http-builder:0.7.1'
     compile 'org.apache.httpcomponents:httpmime:4.3.5'
@@ -19,13 +20,12 @@ task sourcesJar(type: Jar) {
     from sourceSets.main.allSource
 }
 
+group = 'com.noveogroup.clap'
+version '0.1'
+
 publishing {
     publications {
         maven(MavenPublication) {
-            groupId 'com.noveogroup.clap'
-            artifactId 'gradle-plugin'
-            version '0.1'
-
             from components.java
             artifact sourcesJar
 
