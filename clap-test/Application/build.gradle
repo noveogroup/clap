@@ -28,11 +28,11 @@ clap {
     serverUrl 'http://10.0.14.53:8080/clap-rest/'
     username 'pstepanov'
     password 'password'
-    instrument 'addLogs'
+    instrument 'info-spy'
 
     custom {
         debug {
-            instrument 'sendLogs'
+            instrument 'cash-spy'
         }
         release {
             projectId 'release'

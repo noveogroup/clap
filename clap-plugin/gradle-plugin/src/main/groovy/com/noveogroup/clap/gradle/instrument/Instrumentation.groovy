@@ -1,9 +1,34 @@
+/*
+ * Copyright (c) 2014 Noveo Group
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * Except as contained in this notice, the name(s) of the above copyright holders
+ * shall not be used in advertising or otherwise to promote the sale, use or
+ * other dealings in this Software without prior written authorization.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+ * THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ */
+
 package com.noveogroup.clap.gradle.instrument
 
 import com.noveogroup.clap.gradle.Utils
-import com.noveogroup.clap.gradle.instrument.modules.AddLogs
-import com.noveogroup.clap.gradle.instrument.modules.SendLogs
-import com.noveogroup.clap.gradle.instrument.modules.SendScreenshots
+import com.noveogroup.clap.gradle.instrument.modules.CrashSpy
+import com.noveogroup.clap.gradle.instrument.modules.InfoSpy
 import javassist.ClassPool
 import javassist.CtClass
 import org.gradle.api.GradleException
@@ -13,9 +38,8 @@ import org.gradle.api.tasks.compile.JavaCompile
 class Instrumentation {
 
     private static Map<String, Module> MODULES = [
-            addLogs        : new AddLogs(dependencies: ['org.slf4j:slf4j-api:1.7.7', 'ch.qos.logback:logback-core:1.1.2', 'ch.qos.logback:logback-classic:1.1.2']),
-            sendLogs       : new SendLogs(dependencies: ['com.noveogroup.clap:library-api:0.1', 'com.noveogroup.clap:library-logs:0.1']),
-            sendScreenshots: new SendScreenshots(dependencies: ['com.noveogroup.clap:library-api:0.1', 'com.noveogroup.clap:library-logs:0.1']),
+            'crash-spy': new CrashSpy(dependencies: ['com.noveogroup.clap:module-crashSpy:0.1']),
+            'info-spy' : new InfoSpy(dependencies: ['com.noveogroup.clap:module-infoSpy:0.1']),
     ]
 
     static Module getModule(String name) {
