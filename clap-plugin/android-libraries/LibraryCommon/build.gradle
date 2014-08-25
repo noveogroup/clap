@@ -1,4 +1,5 @@
 apply plugin: 'com.android.library'
+apply plugin: 'maven-publish'
 
 android {
     compileSdkVersion project.compileSdkVersion
@@ -12,4 +13,112 @@ android {
     }
 
     lintOptions { abortOnError false }
+}
+
+android.libraryVariants.all { variant ->
+    task("generate${variant.name.capitalize()}SourcesJar", type: Jar) {
+        group 'Sources'
+        description "Generates sources jar for $variant.name build."
+        classifier = "${variant.name}-sources"
+        Closure sum = { set, i -> set + i }
+        into('assets') { from variant.sourceSets*.assetsDirectories.inject([], sum) }
+        into('res') { from variant.sourceSets*.resDirectories.inject([], sum) }
+        into('jni') { from variant.sourceSets*.jniDirectories.inject([], sum) }
+        into('rs') { from variant.sourceSets*.renderscriptDirectories.inject([], sum) }
+        from variant.sourceSets*.aidlDirectories.inject([], sum)
+        from variant.sourceSets*.javaDirectories.inject([], sum)
+        from variant.sourceSets*.resourcesDirectories.inject([], sum)
+        from variant.sourceSets*.manifestFile
+    }
+    Task javadocTask = task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
+        group 'Javadoc'
+        description "Generates Javadoc for $variant.name build."
+        source = variant.javaCompile.source
+        classpath = files(android.plugin.bootClasspath, variant.javaCompile.classpath)
+        options.links("http://docs.oracle.com/javase/7/docs/api/");
+    }
+    task("generate${variant.name.capitalize()}JavadocJar", type: Jar,
+            dependsOn: javadocTask.name) {
+        group 'Javadoc'
+        classifier = "${variant.name}-javadoc"
+        description "Generates Javadoc jar for $variant.name build."
+        from javadocTask.destinationDir
+    }
+}
+
+project.afterEvaluate {
+    publishing.publications.maven.artifact tasks.getByName('bundleRelease')
+    publishing.publications.maven.artifact tasks.getByName('generateReleaseSourcesJar') {
+        classifier 'sources'
+    }
+    publishing.publications.maven.artifact tasks.getByName('generateReleaseJavadocJar') {
+        classifier 'javadoc'
+    }
+}
+
+group = 'com.noveogroup.clap'
+version = '0.1'
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            pom.withXml {
+                asNode().children().last() + {
+                    resolveStrategy = Closure.DELEGATE_FIRST
+                    name 'CLAP Plugin Library - Common'
+                    description 'TODO write a description'
+                    url 'http://noveogroup.github.io/clap/'
+                    licenses {
+                        license {
+                            name 'The MIT License (MIT)'
+                            url 'http://opensource.org/licenses/MIT'
+                            distribution 'repo'
+                        }
+                    }
+                    scm {
+                        url 'https://github.com/noveogroup/clap'
+                        connection 'scm:git@github.com:noveogroup/clap.git'
+                        developerConnection 'scm:git@github.com:noveogroup/clap.git'
+                    }
+                    developers {
+                        developer {
+                            name 'Pavel Stepanov'
+                            url 'https://github.com/stefan-nsk'
+                            roles {
+                                role 'architect'
+                                role 'developer'
+                            }
+                        }
+                        developer {
+                            name 'Andrey Sokolov'
+                            url 'https://github.com/RagnarNSK'
+                            roles {
+                                role 'developer'
+                            }
+                        }
+                    }
+                }
+
+                Node dependenciesNode = asNode().appendNode('dependencies')
+                configurations.compile.allDependencies.each {
+                    Node dependencyNode = dependenciesNode.appendNode('dependency')
+                    dependencyNode.appendNode('groupId', it.group)
+                    dependencyNode.appendNode('artifactId', it.name)
+                    dependencyNode.appendNode('version', it.version)
+                }
+            }
+        }
+    }
+    repositories {
+        maven {
+            String sonatypeReleaseRepository = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
+            String sonatypeUsername = project.properties['username']
+            String sonatypePassword = project.properties['password']
+            url sonatypeReleaseRepository
+            credentials {
+                username = sonatypeUsername
+                password = sonatypePassword
+            }
+        }
+    }
 }
