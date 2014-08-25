@@ -26,7 +26,6 @@
 
 package com.noveogroup.clap.gradle
 
-import com.noveogroup.clap.api.BuildConfigHelper
 import com.noveogroup.clap.gradle.config.ClapOptions
 import com.noveogroup.clap.gradle.config.Options
 import com.noveogroup.clap.gradle.instrument.Instrumentation
@@ -55,14 +54,28 @@ class ClapPlugin implements Plugin<Project> {
         }
         set BuildConfigHelper.FIELD_CLAP_PROJECT_ID, options.projectId
         set BuildConfigHelper.FIELD_CLAP_SERVER_URL, options.serverUrl
-        set BuildConfigHelper.FIELD_CLAP_USERNAME, options.username
-        set BuildConfigHelper.FIELD_CLAP_PASSWORD, options.password
     }
 
     Map<String, Task> hashTasks = [:]
     Map<String, String> hashValues = [:]
+    Map<String, String> randomValues = [:]
 
-    private Task createCalculateHashTask(Project project, def variant) {
+    private Task createCalculateRevisionHashTask(Project project) {
+        hashTasks[null] = project.task("calculateHash",
+                group: "CLAP",
+                description: "Calculates hash of all sources of project.")
+
+        hashTasks[null] << {
+            // calculate and update hash code of sources
+            FileTree fileTree = Utils.getFileTree(project)
+            String hash = Utils.calculateHash(fileTree) as String
+            hashValues[null] = hash
+        }
+
+        return hashTasks[null]
+    }
+
+    private Task createCalculateVariantHashTask(Project project, def variant) {
         String name = variant.name as String
         Task hashTask = project.task("calculate${name.capitalize()}Hash",
                 group: "CLAP",
@@ -88,13 +101,12 @@ class ClapPlugin implements Plugin<Project> {
         Task uploadTask = project.task("upload${name.capitalize()}",
                 group: "CLAP",
                 description: "Uploads ${name.capitalize()} APK on CLAP server.",
-                dependsOn: [zipAlignTask, hashTasks[name]])
+                dependsOn: [zipAlignTask, hashTasks[null], hashTasks[name]])
 
         uploadTask << {
             Options options = clap.resolve(variant.buildType.name as String)
-            String hash = hashValues[name] as String
             File apkFile = variant.variantData.outputFile
-            Utils.uploadApk(apkFile, options, hash)
+            Utils.uploadApk(apkFile, options, hashValues[null], hashValues[name], randomValues[name])
         }
 
         return uploadTask
@@ -103,16 +115,6 @@ class ClapPlugin implements Plugin<Project> {
     @Override
     void apply(Project project) {
         project.extensions.create('clap', ClapOptions, project)
-
-        project.android {
-            packagingOptions {
-                exclude 'META-INF/ASL2.0'
-                exclude 'META-INF/LICENSE'
-                exclude 'META-INF/LICENSE.txt'
-                exclude 'META-INF/NOTICE'
-                exclude 'META-INF/NOTICE.txt'
-            }
-        }
 
         project.gradle.afterProject {
             def android = project.extensions.findByName('android')
@@ -134,7 +136,8 @@ class ClapPlugin implements Plugin<Project> {
                 addBuildConfigFields(android.buildTypes[customName], customOptions, false)
 
                 // add dependencies
-                project.dependencies.add("${customName}Compile", 'com.noveogroup.clap:clap-api:0.1')
+                // todo add clap-api module (for field constants, clap annotations and configurations)
+                // project.dependencies.add("${customName}Compile", 'com.noveogroup.clap:clap-api:0.1')
                 Instrumentation.getDependencies(customOptions.instrument).each {
                     project.dependencies.add("${customName}Compile", it)
                 }
@@ -145,25 +148,33 @@ class ClapPlugin implements Plugin<Project> {
             def android = project.extensions.findByName('android')
             ClapOptions clap = project.extensions.findByType(ClapOptions)
 
+            // create calculate revision hash task
+            createCalculateRevisionHashTask(project)
+
             android.applicationVariants.each { variant ->
+                String name = variant.name as String
                 Options customOptions = clap.resolve(variant.buildType.name as String)
                 JavaCompile javaCompileTask = variant.variantData.javaCompileTask
 
+                // generate random values
+                randomValues[name] = Utils.generateRandom()
+
                 // create calculate hash task
-                Task hashTask = createCalculateHashTask(project, variant)
+                Task hashTask = createCalculateVariantHashTask(project, variant)
                 hashTask.dependsOn javaCompileTask.getDependsOn().clone()
+                javaCompileTask.dependsOn hashTasks[null]
                 javaCompileTask.dependsOn hashTask
 
                 // instrument classes after compilation
                 javaCompileTask << {
-                    logger.lifecycle ":$javaCompileTask.project.name:instrument${variant.name.capitalize()}"
+                    logger.lifecycle ":$javaCompileTask.project.name:instrument${name.capitalize()}"
 
                     // prepare class pool
                     ClassPool classPool = Utils.prepareClassPool(javaCompileTask)
 
                     // calculate and update hash code of sources
-                    String hash = hashValues[variant.name as String] as String
-                    Utils.setHashField(classPool, javaCompileTask.destinationDir, variant, hash)
+                    Utils.setBuildConfigFields(classPool, javaCompileTask.destinationDir, variant,
+                            hashValues[null], hashValues[name], randomValues[name])
 
                     // instrument classes
                     Instrumentation.instrument(project, javaCompileTask, classPool, customOptions.instrument)
