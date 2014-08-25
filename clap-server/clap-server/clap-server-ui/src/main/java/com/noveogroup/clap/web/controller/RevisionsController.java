@@ -1,12 +1,6 @@
 package com.noveogroup.clap.web.controller;
 
 import com.google.common.collect.Lists;
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.Writer;
-import com.google.zxing.WriterException;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
-import com.google.zxing.qrcode.QRCodeWriter;
 import com.noveogroup.clap.model.message.BaseMessage;
 import com.noveogroup.clap.model.message.CrashMessage;
 import com.noveogroup.clap.model.message.LogsBunchMessage;
@@ -20,15 +14,11 @@ import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.projects.ProjectsModel;
-import com.noveogroup.clap.web.model.revisions.RevisionPackageModel;
 import com.noveogroup.clap.web.model.revisions.RevisionsListDataModel;
 import com.noveogroup.clap.web.model.revisions.RevisionsModel;
 import com.noveogroup.clap.web.model.user.UserSessionData;
 import com.noveogroup.clap.web.util.message.MessageSupport;
-import org.apache.commons.lang3.StringUtils;
-import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.DefaultTreeNode;
-import org.primefaces.model.StreamedContent;
 import org.primefaces.model.TreeNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,8 +27,6 @@ import javax.enterprise.context.RequestScoped;
 import javax.faces.model.SelectItem;
 import javax.inject.Inject;
 import javax.inject.Named;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
@@ -70,7 +58,7 @@ public class RevisionsController extends BaseController {
     @Inject
     private MessageSupport messageSupport;
 
-    public void prepareRevisionView() throws IOException, WriterException {
+    public void prepareRevisionView() throws IOException {
         final Revision selectedRevision = revisionsModel.getSelectedRevision();
         if (selectedRevision != null) {
             populateRevisionTypesList();
@@ -80,7 +68,7 @@ public class RevisionsController extends BaseController {
         }
     }
 
-    public void prepareRevisionVariantView() throws IOException, WriterException {
+    public void prepareRevisionVariantView() throws IOException {
         final RevisionVariantWithApkStructure selectedRevisionVariant = revisionsModel.getSelectedRevisionVariant();
         if (selectedRevisionVariant != null) {
             revisionsModel.getSelectedRevCrashes().clear();
@@ -97,13 +85,10 @@ public class RevisionsController extends BaseController {
                     revisionsModel.getSelectedRevLogs().add((LogsBunchMessage) message);
                 }
             }
-            final RevisionPackageModel packageModel = new RevisionPackageModel();
-            packageModel.setApkQRCode(getQRCodeFromUrl(selectedRevisionVariant.getPackageUrl()));
             if (selectedRevisionVariant.getApkStructure() != null) {
                 revisionsModel.setSelectedVariantApkStructure(
                         createApkStructureTree(null, selectedRevisionVariant.getApkStructure().getRootEntry()));
             }
-            revisionsModel.setSelectedVariantPackageModel(packageModel);
             LOGGER.debug(selectedRevisionVariant.getId() + " revision preparing finished");
         } else {
             LOGGER.error("revision not selected");
@@ -131,22 +116,6 @@ public class RevisionsController extends BaseController {
         revisionService.deleteRevision(id);
         revisionsModel.getRevisionsListDataModel().remove(id);
         redirectTo(Navigation.PROJECT);
-    }
-
-    private StreamedContent getQRCodeFromUrl(final String url) throws WriterException, IOException {
-        if (StringUtils.isNotEmpty(url)) {
-            final ByteArrayOutputStream buf = new ByteArrayOutputStream();
-            final Writer writer = new QRCodeWriter();
-            final BitMatrix matrix = writer.encode(url,
-                    BarcodeFormat.QR_CODE, 100, 100);
-            MatrixToImageWriter.writeToStream(matrix, "PNG", buf);
-            final byte[] bytes = buf.toByteArray();
-            LOGGER.debug("qrcode for " + url + " generated");
-            return new DefaultStreamedContent(new ByteArrayInputStream(bytes), "image/png");
-        } else {
-            LOGGER.debug("empty url");
-            return null;
-        }
     }
 
     public void prepareMyRevisionsView() {

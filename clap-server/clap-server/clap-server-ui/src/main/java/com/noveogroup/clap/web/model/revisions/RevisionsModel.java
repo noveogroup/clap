@@ -22,7 +22,6 @@ public class RevisionsModel implements Serializable {
     private RevisionsListDataModel revisionsListDataModel;
     private RevisionWithApkStructure selectedRevision;
     private RevisionVariantWithApkStructure selectedRevisionVariant;
-    private RevisionPackageModel selectedVariantPackageModel;
     private List<SelectItem> revisionTypes;
 
     private TreeNode selectedVariantApkStructure;
@@ -73,14 +72,6 @@ public class RevisionsModel implements Serializable {
 
     public void setSelectedRevisionVariant(final RevisionVariantWithApkStructure selectedRevisionVariant) {
         this.selectedRevisionVariant = selectedRevisionVariant;
-    }
-
-    public RevisionPackageModel getSelectedVariantPackageModel() {
-        return selectedVariantPackageModel;
-    }
-
-    public void setSelectedVariantPackageModel(final RevisionPackageModel selectedVariantPackageModel) {
-        this.selectedVariantPackageModel = selectedVariantPackageModel;
     }
 
     public TreeNode getSelectedVariantApkStructure() {

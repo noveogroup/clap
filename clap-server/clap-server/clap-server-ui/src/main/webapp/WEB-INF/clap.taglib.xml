@@ -1,0 +1,14 @@
+<facelet-taglib version="2.0"
+                xmlns="http://java.sun.com/xml/ns/javaee"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facelettaglibrary_2_0.xsd">
+
+    <namespace>http://clap.noveogroup.com</namespace>
+
+    <function>
+        <function-name>urlEncode</function-name>
+        <function-class>com.noveogroup.clap.web.util.ELUtils</function-class>
+        <function-signature>java.lang.String urlEncode(java.lang.String)</function-signature>
+    </function>
+
+</facelet-taglib>

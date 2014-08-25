@@ -1,11 +1,10 @@
 <html xmlns:cc="http://xmlns.jcp.org/jsf/composite"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core">
+      xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:clptl="http://clap.noveogroup.com">
 <cc:interface>
     <cc:attribute name="header"/>
     <cc:attribute name="packageUrl"/>
-    <cc:attribute name="packageModel" type="com.noveogroup.clap.web.model.revisions.RevisionPackageModel"/>
-    <cc:attribute name="packageModelEL"/>
 </cc:interface>
 <cc:implementation>
     <p:panel header="#{cc.attrs.header}">
@@ -14,8 +13,7 @@
                 <a href="#{cc.attrs.packageUrl}">#{msgs['common.form.label.download']}</a>
             </div>
             <div>
-                <p:graphicImage value="#{cc.attrs.packageModel.apkQRCode}">
-                    <f:param name="contentEL" value="#{cc.attrs.packageModelEL}.apkQRCode"/>
+                <p:graphicImage url="#{configBean.clapRestBase}/misc/qrCode/?url=#{clptl:urlEncode(cc.attrs.packageUrl)}">
                 </p:graphicImage>
             </div>
         </h:panelGroup>

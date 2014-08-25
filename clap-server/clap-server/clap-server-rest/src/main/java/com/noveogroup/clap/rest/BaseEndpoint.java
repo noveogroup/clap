@@ -69,4 +69,13 @@ public abstract class BaseEndpoint {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
     }
+
+    protected Response returnImage(final InputStream stream,final String fileName) {
+        if (stream != null) {
+            return Response.ok(stream).header("Content-Disposition",
+                    "attachment; filename=\"" + fileName + "\"").build();
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).build();
+        }
+    }
 }
