@@ -1,4 +1,4 @@
-include ':LibraryCommon'
-include ':Api'
-include ':ModuleInfoSpy'
-include ':ModuleCrashSpy'
+include ':library-common'
+include ':library-api'
+include ':module-infoSpy'
+include ':module-crashSpy'

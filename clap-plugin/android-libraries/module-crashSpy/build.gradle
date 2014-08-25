@@ -1,9 +1,15 @@
 apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 
+configurations { provided }
+sourceSets { main { compileClasspath += configurations.provided } }
+
 dependencies {
-    compile project(':LibraryCommon')
-    compile project(':Api')
+    compile project(':library-common')
+    compile project(':library-api')
+    compile 'com.google.code.gson:gson:2.3'
+    provided 'ch.qos.logback:logback-core:1.1.2'
+    provided 'ch.qos.logback:logback-classic:1.1.2'
 }
 
 android {
@@ -70,7 +76,7 @@ publishing {
             pom.withXml {
                 asNode().children().last() + {
                     resolveStrategy = Closure.DELEGATE_FIRST
-                    name 'CLAP Plugin Module - Info Spy'
+                    name 'CLAP Plugin Module - Crash Spy'
                     description 'TODO write a description'
                     url 'http://noveogroup.github.io/clap/'
                     licenses {
@@ -106,8 +112,6 @@ publishing {
 
                 Node dependenciesNode = asNode().appendNode('dependencies')
                 configurations.compile.allDependencies.each {
-                    println it
-                    println it.getClass()
                     Node dependencyNode = dependenciesNode.appendNode('dependency')
                     dependencyNode.appendNode('groupId', it.group)
                     dependencyNode.appendNode('artifactId', it.name)
