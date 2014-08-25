@@ -1,23 +1,28 @@
 package com.noveogroup.clap.entity.message;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import com.noveogroup.clap.entity.message.log.LogEntryEntity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import java.util.List;
 
 @Entity(name = "CrashMessageEntity")
 @DiscriminatorValue("crash")
 public class CrashMessageEntity extends BaseMessageEntity {
 
-    @Column(name = "device_info", length = COLUMN_LENGTH)
-    private String deviceInfo;
-    @Column(name = "stack_trace", length = COLUMN_LENGTH)
-    private String stackTraceInfo;
-    @Column(name = "log", length = COLUMN_LENGTH)
+    @Column(name = "thread_id")
+    private long threadId;
+    @Column(name = "exception")
+    private String exception;
+    @Column(name = "log_cat", length = COLUMN_LENGTH)
     private String logCat;
-    @Column(name = "activity_trace", length = COLUMN_LENGTH)
-    private String activityTraceLog;
+    @Column(name = "thread_info_json", length = COLUMN_LENGTH)
+    private String threadsInfoJSON;
+    @OneToMany(cascade = {CascadeType.ALL})
+    private List<LogEntryEntity> logs;
 
     /**
      * Constructor
@@ -30,20 +35,20 @@ public class CrashMessageEntity extends BaseMessageEntity {
         return CrashMessageEntity.class;
     }
 
-    public String getDeviceInfo() {
-        return deviceInfo;
+    public long getThreadId() {
+        return threadId;
     }
 
-    public void setDeviceInfo(final String message) {
-        this.deviceInfo = message;
+    public void setThreadId(final long threadId) {
+        this.threadId = threadId;
     }
 
-    public String getStackTraceInfo() {
-        return stackTraceInfo;
+    public String getException() {
+        return exception;
     }
 
-    public void setStackTraceInfo(final String stackTraceInfo) {
-        this.stackTraceInfo = stackTraceInfo;
+    public void setException(final String exception) {
+        this.exception = exception;
     }
 
     public String getLogCat() {
@@ -54,22 +59,19 @@ public class CrashMessageEntity extends BaseMessageEntity {
         this.logCat = logCat;
     }
 
-    public String getActivityTraceLog() {
-        return activityTraceLog;
+    public String getThreadsInfoJSON() {
+        return threadsInfoJSON;
     }
 
-    public void setActivityTraceLog(final String activityTraceLog) {
-        this.activityTraceLog = activityTraceLog;
+    public void setThreadsInfoJSON(final String threadsInfoJSON) {
+        this.threadsInfoJSON = threadsInfoJSON;
     }
 
+    public List<LogEntryEntity> getLogs() {
+        return logs;
+    }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("deviceInfo", deviceInfo)
-                .append("stackTraceInfo", stackTraceInfo)
-                .append("logCat", logCat)
-                .append("activityTraceLog", activityTraceLog)
-                .toString();
+    public void setLogs(final List<LogEntryEntity> logs) {
+        this.logs = logs;
     }
 }

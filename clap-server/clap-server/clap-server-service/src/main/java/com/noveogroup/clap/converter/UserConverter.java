@@ -2,10 +2,8 @@ package com.noveogroup.clap.converter;
 
 import com.google.common.collect.Lists;
 import com.noveogroup.clap.config.ConfigBean;
-import com.noveogroup.clap.entity.message.BaseMessageEntity;
 import com.noveogroup.clap.entity.revision.RevisionVariantEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
-import com.noveogroup.clap.model.message.BaseMessage;
 import com.noveogroup.clap.model.revision.RevisionVariant;
 import com.noveogroup.clap.model.user.ClapPermission;
 import com.noveogroup.clap.model.user.User;
@@ -64,16 +62,6 @@ public class UserConverter {
             permissions.addAll(mapWith.getClapPermissions());
         }
         toMap.setClapPermissions(permissions);
-        List<BaseMessage> messages = Lists.newArrayList();
-        toMap.setUploadedMessages(messages);
-        if (mapWith.getUploadedMessages() != null) {
-            for (BaseMessageEntity messageEntity : mapWith.getUploadedMessages()) {
-                final BaseMessage message = messagesConverter.map(messageEntity, configBean);
-                if (message != null) {
-                    messages.add(message);
-                }
-            }
-        }
         List<RevisionVariant> uploadedVariants = Lists.newArrayList();
         toMap.setUploadedRevisionVariants(uploadedVariants);
         if (mapWith.getUploadedRevisionVariants() != null) {

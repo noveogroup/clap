@@ -55,4 +55,9 @@ public class CrashMessage extends BaseMessage {
     public void setThreadId(final long threadId) {
         this.threadId = threadId;
     }
+
+    @Override
+    public MessageType getType() {
+        return MessageType.CRASH;
+    }
 }

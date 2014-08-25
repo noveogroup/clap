@@ -2,7 +2,6 @@ package com.noveogroup.clap.model.user;
 
 
 import com.google.common.collect.Lists;
-import com.noveogroup.clap.model.message.BaseMessage;
 import com.noveogroup.clap.model.revision.RevisionVariant;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
@@ -19,8 +18,6 @@ public class User extends BaseUser {
     private List<ClapPermission> clapPermissions;
 
     private List<RevisionVariant> uploadedRevisionVariants = Lists.newArrayList();
-
-    private List<BaseMessage> uploadedMessages = Lists.newArrayList();
 
     public Role getRole() {
         return role;
@@ -52,14 +49,6 @@ public class User extends BaseUser {
 
     public void setUploadedRevisionVariants(final List<RevisionVariant> uploadedRevisionVariants) {
         this.uploadedRevisionVariants = uploadedRevisionVariants;
-    }
-
-    public List<BaseMessage> getUploadedMessages() {
-        return uploadedMessages;
-    }
-
-    public void setUploadedMessages(final List<BaseMessage> uploadedMessages) {
-        this.uploadedMessages = uploadedMessages;
     }
 
     @Override

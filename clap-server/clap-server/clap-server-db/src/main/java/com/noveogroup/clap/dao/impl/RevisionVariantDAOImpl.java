@@ -1,6 +1,7 @@
 package com.noveogroup.clap.dao.impl;
 
 import com.noveogroup.clap.dao.RevisionVariantDAO;
+import com.noveogroup.clap.entity.message.BaseMessageEntity;
 import com.noveogroup.clap.entity.revision.RevisionVariantEntity;
 import org.hibernate.Hibernate;
 
@@ -21,18 +22,22 @@ public class RevisionVariantDAOImpl extends GenericDAOImpl<RevisionVariantEntity
         final Query query = entityManager.createNamedQuery(REVISION_BY_HASH);
         query.setParameter(REVISION_BY_HASH_PARAMETER, revisionHash);
         final RevisionVariantEntity revisionEntity = getSingleResultOrNull(query);
-        if (revisionEntity != null) {
-            Hibernate.initialize(revisionEntity.getMessages());
-        }
+        initialize(revisionEntity);
         return revisionEntity;
+    }
+
+    private void initialize(final RevisionVariantEntity revisionEntity) {
+        if (revisionEntity != null) {
+            for(BaseMessageEntity message : revisionEntity.getMessages()){
+                Hibernate.initialize(message.getDeviceInfo());
+            }
+        }
     }
 
     @Override
     public RevisionVariantEntity findById(final Long aLong) {
         final RevisionVariantEntity entity = super.findById(aLong);
-        if(entity != null){
-            Hibernate.initialize(entity.getMessages());
-        }
+        initialize(entity);
         return entity;
     }
 }
