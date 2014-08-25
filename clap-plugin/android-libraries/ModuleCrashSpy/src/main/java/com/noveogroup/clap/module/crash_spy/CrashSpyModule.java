@@ -55,7 +55,11 @@ public final class CrashSpyModule implements Module {
 
     @Override
     public void initStatic(StaticContext context) {
-        // do nothing
+        try {
+            Class.forName("ch.qos.logback.classic.Logger");
+            LogbackHelper.initLogback();
+        } catch (ClassNotFoundException ignored) {
+        }
     }
 
     @Override

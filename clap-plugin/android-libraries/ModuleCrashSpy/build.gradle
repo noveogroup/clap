@@ -1,9 +1,14 @@
 apply plugin: 'com.android.application'
 
+configurations { provided }
+sourceSets { main { compileClasspath += configurations.provided } }
+
 dependencies {
     compile project(':LibraryCommon')
     compile project(':Api')
     compile 'com.google.code.gson:gson:2.3'
+    provided 'ch.qos.logback:logback-core:1.1.2'
+    provided 'ch.qos.logback:logback-classic:1.1.2'
 }
 
 android {
