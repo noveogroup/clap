@@ -233,7 +233,13 @@ public class RevisionServiceImpl implements RevisionService {
     @Override
     public RevisionVariantWithApkStructure getRevisionVariantWithApkStructure(final Long variantId) {
         final RevisionVariantEntity entity = revisionVariantDAO.findById(variantId);
-        return revisionVariantConverter.mapWithApkStructure(entity, configBean);
+        if (entity != null) {
+            final RevisionVariantWithApkStructure variant = revisionVariantConverter.mapWithApkStructure(entity,
+                    configBean);
+            createUrl(variant);
+            return variant;
+        }
+        return null;
     }
 
     /**
@@ -289,6 +295,15 @@ public class RevisionServiceImpl implements RevisionService {
             }
         }
     }
+
+
+    private void createUrl(final RevisionVariant outcomeRevisionVariant) {
+        final UserWithPersistedAuth userWithToken = userService.getUserWithToken();
+        final String token = userWithToken.getToken();
+        outcomeRevisionVariant.setPackageUrl(urlService.createUrl(outcomeRevisionVariant.getRevisionId(),
+                outcomeRevisionVariant.getId(), token));
+    }
+
 
     private String createFileName(final ProjectEntity projectEntity, final String variantName) {
         return projectEntity.getName() + "_" + variantName + ".apk";

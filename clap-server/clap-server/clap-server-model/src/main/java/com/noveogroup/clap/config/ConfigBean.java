@@ -32,6 +32,8 @@ public class ConfigBean {
 
     private String downloadProjectIconUrl;
 
+    private String clapRestBase;
+
     private Properties properties;
 
     private String authenticationSystemId;
@@ -72,6 +74,7 @@ public class ConfigBean {
         configFileLastModified = getConfigFileLastModified();
         downloadScreenshotUrl = properties.getProperty("rest.screenshotDownload");
         downloadProjectIconUrl = properties.getProperty("rest.projectIconDownload");
+        clapRestBase = properties.getProperty("clap.rest.base");
     }
 
     private void fillStringArrayConfig(final String property, final List<String> configList) {
@@ -159,6 +162,10 @@ public class ConfigBean {
 
     public List<String> getOtherFilesDirs() {
         return otherFilesDirs;
+    }
+
+    public String getClapRestBase() {
+        return clapRestBase;
     }
 
     @Override

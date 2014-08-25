@@ -23,4 +23,5 @@ public class PackageEndpointImpl extends BaseEndpoint implements PackageEndpoint
         return Response.ok(application.getContent()).header("Content-Disposition",
                 "attachment; filename=\"" + application.getFilename() + "\"").build();
     }
+
 }
