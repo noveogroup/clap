@@ -32,7 +32,7 @@ clap {
 
     custom {
         debug {
-            instrument 'cash-spy'
+            instrument 'crash-spy'
         }
         release {
             projectId 'release'

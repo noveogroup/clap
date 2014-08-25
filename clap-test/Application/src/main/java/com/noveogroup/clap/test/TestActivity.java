@@ -5,15 +5,13 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
-import com.noveogroup.clap.api.BuildConfigHelper;
-import com.noveogroup.clap.api.Trace;
-
 import java.text.DateFormat;
 import java.util.Date;
 
+// todo uncomment logic when clap-api will be introduced
 public class TestActivity extends Activity {
 
-    @Trace
+    // @Trace
     private String test(String input) {
         return String.format("[%s]", input);
     }
@@ -39,17 +37,17 @@ public class TestActivity extends Activity {
         });
 
         TextView infoView = (TextView) findViewById(R.id.info);
-        infoView.setText(String.format("projectId: %s\n"
-                        + "serverUrl: %s\n"
-                        + "username: %s\n"
-                        + "password: %s\n"
-                        + "source hash: %s\n",
-                BuildConfigHelper.get(getPackageName(), BuildConfigHelper.FIELD_CLAP_PROJECT_ID),
-                BuildConfigHelper.get(getPackageName(), BuildConfigHelper.FIELD_CLAP_SERVER_URL),
-                BuildConfigHelper.get(getPackageName(), BuildConfigHelper.FIELD_CLAP_USERNAME),
-                BuildConfigHelper.get(getPackageName(), BuildConfigHelper.FIELD_CLAP_PASSWORD),
-                BuildConfigHelper.get(getPackageName(), BuildConfigHelper.FIELD_CLAP_SOURCE_HASH)
-        ));
+//        infoView.setText(String.format("projectId: %s\n"
+//                        + "serverUrl: %s\n"
+//                        + "username: %s\n"
+//                        + "password: %s\n"
+//                        + "source hash: %s\n",
+//                BuildConfigHelper.get(getPackageName(), BuildConfigHelper.FIELD_CLAP_PROJECT_ID),
+//                BuildConfigHelper.get(getPackageName(), BuildConfigHelper.FIELD_CLAP_SERVER_URL),
+//                BuildConfigHelper.get(getPackageName(), BuildConfigHelper.FIELD_CLAP_USERNAME),
+//                BuildConfigHelper.get(getPackageName(), BuildConfigHelper.FIELD_CLAP_PASSWORD),
+//                BuildConfigHelper.get(getPackageName(), BuildConfigHelper.FIELD_CLAP_SOURCE_HASH)
+//        ));
     }
 
 }
