@@ -93,6 +93,15 @@ public class ClapApi {
         return request;
     }
 
+    public <R extends BaseRequest<M>, M extends BaseRequest.BaseMessage> R prepare(R request, String token, M message) {
+        request.setProjectId(projectId);
+        request.setRevisionHash(revisionHash);
+        request.setVariantHash(variantHash);
+        request.setToken(token);
+        request.setMessage(message);
+        return request;
+    }
+
     public String retrieveToken() {
         return apiService.getToken(prepareAuth());
     }
