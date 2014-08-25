@@ -34,4 +34,9 @@ public class LogsBunchMessage extends BaseMessage {
                 .append("logs", logs)
                 .toString();
     }
+
+    @Override
+    public MessageType getType() {
+        return MessageType.LOGS;
+    }
 }

@@ -8,7 +8,7 @@ import com.noveogroup.clap.dao.UserDAO;
 import com.noveogroup.clap.entity.message.BaseMessageEntity;
 import com.noveogroup.clap.entity.message.ScreenshotMessageEntity;
 import com.noveogroup.clap.entity.revision.RevisionVariantEntity;
-import com.noveogroup.clap.entity.user.UserEntity;
+import com.noveogroup.clap.exception.ClapDataIntegrityException;
 import com.noveogroup.clap.exception.WrapException;
 import com.noveogroup.clap.model.file.FileType;
 import com.noveogroup.clap.model.message.BaseMessage;
@@ -53,19 +53,21 @@ public class MessagesServiceImpl implements MessagesService {
     @Override
     public void saveMessage(final String variantHash, final BaseMessage message) {
         final RevisionVariantEntity revisionEntity = revisionDAO.getRevisionByHash(variantHash);
-        UserEntity userByLogin = userDAO.getUserByLogin(userService.getCurrentUserLogin());
-        BaseMessageEntity messageEntity = messagesConverter.map(message);
-        messageEntity.setRevisionVariant(revisionEntity);
-        messageEntity.setUploadedBy(userByLogin);
-        messageEntity = messageDAO.persist(messageEntity);
-        List<BaseMessageEntity> messageEntities = revisionEntity.getMessages();
-        if (messageEntities == null) {
-            messageEntities = Lists.newArrayList();
-            revisionEntity.setMessages(messageEntities);
+        if (revisionEntity != null) {
+            BaseMessageEntity messageEntity = messagesConverter.map(message);
+            messageEntity.setRevisionVariant(revisionEntity);
+            messageEntity = messageDAO.persist(messageEntity);
+            List<BaseMessageEntity> messageEntities = revisionEntity.getMessages();
+            if (messageEntities == null) {
+                messageEntities = Lists.newArrayList();
+                revisionEntity.setMessages(messageEntities);
+            }
+            messageEntities.add(messageEntity);
+            revisionDAO.persist(revisionEntity);
+            revisionDAO.flush();
+        } else {
+            throw new ClapDataIntegrityException("no such variant stored, hash: " + variantHash);
         }
-        messageEntities.add(messageEntity);
-        revisionDAO.persist(revisionEntity);
-        revisionDAO.flush();
     }
 
     @RequiresAuthentication

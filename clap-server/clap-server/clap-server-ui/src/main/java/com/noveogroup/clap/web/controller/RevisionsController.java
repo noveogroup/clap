@@ -14,6 +14,7 @@ import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.projects.ProjectsModel;
+import com.noveogroup.clap.web.model.revisions.RevisionVariantSessionModel;
 import com.noveogroup.clap.web.model.revisions.RevisionsListDataModel;
 import com.noveogroup.clap.web.model.revisions.RevisionsModel;
 import com.noveogroup.clap.web.model.user.UserSessionData;
@@ -44,6 +45,9 @@ public class RevisionsController extends BaseController {
     private RevisionsModel revisionsModel;
 
     @Inject
+    private RevisionVariantSessionModel revisionVariantSessionModel;
+
+    @Inject
     private RevisionService revisionService;
 
     @Inject
@@ -69,24 +73,25 @@ public class RevisionsController extends BaseController {
     }
 
     public void prepareRevisionVariantView() throws IOException {
-        final RevisionVariantWithApkStructure selectedRevisionVariant = revisionsModel.getSelectedRevisionVariant();
+        final RevisionVariantWithApkStructure selectedRevisionVariant =
+                revisionVariantSessionModel.getSelectedRevisionVariant();
         if (selectedRevisionVariant != null) {
-            revisionsModel.getSelectedRevCrashes().clear();
-            revisionsModel.getSelectedRevScreenshots().clear();
-            revisionsModel.getSelectedRevLogs().clear();
+            revisionVariantSessionModel.getSelectedRevCrashes().clear();
+            revisionVariantSessionModel.getSelectedRevScreenshots().clear();
+            revisionVariantSessionModel.getSelectedRevLogs().clear();
             for (final BaseMessage message : selectedRevisionVariant.getMessages()) {
                 if (message instanceof CrashMessage) {
-                    revisionsModel.getSelectedRevCrashes().add((CrashMessage) message);
+                    revisionVariantSessionModel.getSelectedRevCrashes().add((CrashMessage) message);
                 }
                 if (message instanceof ScreenshotMessage) {
-                    revisionsModel.getSelectedRevScreenshots().add((ScreenshotMessage) message);
+                    revisionVariantSessionModel.getSelectedRevScreenshots().add((ScreenshotMessage) message);
                 }
                 if (message instanceof LogsBunchMessage) {
-                    revisionsModel.getSelectedRevLogs().add((LogsBunchMessage) message);
+                    revisionVariantSessionModel.getSelectedRevLogs().add((LogsBunchMessage) message);
                 }
             }
             if (selectedRevisionVariant.getApkStructure() != null) {
-                revisionsModel.setSelectedVariantApkStructure(
+                revisionVariantSessionModel.setSelectedVariantApkStructure(
                         createApkStructureTree(null, selectedRevisionVariant.getApkStructure().getRootEntry()));
             }
             LOGGER.debug(selectedRevisionVariant.getId() + " revision preparing finished");

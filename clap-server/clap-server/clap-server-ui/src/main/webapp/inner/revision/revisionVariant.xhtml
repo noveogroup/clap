@@ -9,17 +9,17 @@
 <ui:composition template="/WEB-INF/template.xhtml">
     <ui:define name="sideMenuItems">
         <p:menuitem value="#{msgs['menu.project.view']}" outcome="/inner/project/project">
-            <f:param name="id" value="#{revisionsModel.selectedRevisionVariant.projectId}"/>
+            <f:param name="id" value="#{revisionVariantSessionModel.selectedRevisionVariant.projectId}"/>
         </p:menuitem>
         <p:menuitem value="#{msgs['menu.revision.view']}" outcome="/inner/revision/revision">
-            <f:param name="id" value="#{revisionsModel.selectedRevisionVariant.revisionId}"/>
+            <f:param name="id" value="#{revisionVariantSessionModel.selectedRevisionVariant.revisionId}"/>
         </p:menuitem>
     </ui:define>
     <ui:define name="content">
-        <f:view transient="true">
+        <f:view >
 
             <f:metadata>
-                <f:viewParam name="id" value="#{revisionsModel.selectedRevisionVariant}"
+                <f:viewParam name="id" value="#{revisionVariantSessionModel.selectedRevisionVariant}"
                              converter="#{revisionVariantConverter}" converterMessage="Bad request. Unknown revision."
                              required="true" requiredMessage="Bad request. Please use a link from within the system."/>
                 <f:viewAction action="#{revisionsController.prepareRevisionVariantView}"/>
@@ -27,11 +27,11 @@
 
             <clp:packageForm
                     id="clean"
-                    packageUrl="#{revisionsModel.selectedRevisionVariant.packageUrl}"
+                    packageUrl="#{revisionVariantSessionModel.selectedRevisionVariant.packageUrl}"
                     header="#{msgs['revisionVariant.label.download']}"/>
 
-            <p:panel rendered="#{not empty revisionsModel.selectedRevisionVariant}">
-                <p:tree value="#{revisionsModel.selectedVariantApkStructure}" var="node" id="tree">
+            <p:panel rendered="#{not empty revisionVariantSessionModel.selectedRevisionVariant}">
+                <p:tree value="#{revisionVariantSessionModel.selectedVariantApkStructure}" var="node" id="tree">
                     <p:treeNode id="treeNode">
                         <h:outputText value="#{node.entryName}" id="lblNode"/>
                     </p:treeNode>
@@ -39,48 +39,37 @@
             </p:panel>
 
             <p:dataTable var="crashMessage"
-                         value="#{revisionsModel.selectedRevCrashes}"
+                         value="#{revisionVariantSessionModel.selectedRevCrashes}"
                          paginator="true" rows="10"
                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          rowsPerPageTemplate="5,10,15">
 
-                <p:column style="width:2%">
-                    <p:rowToggler/>
+                <p:column headerText="#{msgs['revision.label.id']}">
+                    <h:link outcome="/inner/message/crashMessage" value="#{crashMessage.id}">
+                        <f:param name="id" value="#{crashMessage.id}"/>
+                    </h:link>
                 </p:column>
                 <p:column headerText="#{msgs['message.label.time']}">
-                    <h:outputText value="#{crashMessage.timestamp}"/>
+                    <h:link outcome="/inner/message/crashMessage" value="#{crashMessage.timestamp}" converter="TimestampConverter">
+                        <f:param name="id" value="#{crashMessage.id}"/>
+                    </h:link>
                 </p:column>
                 <p:column headerText="#{msgs['message.label.uploadedBy']}">
-                    <h:outputText value="#{crashMessage.uploadedBy}"/>
+                    <h:link outcome="/inner/message/crashMessage" value="#{crashMessage.deviceId}">
+                        <f:param name="id" value="#{crashMessage.id}"/>
+                    </h:link>
                 </p:column>
-
-                <p:rowExpansion>
-                    <p:panelGrid columns="2">
-                        <h:outputText value="#{msgs['message.label.deviceInfo']}"/>
-                        <h:inputTextarea disabled="true" rows="6" cols="50" value="#{crashMessage.deviceInfo}"/>
-
-                        <h:outputText value="#{msgs['message.label.activityTraceLog']}"/>
-                        <h:inputTextarea disabled="true" rows="6" cols="50" value="#{crashMessage.activityTraceLog}"/>
-
-                        <h:outputText value="#{msgs['message.label.logCat']}"/>
-                        <h:inputTextarea disabled="true" rows="6" cols="50" value="#{crashMessage.logCat}"/>
-
-                        <h:outputText value="#{msgs['message.label.stackTraceInfo']}"/>
-                        <h:inputTextarea disabled="true" rows="6" cols="50" value="#{crashMessage.stackTraceInfo}"/>
-                    </p:panelGrid>
-
-                </p:rowExpansion>
 
             </p:dataTable>
 
 
             <p:dataTable var="logMessage"
-                         value="#{revisionsModel.selectedRevLogs}"
+                         value="#{revisionVariantSessionModel.selectedRevLogs}"
                          paginator="true" rows="10"
                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          rowsPerPageTemplate="5,10,15">
 
-                <p:column style="width:2%">
+                <p:column style="width:11%">
                     <p:rowToggler/>
                 </p:column>
                 <p:column headerText="#{msgs['message.label.time']}">
@@ -107,12 +96,12 @@
             </p:dataTable>
 
             <p:dataTable var="scrMessage"
-                         value="#{revisionsModel.selectedRevScreenshots}"
+                         value="#{revisionVariantSessionModel.selectedRevScreenshots}"
                          paginator="true" rows="10"
                          paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                          rowsPerPageTemplate="5,10,15">
 
-                <p:column style="width:2%">
+                <p:column style="width:11%">
                     <p:rowToggler/>
                 </p:column>
                 <p:column headerText="#{msgs['message.label.time']}">

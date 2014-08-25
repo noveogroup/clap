@@ -25,7 +25,7 @@ public class MessagesEndpointImpl extends BaseEndpoint implements MessagesEndpoi
     public ClapResponse saveCrashMessage(final CrashMessageRequest request) {
         LOGGER.debug("saving crash message " + request);
         login(request.getToken());
-        messagesService.saveMessage(request.getRevisionHash(), request.getMessage());
+        messagesService.saveMessage(request.getVariantHash(), request.getMessage());
         LOGGER.debug(request + "saved");
         return new ClapResponse();
     }
@@ -34,7 +34,7 @@ public class MessagesEndpointImpl extends BaseEndpoint implements MessagesEndpoi
     public ClapResponse saveLogsBunchMessage(final LogsBunchMessageRequest request) {
         LOGGER.debug("saving logs bunch message " + request);
         login(request.getToken());
-        messagesService.saveMessage(request.getRevisionHash(), request.getMessage());
+        messagesService.saveMessage(request.getVariantHash(), request.getMessage());
         LOGGER.debug(request + "saved");
         return new ClapResponse();
     }
@@ -49,7 +49,7 @@ public class MessagesEndpointImpl extends BaseEndpoint implements MessagesEndpoi
     public ClapResponse saveInfoMessage(final InfoMessageRequest request) {
         LOGGER.debug("saving logs bunch message " + request);
         login(request.getToken());
-        messagesService.saveMessage(request.getRevisionHash(), request.getMessage());
+        messagesService.saveMessage(request.getVariantHash(), request.getMessage());
         LOGGER.debug(request + "saved");
         return new ClapResponse();
     }

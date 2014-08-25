@@ -10,6 +10,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
@@ -19,11 +20,13 @@ public interface MessagesEndpoint {
     @Path("/crash")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     ClapResponse saveCrashMessage(CrashMessageRequest request);
 
     @Path("/logs")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     ClapResponse saveLogsBunchMessage(LogsBunchMessageRequest request);
 
 
@@ -34,5 +37,6 @@ public interface MessagesEndpoint {
     @Path("/info")
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     ClapResponse saveInfoMessage(InfoMessageRequest request);
 }

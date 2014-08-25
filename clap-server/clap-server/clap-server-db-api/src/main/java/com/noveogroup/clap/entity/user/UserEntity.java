@@ -1,7 +1,6 @@
 package com.noveogroup.clap.entity.user;
 
 import com.noveogroup.clap.entity.BaseEntity;
-import com.noveogroup.clap.entity.message.BaseMessageEntity;
 import com.noveogroup.clap.entity.revision.RevisionVariantEntity;
 import com.noveogroup.clap.model.user.ClapPermission;
 import com.noveogroup.clap.model.user.Role;
@@ -51,9 +50,6 @@ public class UserEntity extends BaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "packageUploadedBy")
     private List<RevisionVariantEntity> uploadedRevisionVariants;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "uploadedBy")
-    private List<BaseMessageEntity> uploadedMessages;
-
     public Role getRole() {
         return role;
     }
@@ -94,13 +90,6 @@ public class UserEntity extends BaseEntity {
         this.hashedPassword = hashedPassword;
     }
 
-    public List<BaseMessageEntity> getUploadedMessages() {
-        return uploadedMessages;
-    }
-
-    public void setUploadedMessages(final List<BaseMessageEntity> uploadedMessages) {
-        this.uploadedMessages = uploadedMessages;
-    }
 
     public List<ClapPermission> getClapPermissions() {
         return clapPermissions;

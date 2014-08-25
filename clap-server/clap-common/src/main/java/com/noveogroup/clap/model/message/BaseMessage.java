@@ -12,6 +12,8 @@ public abstract class BaseMessage extends BaseModel {
     private long timestamp;
     private Map<String,String> deviceInfo;
 
+    public abstract MessageType getType();
+
     public String getDeviceId() {
         return deviceId;
     }
