@@ -44,6 +44,8 @@ class ClapOptions extends Options {
     void custom(Action<NamedDomainObjectContainer<CustomOptions>> action) { action.execute(custom) }
 
     Options resolve(String name) {
+        if (!custom.contains(name)) return this
+
         Options customOptions = custom[name]
         return new Options(
                 projectId: customOptions.projectId ?: this.projectId,
