@@ -21,4 +21,9 @@ public class RevisionVariantConverter extends BaseModelConverter implements Conv
     protected Object getObject(final Long id) {
         return revisionService.getRevisionVariantWithApkStructure(id);
     }
+
+    @Override
+    protected String getErrorMessageId() {
+        return "error.badRequest.variant";
+    }
 }

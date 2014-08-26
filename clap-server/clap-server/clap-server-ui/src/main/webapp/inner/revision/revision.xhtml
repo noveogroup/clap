@@ -8,21 +8,20 @@
 <ui:composition template="/WEB-INF/template.xhtml">
     <ui:define name="sideMenuItems">
         <p:menuitem value="#{msgs['menu.project.view']}" outcome="/inner/project/project">
-            <f:param name="id" value="#{revisionsModel.selectedRevision.projectId}"/>
+            <f:param name="projectId" value="#{revisionsSessionModel.selectedRevision.projectId}"/>
         </p:menuitem>
     </ui:define>
     <ui:define name="content">
-        <f:view transient="true">
-
+        <f:view>
             <f:metadata>
-                <f:viewParam name="id" value="#{revisionsModel.selectedRevision}"
-                             converter="#{revisionConverter}" converterMessage="Bad request. Unknown revision."
-                             required="true" requiredMessage="Bad request. Please use a link from within the system."/>
+                <f:viewParam name="revisionId" value="#{revisionsSessionModel.selectedRevision}"
+                             converter="#{revisionConverter}"
+                             required="true" requiredMessage="#{msgs['error.badRequest.noId']}"/>
                 <f:viewAction action="#{revisionsController.prepareRevisionView}"/>
             </f:metadata>
-            <p:panel header="#{msgs['revision.label.control.header']}">
-                <h:form>
-                    <p:messages id="revisionControlMessages"/>
+            <p:panel rendered="#{empty facesContext.messageList}" header="#{msgs['revision.label.control.header']}">
+                <h:form id="revisionControlMessages">
+                    <p:message for="revisionControlMessages"/>
                     <h:panelGrid columns="2">
                         <h:outputText value="#{msgs['revision.label.control.remove']}"
                                       rendered="#{userSessionData.hasPermission('DELETE_REVISIONS')}"/>
@@ -30,27 +29,29 @@
                                          ajax="false"
                                          immediate="true"
                                          rendered="#{userSessionData.hasPermission('DELETE_REVISIONS')}"
-                                         action="#{revisionsController.removeSelectedRevision}"/>
+                                         action="#{revisionsController.removeSelectedRevision}">
+                            <f:param name="projectId" value="#{revisionsSessionModel.selectedRevision.projectId}"/>
+                        </p:commandButton>
 
                         <p:outputLabel value="#{msgs['revision.label.control.change.type']}"
                                        for="changeTypeMenu"
-                                       rendered="#{not empty revisionsModel.revisionTypes}"/>
+                                       rendered="#{not empty revisionsSessionModel.revisionTypes}"/>
                         <p:selectOneMenu id="changeTypeMenu"
-                                         value="#{revisionsModel.selectedRevision.revisionType}"
-                                         rendered="#{not empty revisionsModel.revisionTypes}">
-                            <f:selectItems value="#{revisionsModel.revisionTypes}"/>
-                            <p:ajax listener="#{revisionsController.onRevisionTypeSelected}" update="@form"/>
+                                         value="#{revisionsSessionModel.selectedRevision.revisionType}"
+                                         rendered="#{not empty revisionsSessionModel.revisionTypes}">
+                            <f:selectItems value="#{revisionsSessionModel.revisionTypes}"/>
+                            <p:ajax listener="#{revisionsController.onRevisionTypeSelected()}" update="@form"/>
                         </p:selectOneMenu>
                     </h:panelGrid>
                 </h:form>
             </p:panel>
-            <h:form>
+            <h:form rendered="#{empty facesContext.messageList}">
                 <p:commandButton id="tableSettingsButton" value="#{msgs['common.table.settings']}" type="button"/>
                 <p:columnToggler datasource="revisionVariants" trigger="tableSettingsButton"/>
                 <p:dataTable id="revisionVariants"
                              var="revisionVariant"
                              resizableColumns="true"
-                             value="#{revisionsModel.selectedRevision.variants}">
+                             value="#{revisionsSessionModel.selectedRevision.variants}">
 
                     <p:column headerText="#{msgs['revision.label.id']}">
                         <h:link outcome="/inner/revision/revisionVariant" value="#{revisionVariant.id}">

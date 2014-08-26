@@ -5,6 +5,7 @@ import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.model.project.ImagedProject;
 import com.noveogroup.clap.service.project.ProjectService;
 import com.noveogroup.clap.web.Navigation;
+import com.noveogroup.clap.web.model.projects.ProjectsListModel;
 import com.noveogroup.clap.web.model.projects.ProjectsModel;
 import com.noveogroup.clap.web.model.revisions.RevisionsListDataModel;
 import com.noveogroup.clap.web.model.revisions.RevisionsModel;
@@ -36,6 +37,9 @@ public class ProjectsController extends BaseController {
     private ProjectsModel projectsModel;
 
     @Inject
+    private ProjectsListModel projectsListModel;
+
+    @Inject
     private RevisionsModel revisionsModel;
 
     public String addProject() {
@@ -63,7 +67,7 @@ public class ProjectsController extends BaseController {
     public void prepareProjectsListView() {
         LOGGER.debug("call project service");
         final List<ImagedProject> projectList = projectService.findAllImagedProjects();
-        projectsModel.setProjectList(projectList);
+        projectsListModel.setProjectList(projectList);
         LOGGER.debug("project service ret " + projectList);
     }
 
@@ -74,7 +78,7 @@ public class ProjectsController extends BaseController {
                     new RevisionsListDataModel(selectedProject.getRevisions()));
         } else {
             messageSupport.addMessage(null,
-                    new FacesMessage(messageSupport.getMessage("error.badRequest",
+                    new FacesMessage(messageSupport.getMessage("error.badRequest.project",
                             new Object[]{"no project id"})));
             LOGGER.error("project not selected");
         }

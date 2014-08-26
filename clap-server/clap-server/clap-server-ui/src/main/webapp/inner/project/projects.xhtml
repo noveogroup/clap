@@ -19,13 +19,13 @@
             </h:panelGroup>
             <p:dataTable id="projects"
                          var="project"
-                         value="#{projectsModel.projectList}">
+                         value="#{projectsListModel.projectList}">
                 <p:column>
                     <p:graphicImage url="#{project.iconFileUrl}" rendered="#{not empty project.iconFileUrl}"/>
                 </p:column>
                 <p:column headerText="#{msgs['project.label.name']}">
                     <h:link outcome="project" value="#{project.name}">
-                        <f:param name="id" value="#{project.id}"/>
+                        <f:param name="projectId" value="#{project.id}"/>
                     </h:link>
                 </p:column>
                 <p:column headerText="#{msgs['project.label.creationDate']}">

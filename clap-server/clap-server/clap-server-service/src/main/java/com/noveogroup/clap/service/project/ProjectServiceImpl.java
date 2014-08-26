@@ -102,18 +102,26 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public Project findById(final Long id) {
         final ProjectEntity projectEntity = projectDAO.findById(id);
-        final Project project = projectConverter.map(projectEntity);
-        updateRevisionUrls(id, projectEntity, project);
-        return project;
+        if (projectEntity != null) {
+            final Project project = projectConverter.map(projectEntity);
+            updateRevisionUrls(id, projectEntity, project);
+            return project;
+        } else {
+            return null;
+        }
     }
 
     @RequiresAuthentication
     @Override
     public ImagedProject findByIdWithImage(final Long id) {
         final ProjectEntity projectEntity = projectDAO.findById(id);
-        final ImagedProject project = projectConverter.mapToImagedProject(projectEntity, configBean);
-        updateRevisionUrls(id, projectEntity, project);
-        return project;
+        if (projectEntity != null) {
+            final ImagedProject project = projectConverter.mapToImagedProject(projectEntity, configBean);
+            updateRevisionUrls(id, projectEntity, project);
+            return project;
+        } else {
+            return null;
+        }
     }
 
     @RequiresAuthentication
@@ -144,11 +152,15 @@ public class ProjectServiceImpl implements ProjectService {
     @Override
     public void deleteProject(final Project project) {
         final ProjectEntity projectEntity = projectDAO.findById(project.getId());
-        for (final RevisionEntity revisionEntity : projectEntity.getRevisions()) {
-            revisionService.deleteRevision(revisionEntity.getId());
+        if (projectEntity != null) {
+            if (projectEntity.getRevisions() != null) {
+                for (final RevisionEntity revisionEntity : projectEntity.getRevisions()) {
+                    revisionService.deleteRevision(revisionEntity.getId());
+                }
+            }
+            projectDAO.remove(projectEntity);
+            projectDAO.flush();
         }
-        projectDAO.removeById(project.getId());
-        projectDAO.flush();
     }
 
     @Override

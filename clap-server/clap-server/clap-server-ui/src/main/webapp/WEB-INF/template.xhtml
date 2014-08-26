@@ -14,8 +14,6 @@
 </h:head>
 <h:body>
     <h:panelGroup styleClass="rootContainer" layout="block">
-        <p:growl autoUpdate="true" globalOnly="true"/>
-
         <h:form>
             <p:menubar id="mainMenu" styleClass="mainMenu">
                 <p:menuitem ajax="false" outcome="/index" value="#{msgs['menu.home']}"/>
@@ -52,6 +50,7 @@
             </p:menu>
         </h:form>
         <h:panelGroup id="content">
+            <p:messages />
             <ui:insert name="content"/>
         </h:panelGroup>
     </h:panelGroup>
