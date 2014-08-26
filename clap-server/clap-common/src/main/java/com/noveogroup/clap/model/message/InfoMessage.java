@@ -5,7 +5,7 @@ package com.noveogroup.clap.model.message;
  */
 public class InfoMessage extends BaseMessage {
     @Override
-    public MessageType getType() {
+    public MessageType type() {
         return MessageType.INFO;
     }
 }

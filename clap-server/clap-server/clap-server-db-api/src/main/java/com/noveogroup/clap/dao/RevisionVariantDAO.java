@@ -7,4 +7,5 @@ import com.noveogroup.clap.entity.revision.RevisionVariantEntity;
  */
 public interface RevisionVariantDAO extends GenericDAO<RevisionVariantEntity, Long> {
     RevisionVariantEntity getRevisionByHash(String revisionHash);
+    RevisionVariantEntity getRevisionByMessageId(long id);
 }

@@ -35,4 +35,6 @@ public interface RevisionService {
     Set<RevisionType> getAvailableTypesToChange(User user, Revision revision);
 
     RevisionVariantWithApkStructure getRevisionVariantWithApkStructure(Long variantId);
+
+    RevisionVariantWithApkStructure getRevisionVariantWithApkStructureByMessageId(Long messageId);
 }

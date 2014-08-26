@@ -16,7 +16,7 @@ public class ScreenshotMessage extends BaseMessage {
     }
 
     @Override
-    public MessageType getType() {
+    public MessageType type() {
         return MessageType.SCREENSHOT;
     }
 }

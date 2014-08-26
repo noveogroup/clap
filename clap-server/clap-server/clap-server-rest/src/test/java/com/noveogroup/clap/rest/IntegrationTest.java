@@ -25,6 +25,11 @@ import static org.junit.Assert.assertEquals;
 public class IntegrationTest {
 
     public static final String BASE = "http://localhost:8080/clap-rest/v1/";
+    private String random = "random";
+    private String testRevisionHash = "testRevisionHash";
+    private String testVariantHash = "testVariantHash";
+    private String testVariantName = "testVariantName";
+    private String testProjectExternalId = "testProjectExternalId";
 
     @Test
     public void testAll() throws Exception {
@@ -37,20 +42,14 @@ public class IntegrationTest {
         final UploadFileEndpoint uploadFileEndpoint = ProxyFactory.create(UploadFileEndpoint.class,BASE);
         final CreateOrUpdateRevisionRequest request = new CreateOrUpdateRevisionRequest();
         request.setPackageStream(getClass().getResourceAsStream("/com.noveogroup.clap-clap-application_hacked.apk"));
-        final String testProjectExternalId = "testProjectExternalId";
         request.setProjectExternalId(testProjectExternalId);
-        final String random = "random";
         request.setRandom(random);
-        final String testRevisionHash = "testRevisionHash";
         request.setRevisionHash(testRevisionHash);
-        final String testVariantHash = "testVariantHash";
         request.setVariantHash(testVariantHash);
-        final String testVariantName = "testVariantName";
         request.setVariantName(testVariantName);
         request.setToken(token);
         final ClapResponse response = uploadFileEndpoint.createOrUpdateRevision(request);
         assertEquals(0, response.getCode());
-
 
         final ApkAuthentication apkAuthentication = new ApkAuthentication();
         apkAuthentication.setProjectId(testProjectExternalId);
@@ -103,5 +102,6 @@ public class IntegrationTest {
         crashMessageRequest.setMessage(message);
         final ClapResponse clapResponse = messagesEndpoint.saveCrashMessage(crashMessageRequest);
         assertEquals(0, clapResponse.getCode());
+
     }
 }

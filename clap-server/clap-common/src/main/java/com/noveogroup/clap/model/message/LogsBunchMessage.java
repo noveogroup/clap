@@ -36,7 +36,7 @@ public class LogsBunchMessage extends BaseMessage {
     }
 
     @Override
-    public MessageType getType() {
+    public MessageType type() {
         return MessageType.LOGS;
     }
 }

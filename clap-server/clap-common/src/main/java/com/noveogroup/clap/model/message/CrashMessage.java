@@ -57,7 +57,7 @@ public class CrashMessage extends BaseMessage {
     }
 
     @Override
-    public MessageType getType() {
+    public MessageType type() {
         return MessageType.CRASH;
     }
 }

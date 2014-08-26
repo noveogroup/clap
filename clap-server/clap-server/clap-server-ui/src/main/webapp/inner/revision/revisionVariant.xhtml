@@ -38,62 +38,9 @@
                 </p:tree>
             </p:panel>
 
-            <p:dataTable var="crashMessage"
-                         value="#{revisionVariantSessionModel.selectedRevCrashes}"
-                         paginator="true" rows="10"
-                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         rowsPerPageTemplate="5,10,15">
+            <clp:messagesTable messages="#{revisionVariantSessionModel.selectedRevCrashes}" messageView="/inner/message/crashMessage"/>
+            <clp:messagesTable messages="#{revisionVariantSessionModel.selectedRevLogs}" messageView="/inner/message/logMessage"/>
 
-                <p:column headerText="#{msgs['revision.label.id']}">
-                    <h:link outcome="/inner/message/crashMessage" value="#{crashMessage.id}">
-                        <f:param name="id" value="#{crashMessage.id}"/>
-                    </h:link>
-                </p:column>
-                <p:column headerText="#{msgs['message.label.time']}">
-                    <h:link outcome="/inner/message/crashMessage" value="#{crashMessage.timestamp}" converter="TimestampConverter">
-                        <f:param name="id" value="#{crashMessage.id}"/>
-                    </h:link>
-                </p:column>
-                <p:column headerText="#{msgs['message.label.uploadedBy']}">
-                    <h:link outcome="/inner/message/crashMessage" value="#{crashMessage.deviceId}">
-                        <f:param name="id" value="#{crashMessage.id}"/>
-                    </h:link>
-                </p:column>
-
-            </p:dataTable>
-
-
-            <p:dataTable var="logMessage"
-                         value="#{revisionVariantSessionModel.selectedRevLogs}"
-                         paginator="true" rows="10"
-                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                         rowsPerPageTemplate="5,10,15">
-
-                <p:column style="width:11%">
-                    <p:rowToggler/>
-                </p:column>
-                <p:column headerText="#{msgs['message.label.time']}">
-                    <h:outputText value="#{logMessage.timestamp}"/>
-                </p:column>
-                <p:column headerText="#{msgs['message.label.uploadedBy']}">
-                    <h:outputText value="#{logMessage.uploadedBy}"/>
-                </p:column>
-
-                <p:rowExpansion>
-                    <ul>
-                        <ui:repeat value="#{logMessage.logs}" var="logEntry">
-                            <li>
-                                <h:outputText value="#{logEntry.timestamp}">
-                                    <f:converter converterId="TimestampConverter"/>
-                                </h:outputText>
-                                - #{logEntry.message}
-                            </li>
-                        </ui:repeat>
-                    </ul>
-
-                </p:rowExpansion>
-
-            </p:dataTable>
 
             <p:dataTable var="scrMessage"
                          value="#{revisionVariantSessionModel.selectedRevScreenshots}"

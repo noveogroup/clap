@@ -13,14 +13,25 @@ import javax.persistence.Query;
  */
 @Stateless
 public class RevisionVariantDAOImpl extends GenericDAOImpl<RevisionVariantEntity,Long> implements RevisionVariantDAO {
+    private static final String REVISION_BY_MESSAGE_ID = "getRevisionVariantByMessageId";
     private static final String REVISION_BY_HASH = "getRevisionVariantByHash";
     private static final String REVISION_BY_HASH_PARAMETER = "hash";
+    private static final String REVISION_BY_MESSAGE_ID_PARAMETER = "id";
 
 
     @Override
     public RevisionVariantEntity getRevisionByHash(final String revisionHash) {
         final Query query = entityManager.createNamedQuery(REVISION_BY_HASH);
         query.setParameter(REVISION_BY_HASH_PARAMETER, revisionHash);
+        final RevisionVariantEntity revisionEntity = getSingleResultOrNull(query);
+        initialize(revisionEntity);
+        return revisionEntity;
+    }
+
+    @Override
+    public RevisionVariantEntity getRevisionByMessageId(final long id) {
+        final Query query = entityManager.createNamedQuery(REVISION_BY_MESSAGE_ID);
+        query.setParameter(REVISION_BY_MESSAGE_ID_PARAMETER, id);
         final RevisionVariantEntity revisionEntity = getSingleResultOrNull(query);
         initialize(revisionEntity);
         return revisionEntity;
