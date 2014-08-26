@@ -50,19 +50,28 @@ public class ModuleManager {
 
     public void registerModule(String moduleName, String moduleClassName) {
         try {
-            Class<?> moduleClass = Class.forName(moduleClassName);
-            Module module = (Module) moduleClass.newInstance();
             synchronized (lock) {
-                if (initStaticDone) {
-                    moduleInitStatic(moduleName, module);
+                Module module = modules.get(moduleName);
+                if (module != null) {
+                    String className = module.getClass().getName();
+                    if (!className.equals(moduleClassName)) {
+                        throw new RuntimeException(String.format("cannot module '%s' from %s. it is already registered from %s", moduleName, moduleClassName, className));
+                    }
+                } else {
+                    Class<?> moduleClass = Class.forName(moduleClassName);
+                    module = (Module) moduleClass.newInstance();
+
+                    if (initStaticDone) {
+                        moduleInitStatic(moduleName, module);
+                    }
+                    if (initContextDone) {
+                        moduleInitContext(moduleName, module);
+                    }
+                    modules.put(moduleName, module);
                 }
-                if (initContextDone) {
-                    moduleInitContext(moduleName, module);
-                }
-                modules.put(moduleName, module);
             }
         } catch (Exception e) {
-            throw new RuntimeException(String.format("cannot register module %s from %s", moduleName, moduleClassName), e);
+            throw new RuntimeException(String.format("cannot register module '%s' from %s", moduleName, moduleClassName), e);
         }
     }
 
