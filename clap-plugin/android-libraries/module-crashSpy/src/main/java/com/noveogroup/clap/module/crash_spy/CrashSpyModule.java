@@ -67,6 +67,7 @@ public final class CrashSpyModule implements Module {
         this.context = context;
         Thread.UncaughtExceptionHandler handler = Thread.getDefaultUncaughtExceptionHandler();
         Thread.setDefaultUncaughtExceptionHandler(new ExceptionHandler(handler));
+        CrashService.startService(context.getContext());
     }
 
 }

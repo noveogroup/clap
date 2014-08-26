@@ -36,7 +36,7 @@ public final class AndroidLog {
         throw new UnsupportedOperationException();
     }
 
-    private static int convertLevel(int level) {
+    private static int convert(int level) {
         switch (level) {
             case Log.VERBOSE:
                 return LogEntry.TRACE;
@@ -55,19 +55,65 @@ public final class AndroidLog {
         }
     }
 
-    public static void appendLogEntry(int level, String tag, String message, Throwable throwable) {
+    private static int convert(String methodName) {
+        if (methodName.length() == 1) {
+            switch (methodName.charAt(0)) {
+                case 'v':
+                    return LogEntry.TRACE;
+                case 'd':
+                    return LogEntry.DEBUG;
+                case 'i':
+                    return LogEntry.INFO;
+                case 'w':
+                    return LogEntry.WARN;
+                case 'e':
+                    return LogEntry.ERROR;
+            }
+        } else {
+            if ("wtf".equals(methodName)) {
+                return LogEntry.FATAL;
+            }
+        }
+        return LogEntry.INFO;
+    }
+
+    private static void appendLogEntry(int level, String tag, String message, Throwable throwable) {
         if (throwable == null) {
-            LogHelper.appendLogEntry(System.currentTimeMillis(), convertLevel(level),
+            LogHelper.appendLogEntry(System.currentTimeMillis(), level,
                     tag, Thread.currentThread().getName(), message);
         } else {
             if (message == null) {
-                LogHelper.appendLogEntry(System.currentTimeMillis(), convertLevel(level),
+                LogHelper.appendLogEntry(System.currentTimeMillis(), level,
                         tag, Thread.currentThread().getName(), Log.getStackTraceString(throwable));
             } else {
-                LogHelper.appendLogEntry(System.currentTimeMillis(), convertLevel(level),
+                LogHelper.appendLogEntry(System.currentTimeMillis(), level,
                         tag, Thread.currentThread().getName(), message + "\n" + Log.getStackTraceString(throwable));
             }
         }
+    }
+
+    public static void log(String methodName, String tag, String message) {
+        appendLogEntry(convert(methodName), tag, message, null);
+    }
+
+    public static void log(String methodName, String tag, Throwable throwable) {
+        appendLogEntry(convert(methodName), tag, null, throwable);
+    }
+
+    public static void log(String methodName, String tag, String message, Throwable throwable) {
+        appendLogEntry(convert(methodName), tag, message, throwable);
+    }
+
+    public static void log(int priority, String tag, String message) {
+        appendLogEntry(convert(priority), tag, message, null);
+    }
+
+    public static void log(int priority, String tag, Throwable throwable) {
+        appendLogEntry(convert(priority), tag, null, throwable);
+    }
+
+    public static void log(int priority, String tag, String message, Throwable throwable) {
+        appendLogEntry(convert(priority), tag, message, throwable);
     }
 
 }

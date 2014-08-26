@@ -160,7 +160,7 @@ public class CrashService extends Service {
         @Override
         public void run() {
             ClapApi clapApi = new ClapApi(CrashService.this);
-            while (isInterrupted()) {
+            while (!isInterrupted()) {
                 sendCrash(CrashService.this, clapApi);
                 try {
                     Thread.sleep(SEND_INTERVAL);
@@ -168,7 +168,8 @@ public class CrashService extends Service {
                     break;
                 }
             }
-            startService(CrashService.this);
+            stopService(CrashService.this);
+            stopSelf();
         }
     };
 
