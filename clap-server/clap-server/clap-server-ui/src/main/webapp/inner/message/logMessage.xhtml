@@ -7,15 +7,33 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/template.xhtml">
+    <ui:define name="sideMenuItems">
+        <p:menuitem value="#{msgs['menu.project.view']}" outcome="/inner/project/project">
+            <f:param name="projectId" value="#{revisionVariantSessionModel.selectedRevisionVariant.projectId}"/>
+        </p:menuitem>
+        <p:menuitem value="#{msgs['menu.revision.view']}" outcome="/inner/revision/revision">
+            <f:param name="revisionId" value="#{revisionVariantSessionModel.selectedRevisionVariant.revisionId}"/>
+        </p:menuitem>
+        <p:menuitem value="#{msgs['menu.revisionVariant.view']}" outcome="/inner/revision/revisionVariant">
+            <f:param name="id" value="#{revisionVariantSessionModel.selectedRevisionVariant.id}"/>
+        </p:menuitem>
+    </ui:define>
     <ui:define name="content">
         <f:view >
             <f:metadata>
                 <f:viewAction action="#{messagesController.prepareLogsView}"/>
             </f:metadata>
 
-            TODO logs
+            <p:panelGrid columns="2">
+                <h:outputText value="#{msgs['message.label.deviceInfo']}"/>
+                <h:inputTextarea disabled="true" rows="6" cols="50" value="#{revisionVariantSessionModel.selectedLogsMessage.deviceInfo}"/>
 
+                <h:outputText value="#{msgs['message.label.logCat']}"/>
+                <h:inputTextarea disabled="true" rows="6" cols="50" value="#{revisionVariantSessionModel.selectedLogsMessage.logCat}"/>
 
+                <h:outputText value="#{msgs['message.label.catchedLogs']}"/>
+                <h:inputTextarea disabled="true" rows="6" cols="50" value="#{revisionVariantSessionModel.selectedLogsMessage.logs}"/>
+            </p:panelGrid>
         </f:view>
     </ui:define>
 </ui:composition>

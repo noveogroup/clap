@@ -2,6 +2,7 @@ package com.noveogroup.clap.web.controller;
 
 import com.noveogroup.clap.model.message.BaseMessage;
 import com.noveogroup.clap.model.message.CrashMessage;
+import com.noveogroup.clap.model.message.LogsBunchMessage;
 import com.noveogroup.clap.model.revision.RevisionVariantWithApkStructure;
 import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.web.model.revisions.RevisionVariantSessionModel;
@@ -29,43 +30,53 @@ public class MessagesController extends BaseController {
     private MessageSupport messageSupport;
 
     public void prepareLogsView() {
-        //TODO
+        final LogsBunchMessage selectedLogsMessage = sessionModel.getSelectedLogsMessage();
+        final LogsBunchMessage loadedMessage = loadMessage(selectedLogsMessage, LogsBunchMessage.class);
+        sessionModel.setSelectedLogsMessage(loadedMessage);
     }
 
     public void prepareCrashView() {
         CrashMessage selectedCrashMessage = sessionModel.getSelectedCrashMessage();
+        final CrashMessage loadedMessage = loadMessage(selectedCrashMessage, CrashMessage.class);
+        sessionModel.setSelectedCrashMessage(loadedMessage);
+    }
+
+    private <T extends BaseMessage> T loadMessage(T selectedMessage, final Class<T> messageClass) {
         final String idString = getRequestParam("id");
         if (idString != null) {
             final long id = Long.valueOf(idString);
-            if (selectedCrashMessage == null || selectedCrashMessage.getId() != id) {
+            if (selectedMessage == null || selectedMessage.getId() != id) {
                 RevisionVariantWithApkStructure selectedRevisionVariant = sessionModel.getSelectedRevisionVariant();
                 if (selectedRevisionVariant == null) {
                     selectedRevisionVariant = revisionService.getRevisionVariantWithApkStructureByMessageId(id);
                 } else {
-                    selectedCrashMessage = findMessage(id, selectedRevisionVariant.getMessages());
+                    selectedMessage = findMessage(id, selectedRevisionVariant.getMessages(), messageClass);
                 }
-                if (selectedCrashMessage == null) {
+                if (selectedMessage == null) {
                     selectedRevisionVariant = revisionService.getRevisionVariantWithApkStructureByMessageId(id);
                     if (selectedRevisionVariant != null) {
-                        selectedCrashMessage = findMessage(id, selectedRevisionVariant.getMessages());
+                        selectedMessage = findMessage(id, selectedRevisionVariant.getMessages(), messageClass);
                     }
                 }
                 sessionModel.setSelectedRevisionVariant(selectedRevisionVariant);
-                sessionModel.setSelectedCrashMessage(selectedCrashMessage);
-                if (selectedCrashMessage == null) {
+                if (selectedMessage == null) {
                     messageSupport.addMessage(null,
                             new FacesMessage(messageSupport.getMessage("error.badRequest.message", new Object[]{id})));
                 }
+                return selectedMessage;
             }
         } else {
             messageSupport.addMessage("error.badRequest.noId");
         }
+        return null;
     }
 
-    private CrashMessage findMessage(final long id, final List<BaseMessage> messageList) {
+    private <T extends BaseMessage> T findMessage(final long id,
+                                                  final List<BaseMessage> messageList,
+                                                  final Class<T> messageClass) {
         for (BaseMessage message : messageList) {
-            if (message.getId() == id && message instanceof CrashMessage) {
-                return (CrashMessage) message;
+            if (message.getId() == id && messageClass.isAssignableFrom(message.getClass())) {
+                return (T) message;
             }
         }
         return null;

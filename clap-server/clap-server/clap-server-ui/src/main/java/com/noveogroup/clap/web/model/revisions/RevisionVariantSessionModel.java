@@ -20,6 +20,7 @@ import java.util.List;
 public class RevisionVariantSessionModel implements Serializable{
     private RevisionVariantWithApkStructure selectedRevisionVariant;
     private CrashMessage selectedCrashMessage;
+    private LogsBunchMessage selectedLogsMessage;
 
     private TreeNode selectedVariantApkStructure;
 
@@ -61,5 +62,13 @@ public class RevisionVariantSessionModel implements Serializable{
 
     public void setSelectedCrashMessage(final CrashMessage selectedCrashMessage) {
         this.selectedCrashMessage = selectedCrashMessage;
+    }
+
+    public LogsBunchMessage getSelectedLogsMessage() {
+        return selectedLogsMessage;
+    }
+
+    public void setSelectedLogsMessage(final LogsBunchMessage selectedLogsMessage) {
+        this.selectedLogsMessage = selectedLogsMessage;
     }
 }
