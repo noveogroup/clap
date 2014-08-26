@@ -27,6 +27,32 @@
 package com.noveogroup.clap.gradle.instrument.modules
 
 import com.noveogroup.clap.gradle.instrument.Module
+import javassist.CannotCompileException
+import javassist.ClassPool
+import javassist.CtClass
+import javassist.expr.ExprEditor
+import javassist.expr.MethodCall
 
 class CrashSpy extends Module {
+
+    private static final String LOG = "com.noveogroup.clap.module.crash_spy.AndroidLog";
+
+    @Override
+    void instrumentClass(ClassPool classPool, CtClass aClass) {
+        aClass.instrument(new ExprEditor() {
+            @Override
+            void edit(MethodCall m) throws CannotCompileException {
+                if (m.getClassName() == 'android.util.Log') {
+                    String methodName = m.getMethodName() as String
+
+                    if (methodName == 'println') {
+                        m.replace('{ ' + LOG + '.log($$); $_ = $proceed($$); }')
+                    } else if (methodName == 'wtf' || methodName.length() == 1) {
+                        m.replace('{ ' + LOG + '.log(\"' + methodName + '\", $$); $_ = $proceed($$); }')
+                    }
+                }
+            }
+        })
+    }
+
 }
