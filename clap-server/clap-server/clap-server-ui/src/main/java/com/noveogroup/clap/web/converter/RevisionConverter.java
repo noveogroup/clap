@@ -21,4 +21,11 @@ public class RevisionConverter extends BaseModelConverter implements Converter {
     protected Object getObject(final Long id) {
         return revisionService.getRevisionWithApkStructure(id);
     }
+
+    @Override
+    protected String getErrorMessageId() {
+        return "error.badRequest.revision";
+    }
+
+
 }

@@ -21,4 +21,9 @@ public class ProjectConverter extends BaseModelConverter implements Converter {
     protected Object getObject(final Long id) {
         return projectService.findByIdWithImage(id);
     }
+
+    @Override
+    protected String getErrorMessageId() {
+        return "error.badRequest.project";
+    }
 }

@@ -150,7 +150,9 @@ public class RevisionServiceImpl implements RevisionService {
     @Override
     public void updateRevisionData(final Revision revision) {
         final RevisionEntity revisionByHash = revisionDAO.getRevisionByHash(revision.getHash());
-        revisionConverter.updateRevisionData(revisionByHash, revision);
+        if (revisionByHash != null) {
+            revisionConverter.updateRevisionData(revisionByHash, revision);
+        }
     }
 
     @RequiresAuthentication
@@ -171,19 +173,27 @@ public class RevisionServiceImpl implements RevisionService {
     @Override
     public Revision getRevision(final Long revisionId) {
         final RevisionEntity revisionEntity = revisionDAO.findById(revisionId);
-        final Revision revision = revisionConverter.map(revisionEntity, true, configBean);
-        createUrls(revision, revisionEntity);
-        return revision;
+        if (revisionEntity != null) {
+            final Revision revision = revisionConverter.map(revisionEntity, true, configBean);
+            createUrls(revision, revisionEntity);
+            return revision;
+        } else {
+            return null;
+        }
     }
 
     @RequiresAuthentication
     @Override
     public RevisionWithApkStructure getRevisionWithApkStructure(final Long revisionId) {
         final RevisionEntity revisionEntity = revisionDAO.findById(revisionId);
-        final RevisionWithApkStructure revision = revisionConverter.mapWithApkStructure(revisionEntity,
-                true, configBean);
-        createUrls(revision, revisionEntity);
-        return revision;
+        if (revisionEntity != null) {
+            final RevisionWithApkStructure revision = revisionConverter.mapWithApkStructure(revisionEntity,
+                    true, configBean);
+            createUrls(revision, revisionEntity);
+            return revision;
+        } else {
+            return null;
+        }
     }
 
     @RequiresAuthentication
@@ -192,15 +202,17 @@ public class RevisionServiceImpl implements RevisionService {
     @Override
     public void deleteRevision(final Long id) {
         final RevisionEntity revisionEntity = revisionDAO.findById(id);
-        List<String> filesToDelete = Lists.newArrayList();
-        for (RevisionVariantEntity variantEntity : revisionEntity.getVariants()) {
-            filesToDelete.add(variantEntity.getPackageFileUrl());
-        }
-        markRevisionScreenshotsToDelete(revisionEntity, filesToDelete);
-        revisionDAO.removeById(id);
-        revisionDAO.flush();
-        for (String fileToDelete : filesToDelete) {
-            fileService.removeFile(fileToDelete);
+        if (revisionEntity != null) {
+            List<String> filesToDelete = Lists.newArrayList();
+            for (RevisionVariantEntity variantEntity : revisionEntity.getVariants()) {
+                filesToDelete.add(variantEntity.getPackageFileUrl());
+            }
+            markRevisionScreenshotsToDelete(revisionEntity, filesToDelete);
+            revisionDAO.removeById(id);
+            revisionDAO.flush();
+            for (String fileToDelete : filesToDelete) {
+                fileService.removeFile(fileToDelete);
+            }
         }
     }
 

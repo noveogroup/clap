@@ -9,10 +9,10 @@
 <ui:composition template="/WEB-INF/template.xhtml">
     <ui:define name="sideMenuItems">
         <p:menuitem value="#{msgs['menu.project.view']}" outcome="/inner/project/project">
-            <f:param name="id" value="#{revisionVariantSessionModel.selectedRevisionVariant.projectId}"/>
+            <f:param name="projectId" value="#{revisionVariantSessionModel.selectedRevisionVariant.projectId}"/>
         </p:menuitem>
         <p:menuitem value="#{msgs['menu.revision.view']}" outcome="/inner/revision/revision">
-            <f:param name="id" value="#{revisionVariantSessionModel.selectedRevisionVariant.revisionId}"/>
+            <f:param name="revisionId" value="#{revisionVariantSessionModel.selectedRevisionVariant.revisionId}"/>
         </p:menuitem>
     </ui:define>
     <ui:define name="content">
@@ -20,8 +20,8 @@
 
             <f:metadata>
                 <f:viewParam name="id" value="#{revisionVariantSessionModel.selectedRevisionVariant}"
-                             converter="#{revisionVariantConverter}" converterMessage="Bad request. Unknown revision."
-                             required="true" requiredMessage="Bad request. Please use a link from within the system."/>
+                             converter="#{revisionVariantConverter}"
+                             required="true" requiredMessage="#{msgs['error.badRequest.noId']}"/>
                 <f:viewAction action="#{revisionsController.prepareRevisionVariantView}"/>
             </f:metadata>
 

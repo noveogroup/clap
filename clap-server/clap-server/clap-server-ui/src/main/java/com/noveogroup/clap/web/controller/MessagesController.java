@@ -5,8 +5,10 @@ import com.noveogroup.clap.model.message.CrashMessage;
 import com.noveogroup.clap.model.revision.RevisionVariantWithApkStructure;
 import com.noveogroup.clap.service.revision.RevisionService;
 import com.noveogroup.clap.web.model.revisions.RevisionVariantSessionModel;
+import com.noveogroup.clap.web.util.message.MessageSupport;
 
 import javax.enterprise.context.RequestScoped;
+import javax.faces.application.FacesMessage;
 import javax.inject.Inject;
 import javax.inject.Named;
 import java.util.List;
@@ -23,34 +25,46 @@ public class MessagesController extends BaseController {
     @Inject
     private RevisionService revisionService;
 
-    public void prepareLogsView(){
+    @Inject
+    private MessageSupport messageSupport;
+
+    public void prepareLogsView() {
         //TODO
     }
 
-    public void prepareCrashView(){
+    public void prepareCrashView() {
         CrashMessage selectedCrashMessage = sessionModel.getSelectedCrashMessage();
         final String idString = getRequestParam("id");
-        if(idString != null){
+        if (idString != null) {
             final long id = Long.valueOf(idString);
-            if(selectedCrashMessage == null || selectedCrashMessage.getId() != id){
+            if (selectedCrashMessage == null || selectedCrashMessage.getId() != id) {
                 RevisionVariantWithApkStructure selectedRevisionVariant = sessionModel.getSelectedRevisionVariant();
-                if(selectedRevisionVariant == null){
+                if (selectedRevisionVariant == null) {
                     selectedRevisionVariant = revisionService.getRevisionVariantWithApkStructureByMessageId(id);
                 } else {
                     selectedCrashMessage = findMessage(id, selectedRevisionVariant.getMessages());
                 }
-                if(selectedCrashMessage == null){
+                if (selectedCrashMessage == null) {
                     selectedRevisionVariant = revisionService.getRevisionVariantWithApkStructureByMessageId(id);
-                    selectedCrashMessage = findMessage(id, selectedRevisionVariant.getMessages());
+                    if (selectedRevisionVariant != null) {
+                        selectedCrashMessage = findMessage(id, selectedRevisionVariant.getMessages());
+                    }
                 }
+                sessionModel.setSelectedRevisionVariant(selectedRevisionVariant);
                 sessionModel.setSelectedCrashMessage(selectedCrashMessage);
+                if (selectedCrashMessage == null) {
+                    messageSupport.addMessage(null,
+                            new FacesMessage(messageSupport.getMessage("error.badRequest.message", new Object[]{id})));
+                }
             }
+        } else {
+            messageSupport.addMessage("error.badRequest.noId");
         }
     }
 
-    private CrashMessage findMessage(final long id, final List<BaseMessage> messageList){
-        for(BaseMessage message : messageList){
-            if(message.getId() == id && message instanceof CrashMessage){
+    private CrashMessage findMessage(final long id, final List<BaseMessage> messageList) {
+        for (BaseMessage message : messageList) {
+            if (message.getId() == id && message instanceof CrashMessage) {
                 return (CrashMessage) message;
             }
         }

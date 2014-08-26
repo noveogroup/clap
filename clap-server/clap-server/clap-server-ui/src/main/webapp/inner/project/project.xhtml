@@ -8,31 +8,32 @@
       xmlns:p="http://primefaces.org/ui">
 <ui:composition template="/WEB-INF/template.xhtml">
     <ui:define name="content">
-        <f:view transient="true">
-            <f:metadata>
-                <f:viewParam name="id" value="#{projectsModel.selectedProject}"
-                             converter="#{projectConverter}" converterMessage="Bad request. Unknown project."
-                             required="true" requiredMessage="Bad request. Please use a link from within the system."/>
-                <f:viewAction action="#{projectsController.prepareProjectView}"/>
-            </f:metadata>
-            <h:panelGroup rendered="#{not empty projectsModel.selectedProject}">
+        <f:metadata>
+            <f:viewParam name="projectId" value="#{projectsModel.selectedProject}"
+                         converter="#{projectConverter}"
+                         required="true" requiredMessage="#{msgs['error.badRequest.noId']}"/>
+            <f:viewAction action="#{projectsController.prepareProjectView}"/>
+        </f:metadata>
+        <h:panelGroup rendered="#{not empty projectsModel.selectedProject}">
 
-                <p:panel id="projectSummary" header="#{projectsModel.selectedProject.name}">
-                    <p:graphicImage url="#{projectsModel.selectedProject.iconFileUrl}" rendered="#{not empty projectsModel.selectedProject.iconFileUrl}"/>
-                    <h:outputText value="#{projectsModel.selectedProject.description}"/>
-                    <p:commandButton value="#{msgs['menu.project.edit']}"
-                                     immediate="true"
-                                     rendered="#{userSessionData.hasPermission('EDIT_PROJECTS')}"
-                                     action="#{projectsController.toEditProjectView()}"/>
-                    <p:commandButton value="#{msgs['common.form.label.delete']}"
-                                     immediate="true"
-                                     rendered="#{userSessionData.hasPermission('DELETE_PROJECTS')}"
-                                     action="#{projectsController.deleteProject()}"/>
-                </p:panel>
-                <clp:revisionsTable />
+            <p:panel id="projectSummary" header="#{projectsModel.selectedProject.name}">
+                <p:graphicImage url="#{projectsModel.selectedProject.iconFileUrl}"
+                                rendered="#{not empty projectsModel.selectedProject.iconFileUrl}"/>
+                <h:outputText value="#{projectsModel.selectedProject.description}"/>
+                <p:commandButton value="#{msgs['menu.project.edit']}"
+                                 immediate="true"
+                                 rendered="#{userSessionData.hasPermission('EDIT_PROJECTS')}"
+                                 action="#{projectsController.toEditProjectView()}"/>
+                <p:commandButton value="#{msgs['common.form.label.delete']}"
+                                 immediate="true"
+                                 rendered="#{userSessionData.hasPermission('DELETE_PROJECTS')}"
+                                 action="#{projectsController.deleteProject()}"/>
+            </p:panel>
+            <f:view transient="true">
+                <clp:revisionsTable/>
+            </f:view>
 
-            </h:panelGroup>
-        </f:view>
+        </h:panelGroup>
     </ui:define>
 </ui:composition>
 </html>

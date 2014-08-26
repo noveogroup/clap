@@ -17,6 +17,7 @@ import com.noveogroup.clap.web.model.projects.ProjectsModel;
 import com.noveogroup.clap.web.model.revisions.RevisionVariantSessionModel;
 import com.noveogroup.clap.web.model.revisions.RevisionsListDataModel;
 import com.noveogroup.clap.web.model.revisions.RevisionsModel;
+import com.noveogroup.clap.web.model.revisions.RevisionsSessionModel;
 import com.noveogroup.clap.web.model.user.UserSessionData;
 import com.noveogroup.clap.web.util.message.MessageSupport;
 import org.primefaces.model.DefaultTreeNode;
@@ -45,6 +46,9 @@ public class RevisionsController extends BaseController {
     private RevisionsModel revisionsModel;
 
     @Inject
+    private RevisionsSessionModel revisionsSessionModel;
+
+    @Inject
     private RevisionVariantSessionModel revisionVariantSessionModel;
 
     @Inject
@@ -63,7 +67,7 @@ public class RevisionsController extends BaseController {
     private MessageSupport messageSupport;
 
     public void prepareRevisionView() throws IOException {
-        final Revision selectedRevision = revisionsModel.getSelectedRevision();
+        final Revision selectedRevision = revisionsSessionModel.getSelectedRevision();
         if (selectedRevision != null) {
             populateRevisionTypesList();
             LOGGER.debug(selectedRevision.getId() + " revision preparing finished");
@@ -112,7 +116,7 @@ public class RevisionsController extends BaseController {
     }
 
     public String removeSelectedRevision() {
-        revisionService.deleteRevision(revisionsModel.getSelectedRevision().getId());
+        revisionService.deleteRevision(revisionsSessionModel.getSelectedRevision().getId());
         return Navigation.PROJECT.getView();
     }
 
@@ -141,19 +145,19 @@ public class RevisionsController extends BaseController {
 
     public void populateRevisionTypesList() {
         final User user = userSessionData.getUser();
-        final Revision selectedRevision = revisionsModel.getSelectedRevision();
+        final Revision selectedRevision = revisionsSessionModel.getSelectedRevision();
         final Set<RevisionType> availableTypes = revisionService.getAvailableTypesToChange(user, selectedRevision);
         final List<SelectItem> types = Lists.newArrayList();
         for (RevisionType revisionType : availableTypes) {
             types.add(new SelectItem(revisionType, revisionType.name()));
         }
-        revisionsModel.setRevisionTypes(types);
+        revisionsSessionModel.setRevisionTypes(types);
     }
 
 
     public void onRevisionTypeSelected() {
-        revisionService.updateRevisionData(revisionsModel.getSelectedRevision());
-        LOGGER.error("Type is : " + revisionsModel.getSelectedRevision().getRevisionType());
+        revisionService.updateRevisionData(revisionsSessionModel.getSelectedRevision());
+        LOGGER.error("Type is : " + revisionsSessionModel.getSelectedRevision().getRevisionType());
         messageSupport.addMessage("revisionControlMessages", "common.form.info.update.success");
     }
 }
