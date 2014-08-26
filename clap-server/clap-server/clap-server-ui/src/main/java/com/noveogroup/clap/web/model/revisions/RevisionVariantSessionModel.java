@@ -19,6 +19,7 @@ import java.util.List;
 @SessionScoped
 public class RevisionVariantSessionModel implements Serializable{
     private RevisionVariantWithApkStructure selectedRevisionVariant;
+    private CrashMessage selectedCrashMessage;
 
     private TreeNode selectedVariantApkStructure;
 
@@ -52,5 +53,13 @@ public class RevisionVariantSessionModel implements Serializable{
 
     public void setSelectedVariantApkStructure(final TreeNode selectedVariantApkStructure) {
         this.selectedVariantApkStructure = selectedVariantApkStructure;
+    }
+
+    public CrashMessage getSelectedCrashMessage() {
+        return selectedCrashMessage;
+    }
+
+    public void setSelectedCrashMessage(final CrashMessage selectedCrashMessage) {
+        this.selectedCrashMessage = selectedCrashMessage;
     }
 }

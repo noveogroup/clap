@@ -242,6 +242,19 @@ public class RevisionServiceImpl implements RevisionService {
         return null;
     }
 
+    @Override
+    public RevisionVariantWithApkStructure getRevisionVariantWithApkStructureByMessageId(final Long messageId) {
+        final RevisionVariantEntity entity = revisionVariantDAO.getRevisionByMessageId(messageId);
+        if (entity != null) {
+            final RevisionVariantWithApkStructure variant = revisionVariantConverter.mapWithApkStructure(entity,
+                    configBean);
+            createUrl(variant);
+            return variant;
+        }
+        return null;
+
+    }
+
     /**
      * processes uploaded packages
      * makes copy in temp files dir for writing to DB

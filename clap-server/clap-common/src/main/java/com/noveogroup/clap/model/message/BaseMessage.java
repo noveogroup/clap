@@ -12,7 +12,7 @@ public abstract class BaseMessage extends BaseModel {
     private long timestamp;
     private Map<String,String> deviceInfo;
 
-    public abstract MessageType getType();
+    public abstract MessageType type();
 
     public String getDeviceId() {
         return deviceId;

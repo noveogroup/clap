@@ -21,7 +21,9 @@ import java.util.List;
 @Table(name = "revision_variants")
 @NamedQueries({
         @NamedQuery(name = "getRevisionVariantByHash",
-                query = "SELECT rev FROM RevisionVariantEntity rev WHERE rev.fullHash = :hash")
+                query = "SELECT rev FROM RevisionVariantEntity rev WHERE rev.fullHash = :hash"),
+        @NamedQuery(name = "getRevisionVariantByMessageId",
+                query = "SELECT rev FROM RevisionVariantEntity rev INNER JOIN rev.messages m WHERE m.id = :id")
 })
 public class RevisionVariantEntity extends BaseEntity {
 
