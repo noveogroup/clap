@@ -100,8 +100,8 @@ public class ModuleManager {
 
     public void initContext(Context context) {
         synchronized (lock) {
-            if (!initStaticDone) {
-                initStaticDone = true;
+            if (!initContextDone) {
+                initContextDone = true;
                 applicationContext = context.getApplicationContext();
 
                 for (Map.Entry<String, Module> entry : modules.entrySet()) {

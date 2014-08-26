@@ -42,7 +42,7 @@ public final class InfoSpyModule implements Module {
 
     @Override
     public void initContext(final AndroidContext context) {
-        if (context.getPreferences().getBoolean(KEY_INFO_SENT, false)) {
+        if (!context.getPreferences().getBoolean(KEY_INFO_SENT, false)) {
             new Thread() {
                 @Override
                 public void run() {
