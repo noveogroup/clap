@@ -29,4 +29,7 @@ package com.noveogroup.clap.gradle.instrument.modules
 import com.noveogroup.clap.gradle.instrument.Module
 
 class InfoSpy extends Module {
+
+    // do nothing
+
 }

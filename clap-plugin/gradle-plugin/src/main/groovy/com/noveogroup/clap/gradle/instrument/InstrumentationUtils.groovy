@@ -27,6 +27,8 @@
 package com.noveogroup.clap.gradle.instrument
 
 import javassist.*
+import javassist.bytecode.LocalVariableAttribute
+import javassist.bytecode.MethodInfo
 
 class InstrumentationUtils {
 
@@ -99,6 +101,19 @@ class InstrumentationUtils {
             aClass.addMethod(method)
         }
         return method
+    }
+
+    static CtMethod getMethodToInstrument(ClassPool classPool, CtClass aClass, String methodName, String returnType, List<String> parameters) {
+        CtClass returnClass = classPool.getCtClass(returnType)
+        List<CtClass> parameterClasses = parameters.collect { classPool.getCtClass(it) }
+        return getMethodToInstrument(classPool, aClass, true, methodName, returnClass, parameterClasses as CtClass[])
+    }
+
+    static String getParameterName(CtMethod method, int index) {
+        MethodInfo methodInfo = method.getMethodInfo()
+        LocalVariableAttribute table = methodInfo.getCodeAttribute().getAttribute(LocalVariableAttribute.tag)
+        int frameWithNameAtConstantPool = table.nameIndex(index);
+        return methodInfo.getConstPool().getUtf8Info(frameWithNameAtConstantPool) as String
     }
 
 }

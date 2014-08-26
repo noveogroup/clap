@@ -32,6 +32,8 @@ import javassist.CtClass
 public class Module {
 
     List<String> dependencies
+    
+    String moduleClassName
 
     void instrumentClass(ClassPool classPool, CtClass aClass) {}
 
