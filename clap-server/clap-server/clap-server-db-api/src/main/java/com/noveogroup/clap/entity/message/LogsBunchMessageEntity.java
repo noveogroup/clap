@@ -3,8 +3,8 @@ package com.noveogroup.clap.entity.message;
 import com.noveogroup.clap.entity.message.log.LogEntryEntity;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.List;
@@ -19,8 +19,8 @@ public class LogsBunchMessageEntity extends BaseMessageEntity {
     @OneToMany(cascade = {CascadeType.ALL})
     private List<LogEntryEntity> logEntries;
 
-    @Column(name = "log_cat", length = COLUMN_LENGTH)
-    private String logCat;
+    @ElementCollection
+    private List<String> logCat;
 
     @Override
     public Class<? extends BaseMessageEntity> getEntityType() {
@@ -33,5 +33,13 @@ public class LogsBunchMessageEntity extends BaseMessageEntity {
 
     public void setLogEntries(final List<LogEntryEntity> logEntries) {
         this.logEntries = logEntries;
+    }
+
+    public List<String> getLogCat() {
+        return logCat;
+    }
+
+    public void setLogCat(final List<String> logCat) {
+        this.logCat = logCat;
     }
 }

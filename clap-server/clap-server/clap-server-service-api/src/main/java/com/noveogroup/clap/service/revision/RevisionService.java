@@ -22,7 +22,7 @@ public interface RevisionService {
      */
     boolean createOrUpdateRevision(@NotNull CreateOrUpdateRevisionRequest request);
 
-    void updateRevisionData(Revision revision);
+    void updateRevisionData(@NotNull Revision revision);
 
     ApplicationFile getApplication(Long revId, Long variantId);
 
@@ -37,4 +37,6 @@ public interface RevisionService {
     RevisionVariantWithApkStructure getRevisionVariantWithApkStructure(Long variantId);
 
     RevisionVariantWithApkStructure getRevisionVariantWithApkStructureByMessageId(Long messageId);
+
+    boolean checkRevisionVariantRandom(String variantHash, String random);
 }

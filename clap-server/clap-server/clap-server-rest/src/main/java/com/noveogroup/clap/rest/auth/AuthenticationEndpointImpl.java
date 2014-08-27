@@ -25,11 +25,7 @@ public class AuthenticationEndpointImpl implements AuthenticationEndpoint {
 
     @Override
     public String getToken(final ApkAuthentication authentication) {
-        //TODO implement this
-        final Authentication authentication1 = new Authentication();
-        authentication1.setLogin("unnamed");
-        authentication1.setPassword("unnamed_password");
-        final String token = userService.getToken(authentication1);
+        final String token = userService.getApkToken(authentication);
         return token;
     }
 }

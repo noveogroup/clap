@@ -9,11 +9,13 @@ import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.exception.ClapAuthenticationFailedException;
 import com.noveogroup.clap.exception.ClapUserNotFoundException;
 import com.noveogroup.clap.exception.WrapException;
+import com.noveogroup.clap.model.auth.ApkAuthentication;
 import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.user.Role;
 import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.model.user.UserCreationModel;
 import com.noveogroup.clap.model.user.UserWithPersistedAuth;
+import com.noveogroup.clap.service.revision.RevisionService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
@@ -28,6 +30,7 @@ import javax.ejb.Stateless;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.util.List;
 import java.util.UUID;
 
@@ -47,6 +50,9 @@ public class UserServiceImpl implements UserService {
 
     @Inject
     private ConfigBean configBean;
+
+    @Inject
+    private Provider<RevisionService> revisionServiceProvider;
 
     @Override
     public UserWithPersistedAuth getUserWithToken() {
@@ -214,6 +220,19 @@ public class UserServiceImpl implements UserService {
         final UserEntity userEntity = getUserByLogin(user);
         userEntity.setRole(user.getRole());
         return persistFlushAndReturnConverted(userEntity);
+    }
+
+    @Override
+    public String getApkToken(final ApkAuthentication authentication) {
+        final RevisionService service = revisionServiceProvider.get();
+        if(service.checkRevisionVariantRandom(authentication.getVariantHash(), authentication.getRandom())){
+            final Authentication authentication1 = new Authentication();
+            authentication1.setLogin("unnamed");
+            authentication1.setPassword("unnamed_password");
+            return getToken(authentication1);
+        } else {
+            throw new ClapAuthenticationFailedException("unknown random");
+        }
     }
 
     private UserEntity getUserByLogin(final User user) {

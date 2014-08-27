@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class LogsBunchMessage extends BaseMessage {
     private List<LogEntry> logs;
-    private String logCat;
+    private List<String> logCat;
 
     public List<LogEntry> getLogs() {
         return logs;
@@ -20,11 +20,11 @@ public class LogsBunchMessage extends BaseMessage {
         this.logs = logs;
     }
 
-    public String getLogCat() {
+    public List<String> getLogCat() {
         return logCat;
     }
 
-    public void setLogCat(final String logCat) {
+    public void setLogCat(final List<String> logCat) {
         this.logCat = logCat;
     }
 

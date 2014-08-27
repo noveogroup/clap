@@ -51,7 +51,9 @@ public abstract class GenericDAOImpl<T, ID extends Serializable> implements Gene
     @Override
     public void removeById(final ID id) {
         final T obj = entityManager.find(persistentClass, id);
-        entityManager.remove(obj);
+        if (obj != null) {
+            entityManager.remove(obj);
+        }
     }
 
 
