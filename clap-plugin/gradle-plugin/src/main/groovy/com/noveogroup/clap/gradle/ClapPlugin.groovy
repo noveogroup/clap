@@ -152,6 +152,48 @@ class ClapPlugin implements Plugin<Project> {
                 Instrumentation.getDependencies(customOptions.instrument).each {
                     project.dependencies.add("${customName}Compile", it)
                 }
+
+//                todo Android builder do not support standard Artifact Query API
+//                println "----- ===== ***** ===== -----"
+//                project.dependencies.components.eachComponent { ComponentMetadataDetails details ->
+//                    println "${details.id.group} : ${details.id.name} : ${details.id.version}"
+//                    def result = project.dependencies.createArtifactResolutionQuery()
+//                            .forComponents(new DefaultModuleComponentIdentifier(details.id.group, details.id.name, details.id.version))
+//                            .withArtifacts(JvmLibrary, SourcesArtifact, JavadocArtifact)
+//                            .execute()
+//
+//                    for (component in result.resolvedComponents) {
+//                        println component
+//                        component.getArtifacts(SourcesArtifact).each {
+//                            println "Source artifact for ${component.id}: ${it.file}"
+//                        }
+//                    }
+//                }
+//                println "----- ===== ***** ===== -----"
+//                project.repositories.each { ArtifactRepository artifactRepository ->
+//                    if (artifactRepository instanceof MavenArtifactRepository) {
+//                        MavenArtifactRepository repository = artifactRepository
+//                        println repository
+//                        println repository.url
+//                    }
+//                }
+//                println "----- ===== ***** ===== -----"
+//                variant.variantData.variantDependency.libraries.each { println it }
+//                variant.variantData.variantDependency.jars.each { println it }
+//                variant.variantData.variantDependency.localJars.each { println it }
+//                println "----- ===== ***** ===== -----"
+//                println project.components
+//                println "----- ===== ***** ===== -----"
+//                def componentIds = project.configurations.compile.incoming.resolutionResult.allDependencies.collect {
+//                    it.selected.id
+//                }
+//                println componentIds
+//                def result = project.dependencies.createArtifactResolutionQuery()
+//                        .forComponents(componentIds)
+//                        .withArtifacts(JvmLibrary, SourcesArtifact, JavadocArtifact)
+//                        .execute()
+//                println result
+//                println "----- ===== ***** ===== -----"
             }
         }
 
@@ -190,6 +232,10 @@ class ClapPlugin implements Plugin<Project> {
                     // instrument classes
                     Instrumentation.instrument(project, javaCompileTask, classPool, customOptions.instrument)
                 }
+
+                // delete instrumented classes from DEX task
+                // todo so preDEX task does useless work now
+                variant.variantData.dexTask.libraries = []
 
                 // create upload task
                 createUploadTask(project, clap, variant)

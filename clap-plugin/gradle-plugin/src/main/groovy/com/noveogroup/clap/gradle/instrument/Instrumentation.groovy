@@ -29,10 +29,7 @@ package com.noveogroup.clap.gradle.instrument
 import com.noveogroup.clap.gradle.Utils
 import com.noveogroup.clap.gradle.instrument.modules.CrashSpy
 import com.noveogroup.clap.gradle.instrument.modules.InfoSpy
-import javassist.ClassPool
-import javassist.CtClass
-import javassist.CtConstructor
-import javassist.CtMethod
+import javassist.*
 import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.tasks.compile.JavaCompile
@@ -104,8 +101,8 @@ class Instrumentation {
     }
 
     static void instrument(Project project, JavaCompile javaCompileTask, ClassPool classPool, Set<String> names) {
-        List<String> classNames = Utils.getClassNames(javaCompileTask.destinationDir)
-        classNames.each { String className ->
+        Utils.getClassNames(javaCompileTask.destinationDir)
+                .each { String className ->
             CtClass aClass = classPool.getCtClass(className)
 
             project.logger.info "instrument $className"
@@ -115,6 +112,24 @@ class Instrumentation {
             aClass.writeFile(javaCompileTask.destinationDir.absolutePath)
             aClass.detach()
         }
+
+        javaCompileTask.classpath
+                .inject([]) { classNames, file -> classNames + Utils.getClassNames(file) }
+                .each { String className ->
+            CtClass aClass = classPool.getCtClass(className)
+
+            try {
+                project.logger.info "instrument $className"
+                instrumentCommon(classPool, aClass, names)
+                names.each { getModule(it).instrumentClass(classPool, aClass) }
+            } catch (NotFoundException ignored) {
+                // classpath can contain classes with missed dependencies
+            }
+
+            aClass.writeFile(javaCompileTask.destinationDir.absolutePath)
+            aClass.detach()
+        }
+
         javaCompileTask.classpath = project.files()
     }
 

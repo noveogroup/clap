@@ -43,6 +43,7 @@ import org.gradle.api.file.FileTree
 import org.gradle.api.tasks.compile.JavaCompile
 
 import java.security.MessageDigest
+import java.util.zip.ZipFile
 
 class Utils {
 
@@ -125,19 +126,31 @@ class Utils {
         buildConfigClass.detach()
     }
 
-    static List<String> getClassNames(File directory) {
+    static List<String> getClassNames(File file) {
         List<String> list = []
-        directory.eachFileRecurse {
-            String path = it.absolutePath as String
-            def matcher = (path =~ /(.*)\.class/)
-            if (it.isFile() && matcher.matches()) {
-                String className = matcher.group(1)
-                        .substring(directory.absolutePath.length() + 1)
-                        .replaceAll('/', '.')
-                        .replaceAll('\\\\', '.') as String
-                list << className
+
+        if (file.isDirectory()) {
+            file.eachFileRecurse {
+                String path = it.absolutePath as String
+                def matcher = (path =~ /(.*)\.class/)
+                if (it.isFile() && matcher.matches()) {
+                    String className = matcher.group(1)
+                            .substring(file.absolutePath.length() + 1)
+                            .replaceAll('/', '.')
+                            .replaceAll('\\\\', '.') as String
+                    list << className
+                }
+            }
+        } else {
+            new ZipFile(file).entries().each {
+                def matcher = (it.name =~ /(.*)\.class/)
+                if (!it.isDirectory() && matcher.matches()) {
+                    String className = matcher.group(1).replaceAll('/', '.') as String
+                    list << className
+                }
             }
         }
+
         return list
     }
 
