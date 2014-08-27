@@ -15,7 +15,9 @@ public class LogsBunchMessageConverter implements OneTypeMessagesConverter<LogsB
 
     @Override
     public LogsBunchMessage map(final LogsBunchMessageEntity messageEntity, final ConfigBean configBean) {
-        return MAPPER.map(messageEntity, LogsBunchMessage.class);
+        final LogsBunchMessage map = MAPPER.map(messageEntity, LogsBunchMessage.class);
+        map.getLogCat().addAll(messageEntity.getLogCat());
+        return map;
     }
 
     @Override

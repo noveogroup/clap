@@ -35,6 +35,7 @@ import com.noveogroup.clap.service.file.FileService;
 import com.noveogroup.clap.service.url.UrlService;
 import com.noveogroup.clap.service.user.UserService;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authz.annotation.RequiresAuthentication;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.slf4j.Logger;
@@ -201,19 +202,7 @@ public class RevisionServiceImpl implements RevisionService {
     @WrapException
     @Override
     public void deleteRevision(final Long id) {
-        final RevisionEntity revisionEntity = revisionDAO.findById(id);
-        if (revisionEntity != null) {
-            List<String> filesToDelete = Lists.newArrayList();
-            for (RevisionVariantEntity variantEntity : revisionEntity.getVariants()) {
-                filesToDelete.add(variantEntity.getPackageFileUrl());
-            }
-            markRevisionScreenshotsToDelete(revisionEntity, filesToDelete);
-            revisionDAO.removeById(id);
-            revisionDAO.flush();
-            for (String fileToDelete : filesToDelete) {
-                fileService.removeFile(fileToDelete);
-            }
-        }
+        revisionDAO.removeById(id);
     }
 
     private void markRevisionScreenshotsToDelete(final RevisionEntity revisionEntity,
@@ -265,6 +254,12 @@ public class RevisionServiceImpl implements RevisionService {
         }
         return null;
 
+    }
+
+    @Override
+    public boolean checkRevisionVariantRandom(final String variantHash, final String random) {
+        final RevisionVariantEntity revisionByHash = revisionVariantDAO.getRevisionByHash(variantHash);
+        return revisionByHash != null && StringUtils.equals(revisionByHash.getRandom(), random);
     }
 
     /**

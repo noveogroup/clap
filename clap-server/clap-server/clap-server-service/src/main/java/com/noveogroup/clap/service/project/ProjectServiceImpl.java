@@ -7,7 +7,6 @@ import com.noveogroup.clap.dao.MessageDAO;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.entity.project.ProjectEntity;
-import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.exception.ClapPersistenceException;
 import com.noveogroup.clap.exception.WrapException;
 import com.noveogroup.clap.model.Project;
@@ -151,16 +150,7 @@ public class ProjectServiceImpl implements ProjectService {
     @RequiresPermissions("DELETE_PROJECTS")
     @Override
     public void deleteProject(final Project project) {
-        final ProjectEntity projectEntity = projectDAO.findById(project.getId());
-        if (projectEntity != null) {
-            if (projectEntity.getRevisions() != null) {
-                for (final RevisionEntity revisionEntity : projectEntity.getRevisions()) {
-                    revisionService.deleteRevision(revisionEntity.getId());
-                }
-            }
-            projectDAO.remove(projectEntity);
-            projectDAO.flush();
-        }
+        projectDAO.removeById(project.getId());
     }
 
     @Override

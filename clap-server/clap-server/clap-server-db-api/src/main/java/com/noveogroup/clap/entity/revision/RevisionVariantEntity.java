@@ -6,6 +6,7 @@ import com.noveogroup.clap.entity.user.UserEntity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
@@ -25,6 +26,7 @@ import java.util.List;
         @NamedQuery(name = "getRevisionVariantByMessageId",
                 query = "SELECT rev FROM RevisionVariantEntity rev INNER JOIN rev.messages m WHERE m.id = :id")
 })
+@EntityListeners(RevisionVariantEntityListener.class)
 public class RevisionVariantEntity extends BaseEntity {
 
     @ManyToOne(optional = false)

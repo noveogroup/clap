@@ -10,6 +10,7 @@ import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -27,6 +28,8 @@ public class CrashMessagesConverter implements OneTypeMessagesConverter<CrashMes
         final CrashMessage map = MAPPER.map(messageEntity, CrashMessage.class);
         map.setDeviceInfo(new HashMap<String, String>());
         map.getDeviceInfo().putAll(messageEntity.getDeviceInfo());
+        map.setLogCat(new ArrayList<String>());
+        map.getLogCat().addAll(messageEntity.getLogCat());
         final Object fromJson = gson.fromJson(messageEntity.getThreadsInfoJSON(), listType);
         if(fromJson instanceof List){
             map.setThreads((List<ThreadInfo>) fromJson);

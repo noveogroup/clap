@@ -12,7 +12,7 @@ public class CrashMessage extends BaseMessage {
 
     private long threadId;
     private String exception;
-    private String logCat;
+    private List<String> logCat;
     private List<ThreadInfo> threads;
     private List<LogEntry> logs;
 
@@ -24,11 +24,11 @@ public class CrashMessage extends BaseMessage {
         this.exception = exception;
     }
 
-    public String getLogCat() {
+    public List<String> getLogCat() {
         return logCat;
     }
 
-    public void setLogCat(final String logCat) {
+    public void setLogCat(final List<String> logCat) {
         this.logCat = logCat;
     }
 

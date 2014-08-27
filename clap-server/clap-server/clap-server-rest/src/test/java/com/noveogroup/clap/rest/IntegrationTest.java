@@ -68,7 +68,9 @@ public class IntegrationTest {
         message.setTimestamp(new Date().getTime());
         message.setDeviceId("someDeviceId");
         message.setException("some exception");
-        message.setLogCat("some logcat");
+        final ArrayList<String> logCat = new ArrayList<String>();
+        logCat.add("some logcat");
+        message.setLogCat(logCat);
         final LogEntry logEntry = new LogEntry();
         logEntry.setLevel(1);
         logEntry.setLoggerName("logger");
@@ -102,6 +104,5 @@ public class IntegrationTest {
         crashMessageRequest.setMessage(message);
         final ClapResponse clapResponse = messagesEndpoint.saveCrashMessage(crashMessageRequest);
         assertEquals(0, clapResponse.getCode());
-
     }
 }

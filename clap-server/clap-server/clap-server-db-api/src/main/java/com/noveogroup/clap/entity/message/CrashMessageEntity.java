@@ -5,6 +5,7 @@ import com.noveogroup.clap.entity.message.log.LogEntryEntity;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.OneToMany;
 import java.util.List;
@@ -17,8 +18,8 @@ public class CrashMessageEntity extends BaseMessageEntity {
     private long threadId;
     @Column(name = "exception")
     private String exception;
-    @Column(name = "log_cat", length = COLUMN_LENGTH)
-    private String logCat;
+    @ElementCollection
+    private List<String> logCat;
     @Column(name = "thread_info_json", length = COLUMN_LENGTH)
     private String threadsInfoJSON;
     @OneToMany(cascade = {CascadeType.ALL})
@@ -51,11 +52,11 @@ public class CrashMessageEntity extends BaseMessageEntity {
         this.exception = exception;
     }
 
-    public String getLogCat() {
+    public List<String> getLogCat() {
         return logCat;
     }
 
-    public void setLogCat(final String logCat) {
+    public void setLogCat(final List<String> logCat) {
         this.logCat = logCat;
     }
 

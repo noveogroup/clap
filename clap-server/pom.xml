@@ -113,7 +113,6 @@
         <maven-glassfish-plugin.version>2.1</maven-glassfish-plugin.version>
         <hsqldb.version>1.8.0.10</hsqldb.version>
         <mysql-connector-java.version>5.1.24</mysql-connector-java.version>
-        <hibernate.version>4.2.1.Final</hibernate.version>
         <mockito-all.version>1.9.5</mockito-all.version>
         <powermock.version>1.5</powermock.version>
         <glassfish-embedded-all.version>4.0-b72</glassfish-embedded-all.version>

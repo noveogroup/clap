@@ -1,5 +1,6 @@
 package com.noveogroup.clap.service.user;
 
+import com.noveogroup.clap.model.auth.ApkAuthentication;
 import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.model.user.UserCreationModel;
@@ -65,4 +66,6 @@ public interface UserService {
     User editPermissions(User user);
 
     User editRole(User user);
+
+    String getApkToken(ApkAuthentication authentication);
 }
