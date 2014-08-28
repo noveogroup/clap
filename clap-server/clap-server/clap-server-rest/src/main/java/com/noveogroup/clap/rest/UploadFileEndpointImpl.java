@@ -1,6 +1,5 @@
 package com.noveogroup.clap.rest;
 
-import com.noveogroup.clap.model.message.ScreenshotMessage;
 import com.noveogroup.clap.model.request.message.ScreenshotMessageRequest;
 import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
 import com.noveogroup.clap.model.response.ClapResponse;
@@ -38,10 +37,10 @@ public class UploadFileEndpointImpl extends BaseEndpoint implements UploadFileEn
 
     @Override
     public ClapResponse saveScreenshot(final ScreenshotMessageRequest request) {
-        final String revisionHash = request.getRevisionHash();
+        final String revisionHash = request.getVariantHash();
         LOGGER.debug("saving screenshot message " + revisionHash);
         login(request.getToken());
-        messagesService.saveMessage(revisionHash, new ScreenshotMessage(), request.getScreenshotFileStream());
+        messagesService.saveMessage(revisionHash, request.getMessage(), request.getScreenshotFileStream());
         LOGGER.debug(revisionHash + "screenshot saved");
         return new ClapResponse();
     }

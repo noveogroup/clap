@@ -49,17 +49,17 @@
                 <f:facet name="header">
                     #{msgs['message.label.screenshotsTableHeader']}
                 </f:facet>
-                <p:column style="width:11%">
+                <p:column style="width:16px">
                     <p:rowToggler/>
                 </p:column>
                 <p:column headerText="#{msgs['message.label.time']}">
                     <h:outputText value="#{scrMessage.timestamp}" converter="TimestampConverter"/>
                 </p:column>
                 <p:column headerText="#{msgs['message.label.uploadedBy']}">
-                    <h:outputText value="#{scrMessage.uploadedBy}"/>
+                    <h:outputText value="#{scrMessage.deviceId}"/>
                 </p:column>
                 <p:rowExpansion>
-                    <p:graphicImage url="#{scrMessage.screenshotUrl}"/>
+                    <p:graphicImage url="#{scrMessage.screenshotUrl}" width="100%"/>
                 </p:rowExpansion>
             </p:dataTable>
         </f:view>

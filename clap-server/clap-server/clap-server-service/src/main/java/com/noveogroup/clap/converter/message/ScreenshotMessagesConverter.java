@@ -3,19 +3,24 @@ package com.noveogroup.clap.converter.message;
 import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.entity.message.ScreenshotMessageEntity;
 import com.noveogroup.clap.model.message.ScreenshotMessage;
+import org.dozer.DozerBeanMapper;
+import org.dozer.Mapper;
 
 import java.util.Date;
 
 /**
  * @author Andrey Sokolov
  */
-public class ScreenshotMessagesConverter
+public class ScreenshotMessagesConverter extends BaseMessagesConverter
         implements OneTypeMessagesConverter<ScreenshotMessage, ScreenshotMessageEntity> {
+
+    private static final Mapper MAPPER = new DozerBeanMapper();
+
     @Override
     public ScreenshotMessage map(final ScreenshotMessageEntity messageEntity,final ConfigBean configBean) {
         final ScreenshotMessage screenshotMessage = new ScreenshotMessage();
         final Long id = messageEntity.getId();
-        screenshotMessage.setId(id);
+        map(messageEntity,screenshotMessage);
         screenshotMessage.setScreenshotUrl(configBean.getDownloadScreenshotUrl(id));
         final Date timestamp = messageEntity.getTimestamp();
         if(timestamp != null){
@@ -26,9 +31,8 @@ public class ScreenshotMessagesConverter
 
     @Override
     public ScreenshotMessageEntity map(final ScreenshotMessage message) {
-        final ScreenshotMessageEntity screenshotMessageEntity = new ScreenshotMessageEntity();
+        final ScreenshotMessageEntity screenshotMessageEntity = MAPPER.map(message,ScreenshotMessageEntity.class);
         screenshotMessageEntity.setScreenshotFileUrl(message.getScreenshotUrl());
-        screenshotMessageEntity.setTimestamp(new Date(message.getTimestamp()));
         return screenshotMessageEntity;
     }
 

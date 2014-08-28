@@ -6,12 +6,14 @@ import com.noveogroup.clap.model.auth.Authentication;
 import com.noveogroup.clap.model.message.BaseMessage;
 import com.noveogroup.clap.model.message.CrashMessage;
 import com.noveogroup.clap.model.message.LogsBunchMessage;
+import com.noveogroup.clap.model.message.ScreenshotMessage;
 import com.noveogroup.clap.model.message.StackTraceEntry;
 import com.noveogroup.clap.model.message.ThreadInfo;
 import com.noveogroup.clap.model.message.log.LogEntry;
 import com.noveogroup.clap.model.request.message.BaseMessageRequest;
 import com.noveogroup.clap.model.request.message.CrashMessageRequest;
 import com.noveogroup.clap.model.request.message.LogsBunchMessageRequest;
+import com.noveogroup.clap.model.request.message.ScreenshotMessageRequest;
 import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
 import com.noveogroup.clap.model.response.ClapResponse;
 import junit.framework.Assert;
@@ -59,11 +61,7 @@ public class IntegrationTest {
         final ClapResponse response = uploadFileEndpoint.createOrUpdateRevision(request);
         assertEquals(0, response.getCode());
 
-        final ApkAuthentication apkAuthentication = new ApkAuthentication();
-        apkAuthentication.setProjectId(testProjectExternalId);
-        apkAuthentication.setRevisionHash(testRevisionHash);
-        apkAuthentication.setVariantHash(testVariantHash);
-        apkAuthentication.setRandom(random);
+        final ApkAuthentication apkAuthentication = getApkAuthentication();
         final String token2 = authenticationEndpoint.getToken(apkAuthentication);
 
         MessagesEndpoint messagesEndpoint = ProxyFactory.create(MessagesEndpoint.class,BASE);
@@ -137,8 +135,32 @@ public class IntegrationTest {
         } catch (Exception e){
             Assert.fail();
         }
+    }
 
+    private ApkAuthentication getApkAuthentication() {
+        final ApkAuthentication apkAuthentication = new ApkAuthentication();
+        apkAuthentication.setProjectId(testProjectExternalId);
+        apkAuthentication.setRevisionHash(testRevisionHash);
+        apkAuthentication.setVariantHash(testVariantHash);
+        apkAuthentication.setRandom(random);
+        return apkAuthentication;
+    }
 
+    @Test
+    public void testScreenshot() throws Exception {
+        final AuthenticationEndpoint authenticationEndpoint = ProxyFactory.create(AuthenticationEndpoint.class, BASE);
+        final String token = authenticationEndpoint.getToken(getApkAuthentication());
+        final UploadFileEndpoint uploadFileEndpoint = ProxyFactory.create(UploadFileEndpoint.class, BASE);
+        final ScreenshotMessageRequest request = new ScreenshotMessageRequest();
+        request.setRevisionHash(testRevisionHash);
+        request.setVariantHash(testVariantHash);
+        request.setToken(token);
+        request.setScreenshotFileStream(getClass().getResourceAsStream("/clap_8972227388431348519.png"));
+        final ScreenshotMessage message = new ScreenshotMessage();
+        fillMessage(message);
+        request.setMessage(message);
+        final ClapResponse clapResponse = uploadFileEndpoint.saveScreenshot(request);
+        assertEquals(0, clapResponse.getCode());
     }
 
     private void fillMessage(final BaseMessage message) {
