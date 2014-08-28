@@ -1,0 +1,32 @@
+<html xmlns:cc="http://xmlns.jcp.org/jsf/composite"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+        >
+<cc:interface>
+    <cc:attribute name="message" required="true" type="com.noveogroup.clap.model.message.BaseMessage"/>
+</cc:interface>
+<cc:implementation>
+    <p:panelGrid columns="2" columnClasses="infoLabel,infoValue">
+        <h:outputText value="#{msgs['message.label.deviceId']}"/>
+        <h:outputText value="#{cc.attrs.message.deviceId}"/>
+
+        <h:outputText value="#{msgs['message.label.time']}"/>
+        <h:outputText value="#{cc.attrs.message.timestamp}"
+                      converter="TimestampConverter"/>
+
+        <h:outputText value="#{msgs['message.label.deviceInfo']}"/>
+        <h:panelGroup>
+            <p:dataTable var="infoEntry"
+                         value="#{cc.attrs.message.deviceInfo.entrySet().toArray()}">
+                <p:column headerText="Name">
+                    <h:outputText value="#{infoEntry.key}"/>
+                </p:column>
+
+                <p:column headerText="Value">
+                    <h:outputText value="#{infoEntry.value}"/>
+                </p:column>
+            </p:dataTable>
+        </h:panelGroup>
+    </p:panelGrid>
+</cc:implementation>
+</html>

@@ -19,21 +19,20 @@
         </p:menuitem>
     </ui:define>
     <ui:define name="content">
-        <f:view >
+        <f:view>
             <f:metadata>
                 <f:viewAction action="#{messagesController.prepareLogsView}"/>
             </f:metadata>
+            <clp:commonMessageInfo message="#{revisionVariantSessionModel.selectedLogsMessage}"/>
 
-            <p:panelGrid columns="2">
-                <h:outputText value="#{msgs['message.label.deviceInfo']}"/>
-                <h:inputTextarea disabled="true" rows="6" cols="50" value="#{revisionVariantSessionModel.selectedLogsMessage.deviceInfo}"/>
-
+            <p:panelGrid columns="2" columnClasses="infoLabel,infoValue">
                 <h:outputText value="#{msgs['message.label.logCat']}"/>
-                <h:inputTextarea disabled="true" rows="6" cols="50" value="#{revisionVariantSessionModel.selectedLogsMessage.logCat}"/>
-
-                <h:outputText value="#{msgs['message.label.catchedLogs']}"/>
-                <h:inputTextarea disabled="true" rows="6" cols="50" value="#{revisionVariantSessionModel.selectedLogsMessage.logs}"/>
+                <p:dataList value="#{revisionVariantSessionModel.selectedLogsMessage.logCat}" var="logCatEntry"
+                            type="unordered" itemType="none" paginator="true" rows="10" styleClass="paginated">
+                    <h:outputText value="#{logCatEntry}"/>
+                </p:dataList>
             </p:panelGrid>
+            <clp:logsTable logs="#{revisionVariantSessionModel.selectedLogsMessage.logs}"/>
         </f:view>
     </ui:define>
 </ui:composition>

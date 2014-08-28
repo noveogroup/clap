@@ -6,41 +6,50 @@ import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.entity.message.CrashMessageEntity;
 import com.noveogroup.clap.model.message.CrashMessage;
 import com.noveogroup.clap.model.message.ThreadInfo;
+import com.noveogroup.clap.model.message.log.LogEntry;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 /**
  * @author Andrey Sokolov
  */
-public class CrashMessagesConverter implements OneTypeMessagesConverter<CrashMessage, CrashMessageEntity> {
+public class CrashMessagesConverter extends BaseMessagesConverter
+        implements OneTypeMessagesConverter<CrashMessage, CrashMessageEntity> {
 
     private static final Mapper MAPPER = new DozerBeanMapper();
-    private Type listType = new TypeToken<List<ThreadInfo>>(){}.getType();
+    private Type listType = new TypeToken<List<ThreadInfo>>() {
+    }.getType();
     private Gson gson = new Gson();
 
     @Override
-    public CrashMessage map(CrashMessageEntity messageEntity,final ConfigBean configBean) {
-        final CrashMessage map = MAPPER.map(messageEntity, CrashMessage.class);
-        map.setDeviceInfo(new HashMap<String, String>());
-        map.getDeviceInfo().putAll(messageEntity.getDeviceInfo());
+    public CrashMessage map(CrashMessageEntity messageEntity, final ConfigBean configBean) {
+        final CrashMessage map = new CrashMessage();
+        map(messageEntity,map);
+        map.setThreadId(messageEntity.getThreadId());
+        map.setException(messageEntity.getException());
+
         map.setLogCat(new ArrayList<String>());
-        map.getLogCat().addAll(messageEntity.getLogCat());
+        mapLogCat(messageEntity.getLogCat(), map.getLogCat());
+
+        map.setLogs(new ArrayList<LogEntry>());
+        mapLogs(messageEntity.getLogs(), map.getLogs());
+
         final Object fromJson = gson.fromJson(messageEntity.getThreadsInfoJSON(), listType);
-        if(fromJson instanceof List){
+        if (fromJson instanceof List) {
             map.setThreads((List<ThreadInfo>) fromJson);
         }
         return map;
     }
 
+
     @Override
     public CrashMessageEntity map(CrashMessage message) {
         final CrashMessageEntity map = MAPPER.map(message, CrashMessageEntity.class);
-        map.setThreadsInfoJSON(gson.toJson(message.getThreads(),listType));
+        map.setThreadsInfoJSON(gson.toJson(message.getThreads(), listType));
         return map;
     }
 

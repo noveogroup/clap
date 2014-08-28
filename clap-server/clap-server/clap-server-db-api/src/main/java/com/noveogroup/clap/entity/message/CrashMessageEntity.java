@@ -1,6 +1,7 @@
 package com.noveogroup.clap.entity.message;
 
 import com.noveogroup.clap.entity.message.log.LogEntryEntity;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -74,5 +75,16 @@ public class CrashMessageEntity extends BaseMessageEntity {
 
     public void setLogs(final List<LogEntryEntity> logs) {
         this.logs = logs;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("threadId", threadId)
+                .append("exception", exception)
+                .append("logCat", logCat)
+                .append("threadsInfoJSON", threadsInfoJSON)
+                .append("logs", logs)
+                .toString();
     }
 }

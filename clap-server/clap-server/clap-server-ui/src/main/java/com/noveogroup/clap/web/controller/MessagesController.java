@@ -60,11 +60,14 @@ public class MessagesController extends BaseController {
                 }
                 sessionModel.setSelectedRevisionVariant(selectedRevisionVariant);
                 if (selectedMessage == null) {
+                    final FacesMessage message = new FacesMessage(messageSupport.getMessage("error.badRequest.message",
+                            new Object[]{id}));
+                    message.setSeverity(FacesMessage.SEVERITY_ERROR);
                     messageSupport.addMessage(null,
-                            new FacesMessage(messageSupport.getMessage("error.badRequest.message", new Object[]{id})));
+                            message);
                 }
-                return selectedMessage;
             }
+            return selectedMessage;
         } else {
             messageSupport.addMessage("error.badRequest.noId");
         }

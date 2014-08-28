@@ -67,12 +67,23 @@ public class InitService {
         user = userDAO.persist(user);
         LOGGER.debug("user created = " + user);
 
+
         user = new UserEntity();
         user.setLogin("asokolov");
         user.setHashedPassword(PasswordsHashCalculator.calculatePasswordHash("testtest"));
         user.setToken(UUID.randomUUID().toString());
         user.setClapPermissions(Lists.newArrayList(ClapPermission.values()));
         user.setRole(Role.ADMIN);
+        user = userDAO.persist(user);
+        LOGGER.debug("user created = " + user);
+
+
+        user = new UserEntity();
+        user.setLogin("pstepanov");
+        user.setHashedPassword(PasswordsHashCalculator.calculatePasswordHash("pstepanov"));
+        user.setToken(UUID.randomUUID().toString());
+        user.setRole(Role.DEVELOPER);
+        user.setClapPermissions(Lists.newArrayList(ClapPermission.values()));
         user = userDAO.persist(user);
         LOGGER.debug("user created = " + user);
 

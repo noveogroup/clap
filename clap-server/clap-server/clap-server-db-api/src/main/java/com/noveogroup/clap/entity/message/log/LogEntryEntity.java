@@ -11,14 +11,18 @@ import javax.persistence.Table;
  */
 @Entity(name = "LogEntry")
 @Table(name = "logs")
-public class LogEntryEntity extends BaseEntity{
+public class LogEntryEntity extends BaseEntity {
 
     @Column(name = "message", length = COLUMN_LENGTH)
     private String message;
-    @Column(name = "timestamp", length = COLUMN_LENGTH)
+    @Column(name = "timestamp")
     private Long timestamp;
-    @Column(name = "level", length = COLUMN_LENGTH)
+    @Column(name = "level")
     private int level;
+    @Column(name = "loggerName")
+    private String loggerName;
+    @Column(name = "threadName")
+    private String threadName;
 
     public String getMessage() {
         return message;
@@ -42,5 +46,21 @@ public class LogEntryEntity extends BaseEntity{
 
     public void setLevel(final int level) {
         this.level = level;
+    }
+
+    public String getLoggerName() {
+        return loggerName;
+    }
+
+    public void setLoggerName(final String loggerName) {
+        this.loggerName = loggerName;
+    }
+
+    public String getThreadName() {
+        return threadName;
+    }
+
+    public void setThreadName(final String threadName) {
+        this.threadName = threadName;
     }
 }

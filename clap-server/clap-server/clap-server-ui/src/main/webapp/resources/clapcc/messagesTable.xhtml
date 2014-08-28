@@ -5,6 +5,7 @@
 <cc:interface>
     <cc:attribute name="messages" required="true"/>
     <cc:attribute name="messageView" required="true"/>
+    <cc:attribute name="header" required="true"/>
 </cc:interface>
 <cc:implementation>
 
@@ -13,14 +14,18 @@
                  paginator="true" rows="10"
                  paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                  rowsPerPageTemplate="5,10,15">
+        <f:facet name="header">
+            #{cc.attrs.header}
+        </f:facet>
 
-        <p:column headerText="#{msgs['revision.label.id']}">
+        <p:column headerText="#{msgs['common.label.id']}">
             <h:link outcome="#{cc.attrs.messageView}" value="#{crashMessage.id}">
                 <f:param name="id" value="#{crashMessage.id}"/>
             </h:link>
         </p:column>
         <p:column headerText="#{msgs['message.label.time']}">
-            <h:link outcome="#{cc.attrs.messageView}" value="#{crashMessage.timestamp}" converter="TimestampConverter">
+            <h:link outcome="#{cc.attrs.messageView}">
+                <h:outputText value="#{crashMessage.timestamp}" converter="TimestampConverter"/>
                 <f:param name="id" value="#{crashMessage.id}"/>
             </h:link>
         </p:column>

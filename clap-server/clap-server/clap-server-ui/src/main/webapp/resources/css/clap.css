@@ -52,3 +52,7 @@ div.sideMenu, .packagesBlock, .userInfoTable {
 .permissionsPickList.ui-picklist .ui-picklist-list {
     width: 300px;
 }
+
+td.infoLabel {
+    width: 15%;
+}

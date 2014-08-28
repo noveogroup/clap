@@ -1,6 +1,7 @@
 package com.noveogroup.clap.entity.message;
 
 import com.noveogroup.clap.entity.message.log.LogEntryEntity;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
@@ -17,7 +18,7 @@ import java.util.List;
 public class LogsBunchMessageEntity extends BaseMessageEntity {
 
     @OneToMany(cascade = {CascadeType.ALL})
-    private List<LogEntryEntity> logEntries;
+    private List<LogEntryEntity> logs;
 
     @ElementCollection
     private List<String> logCat;
@@ -27,12 +28,12 @@ public class LogsBunchMessageEntity extends BaseMessageEntity {
         return LogsBunchMessageEntity.class;
     }
 
-    public List<LogEntryEntity> getLogEntries() {
-        return logEntries;
+    public List<LogEntryEntity> getLogs() {
+        return logs;
     }
 
-    public void setLogEntries(final List<LogEntryEntity> logEntries) {
-        this.logEntries = logEntries;
+    public void setLogs(final List<LogEntryEntity> logs) {
+        this.logs = logs;
     }
 
     public List<String> getLogCat() {
@@ -41,5 +42,13 @@ public class LogsBunchMessageEntity extends BaseMessageEntity {
 
     public void setLogCat(final List<String> logCat) {
         this.logCat = logCat;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("logs", logs)
+                .append("logCat", logCat)
+                .toString();
     }
 }

@@ -2,6 +2,7 @@ package com.noveogroup.clap.entity.message;
 
 import com.noveogroup.clap.entity.BaseEntity;
 import com.noveogroup.clap.entity.revision.RevisionVariantEntity;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -9,6 +10,7 @@ import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
@@ -36,7 +38,7 @@ public abstract class BaseMessageEntity extends BaseEntity {
     @Column(name = "deviceId")
     private String deviceId;
 
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @MapKeyColumn(name = "deviceInfoKey")
     @Column(name = "deviceInfoValue")
     @CollectionTable(name = "device_info", joinColumns = @JoinColumn(name = "device_info_id"))
@@ -70,5 +72,19 @@ public abstract class BaseMessageEntity extends BaseEntity {
 
     public void setDeviceId(final String deviceId) {
         this.deviceId = deviceId;
+    }
+
+    public void setDeviceInfo(final Map<String, String> deviceInfo) {
+        this.deviceInfo = deviceInfo;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("timestamp", timestamp)
+                .append("revisionVariant", revisionVariant)
+                .append("deviceId", deviceId)
+                .append("deviceInfo", deviceInfo)
+                .toString();
     }
 }

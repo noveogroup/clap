@@ -29,4 +29,8 @@
         <converter-id>ClapPermissionConverter</converter-id>
         <converter-class>com.noveogroup.clap.web.util.converter.ClapPermissionConverter</converter-class>
     </converter>
+    <converter>
+        <converter-id>ToJSONConverter</converter-id>
+        <converter-class>com.noveogroup.clap.web.util.converter.ToJSONConverter</converter-class>
+    </converter>
 </faces-config>

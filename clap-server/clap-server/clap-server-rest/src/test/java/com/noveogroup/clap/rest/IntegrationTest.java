@@ -3,21 +3,29 @@ package com.noveogroup.clap.rest;
 import com.google.common.collect.Lists;
 import com.noveogroup.clap.model.auth.ApkAuthentication;
 import com.noveogroup.clap.model.auth.Authentication;
+import com.noveogroup.clap.model.message.BaseMessage;
 import com.noveogroup.clap.model.message.CrashMessage;
+import com.noveogroup.clap.model.message.LogsBunchMessage;
 import com.noveogroup.clap.model.message.StackTraceEntry;
 import com.noveogroup.clap.model.message.ThreadInfo;
 import com.noveogroup.clap.model.message.log.LogEntry;
+import com.noveogroup.clap.model.request.message.BaseMessageRequest;
 import com.noveogroup.clap.model.request.message.CrashMessageRequest;
+import com.noveogroup.clap.model.request.message.LogsBunchMessageRequest;
 import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
 import com.noveogroup.clap.model.response.ClapResponse;
+import junit.framework.Assert;
+import org.jboss.resteasy.client.ClientResponseFailure;
 import org.jboss.resteasy.client.ProxyFactory;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 /**
  * @author Andrey Sokolov
@@ -60,16 +68,17 @@ public class IntegrationTest {
 
         MessagesEndpoint messagesEndpoint = ProxyFactory.create(MessagesEndpoint.class,BASE);
         final CrashMessageRequest crashMessageRequest = new CrashMessageRequest();
-        crashMessageRequest.setProjectId(testProjectExternalId);
-        crashMessageRequest.setRevisionHash(testRevisionHash);
-        crashMessageRequest.setVariantHash(testVariantHash);
-        crashMessageRequest.setToken(token2);
+        fillMessageRequest(token2, crashMessageRequest);
         final CrashMessage message = new CrashMessage();
-        message.setTimestamp(new Date().getTime());
-        message.setDeviceId("someDeviceId");
+        fillMessage(message);
+
         message.setException("some exception");
         final ArrayList<String> logCat = new ArrayList<String>();
-        logCat.add("some logcat");
+        logCat.add("some logcat1");
+        logCat.add("some logcat2");
+        logCat.add("some logcat3");
+        logCat.add("some logcat4");
+        logCat.add("some logcat5");
         message.setLogCat(logCat);
         final LogEntry logEntry = new LogEntry();
         logEntry.setLevel(1);
@@ -79,11 +88,15 @@ public class IntegrationTest {
         logEntry.setTimestamp(new Date().getTime());
         final LogEntry logEntry2 = new LogEntry();
         logEntry2.setLevel(1);
-        logEntry2.setLoggerName("logger");
-        logEntry2.setMessage("message1");
-        logEntry2.setThreadName("thread1");
+        logEntry2.setLoggerName("logger2");
+        logEntry2.setMessage("message2");
+        logEntry2.setThreadName("thread2");
         logEntry2.setTimestamp(new Date().getTime());
         List<LogEntry> logs = Lists.newArrayList();
+        logs.add(logEntry);
+        logs.add(logEntry2);
+        logs.add(logEntry);
+        logs.add(logEntry2);
         logs.add(logEntry);
         logs.add(logEntry2);
         message.setLogs(logs);
@@ -104,5 +117,44 @@ public class IntegrationTest {
         crashMessageRequest.setMessage(message);
         final ClapResponse clapResponse = messagesEndpoint.saveCrashMessage(crashMessageRequest);
         assertEquals(0, clapResponse.getCode());
+
+        final String token3 = authenticationEndpoint.getToken(apkAuthentication);
+        final LogsBunchMessageRequest logsBunchMessageRequest = new LogsBunchMessageRequest();
+        fillMessageRequest(token3, logsBunchMessageRequest);
+        final LogsBunchMessage logsBunchMessage = new LogsBunchMessage();
+        fillMessage(logsBunchMessage);
+        logsBunchMessage.setLogCat(logCat);
+        logsBunchMessage.setLogs(logs);
+        logsBunchMessageRequest.setMessage(logsBunchMessage);
+        final ClapResponse clapResponse1 = messagesEndpoint.saveLogsBunchMessage(logsBunchMessageRequest);
+        assertEquals(0, clapResponse1.getCode());
+
+        apkAuthentication.setRandom("badRandom");
+        try {
+            final String token4 = authenticationEndpoint.getToken(apkAuthentication);
+        } catch (ClientResponseFailure e){
+            assertEquals(403,e.getResponse().getStatus());
+        } catch (Exception e){
+            Assert.fail();
+        }
+
+
+    }
+
+    private void fillMessage(final BaseMessage message) {
+        message.setTimestamp(new Date().getTime());
+        message.setDeviceId("someDeviceId");
+        final HashMap<String, String> deviceInfo = new HashMap<String, String>();
+        deviceInfo.put("somDeviceInfoKey","someDeviceInfoValue");
+        deviceInfo.put("somDeviceInfoKey2","someDeviceInfoValue2");
+        deviceInfo.put("somDeviceInfoKey3","someDeviceInfoValue3");
+        message.setDeviceInfo(deviceInfo);
+    }
+
+    private void fillMessageRequest(final String token, final BaseMessageRequest crashMessageRequest) {
+        crashMessageRequest.setProjectId(testProjectExternalId);
+        crashMessageRequest.setRevisionHash(testRevisionHash);
+        crashMessageRequest.setVariantHash(testVariantHash);
+        crashMessageRequest.setToken(token);
     }
 }
