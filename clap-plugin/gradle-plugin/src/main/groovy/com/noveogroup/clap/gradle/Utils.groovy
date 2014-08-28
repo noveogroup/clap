@@ -38,6 +38,7 @@ import javassist.Modifier
 import org.apache.http.entity.mime.MultipartEntityBuilder
 import org.apache.http.entity.mime.content.FileBody
 import org.apache.http.entity.mime.content.StringBody
+import org.gradle.api.GradleException
 import org.gradle.api.Project
 import org.gradle.api.file.FileTree
 import org.gradle.api.tasks.compile.JavaCompile
@@ -154,30 +155,32 @@ class Utils {
         return list
     }
 
-    static boolean uploadApk(File apkFile, Options options, String revisionHash, String variantHash, String random) {
-        println "revisionHash: $revisionHash"
-        println "variantHash : $variantHash"
-        println "random      : $random"
-
+    static boolean uploadApk(String variantName, File apkFile, Options options, String revisionHash, String variantHash, String random) {
         RESTClient clapREST = new RESTClient(options.serverUrl)
-        def authResponse = clapREST.post(path: 'auth',
+        def authResponse = clapREST.post(path: 'auth/common',
                 body: [login: options.username, password: options.password],
                 requestContentType: ContentType.JSON)
         String token = authResponse.data.text as String
 
         HTTPBuilder httpBuilder = new HTTPBuilder("${options.serverUrl}")
-        def uploadResponse = httpBuilder.request(Method.POST, ContentType.TEXT) { request ->
+        def uploadResponse = httpBuilder.request(Method.POST, ContentType.JSON) { request ->
             uri.path = 'upload/revision'
             requestContentType: 'multipart/form-data'
             headers = ['Accept': 'application/json']
             MultipartEntityBuilder builder = MultipartEntityBuilder.create()
             builder.addPart('projectExternalId', new StringBody(options.projectId))
-            builder.addPart('revisionHash', new StringBody(variantHash))
+            builder.addPart('revisionHash', new StringBody(revisionHash))
+            builder.addPart('variantHash', new StringBody(variantHash))
+            builder.addPart('packageStream', new FileBody(apkFile))
+            builder.addPart('variantName', new StringBody(variantName))
+            builder.addPart('random', new StringBody(random))
             builder.addPart('token', new StringBody(token))
-            builder.addPart('mainPackage', new FileBody(apkFile))
             request.entity = builder.build()
         }
-        return uploadResponse.text != "true"
+        if (uploadResponse.code != 0) {
+            throw new GradleException("code: ${uploadResponse.code} message: ${uploadResponse.message}")
+        }
+        return uploadResponse.code == "0"
     }
 
 }

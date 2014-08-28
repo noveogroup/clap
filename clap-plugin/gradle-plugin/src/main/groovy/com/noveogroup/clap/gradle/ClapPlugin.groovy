@@ -106,7 +106,7 @@ class ClapPlugin implements Plugin<Project> {
         uploadTask << {
             Options options = clap.resolve(variant.buildType.name as String)
             File apkFile = variant.variantData.outputFile
-            Utils.uploadApk(apkFile, options, hashValues[null], hashValues[name], randomValues[name])
+            Utils.uploadApk(name, apkFile, options, hashValues[null], hashValues[name], randomValues[name])
         }
 
         return uploadTask
