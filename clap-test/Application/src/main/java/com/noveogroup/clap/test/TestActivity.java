@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import java.text.DateFormat;
 import java.util.Date;
@@ -55,19 +54,6 @@ public class TestActivity extends Activity {
                 test(DateFormat.getDateTimeInstance().format(new Date()));
             }
         });
-
-        TextView infoView = (TextView) findViewById(R.id.info);
-//        infoView.setText(String.format("projectId: %s\n"
-//                        + "serverUrl: %s\n"
-//                        + "username: %s\n"
-//                        + "password: %s\n"
-//                        + "source hash: %s\n",
-//                BuildConfigHelper.get(getPackageName(), BuildConfigHelper.FIELD_CLAP_PROJECT_ID),
-//                BuildConfigHelper.get(getPackageName(), BuildConfigHelper.FIELD_CLAP_SERVER_URL),
-//                BuildConfigHelper.get(getPackageName(), BuildConfigHelper.FIELD_CLAP_USERNAME),
-//                BuildConfigHelper.get(getPackageName(), BuildConfigHelper.FIELD_CLAP_PASSWORD),
-//                BuildConfigHelper.get(getPackageName(), BuildConfigHelper.FIELD_CLAP_SOURCE_HASH)
-//        ));
     }
 
 }
