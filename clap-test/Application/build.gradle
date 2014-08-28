@@ -25,9 +25,9 @@ android {
 clap {
 
     projectId 'com.noveogroup.clap.test'
-    serverUrl 'http://10.0.14.53:8080/clap-rest/'
+    serverUrl 'http://10.0.14.53:8080/clap-rest/v1/'
     username 'pstepanov'
-    password 'password'
+    password 'pstepanov'
     instrument 'info-spy'
 
     custom {
