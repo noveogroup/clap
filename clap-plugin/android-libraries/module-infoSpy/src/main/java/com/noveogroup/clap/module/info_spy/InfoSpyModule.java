@@ -33,6 +33,7 @@ import com.noveogroup.clap.library.api.server.ClapApiService;
 import com.noveogroup.clap.library.api.server.beans.InfoRequest;
 import com.noveogroup.clap.library.common.AndroidContext;
 import com.noveogroup.clap.library.common.Module;
+import com.noveogroup.clap.library.common.ModuleManager;
 import com.noveogroup.clap.library.common.StaticContext;
 
 public final class InfoSpyModule implements Module {
@@ -62,6 +63,7 @@ public final class InfoSpyModule implements Module {
 
                         context.getPreferences().edit().putBoolean(KEY_INFO_SENT, true).commit();
                     } catch (Throwable ignored) {
+                        ModuleManager.getInstance().reportException("cannot send info", ignored);
                     }
                 }
             }.start();

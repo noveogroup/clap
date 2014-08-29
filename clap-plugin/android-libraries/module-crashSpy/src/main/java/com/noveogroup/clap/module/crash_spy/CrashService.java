@@ -41,6 +41,7 @@ import com.google.gson.Gson;
 import com.noveogroup.clap.library.api.ClapApi;
 import com.noveogroup.clap.library.api.server.ClapApiService;
 import com.noveogroup.clap.library.api.server.beans.CrashRequest;
+import com.noveogroup.clap.library.common.ModuleManager;
 
 public class CrashService extends Service {
 
@@ -154,7 +155,11 @@ public class CrashService extends Service {
         @Override
         public void run() {
             while (!isInterrupted()) {
-                sendCrash(CrashService.this);
+                try {
+                    sendCrash(CrashService.this);
+                } catch (Throwable ignored) {
+                    ModuleManager.getInstance().reportException("cannot send crash", ignored);
+                }
                 try {
                     Thread.sleep(SEND_INTERVAL);
                 } catch (InterruptedException e) {

@@ -28,6 +28,7 @@ package com.noveogroup.clap.module.crash_spy;
 
 import com.noveogroup.clap.library.common.AndroidContext;
 import com.noveogroup.clap.library.common.Module;
+import com.noveogroup.clap.library.common.ModuleManager;
 import com.noveogroup.clap.library.common.StaticContext;
 
 public final class CrashSpyModule implements Module {
@@ -45,6 +46,7 @@ public final class CrashSpyModule implements Module {
             try {
                 CrashService.saveCrash(context.getContext(), thread, uncaughtException);
             } catch (Throwable ignored) {
+                ModuleManager.getInstance().reportException("cannot save crash", ignored);
             } finally {
                 previousHandler.uncaughtException(thread, uncaughtException);
             }

@@ -27,6 +27,7 @@
 package com.noveogroup.clap.library.common;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -112,6 +113,10 @@ public class ModuleManager {
                 }
             }
         }
+    }
+
+    public void reportException(String message, Throwable cause) {
+        Log.e("CLAP", message, cause);
     }
 
 }
