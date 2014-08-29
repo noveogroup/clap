@@ -26,7 +26,11 @@
 
 package com.noveogroup.clap.module.info_spy;
 
+import android.content.Context;
+
 import com.noveogroup.clap.library.api.ClapApi;
+import com.noveogroup.clap.library.api.server.ClapApiService;
+import com.noveogroup.clap.library.api.server.beans.InfoRequest;
 import com.noveogroup.clap.library.common.AndroidContext;
 import com.noveogroup.clap.library.common.Module;
 import com.noveogroup.clap.library.common.StaticContext;
@@ -47,9 +51,15 @@ public final class InfoSpyModule implements Module {
                 @Override
                 public void run() {
                     try {
-                        ClapApi clapApi = new ClapApi(context.getContext());
-                        String token = clapApi.retrieveToken();
-                        clapApi.sendInfo(clapApi.prepareInfoRequest(token));
+                        Context androidContext = context.getContext();
+                        ClapApiService apiService = ClapApi.getApiService(androidContext);
+
+                        String token = apiService.getToken(ClapApi.prepareAuth(androidContext));
+
+                        InfoRequest.InfoMessage message = ClapApi.prepareInfoMessage(androidContext);
+                        InfoRequest request = ClapApi.prepareBaseRequest(new InfoRequest(), androidContext, token, message);
+                        apiService.sendInfo(request);
+
                         context.getPreferences().edit().putBoolean(KEY_INFO_SENT, true).commit();
                     } catch (Throwable ignored) {
                     }

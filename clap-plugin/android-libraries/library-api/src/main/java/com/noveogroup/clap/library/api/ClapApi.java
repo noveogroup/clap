@@ -41,7 +41,11 @@ import java.util.List;
 
 import retrofit.RestAdapter;
 
-public class ClapApi {
+public final class ClapApi {
+
+    private ClapApi() {
+        throw new UnsupportedOperationException();
+    }
 
     private static final String FIELD_CLAP_SERVER_URL = "CLAP_SERVER_URL";
     private static final String FIELD_CLAP_PROJECT_ID = "CLAP_PROJECT_ID";
@@ -49,89 +53,50 @@ public class ClapApi {
     private static final String FIELD_CLAP_VARIANT_HASH = "CLAP_VARIANT_HASH";
     private static final String FIELD_CLAP_RANDOM = "CLAP_RANDOM";
 
-    private final Context applicationContext;
-
-    private final ClapApiService apiService;
-
-    private final String projectId;
-    private final String revisionHash;
-    private final String variantHash;
-    private final String random;
-
-    private final String deviceId;
-
-    public ClapApi(Context context) {
-        this.applicationContext = context.getApplicationContext();
-
-        String serverUrl = BuildConfigHelper.get(applicationContext, FIELD_CLAP_SERVER_URL);
-        this.apiService = new RestAdapter.Builder()
+    public static ClapApiService getApiService(Context context) {
+        String serverUrl = BuildConfigHelper.get(context, FIELD_CLAP_SERVER_URL);
+        return new RestAdapter.Builder()
                 .setEndpoint(serverUrl).build()
                 .create(ClapApiService.class);
-
-        this.projectId = BuildConfigHelper.get(applicationContext, FIELD_CLAP_PROJECT_ID);
-        this.revisionHash = BuildConfigHelper.get(applicationContext, FIELD_CLAP_REVISION_HASH);
-        this.variantHash = BuildConfigHelper.get(applicationContext, FIELD_CLAP_VARIANT_HASH);
-        this.random = BuildConfigHelper.get(applicationContext, FIELD_CLAP_RANDOM);
-
-        this.deviceId = SystemUtils.getDeviceId(applicationContext);
     }
 
-    private Auth prepareAuth() {
+    public static Auth prepareAuth(Context context) {
         Auth auth = new Auth();
-        auth.setProjectId(projectId);
-        auth.setRevisionHash(revisionHash);
-        auth.setVariantHash(variantHash);
-        auth.setRandom(random);
+        auth.setProjectId(BuildConfigHelper.get(context, FIELD_CLAP_PROJECT_ID));
+        auth.setRevisionHash(BuildConfigHelper.get(context, FIELD_CLAP_REVISION_HASH));
+        auth.setVariantHash(BuildConfigHelper.get(context, FIELD_CLAP_VARIANT_HASH));
+        auth.setRandom(BuildConfigHelper.get(context, FIELD_CLAP_RANDOM));
         return auth;
     }
 
-    private <R extends BaseRequest<M>, M extends BaseRequest.BaseMessage> R prepare(R request, String token) {
-        request.setProjectId(projectId);
-        request.setRevisionHash(revisionHash);
-        request.setVariantHash(variantHash);
-        request.setToken(token);
-        request.setMessage(request.createMessage());
-
-        request.getMessage().setTimestamp(System.currentTimeMillis());
-        request.getMessage().setDeviceId(deviceId);
-        request.getMessage().setDeviceInfo(SystemUtils.getDeviceInfo(applicationContext));
-
-        return request;
+    public static <M extends BaseRequest.BaseMessage> M prepareBaseMessage(M message, Context context) {
+        message.setTimestamp(System.currentTimeMillis());
+        message.setDeviceId(SystemUtils.getDeviceId(context));
+        message.setDeviceInfo(SystemUtils.getDeviceInfo(context));
+        return message;
     }
 
-    public <R extends BaseRequest<M>, M extends BaseRequest.BaseMessage> R prepare(R request, String token, M message) {
-        request.setProjectId(projectId);
-        request.setRevisionHash(revisionHash);
-        request.setVariantHash(variantHash);
+    public static InfoRequest.InfoMessage prepareInfoMessage(Context context) {
+        return prepareBaseMessage(new InfoRequest.InfoMessage(), context);
+    }
+
+    public static CrashRequest.CrashMessage prepareCrashMessage(Context context, Thread thread, Throwable throwable, List<String> logcat, List<LogEntry> logs) {
+        CrashRequest.CrashMessage message = prepareBaseMessage(new CrashRequest.CrashMessage(), context);
+        message.setThreadId(thread.getId());
+        message.setException(SystemUtils.getStackTrace(throwable));
+        message.setThreads(SystemUtils.getThreadsInfo());
+        message.setLogCat(logcat);
+        message.setLogs(logs);
+        return message;
+    }
+
+    public static <R extends BaseRequest<M>, M extends BaseRequest.BaseMessage> R prepareBaseRequest(R request, Context context, String token, M message) {
+        request.setProjectId(BuildConfigHelper.get(context, FIELD_CLAP_PROJECT_ID));
+        request.setRevisionHash(BuildConfigHelper.get(context, FIELD_CLAP_REVISION_HASH));
+        request.setVariantHash(BuildConfigHelper.get(context, FIELD_CLAP_VARIANT_HASH));
         request.setToken(token);
         request.setMessage(message);
         return request;
-    }
-
-    public String retrieveToken() {
-        return apiService.getToken(prepareAuth());
-    }
-
-    public InfoRequest prepareInfoRequest(String token) {
-        return prepare(new InfoRequest(), token);
-    }
-
-    public void sendInfo(InfoRequest request) {
-        apiService.sendInfo(request);
-    }
-
-    public CrashRequest prepareCrashRequest(String token, Thread thread, Throwable throwable, List<String> logcat, List<LogEntry> logs) {
-        CrashRequest request = prepare(new CrashRequest(), token);
-        request.getMessage().setThreadId(thread.getId());
-        request.getMessage().setException(SystemUtils.getStackTrace(throwable));
-        request.getMessage().setLogCat(logcat);
-        request.getMessage().setLogs(logs);
-        request.getMessage().setThreads(SystemUtils.getThreadsInfo());
-        return request;
-    }
-
-    public void sendCrash(CrashRequest request) {
-        apiService.sendCrash(request);
     }
 
 }

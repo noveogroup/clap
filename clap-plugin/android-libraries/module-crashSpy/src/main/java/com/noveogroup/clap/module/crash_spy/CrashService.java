@@ -39,8 +39,8 @@ import android.os.IBinder;
 
 import com.google.gson.Gson;
 import com.noveogroup.clap.library.api.ClapApi;
+import com.noveogroup.clap.library.api.server.ClapApiService;
 import com.noveogroup.clap.library.api.server.beans.CrashRequest;
-import com.noveogroup.clap.library.api.utils.SystemUtils;
 
 public class CrashService extends Service {
 
@@ -71,15 +71,7 @@ public class CrashService extends Service {
     private static volatile SQLiteDatabase database = null;
 
     public static synchronized void saveCrash(Context context, Thread thread, Throwable uncaughtException) {
-        CrashRequest.CrashMessage message = new CrashRequest.CrashMessage();
-        message.setTimestamp(System.currentTimeMillis());
-        message.setDeviceId(SystemUtils.getDeviceId(context));
-        message.setDeviceInfo(SystemUtils.getDeviceInfo(context));
-        message.setThreadId(thread.getId());
-        message.setException(SystemUtils.getStackTrace(uncaughtException));
-        message.setLogCat(LogHelper.getLogCat());
-        message.setLogs(LogHelper.getLogs());
-        message.setThreads(SystemUtils.getThreadsInfo());
+        CrashRequest.CrashMessage message = ClapApi.prepareCrashMessage(context, thread, uncaughtException, LogHelper.getLogCat(), LogHelper.getLogs());
 
         if (database == null) {
             database = new CrashOpenHelper(context).getWritableDatabase();
@@ -98,7 +90,7 @@ public class CrashService extends Service {
         CrashService.startService(context);
     }
 
-    private static synchronized void sendCrash(Context context, ClapApi clapApi) {
+    private static synchronized void sendCrash(Context context) {
         if (database == null) {
             database = new CrashOpenHelper(context).getWritableDatabase();
         }
@@ -112,9 +104,11 @@ public class CrashService extends Service {
                     String json = cursor.getString(cursor.getColumnIndex(COLUMN_CRASH));
                     CrashRequest.CrashMessage message = new Gson().fromJson(json, CrashRequest.CrashMessage.class);
 
-                    String token = clapApi.retrieveToken();
-                    CrashRequest request = clapApi.prepare(new CrashRequest(), token, message);
-                    clapApi.sendCrash(request);
+                    ClapApiService apiService = ClapApi.getApiService(context);
+                    String token = apiService.getToken(ClapApi.prepareAuth(context));
+
+                    CrashRequest request = ClapApi.prepareBaseRequest(new CrashRequest(), context, token, message);
+                    apiService.sendCrash(request);
 
                     database.delete(null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
                 } else {
@@ -159,9 +153,8 @@ public class CrashService extends Service {
     private final Thread thread = new Thread() {
         @Override
         public void run() {
-            ClapApi clapApi = new ClapApi(CrashService.this);
             while (!isInterrupted()) {
-                sendCrash(CrashService.this, clapApi);
+                sendCrash(CrashService.this);
                 try {
                     Thread.sleep(SEND_INTERVAL);
                 } catch (InterruptedException e) {
