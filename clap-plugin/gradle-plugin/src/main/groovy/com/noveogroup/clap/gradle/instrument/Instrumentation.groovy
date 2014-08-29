@@ -57,6 +57,8 @@ class Instrumentation {
     }
 
     private static void instrumentCommon(ClassPool classPool, CtClass aClass, Set<String> names) {
+        if (aClass.name == MODULE_MANAGER) return
+
         CtConstructor initializer = aClass.classInitializer ?: aClass.makeClassInitializer()
 
         // add static initialization
@@ -96,8 +98,6 @@ class Instrumentation {
             CtMethod method = InstrumentationUtils.getMethodToInstrument(classPool, aClass, 'onReceive', 'boolean', ['android.content.Context', 'android.content.Intent'])
             method.insertBefore("${MODULE_MANAGER}.getInstance().initContext(${InstrumentationUtils.getParameterName(method, 1)});")
         }
-
-        aClass
     }
 
     static void instrument(Project project, JavaCompile javaCompileTask, ClassPool classPool, Set<String> names) {
