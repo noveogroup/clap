@@ -30,6 +30,8 @@ import com.noveogroup.clap.library.api.server.beans.Auth;
 import com.noveogroup.clap.library.api.server.beans.CrashRequest;
 import com.noveogroup.clap.library.api.server.beans.InfoRequest;
 
+import org.json.JSONObject;
+
 import retrofit.http.Body;
 import retrofit.http.POST;
 
@@ -38,10 +40,10 @@ public interface ClapApiService {
     @POST("/auth/apk")
     public String getToken(@Body Auth auth);
 
-    @POST("/info")
-    public String sendInfo(@Body InfoRequest request);
+    @POST("/message/info")
+    public JSONObject sendInfo(@Body InfoRequest request);
 
-    @POST("/crash")
-    public String sendCrash(@Body CrashRequest request);
+    @POST("/message/crash")
+    public JSONObject sendCrash(@Body CrashRequest request);
 
 }
