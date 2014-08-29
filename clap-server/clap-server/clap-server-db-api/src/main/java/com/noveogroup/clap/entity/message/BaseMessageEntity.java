@@ -2,7 +2,6 @@ package com.noveogroup.clap.entity.message;
 
 import com.noveogroup.clap.entity.BaseEntity;
 import com.noveogroup.clap.entity.revision.RevisionVariantEntity;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.CollectionTable;
 import javax.persistence.Column;
@@ -78,13 +77,4 @@ public abstract class BaseMessageEntity extends BaseEntity {
         this.deviceInfo = deviceInfo;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("timestamp", timestamp)
-                .append("revisionVariant", revisionVariant)
-                .append("deviceId", deviceId)
-                .append("deviceInfo", deviceInfo)
-                .toString();
-    }
 }

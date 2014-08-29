@@ -143,7 +143,7 @@ public class ProjectServiceImpl implements ProjectService {
     private void updateProjectWatched(final ImagedProject imagedProject) {
         final User user = userService.getUser();
         if (user != null) {
-            final List<Project> watchedProjects = user.getWatchedProjects();
+            final List<ImagedProject> watchedProjects = user.getWatchedProjects();
             if (watchedProjects != null) {
                 for (Project project : watchedProjects) {
                     if (imagedProject.getId() == project.getId()) {

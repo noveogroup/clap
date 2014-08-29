@@ -4,6 +4,7 @@ import com.noveogroup.clap.exception.ClapPersistenceException;
 import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.model.project.ImagedProject;
 import com.noveogroup.clap.service.project.ProjectService;
+import com.noveogroup.clap.service.user.UserService;
 import com.noveogroup.clap.web.Navigation;
 import com.noveogroup.clap.web.model.projects.ProjectsListModel;
 import com.noveogroup.clap.web.model.projects.ProjectsModel;
@@ -38,6 +39,9 @@ public class ProjectsController extends BaseController {
     private ProjectsListModel projectsListModel;
 
     @Inject
+    private UserService userService;
+
+    @Inject
     private RevisionsModel revisionsModel;
 
     public String addProject() {
@@ -63,11 +67,18 @@ public class ProjectsController extends BaseController {
     }
 
     public void prepareProjectsListView() {
-        LOGGER.debug("call project service");
         final List<ImagedProject> projectList = projectService.findAllImagedProjects();
         projectsListModel.setProjectList(projectList);
         LOGGER.debug("project service ret " + projectList);
     }
+
+
+    public void prepareWatchedProjectsListView() {
+        final List<ImagedProject> projectList = userService.getUser().getWatchedProjects();
+        projectsListModel.setProjectList(projectList);
+        LOGGER.debug("project service ret " + projectList);
+    }
+
 
     public void prepareProjectView() {
         final Project selectedProject = projectsModel.getSelectedProject();

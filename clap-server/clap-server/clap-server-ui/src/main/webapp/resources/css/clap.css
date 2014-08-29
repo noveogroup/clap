@@ -56,3 +56,7 @@ div.sideMenu, .packagesBlock, .userInfoTable {
 td.infoLabel {
     width: 15%;
 }
+
+.projectIcon {
+    width: 100px;
+}

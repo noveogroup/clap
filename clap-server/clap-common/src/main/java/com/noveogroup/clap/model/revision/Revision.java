@@ -3,12 +3,13 @@ package com.noveogroup.clap.model.revision;
 import com.noveogroup.clap.model.BaseModel;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author Mikhail Demidov
  */
-public class Revision extends BaseModel {
+public class Revision extends BaseModel implements Serializable {
 
     private Long timestamp;
 

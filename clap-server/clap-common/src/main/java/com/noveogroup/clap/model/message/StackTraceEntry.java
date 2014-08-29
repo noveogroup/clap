@@ -1,9 +1,11 @@
 package com.noveogroup.clap.model.message;
 
+import java.io.Serializable;
+
 /**
  * @author Andrey Sokolov
  */
-public class StackTraceEntry {
+public class StackTraceEntry implements Serializable {
     private String className;
     private String methodName;
     private int lineNumber;

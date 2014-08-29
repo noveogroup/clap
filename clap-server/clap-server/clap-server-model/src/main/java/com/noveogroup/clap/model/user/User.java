@@ -2,7 +2,7 @@ package com.noveogroup.clap.model.user;
 
 
 import com.google.common.collect.Lists;
-import com.noveogroup.clap.model.Project;
+import com.noveogroup.clap.model.project.ImagedProject;
 import com.noveogroup.clap.model.revision.RevisionVariant;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
@@ -20,7 +20,7 @@ public class User extends BaseUser {
 
     private List<RevisionVariant> uploadedRevisionVariants = Lists.newArrayList();
 
-    private List<Project> watchedProjects;
+    private List<ImagedProject> watchedProjects;
 
     public Role getRole() {
         return role;
@@ -54,11 +54,11 @@ public class User extends BaseUser {
         this.uploadedRevisionVariants = uploadedRevisionVariants;
     }
 
-    public List<Project> getWatchedProjects() {
+    public List<ImagedProject> getWatchedProjects() {
         return watchedProjects;
     }
 
-    public void setWatchedProjects(final List<Project> watchedProjects) {
+    public void setWatchedProjects(final List<ImagedProject> watchedProjects) {
         this.watchedProjects = watchedProjects;
     }
 

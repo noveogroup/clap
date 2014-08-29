@@ -1,12 +1,15 @@
 package com.noveogroup.clap.entity.message;
 
 import com.noveogroup.clap.entity.message.log.LogEntryEntity;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import java.util.List;
 
@@ -17,10 +20,14 @@ import java.util.List;
 @DiscriminatorValue("logsBunch")
 public class LogsBunchMessageEntity extends BaseMessageEntity {
 
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinTable(name = "logsBunch_logs",
+            joinColumns = @JoinColumn(name = "logsBunch_id"),
+            inverseJoinColumns = @JoinColumn(name = "log_id"))
     private List<LogEntryEntity> logs;
 
     @ElementCollection
+    @Column(length = COLUMN_LENGTH)
     private List<String> logCat;
 
     @Override
@@ -44,11 +51,4 @@ public class LogsBunchMessageEntity extends BaseMessageEntity {
         this.logCat = logCat;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("logs", logs)
-                .append("logCat", logCat)
-                .toString();
-    }
 }

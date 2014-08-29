@@ -1,13 +1,15 @@
 package com.noveogroup.clap.entity.message;
 
 import com.noveogroup.clap.entity.message.log.LogEntryEntity;
-import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.OneToMany;
 import java.util.List;
 
@@ -20,10 +22,14 @@ public class CrashMessageEntity extends BaseMessageEntity {
     @Column(name = "exception", length = COLUMN_LENGTH)
     private String exception;
     @ElementCollection
+    @Column(length = COLUMN_LENGTH)
     private List<String> logCat;
     @Column(name = "thread_info_json", length = COLUMN_LENGTH)
     private String threadsInfoJSON;
-    @OneToMany(cascade = {CascadeType.ALL})
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @JoinTable(name = "crash_logs",
+            joinColumns = @JoinColumn(name = "crash_id"),
+            inverseJoinColumns = @JoinColumn(name = "log_id"))
     private List<LogEntryEntity> logs;
 
     /**
@@ -77,14 +83,4 @@ public class CrashMessageEntity extends BaseMessageEntity {
         this.logs = logs;
     }
 
-    @Override
-    public String toString() {
-        return new ToStringBuilder(this)
-                .append("threadId", threadId)
-                .append("exception", exception)
-                .append("logCat", logCat)
-                .append("threadsInfoJSON", threadsInfoJSON)
-                .append("logs", logs)
-                .toString();
-    }
 }

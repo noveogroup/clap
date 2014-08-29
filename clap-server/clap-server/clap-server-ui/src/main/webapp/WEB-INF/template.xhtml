@@ -38,19 +38,17 @@
         <h:form id="sideMenuForm" styleClass="sideMenuForm">
             <p:menu id="sideMenu" styleClass="sideMenu" rendered="#{userSessionData.authenticated}">
                 <ui:insert name="sideMenuItems"/>
-                <p:submenu styleClass="subMenu" label="#{msgs['side.menu.my.revisions']}">
-                    <p:menuitem value="TODO" disabled="true"/>
-                </p:submenu>
-                <p:submenu styleClass="subMenu" label="#{msgs['side.menu.watching.projects']}">
-                    <p:menuitem value="TODO" disabled="true"/>
-                </p:submenu>
-                <p:submenu styleClass="subMenu" label="#{msgs['side.menu.last.updates']}">
-                    <p:menuitem value="TODO" disabled="true"/>
+                <p:submenu styleClass="subMenu" label="#{msgs['side.menu.otherLinks']}">
+                    <p:menuitem value="#{msgs['side.menu.watching.projects']}" outcome="/inner/project/watched"/>
+                    <p:menuitem value="#{msgs['side.menu.my.revisions']}" outcome="/inner/revision/myRevisionVariants"
+                                disabled="true"/>
+                    <p:menuitem value="#{msgs['side.menu.last.updates']}" outcome="/inner/lastUpdates"
+                                disabled="true"/>
                 </p:submenu>
             </p:menu>
         </h:form>
         <h:panelGroup id="content">
-            <p:messages />
+            <p:messages/>
             <ui:insert name="content"/>
         </h:panelGroup>
     </h:panelGroup>

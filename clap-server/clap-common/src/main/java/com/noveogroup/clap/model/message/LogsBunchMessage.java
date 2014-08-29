@@ -3,12 +3,13 @@ package com.noveogroup.clap.model.message;
 import com.noveogroup.clap.model.message.log.LogEntry;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author Andrey Sokolov
  */
-public class LogsBunchMessage extends BaseMessage {
+public class LogsBunchMessage extends BaseMessage implements Serializable {
     private List<LogEntry> logs;
     private List<String> logCat;
 

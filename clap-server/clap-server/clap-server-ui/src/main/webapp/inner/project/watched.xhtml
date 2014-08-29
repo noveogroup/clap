@@ -10,14 +10,8 @@
     <ui:define name="content">
         <f:view transient="true">
             <f:metadata>
-                <f:viewAction action="#{projectsController.prepareProjectsListView}"/>
+                <f:viewAction action="#{projectsController.prepareWatchedProjectsListView()}"/>
             </f:metadata>
-            <h:panelGroup>
-                <p:commandButton value="#{msgs['menu.project.add']}"
-                                 immediate="true"
-                                 rendered="#{userSessionData.hasPermission('ADD_PROJECTS')}"
-                                 action="#{projectsController.toAddProjectView()}"/>
-            </h:panelGroup>
 
             <clp:projectsTable projects="#{projectsListModel.projectList}"/>
 

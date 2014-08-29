@@ -3,12 +3,13 @@ package com.noveogroup.clap.model.revision;
 import com.noveogroup.clap.model.BaseModel;
 import com.noveogroup.clap.model.message.BaseMessage;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author Andrey Sokolov
  */
-public class RevisionVariant extends BaseModel {
+public class RevisionVariant extends BaseModel implements Serializable {
 
     private String fullHash;
     private String packageUrl;

@@ -1,9 +1,11 @@
 package com.noveogroup.clap.model;
 
+import java.io.Serializable;
+
 /**
  * @author Mikhail Demidov
  */
-public class BaseModel {
+public class BaseModel implements Serializable{
 
     private Long id;
 

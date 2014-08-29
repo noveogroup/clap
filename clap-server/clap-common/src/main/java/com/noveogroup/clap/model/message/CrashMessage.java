@@ -3,12 +3,13 @@ package com.noveogroup.clap.model.message;
 
 import com.noveogroup.clap.model.message.log.LogEntry;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * @author Mikhail Demidov
  */
-public class CrashMessage extends BaseMessage {
+public class CrashMessage extends BaseMessage implements Serializable {
 
     private long threadId;
     private String exception;

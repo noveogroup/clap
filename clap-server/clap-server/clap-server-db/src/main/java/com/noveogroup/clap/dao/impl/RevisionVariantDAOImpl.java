@@ -2,6 +2,8 @@ package com.noveogroup.clap.dao.impl;
 
 import com.noveogroup.clap.dao.RevisionVariantDAO;
 import com.noveogroup.clap.entity.message.BaseMessageEntity;
+import com.noveogroup.clap.entity.message.CrashMessageEntity;
+import com.noveogroup.clap.entity.message.LogsBunchMessageEntity;
 import com.noveogroup.clap.entity.revision.RevisionVariantEntity;
 import org.hibernate.Hibernate;
 
@@ -41,6 +43,12 @@ public class RevisionVariantDAOImpl extends GenericDAOImpl<RevisionVariantEntity
         if (revisionEntity != null) {
             for(BaseMessageEntity message : revisionEntity.getMessages()){
                 Hibernate.initialize(message.getDeviceInfo());
+                if(message instanceof CrashMessageEntity){
+                    Hibernate.initialize(((CrashMessageEntity) message).getLogs());
+                }
+                if(message instanceof LogsBunchMessageEntity){
+                    Hibernate.initialize(((LogsBunchMessageEntity) message).getLogs());
+                }
             }
         }
     }

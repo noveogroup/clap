@@ -5,7 +5,7 @@ import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionVariantEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
-import com.noveogroup.clap.model.Project;
+import com.noveogroup.clap.model.project.ImagedProject;
 import com.noveogroup.clap.model.revision.RevisionVariant;
 import com.noveogroup.clap.model.user.ClapPermission;
 import com.noveogroup.clap.model.user.User;
@@ -64,12 +64,12 @@ public class UserConverter {
             permissions.addAll(mapWith.getClapPermissions());
         }
         toMap.setClapPermissions(permissions);
-        List<Project> watchedProjects = Lists.newArrayList();
+        List<ImagedProject> watchedProjects = Lists.newArrayList();
         toMap.setWatchedProjects(watchedProjects);
         final List<ProjectEntity> watchedProjectsEntities = mapWith.getWatchedProjects();
         if(watchedProjectsEntities != null){
             for(ProjectEntity projectEntity : watchedProjectsEntities){
-                toMap.getWatchedProjects().add(projectConverter.map(projectEntity,false));
+                toMap.getWatchedProjects().add(projectConverter.mapToImagedProject(projectEntity, configBean, false));
             }
         }
         List<RevisionVariant> uploadedVariants = Lists.newArrayList();

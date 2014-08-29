@@ -91,7 +91,7 @@ public class IconExtractor implements InfoExtractor {
 
     private static class IconPathTemplate {
         private static final String STARTS_WITH = "res/drawable";
-        private static final String ICON_NAME = "/icon.";
+        private static final String ICON_NAME = "/ic_launcher.";
         private final String qualificator;
         private final int priority;
         private String iconName;

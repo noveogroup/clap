@@ -2,12 +2,13 @@ package com.noveogroup.clap.model.message;
 
 import com.noveogroup.clap.model.BaseModel;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * @author Andrey Sokolov
  */
-public abstract class BaseMessage extends BaseModel {
+public abstract class BaseMessage extends BaseModel implements Serializable {
     private String deviceId;
     private long timestamp;
     private Map<String,String> deviceInfo;

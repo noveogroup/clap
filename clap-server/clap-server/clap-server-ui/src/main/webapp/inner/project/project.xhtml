@@ -18,8 +18,16 @@
             <h:form>
                 <p:panel id="projectSummary" header="#{projectsModel.selectedProject.name}">
                     <p:graphicImage url="#{projectsModel.selectedProject.iconFileUrl}"
+                                    styleClass="projectIcon"
                                     rendered="#{not empty projectsModel.selectedProject.iconFileUrl}"/>
                     <h:outputText value="#{projectsModel.selectedProject.description}"/>
+
+                    <p:commandButton rendered="#{projectsModel.selectedProject.watched}" value="Unwatch" update="@form"
+                                     immediate="true"
+                                     action="#{projectsController.watchProject()}"/>
+                    <p:commandButton rendered="#{!projectsModel.selectedProject.watched}" value="Watch" update="@form"
+                                     immediate="true"
+                                     action="#{projectsController.watchProject()}"/>
 
 
                     <p:commandButton value="#{msgs['menu.project.edit']}"

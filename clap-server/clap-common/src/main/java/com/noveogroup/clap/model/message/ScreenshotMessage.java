@@ -1,9 +1,11 @@
 package com.noveogroup.clap.model.message;
 
+import java.io.Serializable;
+
 /**
  * @author Andrey Sokolov
  */
-public class ScreenshotMessage extends BaseMessage {
+public class ScreenshotMessage extends BaseMessage implements Serializable {
 
     private String screenshotUrl;
 

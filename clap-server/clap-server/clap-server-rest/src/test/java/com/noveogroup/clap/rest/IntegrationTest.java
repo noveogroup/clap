@@ -35,9 +35,9 @@ import static org.junit.Assert.assertNull;
 public class IntegrationTest {
 
     public static final String BASE = "http://localhost:8080/clap-rest/v1/";
-    private String random = "random";
-    private String testRevisionHash = "testRevisionHash";
-    private String testVariantHash = "testVariantHash";
+    private String random = "5509B4B3828FB584374EF35555266DF98ACF9FD60F1270069AB98498CEF5D2E4";
+    private String testRevisionHash = "aa9c4fa9f09e7e2ac477af717e57864cc7175611";
+    private String testVariantHash = "aa9c4fa9f09e7e2ac477af717e57864cc7175611";
     private String testVariantName = "testVariantName";
     private String testProjectExternalId = "testProjectExternalId";
 
@@ -51,7 +51,7 @@ public class IntegrationTest {
         final String token = authenticationEndpoint.getToken(authentication);
         final UploadFileEndpoint uploadFileEndpoint = ProxyFactory.create(UploadFileEndpoint.class,BASE);
         final CreateOrUpdateRevisionRequest request = new CreateOrUpdateRevisionRequest();
-        request.setPackageStream(getClass().getResourceAsStream("/com.noveogroup.clap-clap-application_hacked.apk"));
+        request.setPackageStream(getClass().getResourceAsStream("/clap_test.apk"));
         request.setProjectExternalId(testProjectExternalId);
         request.setRandom(random);
         request.setRevisionHash(testRevisionHash);
@@ -90,13 +90,13 @@ public class IntegrationTest {
         logEntry2.setMessage("message2");
         logEntry2.setThreadName("thread2");
         logEntry2.setTimestamp(new Date().getTime());
-        List<LogEntry> logs = Lists.newArrayList();
+        List<LogEntry> logs = Lists.newArrayList();   /*
         logs.add(logEntry);
         logs.add(logEntry2);
         logs.add(logEntry);
         logs.add(logEntry2);
         logs.add(logEntry);
-        logs.add(logEntry2);
+        logs.add(logEntry2); */
         message.setLogs(logs);
         message.setThreads(new ArrayList<ThreadInfo>());
         message.setThreadId(124124);
