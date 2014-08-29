@@ -109,6 +109,7 @@ public final class SystemUtils {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private static String getDiskUsage(File root) {
         StatFs statFs = new StatFs(root.getAbsolutePath());
         long totalBytes = statFs.getBlockCount() * (long) statFs.getBlockSize();
