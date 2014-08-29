@@ -40,4 +40,5 @@ public interface ProjectService {
 
     File getProjectIcon(long id);
 
+    ImagedProject watchProject(long projectId);
 }

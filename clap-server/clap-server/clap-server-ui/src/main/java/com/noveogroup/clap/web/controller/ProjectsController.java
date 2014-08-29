@@ -25,8 +25,6 @@ public class ProjectsController extends BaseController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProjectsController.class);
 
-    private long projectId;
-
     @Inject
     private MessageSupport messageSupport;
 
@@ -79,9 +77,16 @@ public class ProjectsController extends BaseController {
         } else {
             messageSupport.addMessage(null,
                     new FacesMessage(messageSupport.getMessage("error.badRequest.project",
-                            new Object[]{"no project id"})));
+                            new Object[]{"no project id"}))
+            );
             LOGGER.error("project not selected");
         }
+    }
+
+    public void watchProject() {
+        final Long projectId = projectsModel.getSelectedProject().getId();
+        final ImagedProject project = projectService.watchProject(Long.valueOf(projectId));
+        projectsModel.setSelectedProject(project);
     }
 
     public String toEditProjectView() {

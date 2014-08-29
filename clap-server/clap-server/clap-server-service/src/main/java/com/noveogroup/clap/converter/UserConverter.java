@@ -2,8 +2,10 @@ package com.noveogroup.clap.converter;
 
 import com.google.common.collect.Lists;
 import com.noveogroup.clap.config.ConfigBean;
+import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionVariantEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
+import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.model.revision.RevisionVariant;
 import com.noveogroup.clap.model.user.ClapPermission;
 import com.noveogroup.clap.model.user.User;
@@ -17,7 +19,7 @@ import java.util.List;
  */
 public class UserConverter {
 
-    private RevisionConverter revisionConverter = new RevisionConverter();
+    private ProjectConverter projectConverter = new ProjectConverter();
     private RevisionVariantConverter variantConverter = new RevisionVariantConverter();
 
     private MessagesConverter messagesConverter = new MessagesConverter();
@@ -38,8 +40,8 @@ public class UserConverter {
         return ret;
     }
 
-    public void setRevisionConverter(final RevisionConverter revisionConverter) {
-        this.revisionConverter = revisionConverter;
+    public void setProjectConverter(final ProjectConverter projectConverter) {
+        this.projectConverter = projectConverter;
     }
 
     public void setMessagesConverter(final MessagesConverter messagesConverter) {
@@ -62,6 +64,14 @@ public class UserConverter {
             permissions.addAll(mapWith.getClapPermissions());
         }
         toMap.setClapPermissions(permissions);
+        List<Project> watchedProjects = Lists.newArrayList();
+        toMap.setWatchedProjects(watchedProjects);
+        final List<ProjectEntity> watchedProjectsEntities = mapWith.getWatchedProjects();
+        if(watchedProjectsEntities != null){
+            for(ProjectEntity projectEntity : watchedProjectsEntities){
+                toMap.getWatchedProjects().add(projectConverter.map(projectEntity,false));
+            }
+        }
         List<RevisionVariant> uploadedVariants = Lists.newArrayList();
         toMap.setUploadedRevisionVariants(uploadedVariants);
         if (mapWith.getUploadedRevisionVariants() != null) {

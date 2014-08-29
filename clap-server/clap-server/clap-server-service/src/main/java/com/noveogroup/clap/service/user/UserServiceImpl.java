@@ -235,6 +235,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+
     private UserEntity getUserByLogin(final User user) {
         return userDAO.getUserByLogin(user.getLogin());
     }

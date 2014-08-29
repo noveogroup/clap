@@ -6,13 +6,17 @@ import com.noveogroup.clap.converter.ProjectConverter;
 import com.noveogroup.clap.dao.MessageDAO;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
+import com.noveogroup.clap.dao.UserDAO;
 import com.noveogroup.clap.entity.project.ProjectEntity;
+import com.noveogroup.clap.entity.user.UserEntity;
+import com.noveogroup.clap.exception.ClapDataIntegrityException;
 import com.noveogroup.clap.exception.ClapPersistenceException;
 import com.noveogroup.clap.exception.WrapException;
 import com.noveogroup.clap.model.Project;
 import com.noveogroup.clap.model.project.ImagedProject;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionVariant;
+import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.model.user.UserWithPersistedAuth;
 import com.noveogroup.clap.service.file.FileService;
 import com.noveogroup.clap.service.revision.RevisionService;
@@ -65,6 +69,9 @@ public class ProjectServiceImpl implements ProjectService {
     @Inject
     private ConfigBean configBean;
 
+    @EJB
+    private UserDAO userDAO;
+
     private ProjectConverter projectConverter = new ProjectConverter();
 
     @WrapException
@@ -115,11 +122,37 @@ public class ProjectServiceImpl implements ProjectService {
     public ImagedProject findByIdWithImage(final Long id) {
         final ProjectEntity projectEntity = projectDAO.findById(id);
         if (projectEntity != null) {
-            final ImagedProject project = projectConverter.mapToImagedProject(projectEntity, configBean);
-            updateRevisionUrls(id, projectEntity, project);
+            final ImagedProject project = mapToImagedProject(id, projectEntity, true);
             return project;
         } else {
             return null;
+        }
+    }
+
+    private ImagedProject mapToImagedProject(final Long id,
+                                             final ProjectEntity projectEntity,
+                                             final boolean mapRevisions) {
+        final ImagedProject project = projectConverter.mapToImagedProject(projectEntity, configBean, mapRevisions);
+        updateProjectWatched(project);
+        if (mapRevisions) {
+            updateRevisionUrls(id, projectEntity, project);
+        }
+        return project;
+    }
+
+    private void updateProjectWatched(final ImagedProject imagedProject) {
+        final User user = userService.getUser();
+        if (user != null) {
+            final List<Project> watchedProjects = user.getWatchedProjects();
+            if (watchedProjects != null) {
+                for (Project project : watchedProjects) {
+                    if (imagedProject.getId() == project.getId()) {
+                        imagedProject.setWatched(true);
+                        return;
+                    }
+                }
+            }
+            imagedProject.setWatched(false);
         }
     }
 
@@ -140,7 +173,8 @@ public class ProjectServiceImpl implements ProjectService {
         final List<ProjectEntity> projectEntityList = projectDAO.selectAll();
         final List<ImagedProject> projectList = Lists.newArrayList();
         for (final ProjectEntity projectEntity : projectEntityList) {
-            projectList.add(projectConverter.mapToImagedProject(projectEntity, configBean, false));
+            final ImagedProject imagedProject = mapToImagedProject(projectEntity.getId(), projectEntity, false);
+            projectList.add(imagedProject);
         }
         return projectList;
     }
@@ -181,6 +215,33 @@ public class ProjectServiceImpl implements ProjectService {
         }
     }
 
+
+    @Override
+    public ImagedProject watchProject(final long projectId) {
+        final String currentUserLogin = userService.getCurrentUserLogin();
+        if (currentUserLogin != null) {
+            final UserEntity userByLogin = userDAO.getUserByLogin(currentUserLogin);
+            List<ProjectEntity> watchedProjects = userByLogin.getWatchedProjects();
+            if (watchedProjects == null) {
+                watchedProjects = Lists.newArrayList();
+                userByLogin.setWatchedProjects(watchedProjects);
+            }
+            final ProjectEntity projectEntity = projectDAO.findById(projectId);
+            if (projectEntity != null) {
+                if (watchedProjects.contains(projectEntity)) {
+                    watchedProjects.remove(projectEntity);
+                } else {
+                    watchedProjects.add(projectEntity);
+                }
+                userDAO.persist(userByLogin);
+                return mapToImagedProject(projectId, projectEntity, true);
+            } else {
+                throw new ClapDataIntegrityException("no project with id = " + projectId);
+            }
+        } else {
+            throw new ClapDataIntegrityException("no current user");
+        }
+    }
 
     public void setProjectConverter(final ProjectConverter projectConverter) {
         this.projectConverter = projectConverter;

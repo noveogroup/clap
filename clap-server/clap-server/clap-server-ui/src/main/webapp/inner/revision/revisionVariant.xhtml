@@ -62,6 +62,29 @@
                     <p:graphicImage url="#{scrMessage.screenshotUrl}" width="100%"/>
                 </p:rowExpansion>
             </p:dataTable>
+
+
+            <p:dataTable var="scrMessage"
+                         value="#{revisionVariantSessionModel.selectedRevInfos}"
+                         paginator="true" rows="10"
+                         paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                         rowsPerPageTemplate="5,10,15">
+                <f:facet name="header">
+                    #{msgs['message.label.infosTableHeader']}
+                </f:facet>
+                <p:column style="width:16px">
+                    <p:rowToggler/>
+                </p:column>
+                <p:column headerText="#{msgs['message.label.time']}">
+                    <h:outputText value="#{scrMessage.timestamp}" converter="TimestampConverter"/>
+                </p:column>
+                <p:column headerText="#{msgs['message.label.uploadedBy']}">
+                    <h:outputText value="#{scrMessage.deviceId}"/>
+                </p:column>
+                <p:rowExpansion>
+                    <clp:commonMessageInfo message="#{scrMessage}"/>
+                </p:rowExpansion>
+            </p:dataTable>
         </f:view>
     </ui:define>
 </ui:composition>

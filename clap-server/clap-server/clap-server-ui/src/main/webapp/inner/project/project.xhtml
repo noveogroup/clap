@@ -15,20 +15,23 @@
             <f:viewAction action="#{projectsController.prepareProjectView}"/>
         </f:metadata>
         <h:panelGroup rendered="#{not empty projectsModel.selectedProject}">
+            <h:form>
+                <p:panel id="projectSummary" header="#{projectsModel.selectedProject.name}">
+                    <p:graphicImage url="#{projectsModel.selectedProject.iconFileUrl}"
+                                    rendered="#{not empty projectsModel.selectedProject.iconFileUrl}"/>
+                    <h:outputText value="#{projectsModel.selectedProject.description}"/>
 
-            <p:panel id="projectSummary" header="#{projectsModel.selectedProject.name}">
-                <p:graphicImage url="#{projectsModel.selectedProject.iconFileUrl}"
-                                rendered="#{not empty projectsModel.selectedProject.iconFileUrl}"/>
-                <h:outputText value="#{projectsModel.selectedProject.description}"/>
-                <p:commandButton value="#{msgs['menu.project.edit']}"
-                                 immediate="true"
-                                 rendered="#{userSessionData.hasPermission('EDIT_PROJECTS')}"
-                                 action="#{projectsController.toEditProjectView()}"/>
-                <p:commandButton value="#{msgs['common.form.label.delete']}"
-                                 immediate="true"
-                                 rendered="#{userSessionData.hasPermission('DELETE_PROJECTS')}"
-                                 action="#{projectsController.deleteProject()}"/>
-            </p:panel>
+
+                    <p:commandButton value="#{msgs['menu.project.edit']}"
+                                     immediate="true"
+                                     rendered="#{userSessionData.hasPermission('EDIT_PROJECTS')}"
+                                     action="#{projectsController.toEditProjectView()}"/>
+                    <p:commandButton value="#{msgs['common.form.label.delete']}"
+                                     immediate="true"
+                                     rendered="#{userSessionData.hasPermission('DELETE_PROJECTS')}"
+                                     action="#{projectsController.deleteProject()}"/>
+                </p:panel>
+            </h:form>
             <f:view transient="true">
                 <clp:revisionsTable/>
             </f:view>

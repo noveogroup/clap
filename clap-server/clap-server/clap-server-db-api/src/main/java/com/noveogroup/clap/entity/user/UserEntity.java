@@ -1,6 +1,7 @@
 package com.noveogroup.clap.entity.user;
 
 import com.noveogroup.clap.entity.BaseEntity;
+import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionVariantEntity;
 import com.noveogroup.clap.model.user.ClapPermission;
 import com.noveogroup.clap.model.user.Role;
@@ -49,6 +50,9 @@ public class UserEntity extends BaseEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "packageUploadedBy")
     private List<RevisionVariantEntity> uploadedRevisionVariants;
+
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<ProjectEntity> watchedProjects;
 
     public Role getRole() {
         return role;
@@ -105,6 +109,14 @@ public class UserEntity extends BaseEntity {
 
     public void setUploadedRevisionVariants(final List<RevisionVariantEntity> uploadedRevisionVariants) {
         this.uploadedRevisionVariants = uploadedRevisionVariants;
+    }
+
+    public List<ProjectEntity> getWatchedProjects() {
+        return watchedProjects;
+    }
+
+    public void setWatchedProjects(final List<ProjectEntity> watchedProjects) {
+        this.watchedProjects = watchedProjects;
     }
 
     @Override

@@ -17,7 +17,7 @@ public class CrashMessageEntity extends BaseMessageEntity {
 
     @Column(name = "thread_id")
     private long threadId;
-    @Column(name = "exception")
+    @Column(name = "exception", length = COLUMN_LENGTH)
     private String exception;
     @ElementCollection
     private List<String> logCat;

@@ -9,6 +9,8 @@ public class ImagedProject extends Project {
 
     private String iconFileUrl;
 
+    private boolean watched;
+
     public ImagedProject() {
     }
 
@@ -26,5 +28,13 @@ public class ImagedProject extends Project {
 
     public void setIconFileUrl(final String iconFileUrl) {
         this.iconFileUrl = iconFileUrl;
+    }
+
+    public boolean isWatched() {
+        return watched;
+    }
+
+    public void setWatched(final boolean watched) {
+        this.watched = watched;
     }
 }

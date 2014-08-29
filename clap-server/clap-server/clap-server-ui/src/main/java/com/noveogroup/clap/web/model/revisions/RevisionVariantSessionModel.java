@@ -2,6 +2,7 @@ package com.noveogroup.clap.web.model.revisions;
 
 import com.google.common.collect.Lists;
 import com.noveogroup.clap.model.message.CrashMessage;
+import com.noveogroup.clap.model.message.InfoMessage;
 import com.noveogroup.clap.model.message.LogsBunchMessage;
 import com.noveogroup.clap.model.message.ScreenshotMessage;
 import com.noveogroup.clap.model.revision.RevisionVariantWithApkStructure;
@@ -27,6 +28,7 @@ public class RevisionVariantSessionModel implements Serializable{
     private final List<CrashMessage> selectedRevCrashes = Lists.newArrayList();
     private final List<ScreenshotMessage> selectedRevScreenshots = Lists.newArrayList();
     private final List<LogsBunchMessage> selectedRevLogs = Lists.newArrayList();
+    private final List<InfoMessage> selectedRevInfos = Lists.newArrayList();
 
     public List<CrashMessage> getSelectedRevCrashes() {
         return selectedRevCrashes;
@@ -70,5 +72,9 @@ public class RevisionVariantSessionModel implements Serializable{
 
     public void setSelectedLogsMessage(final LogsBunchMessage selectedLogsMessage) {
         this.selectedLogsMessage = selectedLogsMessage;
+    }
+
+    public List<InfoMessage> getSelectedRevInfos() {
+        return selectedRevInfos;
     }
 }

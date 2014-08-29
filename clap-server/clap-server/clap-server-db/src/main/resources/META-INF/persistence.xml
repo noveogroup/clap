@@ -14,6 +14,7 @@
         <class>com.noveogroup.clap.entity.message.CrashMessageEntity</class>
         <class>com.noveogroup.clap.entity.message.ScreenshotMessageEntity</class>
         <class>com.noveogroup.clap.entity.message.LogsBunchMessageEntity</class>
+        <class>com.noveogroup.clap.entity.message.InfoMessageEntity</class>
         <class>com.noveogroup.clap.entity.message.log.LogEntryEntity</class>
         <class>com.noveogroup.clap.entity.revision.RevisionVariantEntity</class>
         <class>com.noveogroup.clap.entity.user.UserEntity</class>

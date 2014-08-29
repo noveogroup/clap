@@ -3,6 +3,7 @@ package com.noveogroup.clap.web.controller;
 import com.google.common.collect.Lists;
 import com.noveogroup.clap.model.message.BaseMessage;
 import com.noveogroup.clap.model.message.CrashMessage;
+import com.noveogroup.clap.model.message.InfoMessage;
 import com.noveogroup.clap.model.message.LogsBunchMessage;
 import com.noveogroup.clap.model.message.ScreenshotMessage;
 import com.noveogroup.clap.model.revision.ApkEntry;
@@ -83,6 +84,7 @@ public class RevisionsController extends BaseController {
             revisionVariantSessionModel.getSelectedRevCrashes().clear();
             revisionVariantSessionModel.getSelectedRevScreenshots().clear();
             revisionVariantSessionModel.getSelectedRevLogs().clear();
+            revisionVariantSessionModel.getSelectedRevInfos().clear();
             for (final BaseMessage message : selectedRevisionVariant.getMessages()) {
                 if (message instanceof CrashMessage) {
                     revisionVariantSessionModel.getSelectedRevCrashes().add((CrashMessage) message);
@@ -92,6 +94,9 @@ public class RevisionsController extends BaseController {
                 }
                 if (message instanceof LogsBunchMessage) {
                     revisionVariantSessionModel.getSelectedRevLogs().add((LogsBunchMessage) message);
+                }
+                if (message instanceof InfoMessage) {
+                    revisionVariantSessionModel.getSelectedRevInfos().add((InfoMessage) message);
                 }
             }
             if (selectedRevisionVariant.getApkStructure() != null) {

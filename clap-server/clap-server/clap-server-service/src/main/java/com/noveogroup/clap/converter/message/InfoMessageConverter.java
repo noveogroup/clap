@@ -9,11 +9,15 @@ import org.dozer.Mapper;
 /**
  * @author Andrey Sokolov
  */
-public class InfoMessageConverter implements OneTypeMessagesConverter<InfoMessage,InfoMessageEntity> {
+public class InfoMessageConverter extends BaseMessagesConverter
+        implements OneTypeMessagesConverter<InfoMessage, InfoMessageEntity> {
     private static final Mapper MAPPER = new DozerBeanMapper();
+
     @Override
     public InfoMessage map(final InfoMessageEntity messageEntity, final ConfigBean configBean) {
-        return MAPPER.map(messageEntity, InfoMessage.class);
+        final InfoMessage map = new InfoMessage();
+        map(messageEntity, map);
+        return map;
     }
 
     @Override
