@@ -2,6 +2,7 @@ apply plugin: 'com.android.library'
 apply plugin: 'maven-publish'
 
 dependencies {
+    compile project(':library-common')
     compile 'com.squareup.retrofit:retrofit:1.6.1'
     compile('org.apache.httpcomponents:httpmime:4.2.1') {
         exclude group: 'org.apache.httpcomponents'

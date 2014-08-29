@@ -34,14 +34,20 @@ import com.noveogroup.clap.library.api.server.beans.BaseRequest;
 import com.noveogroup.clap.library.api.server.beans.CrashRequest;
 import com.noveogroup.clap.library.api.server.beans.InfoRequest;
 import com.noveogroup.clap.library.api.server.beans.LogEntry;
-import com.noveogroup.clap.library.api.utils.BuildConfigHelper;
 import com.noveogroup.clap.library.api.utils.SystemUtils;
+import com.noveogroup.clap.library.common.BuildConfigHelper;
 
 import java.util.List;
 
 import retrofit.RestAdapter;
 
 public class ClapApi {
+
+    private static final String FIELD_CLAP_SERVER_URL = "CLAP_SERVER_URL";
+    private static final String FIELD_CLAP_PROJECT_ID = "CLAP_PROJECT_ID";
+    private static final String FIELD_CLAP_REVISION_HASH = "CLAP_REVISION_HASH";
+    private static final String FIELD_CLAP_VARIANT_HASH = "CLAP_VARIANT_HASH";
+    private static final String FIELD_CLAP_RANDOM = "CLAP_RANDOM";
 
     private final Context applicationContext;
 
@@ -57,15 +63,15 @@ public class ClapApi {
     public ClapApi(Context context) {
         this.applicationContext = context.getApplicationContext();
 
-        String serverUrl = BuildConfigHelper.get(applicationContext, BuildConfigHelper.FIELD_CLAP_SERVER_URL);
+        String serverUrl = BuildConfigHelper.get(applicationContext, FIELD_CLAP_SERVER_URL);
         this.apiService = new RestAdapter.Builder()
                 .setEndpoint(serverUrl).build()
                 .create(ClapApiService.class);
 
-        this.projectId = BuildConfigHelper.get(applicationContext, BuildConfigHelper.FIELD_CLAP_PROJECT_ID);
-        this.revisionHash = BuildConfigHelper.get(applicationContext, BuildConfigHelper.FIELD_CLAP_REVISION_HASH);
-        this.variantHash = BuildConfigHelper.get(applicationContext, BuildConfigHelper.FIELD_CLAP_VARIANT_HASH);
-        this.random = BuildConfigHelper.get(applicationContext, BuildConfigHelper.FIELD_CLAP_RANDOM);
+        this.projectId = BuildConfigHelper.get(applicationContext, FIELD_CLAP_PROJECT_ID);
+        this.revisionHash = BuildConfigHelper.get(applicationContext, FIELD_CLAP_REVISION_HASH);
+        this.variantHash = BuildConfigHelper.get(applicationContext, FIELD_CLAP_VARIANT_HASH);
+        this.random = BuildConfigHelper.get(applicationContext, FIELD_CLAP_RANDOM);
 
         this.deviceId = SystemUtils.getDeviceId(applicationContext);
     }
