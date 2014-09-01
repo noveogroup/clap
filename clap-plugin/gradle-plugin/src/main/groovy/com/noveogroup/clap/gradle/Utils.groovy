@@ -27,6 +27,7 @@
 package com.noveogroup.clap.gradle
 
 import com.noveogroup.clap.gradle.config.Options
+import groovy.json.JsonSlurper
 import groovyx.net.http.ContentType
 import groovyx.net.http.HTTPBuilder
 import groovyx.net.http.Method
@@ -167,6 +168,12 @@ class Utils {
             uri.path = 'upload/revision'
             requestContentType: 'multipart/form-data'
             headers = ['Accept': 'application/json']
+
+            response.failure = { resp ->
+                def data = new JsonSlurper().parseText(resp.entity.content.text as String)
+                throw new GradleException("code: ${data.code} message: ${data.message}")
+            }
+
             MultipartEntityBuilder builder = MultipartEntityBuilder.create()
             builder.addPart('projectExternalId', new StringBody(options.projectId))
             builder.addPart('revisionHash', new StringBody(revisionHash))
