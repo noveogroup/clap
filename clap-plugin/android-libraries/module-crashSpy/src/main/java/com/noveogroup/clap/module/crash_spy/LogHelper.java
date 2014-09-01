@@ -42,7 +42,7 @@ public final class LogHelper {
         throw new UnsupportedOperationException();
     }
 
-    private static final int MAX_LOG_SIZE = 1000;
+    private static final int MAX_LOG_SIZE = 250;
 
     public static List<String> getLogCat() {
         try {
