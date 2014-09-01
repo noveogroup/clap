@@ -14,7 +14,7 @@
                          required="true" requiredMessage="#{msgs['error.badRequest.noId']}"/>
             <f:viewAction action="#{projectsController.prepareProjectView}"/>
         </f:metadata>
-        <h:panelGroup rendered="#{not empty projectsModel.selectedProject}">
+        <h:panelGroup rendered="#{not empty projectsModel.selectedProject and empty facesContext.messageList}">
             <h:form>
                 <p:panel id="projectSummary" header="#{projectsModel.selectedProject.name}">
                     <p:graphicImage url="#{projectsModel.selectedProject.iconFileUrl}"

@@ -19,7 +19,7 @@ import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.exception.ClapDataIntegrityException;
 import com.noveogroup.clap.exception.WrapException;
 import com.noveogroup.clap.model.file.FileType;
-import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
+import com.noveogroup.clap.model.request.revision.CreateRevisionVariantRequest;
 import com.noveogroup.clap.model.revision.ApkStructure;
 import com.noveogroup.clap.model.revision.ApplicationFile;
 import com.noveogroup.clap.model.revision.Revision;
@@ -99,10 +99,20 @@ public class RevisionServiceImpl implements RevisionService {
     @RequiresAuthentication
     @WrapException
     @Override
-    public boolean createOrUpdateRevision(final @NotNull CreateOrUpdateRevisionRequest request) {
-        boolean ret = false;
+    public boolean createRevisionVariant(final @NotNull CreateRevisionVariantRequest request) {
         final String projectExternalId = request.getProjectExternalId();
         ProjectEntity projectEntity = projectDAO.findProjectByExternalIdOrReturnNull(projectExternalId);
+        final String revisionHash = request.getRevisionHash();
+        RevisionEntity revisionEntity = revisionDAO.getRevisionByHashOrNull(revisionHash);
+        final String variantHash = request.getVariantHash();
+        RevisionVariantEntity revisionVariantEntity = revisionVariantDAO.getRevisionByHash(variantHash);
+        if (revisionVariantEntity != null) {
+            return false;
+        }
+        if (revisionEntity != null && !projectExternalId.equals(revisionEntity.getProject().getExternalId())) {
+            throw new ClapDataIntegrityException("This revision belongs to another project, exists projectId - " +
+                    revisionEntity.getProject().getExternalId() + ", requested projectId - " + projectExternalId);
+        }
         if (projectEntity == null) {
             projectEntity = new ProjectEntity();
             projectEntity.setExternalId(projectExternalId);
@@ -111,8 +121,6 @@ public class RevisionServiceImpl implements RevisionService {
             projectEntity.setCreationDate(new Date());
             projectEntity = projectDAO.persist(projectEntity);
         }
-        final String revisionHash = request.getRevisionHash();
-        RevisionEntity revisionEntity = revisionDAO.getRevisionByHashOrNull(revisionHash);
         boolean needToCheckRevisionsAmount = false;
         if (revisionEntity == null) {
             revisionEntity = new RevisionEntity();
@@ -120,31 +128,22 @@ public class RevisionServiceImpl implements RevisionService {
             revisionEntity.setTimestamp(new Date().getTime());
             revisionEntity.setRevisionType(RevisionType.DEVELOP);
             needToCheckRevisionsAmount = true;
-            ret = true;
             revisionEntity.setProject(projectEntity);
-        }
-        if (!projectExternalId.equals(revisionEntity.getProject().getExternalId())) {
-            throw new ClapDataIntegrityException("This revision belongs to another project, exists projectId - " +
-                    revisionEntity.getProject().getExternalId() + ", requested projectId - " + projectExternalId);
         }
         revisionDAO.persist(revisionEntity);
         if (needToCheckRevisionsAmount) {
             projectEntity.getRevisions().add(revisionEntity);
             checkAndRemoveOldRevisions(projectEntity);
         }
-        RevisionVariantEntity revisionVariantEntity = revisionVariantDAO.getRevisionByHash(request.getVariantHash());
-        if (revisionVariantEntity == null) {
-            revisionVariantEntity = new RevisionVariantEntity();
-            revisionVariantEntity.setFullHash(request.getVariantHash());
-            ret = true;
-            List<RevisionVariantEntity> variants = revisionEntity.getVariants();
-            if (variants == null) {
-                variants = Lists.newArrayList();
-                revisionEntity.setVariants(variants);
-            }
-            variants.add(revisionVariantEntity);
-            revisionVariantEntity.setRevision(revisionEntity);
+        revisionVariantEntity = new RevisionVariantEntity();
+        revisionVariantEntity.setFullHash(variantHash);
+        List<RevisionVariantEntity> variants = revisionEntity.getVariants();
+        if (variants == null) {
+            variants = Lists.newArrayList();
+            revisionEntity.setVariants(variants);
         }
+        variants.add(revisionVariantEntity);
+        revisionVariantEntity.setRevision(revisionEntity);
         if (!revisionHash.equals(revisionVariantEntity.getRevision().getHash())) {
             throw new ClapDataIntegrityException("This variant belongs to another revision, exists revisionHash - " +
                     revisionVariantEntity.getRevision().getHash() + ", requested revisionHash - " + revisionHash);
@@ -155,7 +154,7 @@ public class RevisionServiceImpl implements RevisionService {
         processPackages(revisionVariantEntity, request);
         revisionVariantDAO.persist(revisionVariantEntity);
         revisionVariantDAO.flush();
-        return ret;
+        return true;
     }
 
     @Override
@@ -267,7 +266,7 @@ public class RevisionServiceImpl implements RevisionService {
      * @param request               request object, updates stream references in it
      */
     private void processPackages(final RevisionVariantEntity revisionVariantEntity,
-                                 final CreateOrUpdateRevisionRequest request) {
+                                 final CreateRevisionVariantRequest request) {
         String currentUserLogin = null;
         UserEntity userByLogin = null;
         final InputStream packageStream = request.getPackageStream();

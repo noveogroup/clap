@@ -1,7 +1,7 @@
 package com.noveogroup.clap.rest;
 
 import com.noveogroup.clap.model.request.message.ScreenshotMessageRequest;
-import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
+import com.noveogroup.clap.model.request.revision.CreateRevisionVariantRequest;
 import com.noveogroup.clap.model.response.ClapResponse;
 import com.noveogroup.clap.service.messages.MessagesService;
 import com.noveogroup.clap.service.revision.RevisionService;
@@ -26,11 +26,11 @@ public class UploadFileEndpointImpl extends BaseEndpoint implements UploadFileEn
     private RevisionService revisionService;
 
     @Override
-    public ClapResponse createOrUpdateRevision(final CreateOrUpdateRevisionRequest request) {
+    public ClapResponse createOrUpdateRevision(final CreateRevisionVariantRequest request) {
         login(request.getToken());
-        final boolean result = revisionService.createOrUpdateRevision(request);
+        final boolean result = revisionService.createRevisionVariant(request);
         final ClapResponse response = new ClapResponse();
-        response.setMessage(result ? "saved" : "not saved");
+        response.setMessage(result ? "apk saved" : "apk not saved(apk with such hash already uploaded)");
         return response;
 
     }

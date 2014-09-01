@@ -9,7 +9,7 @@ import com.noveogroup.clap.dao.RevisionVariantDAO;
 import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.revision.RevisionVariantEntity;
-import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
+import com.noveogroup.clap.model.request.revision.CreateRevisionVariantRequest;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.service.file.FileService;
@@ -27,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 import static org.mockito.Matchers.any;
 import static org.mockito.Matchers.argThat;
@@ -74,16 +75,19 @@ public class RevisionsServiceImplTest {
     public void testAddOrGetRevision() throws Exception {
 
         final Date now = new Date();
-        final CreateOrUpdateRevisionRequest request = new CreateOrUpdateRevisionRequest();
+        final CreateRevisionVariantRequest request = new CreateRevisionVariantRequest();
         final String mockProjectExternalId = "mockProjectExternalId";
         request.setProjectExternalId(mockProjectExternalId);
         final Revision revision = new Revision();
         final String mockHash = "mockHash";
         revision.setHash(mockHash);
         request.setRevisionHash(mockHash);
+        final String mockVariantHash = "mockVariantHash";
+        request.setVariantHash(mockVariantHash);
 
         final RevisionEntity mapped = new RevisionEntity();
         when(revisionConverter.map(revision)).thenReturn(mapped);
+        when(revisionVariantDAO.getRevisionByHash(mockVariantHash)).thenReturn(null);
         when(revisionDAO.getRevisionByHashOrNull(mockHash)).thenReturn(null);
         final ProjectEntity projectEntity = new ProjectEntity();
         projectEntity.setId(123L);
@@ -115,12 +119,16 @@ public class RevisionsServiceImplTest {
         revisionEntities.add(re4);
 
         when(revisionDAO.findForProjectAndType(123L, RevisionType.DEVELOP)).thenReturn(revisionEntities);
-        final boolean created = revisionService.createOrUpdateRevision(request);
+        final boolean created = revisionService.createRevisionVariant(request);
         verify(fileService).removeFile("mockFileUrl1");
         verify(fileService).removeFile("mockFileUrl2");
         verify(revisionDAO).remove(re3);
         verify(revisionDAO).persist(argThat(new RevisionEntityMatcher(mockHash)));
         assertTrue(created);
+        when(revisionVariantDAO.getRevisionByHash(mockVariantHash)).thenReturn(new RevisionVariantEntity());
+
+        final boolean created2 = revisionService.createRevisionVariant(request);
+        assertFalse(created2);
     }
 
     private static class RevisionEntityMatcher extends BaseMatcher<RevisionEntity>{

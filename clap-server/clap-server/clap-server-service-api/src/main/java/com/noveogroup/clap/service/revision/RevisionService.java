@@ -1,6 +1,6 @@
 package com.noveogroup.clap.service.revision;
 
-import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
+import com.noveogroup.clap.model.request.revision.CreateRevisionVariantRequest;
 import com.noveogroup.clap.model.revision.ApplicationFile;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
@@ -19,7 +19,7 @@ public interface RevisionService {
      * @param request
      * @return true if new created
      */
-    boolean createOrUpdateRevision(@NotNull CreateOrUpdateRevisionRequest request);
+    boolean createRevisionVariant(@NotNull CreateRevisionVariantRequest request);
 
     void updateRevisionData(@NotNull Revision revision);
 

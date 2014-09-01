@@ -14,7 +14,7 @@ import com.noveogroup.clap.model.request.message.BaseMessageRequest;
 import com.noveogroup.clap.model.request.message.CrashMessageRequest;
 import com.noveogroup.clap.model.request.message.LogsBunchMessageRequest;
 import com.noveogroup.clap.model.request.message.ScreenshotMessageRequest;
-import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
+import com.noveogroup.clap.model.request.revision.CreateRevisionVariantRequest;
 import com.noveogroup.clap.model.response.ClapResponse;
 import junit.framework.Assert;
 import org.jboss.resteasy.client.ClientResponseFailure;
@@ -50,7 +50,7 @@ public class IntegrationTest {
         authentication.setPassword("unnamed_password");
         final String token = authenticationEndpoint.getToken(authentication);
         final UploadFileEndpoint uploadFileEndpoint = ProxyFactory.create(UploadFileEndpoint.class,BASE);
-        final CreateOrUpdateRevisionRequest request = new CreateOrUpdateRevisionRequest();
+        final CreateRevisionVariantRequest request = new CreateRevisionVariantRequest();
         request.setPackageStream(getClass().getResourceAsStream("/clap_test.apk"));
         request.setProjectExternalId(testProjectExternalId);
         request.setRandom(random);

@@ -8,7 +8,7 @@ import java.io.InputStream;
 /**
  * upload apk request
  */
-public class CreateOrUpdateRevisionRequest {
+public class CreateRevisionVariantRequest {
 
     @FormParam("projectExternalId")
     @PartType("text/plain")
