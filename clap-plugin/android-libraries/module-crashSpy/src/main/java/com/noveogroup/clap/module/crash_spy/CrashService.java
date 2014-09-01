@@ -97,7 +97,7 @@ public class CrashService extends Service {
             database = new CrashOpenHelper(context).getWritableDatabase();
         }
 
-        Cursor cursor = database.query(true, TABLE_CRASH, null, null, null, null, null, null, null);
+        Cursor cursor = database.query(true, TABLE_CRASH, null, null, null, null, null, COLUMN_ID + " DESC", null);
         try {
             if (cursor.moveToFirst()) {
                 long id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
