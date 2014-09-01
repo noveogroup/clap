@@ -16,6 +16,7 @@ import com.noveogroup.clap.entity.project.ProjectEntity;
 import com.noveogroup.clap.entity.revision.RevisionEntity;
 import com.noveogroup.clap.entity.revision.RevisionVariantEntity;
 import com.noveogroup.clap.entity.user.UserEntity;
+import com.noveogroup.clap.exception.ClapDataIntegrityException;
 import com.noveogroup.clap.exception.WrapException;
 import com.noveogroup.clap.model.file.FileType;
 import com.noveogroup.clap.model.request.revision.CreateOrUpdateRevisionRequest;
@@ -100,25 +101,31 @@ public class RevisionServiceImpl implements RevisionService {
     @Override
     public boolean createOrUpdateRevision(final @NotNull CreateOrUpdateRevisionRequest request) {
         boolean ret = false;
-        ProjectEntity projectEntity = projectDAO.findProjectByExternalIdOrReturnNull(request.getProjectExternalId());
+        final String projectExternalId = request.getProjectExternalId();
+        ProjectEntity projectEntity = projectDAO.findProjectByExternalIdOrReturnNull(projectExternalId);
         if (projectEntity == null) {
             projectEntity = new ProjectEntity();
-            projectEntity.setExternalId(request.getProjectExternalId());
-            projectEntity.setName(request.getProjectExternalId());
+            projectEntity.setExternalId(projectExternalId);
+            projectEntity.setName(projectExternalId);
             projectEntity.setDescription("Description empty");
             projectEntity.setCreationDate(new Date());
             projectEntity = projectDAO.persist(projectEntity);
         }
-        RevisionEntity revisionEntity = revisionDAO.getRevisionByHashOrNull(request.getRevisionHash());
+        final String revisionHash = request.getRevisionHash();
+        RevisionEntity revisionEntity = revisionDAO.getRevisionByHashOrNull(revisionHash);
         boolean needToCheckRevisionsAmount = false;
         if (revisionEntity == null) {
             revisionEntity = new RevisionEntity();
-            revisionEntity.setHash(request.getRevisionHash());
+            revisionEntity.setHash(revisionHash);
             revisionEntity.setTimestamp(new Date().getTime());
             revisionEntity.setRevisionType(RevisionType.DEVELOP);
             needToCheckRevisionsAmount = true;
             ret = true;
             revisionEntity.setProject(projectEntity);
+        }
+        if (!projectExternalId.equals(revisionEntity.getProject().getExternalId())) {
+            throw new ClapDataIntegrityException("This revision belongs to another project, exists projectId - " +
+                    revisionEntity.getProject().getExternalId() + ", requested projectId - " + projectExternalId);
         }
         revisionDAO.persist(revisionEntity);
         if (needToCheckRevisionsAmount) {
@@ -137,6 +144,10 @@ public class RevisionServiceImpl implements RevisionService {
             }
             variants.add(revisionVariantEntity);
             revisionVariantEntity.setRevision(revisionEntity);
+        }
+        if (!revisionHash.equals(revisionVariantEntity.getRevision().getHash())) {
+            throw new ClapDataIntegrityException("This variant belongs to another revision, exists revisionHash - " +
+                    revisionVariantEntity.getRevision().getHash() + ", requested revisionHash - " + revisionHash);
         }
         revisionVariantEntity.setPackageVariant(request.getVariantName());
         revisionVariantEntity.setRandom(request.getRandom());

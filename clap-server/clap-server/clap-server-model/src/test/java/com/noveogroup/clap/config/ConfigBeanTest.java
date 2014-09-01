@@ -59,6 +59,8 @@ public class ConfigBeanTest {
         assertEquals(3, configBean.getKeepDevRevisions());
         assertEquals(TEMP_FILES_DIR_PROPERTY_1, configBean.getTempFilesDirs().get(0));
         assertEquals(TEMP_FILES_DIR_PROPERTY_2, configBean.getTempFilesDirs().get(1));
+        assertEquals(86400000,configBean.getMessagesCleanupInterval());
+        assertEquals(3,configBean.getMessagesLiveTime().size());
 
     }
 

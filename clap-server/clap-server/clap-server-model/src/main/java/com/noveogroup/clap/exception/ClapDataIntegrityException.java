@@ -1,8 +1,11 @@
 package com.noveogroup.clap.exception;
 
+import javax.ejb.ApplicationException;
+
 /**
  * @author Andrey Sokolov
  */
+@ApplicationException(rollback = true)
 public class ClapDataIntegrityException extends ClapException {
     public ClapDataIntegrityException() {
     }

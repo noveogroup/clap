@@ -2,6 +2,8 @@ package com.noveogroup.clap.config;
 
 
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.rest.exception.ClapException;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
@@ -15,6 +17,7 @@ import javax.inject.Named;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 @Named
@@ -54,6 +57,10 @@ public class ConfigBean {
 
     private int keepDevRevisions;
 
+    private long messagesCleanupInterval;
+
+    private Map<RevisionType, Long> messagesLiveTime = Maps.newHashMap();
+
     @PostConstruct
     protected void setup() {
         try {
@@ -75,6 +82,27 @@ public class ConfigBean {
         downloadScreenshotUrl = properties.getProperty("rest.screenshotDownload");
         downloadProjectIconUrl = properties.getProperty("rest.projectIconDownload");
         clapRestBase = properties.getProperty("clap.rest.base");
+        messagesCleanupInterval = Long.parseLong(properties.getProperty("messages.cleanup.interval"));
+        loadMessagesLiveTime(properties.getProperty("messages.cleanup.liveTimes"));
+    }
+
+    private void loadMessagesLiveTime(final String property) {
+        final String[] split = StringUtils.split(property, ',');
+        if (split != null && split.length > 0) {
+            for (String entry : split) {
+                final String[] entryArray = StringUtils.split(entry, ':');
+                if (entryArray.length == 2) {
+                    String key = StringUtils.trim(entryArray[0]);
+                    String value = StringUtils.trim(entryArray[1]);
+                    RevisionType type = RevisionType.valueOf(key);
+                    messagesLiveTime.put(type, Long.parseLong(value));
+                } else {
+                    throw new IllegalArgumentException("broken property - " + property);
+                }
+            }
+        } else {
+            throw new IllegalArgumentException("no messages live time specified");
+        }
     }
 
     private void fillStringArrayConfig(final String property, final List<String> configList) {
@@ -153,11 +181,11 @@ public class ConfigBean {
     }
 
     public String getDownloadScreenshotUrl(final long id) {
-        return downloadScreenshotUrl.replace("{id}",Long.toString(id));
+        return downloadScreenshotUrl.replace("{id}", Long.toString(id));
     }
 
     public String getDownloadProjectIconUrl(final long id) {
-        return downloadProjectIconUrl.replace("{id}",Long.toString(id));
+        return downloadProjectIconUrl.replace("{id}", Long.toString(id));
     }
 
     public List<String> getOtherFilesDirs() {
@@ -166,6 +194,14 @@ public class ConfigBean {
 
     public String getClapRestBase() {
         return clapRestBase;
+    }
+
+    public long getMessagesCleanupInterval() {
+        return messagesCleanupInterval;
+    }
+
+    public Map<RevisionType, Long> getMessagesLiveTime() {
+        return messagesLiveTime;
     }
 
     @Override

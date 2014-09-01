@@ -87,6 +87,7 @@ public class RevisionsServiceImplTest {
         when(revisionDAO.getRevisionByHashOrNull(mockHash)).thenReturn(null);
         final ProjectEntity projectEntity = new ProjectEntity();
         projectEntity.setId(123L);
+        projectEntity.setExternalId(mockProjectExternalId);
         when(projectDAO.findProjectByExternalIdOrReturnNull(mockProjectExternalId)).thenReturn(projectEntity);
         List<RevisionEntity> revisionEntities = Lists.newArrayList();
         final RevisionEntity re1 = new RevisionEntity();

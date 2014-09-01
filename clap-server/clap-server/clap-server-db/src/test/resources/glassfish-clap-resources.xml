@@ -9,6 +9,7 @@
             pool-resize-quantity="1"
             max-pool-size="50"
             steady-pool-size="0"
+            transaction-isolation-level="serializable"
             non-transactional-connections="true"
             statement-timeout-in-seconds="30">
         <property name="User" value="root"></property>
