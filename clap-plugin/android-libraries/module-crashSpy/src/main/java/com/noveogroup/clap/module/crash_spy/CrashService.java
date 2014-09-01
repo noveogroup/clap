@@ -36,6 +36,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.IBinder;
+import android.util.Pair;
 
 import com.google.gson.Gson;
 import com.noveogroup.clap.library.api.ClapApi;
@@ -91,36 +92,48 @@ public class CrashService extends Service {
         CrashService.startService(context);
     }
 
-    private static synchronized void sendCrash(Context context) {
+    private static synchronized Pair<Long, String> selectCrash(Context context) {
         if (database == null) {
             database = new CrashOpenHelper(context).getWritableDatabase();
         }
 
-        database.beginTransaction();
+        Cursor cursor = database.query(true, TABLE_CRASH, null, null, null, null, null, null, null);
         try {
-            Cursor cursor = database.query(true, TABLE_CRASH, null, null, null, null, null, null, null);
-            try {
-                if (cursor.moveToFirst()) {
-                    long id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
-                    String json = cursor.getString(cursor.getColumnIndex(COLUMN_CRASH));
-                    CrashRequest.CrashMessage message = new Gson().fromJson(json, CrashRequest.CrashMessage.class);
-
-                    ClapApiService apiService = ClapApi.getApiService(context);
-                    String token = apiService.getToken(ClapApi.prepareAuth(context));
-
-                    CrashRequest request = ClapApi.prepareBaseRequest(new CrashRequest(), context, token, message);
-                    apiService.sendCrash(request);
-
-                    database.delete(null, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
-                } else {
-                    stopService(context);
-                }
-            } finally {
-                cursor.close();
+            if (cursor.moveToFirst()) {
+                long id = cursor.getInt(cursor.getColumnIndex(COLUMN_ID));
+                String json = cursor.getString(cursor.getColumnIndex(COLUMN_CRASH));
+                return new Pair<Long, String>(id, json);
             }
-            database.setTransactionSuccessful();
         } finally {
-            database.endTransaction();
+            cursor.close();
+        }
+
+        return null;
+    }
+
+    private static synchronized void deleteCrash(Context context, Long id) {
+        if (database == null) {
+            database = new CrashOpenHelper(context).getWritableDatabase();
+        }
+
+        database.delete(TABLE_CRASH, COLUMN_ID + " = ?", new String[]{String.valueOf(id)});
+    }
+
+    private static void sendCrash(Context context) {
+        Pair<Long, String> crash = selectCrash(context);
+
+        if (crash == null) {
+            stopService(context);
+        } else {
+            CrashRequest.CrashMessage message = new Gson().fromJson(crash.second, CrashRequest.CrashMessage.class);
+
+            ClapApiService apiService = ClapApi.getApiService(context);
+            String token = apiService.getToken(ClapApi.prepareAuth(context));
+
+            CrashRequest request = ClapApi.prepareBaseRequest(new CrashRequest(), context, token, message);
+            apiService.sendCrash(request);
+
+            deleteCrash(context, crash.first);
         }
     }
 
