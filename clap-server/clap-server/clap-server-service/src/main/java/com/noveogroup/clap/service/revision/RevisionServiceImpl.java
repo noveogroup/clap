@@ -25,7 +25,6 @@ import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.model.revision.RevisionVariant;
 import com.noveogroup.clap.model.revision.RevisionVariantWithApkStructure;
-import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
 import com.noveogroup.clap.model.user.ClapPermission;
 import com.noveogroup.clap.model.user.User;
 import com.noveogroup.clap.model.user.UserWithPersistedAuth;
@@ -175,21 +174,7 @@ public class RevisionServiceImpl implements RevisionService {
     public Revision getRevision(final Long revisionId) {
         final RevisionEntity revisionEntity = revisionDAO.findById(revisionId);
         if (revisionEntity != null) {
-            final Revision revision = revisionConverter.map(revisionEntity, true, configBean);
-            createUrls(revision, revisionEntity);
-            return revision;
-        } else {
-            return null;
-        }
-    }
-
-    @RequiresAuthentication
-    @Override
-    public RevisionWithApkStructure getRevisionWithApkStructure(final Long revisionId) {
-        final RevisionEntity revisionEntity = revisionDAO.findById(revisionId);
-        if (revisionEntity != null) {
-            final RevisionWithApkStructure revision = revisionConverter.mapWithApkStructure(revisionEntity,
-                    true, configBean);
+            final Revision revision = revisionConverter.map(revisionEntity);
             createUrls(revision, revisionEntity);
             return revision;
         } else {

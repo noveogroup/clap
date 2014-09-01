@@ -1,6 +1,7 @@
 package com.noveogroup.clap.service.messages;
 
 import com.google.common.collect.Lists;
+import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.converter.MessagesConverter;
 import com.noveogroup.clap.dao.MessageDAO;
 import com.noveogroup.clap.dao.RevisionVariantDAO;
@@ -45,6 +46,9 @@ public class MessagesServiceImpl implements MessagesService {
 
     @Inject
     private FileService fileService;
+
+    @Inject
+    private ConfigBean configBean;
 
     private MessagesConverter messagesConverter = new MessagesConverter();
 
@@ -92,6 +96,15 @@ public class MessagesServiceImpl implements MessagesService {
         } else {
             return null;
         }
+    }
+
+    @RequiresAuthentication
+    @WrapException
+    @Override
+    public <T extends BaseMessage> T getMessage(final long messageId, final Class<T> messsageClass) {
+        final BaseMessageEntity messageEntity = messageDAO.findById(messageId);
+        final T map = messagesConverter.mapFullInfo(messageEntity, configBean,messsageClass);
+        return map;
     }
 
     public void setMessagesConverter(final MessagesConverter messagesConverter) {

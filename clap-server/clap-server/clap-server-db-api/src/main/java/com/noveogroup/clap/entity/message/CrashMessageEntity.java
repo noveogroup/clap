@@ -26,7 +26,7 @@ public class CrashMessageEntity extends BaseMessageEntity {
     private List<String> logCat;
     @Column(name = "thread_info_json", length = COLUMN_LENGTH)
     private String threadsInfoJSON;
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinTable(name = "crash_logs",
             joinColumns = @JoinColumn(name = "crash_id"),
             inverseJoinColumns = @JoinColumn(name = "log_id"))

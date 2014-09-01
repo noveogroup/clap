@@ -26,7 +26,6 @@ public abstract class BaseMessagesConverter extends BaseConverter<BaseMessage,Ba
         if(date != null){
             map.setTimestamp(date.getTime());
         }
-        mapDeviceInfo(entity,map);
     }
 
     protected void mapLogs(final List<LogEntryEntity> logs, final List<LogEntry> map) {

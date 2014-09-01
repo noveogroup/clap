@@ -22,6 +22,9 @@
     <ui:define name="content">
         <f:view>
             <f:metadata>
+                <f:viewParam name="id" value="#{revisionVariantSessionModel.selectedCrashMessage}"
+                             converter="#{crashMessageConverter}"
+                             required="true" requiredMessage="#{msgs['error.badRequest.noId']}"/>
                 <f:viewAction action="#{messagesController.prepareCrashView}"/>
             </f:metadata>
 

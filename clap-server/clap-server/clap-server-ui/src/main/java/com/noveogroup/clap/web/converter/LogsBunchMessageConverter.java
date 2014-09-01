@@ -1,6 +1,7 @@
 package com.noveogroup.clap.web.converter;
 
-import com.noveogroup.clap.service.revision.RevisionService;
+import com.noveogroup.clap.model.message.LogsBunchMessage;
+import com.noveogroup.clap.service.messages.MessagesService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.faces.convert.Converter;
@@ -12,20 +13,19 @@ import javax.inject.Named;
  */
 @Named
 @ApplicationScoped
-public class RevisionConverter extends BaseModelConverter implements Converter {
+public class LogsBunchMessageConverter extends BaseModelConverter implements Converter {
 
     @Inject
-    private RevisionService revisionService;
+    private MessagesService messagesService;
+
 
     @Override
     protected Object getObject(final Long id) {
-        return revisionService.getRevision(id);
+        return messagesService.getMessage(id, LogsBunchMessage.class);
     }
 
     @Override
     protected String getErrorMessageId() {
-        return "error.badRequest.revision";
+        return "error.badRequest.message";
     }
-
-
 }

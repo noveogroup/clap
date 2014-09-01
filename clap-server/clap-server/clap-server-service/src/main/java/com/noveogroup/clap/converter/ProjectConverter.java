@@ -40,7 +40,7 @@ public class ProjectConverter extends BaseConverter<Project, ProjectEntity> {
         if (mapRevisions && CollectionUtils.isNotEmpty(revisionEntities)) {
             final List<Revision> revisions = Lists.newArrayList();
             for (RevisionEntity revisionEntity : revisionEntities) {
-                revisions.add(revisionConverter.map(revisionEntity, false, null));
+                revisions.add(revisionConverter.map(revisionEntity));
             }
             ret.setRevisions(revisions);
         }

@@ -21,6 +21,9 @@
     <ui:define name="content">
         <f:view>
             <f:metadata>
+                <f:viewParam name="id" value="#{revisionVariantSessionModel.selectedLogsMessage}"
+                             converter="#{logsBunchMessageConverter}"
+                             required="true" requiredMessage="#{msgs['error.badRequest.noId']}"/>
                 <f:viewAction action="#{messagesController.prepareLogsView}"/>
             </f:metadata>
             <clp:commonMessageInfo message="#{revisionVariantSessionModel.selectedLogsMessage}"/>

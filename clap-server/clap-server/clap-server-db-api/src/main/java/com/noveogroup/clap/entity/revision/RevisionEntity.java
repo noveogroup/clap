@@ -41,7 +41,7 @@ public class RevisionEntity extends BaseEntity {
     @ManyToOne(optional = false)
     private ProjectEntity project;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "revision", orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "revision", orphanRemoval = true)
     private List<RevisionVariantEntity> variants;
 
     /**

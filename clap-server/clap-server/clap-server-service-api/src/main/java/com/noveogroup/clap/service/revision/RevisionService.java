@@ -5,7 +5,6 @@ import com.noveogroup.clap.model.revision.ApplicationFile;
 import com.noveogroup.clap.model.revision.Revision;
 import com.noveogroup.clap.model.revision.RevisionType;
 import com.noveogroup.clap.model.revision.RevisionVariantWithApkStructure;
-import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
 import com.noveogroup.clap.model.user.User;
 
 import javax.validation.constraints.NotNull;
@@ -27,8 +26,6 @@ public interface RevisionService {
     ApplicationFile getApplication(Long revId, Long variantId);
 
     Revision getRevision(Long revisionId);
-
-    RevisionWithApkStructure getRevisionWithApkStructure(Long revisionId);
 
     void deleteRevision(Long id);
 

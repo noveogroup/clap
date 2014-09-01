@@ -1,6 +1,6 @@
 package com.noveogroup.clap.web.model.revisions;
 
-import com.noveogroup.clap.model.revision.RevisionWithApkStructure;
+import com.noveogroup.clap.model.revision.Revision;
 
 import javax.enterprise.context.SessionScoped;
 import javax.faces.model.SelectItem;
@@ -14,13 +14,13 @@ import java.util.List;
 @Named
 @SessionScoped
 public class RevisionsSessionModel implements Serializable{
-    private RevisionWithApkStructure selectedRevision;
+    private Revision selectedRevision;
     private List<SelectItem> revisionTypes;
-    public RevisionWithApkStructure getSelectedRevision() {
+    public Revision getSelectedRevision() {
         return selectedRevision;
     }
 
-    public void setSelectedRevision(final RevisionWithApkStructure selectedRevision) {
+    public void setSelectedRevision(final Revision selectedRevision) {
         this.selectedRevision = selectedRevision;
     }
 

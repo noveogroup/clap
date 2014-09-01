@@ -47,12 +47,26 @@ public class MessagesConverter extends BaseConverter {
         }
     }
 
+
+    public <T extends BaseMessage> T mapFullInfo(final BaseMessageEntity entity,
+                                         final ConfigBean configBean,
+                                         Class<T> messsageClass) {
+        final OneTypeMessagesConverter converter = converterMapByDTO.get(messsageClass);
+        if (converter != null && converter.getMessageClass().equals(messsageClass)) {
+            T message = (T) converter.mapFullInfo(entity, configBean);
+            return message;
+        } else {
+            throw new IllegalStateException("no converter found for " + messsageClass);
+        }
+    }
+
+
     public BaseMessageEntity map(final BaseMessage message) {
         final Class<? extends BaseMessage> messageClass = message.getClass();
         OneTypeMessagesConverter messagesConverter = converterMapByDTO.get(messageClass);
-        if(messagesConverter == null){
-            for(Class messageType: converterMapByDTO.keySet()){
-                if(messageType.isAssignableFrom(message.getClass())){
+        if (messagesConverter == null) {
+            for (Class messageType : converterMapByDTO.keySet()) {
+                if (messageType.isAssignableFrom(message.getClass())) {
                     messagesConverter = converterMapByDTO.get(messageType);
                     break;
                 }

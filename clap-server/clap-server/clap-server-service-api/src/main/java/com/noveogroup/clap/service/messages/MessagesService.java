@@ -11,4 +11,6 @@ public interface MessagesService {
     void saveMessage(String variantHash, BaseMessage message, InputStream inputStream);
 
     File getScreenshot(long messageId);
+
+    <T extends BaseMessage> T getMessage(long messageId,Class<T> messsageClass);
 }

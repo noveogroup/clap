@@ -31,7 +31,20 @@ public class CrashMessagesConverter extends BaseMessagesConverter
         map(messageEntity,map);
         map.setThreadId(messageEntity.getThreadId());
         map.setException(messageEntity.getException());
+        return map;
+    }
 
+
+    @Override
+    public CrashMessageEntity map(CrashMessage message) {
+        final CrashMessageEntity map = MAPPER.map(message, CrashMessageEntity.class);
+        map.setThreadsInfoJSON(gson.toJson(message.getThreads(), listType));
+        return map;
+    }
+
+    public CrashMessage mapFullInfo(CrashMessageEntity messageEntity, final ConfigBean configBean){
+        final CrashMessage map = map(messageEntity,configBean);
+        mapDeviceInfo(messageEntity,map);
         map.setLogCat(new ArrayList<String>());
         mapLogCat(messageEntity.getLogCat(), map.getLogCat());
 
@@ -42,14 +55,6 @@ public class CrashMessagesConverter extends BaseMessagesConverter
         if (fromJson instanceof List) {
             map.setThreads((List<ThreadInfo>) fromJson);
         }
-        return map;
-    }
-
-
-    @Override
-    public CrashMessageEntity map(CrashMessage message) {
-        final CrashMessageEntity map = MAPPER.map(message, CrashMessageEntity.class);
-        map.setThreadsInfoJSON(gson.toJson(message.getThreads(), listType));
         return map;
     }
 

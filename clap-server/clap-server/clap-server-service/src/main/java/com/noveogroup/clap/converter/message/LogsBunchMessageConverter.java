@@ -25,6 +25,13 @@ public class LogsBunchMessageConverter extends BaseMessagesConverter
         LOGGER.debug("message entity - " + messageEntity);
         final LogsBunchMessage map = new LogsBunchMessage();
         map(messageEntity,map);
+        return map;
+    }
+
+
+    public LogsBunchMessage mapFullInfo(final LogsBunchMessageEntity messageEntity, final ConfigBean configBean){
+        final LogsBunchMessage map = map(messageEntity,configBean);
+        mapDeviceInfo(messageEntity,map);
         map.setLogCat(new ArrayList<String>());
         mapLogCat(messageEntity.getLogCat(), map.getLogCat());
         map.setLogs(new ArrayList<LogEntry>());

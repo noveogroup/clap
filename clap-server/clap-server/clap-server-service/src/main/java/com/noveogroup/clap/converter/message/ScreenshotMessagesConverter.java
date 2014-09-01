@@ -21,12 +21,18 @@ public class ScreenshotMessagesConverter extends BaseMessagesConverter
         final ScreenshotMessage screenshotMessage = new ScreenshotMessage();
         final Long id = messageEntity.getId();
         map(messageEntity,screenshotMessage);
+        mapDeviceInfo(messageEntity,screenshotMessage);
         screenshotMessage.setScreenshotUrl(configBean.getDownloadScreenshotUrl(id));
         final Date timestamp = messageEntity.getTimestamp();
         if(timestamp != null){
             screenshotMessage.setTimestamp(timestamp.getTime());
         }
         return screenshotMessage;
+    }
+
+    @Override
+    public ScreenshotMessage mapFullInfo(final ScreenshotMessageEntity messageEntity, final ConfigBean configBean) {
+        return map(messageEntity,configBean);
     }
 
     @Override

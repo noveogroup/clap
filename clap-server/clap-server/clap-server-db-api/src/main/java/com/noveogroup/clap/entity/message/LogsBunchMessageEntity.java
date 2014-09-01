@@ -20,7 +20,7 @@ import java.util.List;
 @DiscriminatorValue("logsBunch")
 public class LogsBunchMessageEntity extends BaseMessageEntity {
 
-    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.EAGER)
+    @OneToMany(cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     @JoinTable(name = "logsBunch_logs",
             joinColumns = @JoinColumn(name = "logsBunch_id"),
             inverseJoinColumns = @JoinColumn(name = "log_id"))

@@ -11,6 +11,8 @@ public interface OneTypeMessagesConverter<T extends BaseMessage, V extends BaseM
 
     T map(V messageEntity,ConfigBean configBean);
 
+    T mapFullInfo(V messageEntity,ConfigBean configBean);
+
     V map(T message);
 
     Class<T> getMessageClass();

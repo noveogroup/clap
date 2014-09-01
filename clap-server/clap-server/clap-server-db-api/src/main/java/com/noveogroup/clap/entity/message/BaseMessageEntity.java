@@ -37,7 +37,7 @@ public abstract class BaseMessageEntity extends BaseEntity {
     @Column(name = "deviceId")
     private String deviceId;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection(fetch = FetchType.LAZY)
     @MapKeyColumn(name = "deviceInfoKey")
     @Column(name = "deviceInfoValue")
     @CollectionTable(name = "device_info", joinColumns = @JoinColumn(name = "device_info_id"))

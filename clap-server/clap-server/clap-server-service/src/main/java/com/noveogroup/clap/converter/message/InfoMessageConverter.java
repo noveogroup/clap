@@ -17,7 +17,13 @@ public class InfoMessageConverter extends BaseMessagesConverter
     public InfoMessage map(final InfoMessageEntity messageEntity, final ConfigBean configBean) {
         final InfoMessage map = new InfoMessage();
         map(messageEntity, map);
+        mapDeviceInfo(messageEntity,map);
         return map;
+    }
+
+    @Override
+    public InfoMessage mapFullInfo(final InfoMessageEntity messageEntity, final ConfigBean configBean) {
+        return map(messageEntity,configBean);
     }
 
     @Override
