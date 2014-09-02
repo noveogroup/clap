@@ -61,7 +61,7 @@ public class ConfigBeanTest {
         assertEquals(TEMP_FILES_DIR_PROPERTY_2, configBean.getTempFilesDirs().get(1));
         assertEquals(86400000,configBean.getMessagesCleanupInterval());
         assertEquals(3,configBean.getMessagesLiveTime().size());
-
+        assertEquals(300000,configBean.getTokenExpirationTime());
     }
 
     @Test(expected = IllegalArgumentException.class)

@@ -24,6 +24,7 @@
         <param-name>resteasy.providers</param-name>
         <param-value>
             com.noveogroup.clap.rest.exception.AuthExceptionMapper,
+            com.noveogroup.clap.rest.exception.ClapAuthExceptionMapper,
             com.noveogroup.clap.rest.exception.ClapDataExceptionMapper,
             com.noveogroup.clap.rest.exception.GlobalExceptionMapper
         </param-value>

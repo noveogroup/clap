@@ -1,7 +1,6 @@
 package com.noveogroup.clap.web.config;
 
 import com.noveogroup.clap.config.ConfigurationUtils;
-import com.noveogroup.clap.rest.exception.ClapException;
 
 import javax.annotation.PostConstruct;
 import javax.enterprise.context.ApplicationScoped;
@@ -29,7 +28,7 @@ public class WebConfigBean {
         try {
             properties = ConfigurationUtils.getPropertiesFromConfig("clap-ui.properties");
         } catch (IOException e) {
-            throw new ClapException(e);
+            throw new IllegalStateException(e);
         }
         enableRegisteringUsers = Boolean.parseBoolean(properties.getProperty("enable.registering.users"));
         autoCreateUsers = Boolean.parseBoolean(properties.getProperty("auto.create.users.from.cas"));

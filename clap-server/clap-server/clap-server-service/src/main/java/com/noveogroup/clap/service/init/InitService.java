@@ -2,6 +2,7 @@ package com.noveogroup.clap.service.init;
 
 import com.google.common.collect.Lists;
 import com.noveogroup.clap.auth.PasswordsHashCalculator;
+import com.noveogroup.clap.config.ConfigBean;
 import com.noveogroup.clap.dao.ProjectDAO;
 import com.noveogroup.clap.dao.RevisionDAO;
 import com.noveogroup.clap.dao.RevisionVariantDAO;
@@ -23,6 +24,7 @@ import javax.ejb.Singleton;
 import javax.ejb.Startup;
 import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
+import javax.inject.Inject;
 import javax.interceptor.ExcludeDefaultInterceptors;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,8 +54,13 @@ public class InitService {
     @EJB
     private RevisionVariantDAO revisionVariantDAO;
 
+    @Inject
+    private ConfigBean configBean;
+
     @PostConstruct
     public void initDB() {
+        final Date tokenExpireDate = new Date();
+        tokenExpireDate.setTime(tokenExpireDate.getTime()+configBean.getTokenExpirationTime());
         List<UserEntity> userEntities = userDAO.selectAll();
         if(CollectionUtils.isNotEmpty(userEntities)){
             return;
@@ -62,6 +69,7 @@ public class InitService {
         user.setLogin("unnamed");
         user.setHashedPassword(PasswordsHashCalculator.calculatePasswordHash("unnamed_password"));
         user.setToken(UUID.randomUUID().toString());
+        user.setTokenExpiration(tokenExpireDate);
         user.setRole(Role.DEVELOPER);
         user.setClapPermissions(Lists.newArrayList(ClapPermission.values()));
         user = userDAO.persist(user);
@@ -72,6 +80,7 @@ public class InitService {
         user.setLogin("asokolov");
         user.setHashedPassword(PasswordsHashCalculator.calculatePasswordHash("testtest"));
         user.setToken(UUID.randomUUID().toString());
+        user.setTokenExpiration(tokenExpireDate);
         user.setClapPermissions(Lists.newArrayList(ClapPermission.values()));
         user.setRole(Role.ADMIN);
         user = userDAO.persist(user);
@@ -82,6 +91,7 @@ public class InitService {
         user.setLogin("pstepanov");
         user.setHashedPassword(PasswordsHashCalculator.calculatePasswordHash("pstepanov"));
         user.setToken(UUID.randomUUID().toString());
+        user.setTokenExpiration(tokenExpireDate);
         user.setRole(Role.DEVELOPER);
         user.setClapPermissions(Lists.newArrayList(ClapPermission.values()));
         user = userDAO.persist(user);

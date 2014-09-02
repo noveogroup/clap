@@ -4,7 +4,6 @@ package com.noveogroup.clap.config;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.noveogroup.clap.model.revision.RevisionType;
-import com.noveogroup.clap.rest.exception.ClapException;
 import org.apache.commons.lang.ArrayUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.builder.ToStringBuilder;
@@ -61,12 +60,14 @@ public class ConfigBean {
 
     private Map<RevisionType, Long> messagesLiveTime = Maps.newHashMap();
 
+    private long tokenExpirationTime;
+
     @PostConstruct
     protected void setup() {
         try {
             properties = ConfigurationUtils.getPropertiesFromConfig(CONFIG_FILE_NAME);
         } catch (IOException e) {
-            throw new ClapException(e);
+            throw new IllegalStateException(e);
         }
         maxApkSize = Long.parseLong(properties.getProperty("maxApkSize"));
         downloadApkUrl = properties.getProperty("rest.apkDownload");
@@ -84,6 +85,7 @@ public class ConfigBean {
         clapRestBase = properties.getProperty("clap.rest.base");
         messagesCleanupInterval = Long.parseLong(properties.getProperty("messages.cleanup.interval"));
         loadMessagesLiveTime(properties.getProperty("messages.cleanup.liveTimes"));
+        tokenExpirationTime = Long.parseLong(properties.getProperty("token.expiration.time"));
     }
 
     private void loadMessagesLiveTime(final String property) {
@@ -202,6 +204,10 @@ public class ConfigBean {
 
     public Map<RevisionType, Long> getMessagesLiveTime() {
         return messagesLiveTime;
+    }
+
+    public long getTokenExpirationTime() {
+        return tokenExpirationTime;
     }
 
     @Override

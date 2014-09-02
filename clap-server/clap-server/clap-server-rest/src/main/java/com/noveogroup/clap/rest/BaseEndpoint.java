@@ -1,9 +1,10 @@
 package com.noveogroup.clap.rest;
 
+import com.google.common.collect.Lists;
+import com.noveogroup.clap.exception.ClapTempFilesException;
 import com.noveogroup.clap.model.file.FileType;
 import com.noveogroup.clap.model.revision.StreamedPackage;
 import com.noveogroup.clap.rest.auth.ClapRestAuthenticationToken;
-import com.noveogroup.clap.rest.exception.ClapException;
 import com.noveogroup.clap.service.file.FileService;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
@@ -16,6 +17,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.List;
 
 /**
  * @author Andrey Sokolov
@@ -40,7 +42,8 @@ public abstract class BaseEndpoint {
                 LOGGER.debug("Retrieved package as stream: " + tempFile.getName() + "; length: " + length);
                 return streamedPackage;
             } catch (IOException e) {
-                throw new ClapException(e);
+                List<IOException> exceptions = Lists.newArrayList(e);
+                throw new ClapTempFilesException(exceptions);
             }
         }
         return null;
@@ -55,7 +58,8 @@ public abstract class BaseEndpoint {
                 LOGGER.debug("Retrieved package as byte[]: " + tempFile.getName() + "; length: " + length);
                 return streamedPackage;
             } catch (IOException e) {
-                throw new ClapException(e);
+                List<IOException> exceptions = Lists.newArrayList(e);
+                throw new ClapTempFilesException(exceptions);
             }
         }
         return null;

@@ -7,6 +7,7 @@ import com.noveogroup.clap.converter.UserConverter;
 import com.noveogroup.clap.dao.UserDAO;
 import com.noveogroup.clap.entity.user.UserEntity;
 import com.noveogroup.clap.exception.ClapAuthenticationFailedException;
+import com.noveogroup.clap.exception.ClapTokenExpirationException;
 import com.noveogroup.clap.exception.ClapUserNotFoundException;
 import com.noveogroup.clap.exception.WrapException;
 import com.noveogroup.clap.model.auth.ApkAuthentication;
@@ -31,6 +32,7 @@ import javax.ejb.TransactionManagement;
 import javax.ejb.TransactionManagementType;
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,7 +61,7 @@ public class UserServiceImpl implements UserService {
         final String currentUserLogin = getCurrentUserLogin();
         final UserEntity userEntity = userDAO.getUserByLogin(currentUserLogin);
         if (userEntity != null) {
-            return converter.mapWithPersistedAuth(userEntity,configBean);
+            return converter.mapWithPersistedAuth(userEntity, configBean);
         } else {
             throw new ClapUserNotFoundException("requested login == " + currentUserLogin);
         }
@@ -88,7 +90,7 @@ public class UserServiceImpl implements UserService {
     public User getUser(final String login, final boolean autocreate) {
         final UserEntity userEntity = userDAO.getUserByLogin(login);
         if (userEntity != null) {
-            final User user = converter.map(userEntity,configBean);
+            final User user = converter.map(userEntity, configBean);
             return user;
         } else if (autocreate) {
             final UserCreationModel userCreationModel = new UserCreationModel();
@@ -134,7 +136,7 @@ public class UserServiceImpl implements UserService {
         final List<UserEntity> userEntities = userDAO.selectAll();
         final List<User> users = Lists.newArrayList();
         for (UserEntity userEntity : userEntities) {
-            users.add(converter.map(userEntity,configBean));
+            users.add(converter.map(userEntity, configBean));
         }
         return users;
     }
@@ -147,7 +149,7 @@ public class UserServiceImpl implements UserService {
             final String password = authentication.getPassword();
             if (StringUtils.equals(userByLogin.getHashedPassword(),
                     PasswordsHashCalculator.calculatePasswordHash(password))) {
-                updateToken(userByLogin);
+                checkTokenExpiration(userByLogin);
                 userDAO.persist(userByLogin);
                 return userByLogin.getToken();
             } else {
@@ -162,10 +164,21 @@ public class UserServiceImpl implements UserService {
     public User getUserByToken(final String token) {
         final UserEntity userEntity = userDAO.getUserByToken(token);
         if (userEntity != null) {
-            final User user = converter.map(userEntity,configBean);
+            checkTokenExpiration(userEntity);
+            final User user = converter.map(userEntity, configBean);
             return user;
+        } else {
+            throw new ClapTokenExpirationException("token " + token + " not found(expired or never exists)");
         }
-        return null;
+    }
+
+    private void checkTokenExpiration(final UserEntity userEntity) {
+        final String token = userEntity.getToken();
+        final Date now = new Date();
+        if (now.after(userEntity.getTokenExpiration())) {
+            updateToken(userEntity);
+            throw new ClapTokenExpirationException("token " + token + " not found(expired or never exists)");
+        }
     }
 
     @RequiresAuthentication
@@ -182,13 +195,17 @@ public class UserServiceImpl implements UserService {
         updateToken(userEntity);
         userEntity = userDAO.persist(userEntity);
         userDAO.flush();
-        return converter.map(userEntity,configBean);
+        return converter.map(userEntity, configBean);
     }
 
     private void updateToken(final UserEntity userEntity) {
         LOGGER.debug("token for " + userEntity.getLogin() + " updated");
         final String token = UUID.randomUUID().toString();
         userEntity.setToken(token);
+        final long tokenExpirationTime = configBean.getTokenExpirationTime();
+        final Date date = new Date();
+        date.setTime(date.getTime() + tokenExpirationTime);
+        userEntity.setTokenExpiration(date);
     }
 
 
@@ -225,7 +242,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public String getApkToken(final ApkAuthentication authentication) {
         final RevisionService service = revisionServiceProvider.get();
-        if(service.checkRevisionVariantRandom(authentication.getVariantHash(), authentication.getRandom())){
+        if (service.checkRevisionVariantRandom(authentication.getVariantHash(), authentication.getRandom())) {
             final Authentication authentication1 = new Authentication();
             authentication1.setLogin("unnamed");
             authentication1.setPassword("unnamed_password");
@@ -243,7 +260,7 @@ public class UserServiceImpl implements UserService {
     private User persistFlushAndReturnConverted(final UserEntity userEntity) {
         final UserEntity updatedUserEnity = userDAO.persist(userEntity);
         userDAO.flush();
-        final User updatedUser = converter.map(updatedUserEnity,configBean);
+        final User updatedUser = converter.map(updatedUserEnity, configBean);
         return updatedUser;
     }
 

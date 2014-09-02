@@ -15,6 +15,9 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -38,6 +41,10 @@ public class UserEntity extends BaseEntity {
 
     @Column(name = "token", unique = true, nullable = true)
     private String token;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "token_expiration", nullable = false)
+    private Date tokenExpiration;
 
     @Column(name = "pass_hash", nullable = true)
     private String hashedPassword;
@@ -119,12 +126,19 @@ public class UserEntity extends BaseEntity {
         this.watchedProjects = watchedProjects;
     }
 
+    public Date getTokenExpiration() {
+        return tokenExpiration;
+    }
+
+    public void setTokenExpiration(final Date tokenExpiration) {
+        this.tokenExpiration = tokenExpiration;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this)
                 .append("fullName", fullName)
                 .append("login", login)
-                .append("authenticationKey", token)
                 .append("role", role)
                 .toString();
     }
