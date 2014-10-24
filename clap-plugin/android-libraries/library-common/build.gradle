@@ -111,9 +111,9 @@ publishing {
     }
     repositories {
         maven {
-            String sonatypeReleaseRepository = 'https://oss.sonatype.org/service/local/staging/deploy/maven2/'
-            String sonatypeUsername = project.properties['username']
-            String sonatypePassword = project.properties['password']
+            String sonatypeReleaseRepository = 'http://10.0.5.112:8081/nexus/content/repositories/thirdparty/'
+            String sonatypeUsername = 'deployment'
+            String sonatypePassword = 'deployment123'
             url sonatypeReleaseRepository
             credentials {
                 username = sonatypeUsername
