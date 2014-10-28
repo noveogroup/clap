@@ -1,6 +1,6 @@
 buildscript {
     repositories {
-        mavenCentral()
+        jcenter()
         maven { url 'http://10.0.5.112:8081/nexus/content/repositories/thirdparty/' }
         mavenLocal()
     }
@@ -12,7 +12,7 @@ buildscript {
 
 allprojects {
     repositories {
-        mavenCentral()
+        jcenter()
         maven { url 'http://10.0.5.112:8081/nexus/content/repositories/thirdparty/' }
         mavenLocal()
     }
