@@ -109,7 +109,7 @@ class Utils {
 
     static void setBuildConfigFields(ClassPool classPool, File destinationDir, def variant,
                                      String revisionHashValue, String variantHashValue, String randomValue) {
-        CtClass buildConfigClass = classPool.getCtClass("${variant.packageName}.BuildConfig")
+        CtClass buildConfigClass = classPool.getCtClass("${variant.applicationId}.BuildConfig")
         CtClass stringClass = classPool.getCtClass("java.lang.String")
 
         CtField revisionHashField = new CtField(stringClass, BuildConfigHelper.FIELD_CLAP_REVISION_HASH, buildConfigClass)

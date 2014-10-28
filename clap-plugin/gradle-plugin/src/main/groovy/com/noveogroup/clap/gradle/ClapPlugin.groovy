@@ -93,19 +93,18 @@ class ClapPlugin implements Plugin<Project> {
     }
 
     private Task createUploadTask(Project project, ClapOptions clap, def variant) {
-        def zipAlignTask = variant.variantData.zipAlignTask
-        if (!zipAlignTask) return null
-
         String name = variant.name as String
 
         Task uploadTask = project.task("upload${name.capitalize()}",
                 group: "CLAP",
                 description: "Uploads ${name.capitalize()} APK on CLAP server.",
-                dependsOn: [zipAlignTask, hashTasks[null], hashTasks[name]])
+                dependsOn: [variant.assemble, hashTasks[null], hashTasks[name]])
 
         uploadTask << {
+            List outputs = variant.outputs
+            if (outputs.size() != 1) throw new GradleException("variant ${name} has ${outputs.size()} outputs. 1 expected")
             Options options = clap.resolve(variant.buildType.name as String)
-            File apkFile = variant.variantData.outputFile
+            File apkFile = outputs[0].outputFile
             Utils.uploadApk(name, apkFile, options, hashValues[null], hashValues[name], randomValues[name])
         }
 
