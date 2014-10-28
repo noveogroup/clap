@@ -1,8 +1,8 @@
 buildscript {
     repositories {
-        mavenLocal()
         mavenCentral()
         maven { url 'http://10.0.5.112:8081/nexus/content/repositories/thirdparty/' }
+        mavenLocal()
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:0.13.3'
@@ -12,9 +12,9 @@ buildscript {
 
 allprojects {
     repositories {
-        mavenLocal()
         mavenCentral()
         maven { url 'http://10.0.5.112:8081/nexus/content/repositories/thirdparty/' }
+        mavenLocal()
     }
 }
 
