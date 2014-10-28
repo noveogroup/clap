@@ -11,6 +11,7 @@ allprojects {
     repositories {
         mavenLocal()
         mavenCentral()
+        maven { url 'http://10.0.5.112:8081/nexus/content/repositories/thirdparty/' }
     }
 
     ext {
