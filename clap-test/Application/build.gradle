@@ -28,15 +28,6 @@ clap {
     serverUrl 'http://10.0.5.112:8080/clap-rest/v1/'
     username 'pstepanov'
     password 'pstepanov'
-    instrument 'info-spy'
-
-    custom {
-        debug {
-            instrument 'crash-spy'
-        }
-        release {
-            projectId 'release'
-        }
-    }
+    instrument 'info-spy', 'crash-spy'
 
 }

@@ -40,16 +40,24 @@ class InstrumentationUtils {
         }
     }
 
+    static CtClass getSuperclass(CtClass aClass) {
+        try {
+            return aClass.superclass
+        } catch (NotFoundException ignored) {
+            return null
+        }
+    }
+
     static boolean findSuperclass(ClassPool classPool, CtClass aClass, String className) {
         return findSuperclass(aClass, getClass(classPool, className))
     }
 
     static boolean findSuperclass(CtClass aClass, CtClass superClass) {
         while (!aClass.equals(superClass)) {
-            if (aClass.superclass == null) {
+            if (getSuperclass(aClass) == null) {
                 return false
             } else {
-                aClass = aClass.superclass
+                aClass = getSuperclass(aClass)
             }
         }
         return true
@@ -61,7 +69,7 @@ class InstrumentationUtils {
                 return aClass.getDeclaredMethod(methodName, parameters)
             } catch (NotFoundException ignored) {
             }
-            aClass = aClass.superclass
+            aClass = getSuperclass(aClass)
         }
         return null
     }

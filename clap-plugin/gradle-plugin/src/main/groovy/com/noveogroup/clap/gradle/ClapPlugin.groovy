@@ -133,6 +133,13 @@ class ClapPlugin implements Plugin<Project> {
             // add default build config fields
             addBuildConfigFields(android.defaultConfig, clap, true)
 
+            // add common dependencies
+            // todo add clap-api module (for field constants, clap annotations and configurations)
+            // project.dependencies.add("${customName}Compile", 'com.noveogroup.clap:clap-api:0.1')
+            Instrumentation.getDependencies(clap.instrument).each {
+                project.dependencies.add("compile", it)
+            }
+
             clap.custom.names.each { String customName ->
                 Options customOptions = clap.resolve(customName)
 
@@ -229,6 +236,7 @@ class ClapPlugin implements Plugin<Project> {
                             hashValues[null], hashValues[name], randomValues[name])
 
                     // instrument classes
+                    Instrumentation.instrument(project, javaCompileTask, classPool, clap.instrument)
                     Instrumentation.instrument(project, javaCompileTask, classPool, customOptions.instrument)
                 }
 
