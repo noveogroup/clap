@@ -72,31 +72,41 @@ class Instrumentation {
         // add context initialization for Application
         if (InstrumentationUtils.findSuperclass(classPool, aClass, "android.app.Application")) {
             CtMethod method = InstrumentationUtils.getMethodToInstrument(classPool, aClass, 'onCreate', 'void', [])
-            method.insertBefore("${MODULE_MANAGER}.getInstance().initContext(this);")
+            if (method != null) {
+                method.insertBefore("${MODULE_MANAGER}.getInstance().initContext(this);")
+            }
         }
 
         // add context initialization for Activity
         if (InstrumentationUtils.findSuperclass(classPool, aClass, "android.app.Activity")) {
             CtMethod method = InstrumentationUtils.getMethodToInstrument(classPool, aClass, 'onCreate', 'void', ['android.os.Bundle'])
-            method.insertBefore("${MODULE_MANAGER}.getInstance().initContext(this);")
+            if (method != null) {
+                method.insertBefore("${MODULE_MANAGER}.getInstance().initContext(this);")
+            }
         }
 
         // add context initialization for Service
         if (InstrumentationUtils.findSuperclass(classPool, aClass, "android.app.Service")) {
             CtMethod method = InstrumentationUtils.getMethodToInstrument(classPool, aClass, 'onCreate', 'void', [])
-            method.insertBefore("${MODULE_MANAGER}.getInstance().initContext(this);")
+            if (method != null) {
+                method.insertBefore("${MODULE_MANAGER}.getInstance().initContext(this);")
+            }
         }
 
         // add context initialization for ContentProvider
         if (InstrumentationUtils.findSuperclass(classPool, aClass, "android.content.ContentProvider")) {
             CtMethod method = InstrumentationUtils.getMethodToInstrument(classPool, aClass, 'onCreate', 'boolean', [])
-            method.insertBefore("${MODULE_MANAGER}.getInstance().initContext(getContext());")
+            if (method != null) {
+                method.insertBefore("${MODULE_MANAGER}.getInstance().initContext(getContext());")
+            }
         }
 
         // add context initialization for BroadcastReceiver
         if (InstrumentationUtils.findSuperclass(classPool, aClass, "android.content.BroadcastReceiver")) {
             CtMethod method = InstrumentationUtils.getMethodToInstrument(classPool, aClass, 'onReceive', 'boolean', ['android.content.Context', 'android.content.Intent'])
-            method.insertBefore("${MODULE_MANAGER}.getInstance().initContext(${InstrumentationUtils.getParameterName(method, 1)});")
+            if (method != null) {
+                method.insertBefore("${MODULE_MANAGER}.getInstance().initContext(${InstrumentationUtils.getParameterName(method, 1)});")
+            }
         }
     }
 

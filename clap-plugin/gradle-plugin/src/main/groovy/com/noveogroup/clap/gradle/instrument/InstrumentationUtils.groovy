@@ -81,6 +81,7 @@ class InstrumentationUtils {
             method = aClass.getDeclaredMethod(methodName, parameters)
         } catch (NotFoundException ignored) {
             method = InstrumentationUtils.findMethod(aClass, methodName, parameters)
+            if (method.declaringClass != aClass && (aClass.modifiers.and(Modifier.ABSTRACT) != 0)) return null
             if (method != null && (method.modifiers.and(Modifier.FINAL) != 0)) return null
 
             StringBuilder builder = new StringBuilder()
@@ -120,8 +121,8 @@ class InstrumentationUtils {
     static String getParameterName(CtMethod method, int index) {
         MethodInfo methodInfo = method.getMethodInfo()
         LocalVariableAttribute table = methodInfo.getCodeAttribute().getAttribute(LocalVariableAttribute.tag)
-        int frameWithNameAtConstantPool = table.nameIndex(index);
-        return methodInfo.getConstPool().getUtf8Info(frameWithNameAtConstantPool) as String
+        int fixedIndex = (0..table.tableLength() - 1).grep({ table.startPc(it) == 0 }).get(index)
+        return table.variableName(fixedIndex)
     }
 
 }
