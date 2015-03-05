@@ -1,0 +1,27 @@
+apply plugin: 'com.android.library'
+
+android {
+    compileSdkVersion 21
+    buildToolsVersion '21.1.2'
+
+    defaultConfig {
+        minSdkVersion 7
+        targetSdkVersion 21
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_7
+        targetCompatibility JavaVersion.VERSION_1_7
+    }
+
+    lintOptions { abortOnError false }
+}
+
+configurations { provided }
+sourceSets { main { compileClasspath += configurations.provided } }
+
+dependencies {
+    compile 'com.squareup.retrofit:retrofit:1.8.0'
+    provided 'org.slf4j:slf4j-api:1.7.7'
+    provided 'com.github.tony19:logback-android-classic:1.1.1-3'
+}
