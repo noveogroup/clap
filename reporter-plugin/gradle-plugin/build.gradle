@@ -1,0 +1,55 @@
+apply plugin: 'groovy'
+
+dependencies {
+    compile gradleApi()
+}
+
+group = 'com.noveogroup.android.reporter'
+version = '0.1.0'
+description = 'Remote log provider for Android applications.'
+
+project.ext {
+    name = 'Android Reporter Plugin'
+    website = 'https://github.com/noveogroup/android-reporter'
+    pom = {
+        licenses {
+            license {
+                name 'The MIT License (MIT)'
+                url 'http://opensource.org/licenses/MIT'
+                distribution 'repo'
+            }
+        }
+        scm {
+            url 'https://github.com/noveogroup/android-reporter'
+            connection 'scm:git@github.com:noveogroup/android-reporter.git'
+            developerConnection 'scm:git@github.com:noveogroup/android-reporter.git'
+        }
+        issueManagement {
+            system 'GitHub'
+            url 'https://github.com/noveogroup/android-reporter/issues'
+        }
+        developers {
+            developer {
+                name 'Pavel Stepanov'
+                url 'https://github.com/stefan-nsk'
+                roles {
+                    role 'architect'
+                    role 'developer'
+                }
+            }
+        }
+    }
+    bintray = {
+        user = project.hasProperty('bintray.user') ? project['bintray.user'] : 'anonymous'
+        key = project.hasProperty('bintray.key') ? project['bintray.key'] : 'api-key'
+        repo = 'android-reporter'
+        tags = ['android', 'plugin', 'reporter']
+        licenses = ['MIT']
+        issueTracker = 'https://github.com/noveogroup/android-reporter/issues'
+        vcs = 'https://github.com/noveogroup/android-reporter'
+        dryRun = false  // whether to run this as dry-run, without deploying
+        publish = false // if version should be auto published after an upload
+    }
+}
+
+apply from: rootProject.file('gradle/plugin-publish.gradle')

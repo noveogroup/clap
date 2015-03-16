@@ -1,0 +1,2 @@
+include ':android-library'
+include ':gradle-plugin'
