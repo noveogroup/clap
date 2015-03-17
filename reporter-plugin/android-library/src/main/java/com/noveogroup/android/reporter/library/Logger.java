@@ -26,30 +26,6 @@
 
 package com.noveogroup.android.reporter.library;
 
-import android.content.Context;
-
-import com.noveogroup.android.reporter.library.system.Utils;
-
-public final class Reporter {
-
-    private Reporter() {
-        throw new UnsupportedOperationException();
-    }
-
-    public static void init(Context context) {
-
-    }
-
-    public static Logger getLogger() {
-        return getLogger(Utils.getCallerClassName());
-    }
-
-    public static Logger getLogger(Class<?> aClass) {
-        return getLogger(aClass.getName());
-    }
-
-    public static Logger getLogger(String name) {
-        return null;
-    }
+public class Logger {
 
 }
