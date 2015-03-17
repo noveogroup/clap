@@ -31,13 +31,13 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.SystemClock;
 
-import com.noveogroup.android.reporter.library.beans.CrashEvent;
-import com.noveogroup.android.reporter.library.beans.Event;
-import com.noveogroup.android.reporter.library.beans.InfoEvent;
-import com.noveogroup.android.reporter.library.beans.LogEvent;
-import com.noveogroup.android.reporter.library.beans.LogcatEvent;
-import com.noveogroup.android.reporter.library.beans.ScreenshotEvent;
-import com.noveogroup.android.reporter.library.beans.SystemErrorEvent;
+import com.noveogroup.android.reporter.library.events.CrashEvent;
+import com.noveogroup.android.reporter.library.events.Event;
+import com.noveogroup.android.reporter.library.events.InfoEvent;
+import com.noveogroup.android.reporter.library.events.LogEvent;
+import com.noveogroup.android.reporter.library.events.LogcatEvent;
+import com.noveogroup.android.reporter.library.events.ScreenshotEvent;
+import com.noveogroup.android.reporter.library.events.SystemErrorEvent;
 import com.noveogroup.android.reporter.library.system.ThreadInfo;
 import com.noveogroup.android.reporter.library.system.Utils;
 

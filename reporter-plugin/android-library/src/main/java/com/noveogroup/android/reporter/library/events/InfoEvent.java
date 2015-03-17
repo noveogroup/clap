@@ -24,27 +24,29 @@
  * THE SOFTWARE.
  */
 
-package com.noveogroup.android.reporter.library.beans;
+package com.noveogroup.android.reporter.library.events;
 
-public abstract class Event {
+import java.util.Map;
 
-    private long timestamp;
-    private long uptime;
+public class InfoEvent extends Event {
 
-    public long getTimestamp() {
-        return timestamp;
+    public static InfoEvent create(long timestamp, long uptime,
+                                   Map<String, String> deviceInfo) {
+        InfoEvent event = new InfoEvent();
+        event.setTimestamp(timestamp);
+        event.setUptime(uptime);
+        event.setDeviceInfo(deviceInfo);
+        return event;
     }
 
-    public void setTimestamp(long timestamp) {
-        this.timestamp = timestamp;
+    private Map<String, String> deviceInfo;
+
+    public Map<String, String> getDeviceInfo() {
+        return deviceInfo;
     }
 
-    public long getUptime() {
-        return uptime;
-    }
-
-    public void setUptime(long uptime) {
-        this.uptime = uptime;
+    public void setDeviceInfo(Map<String, String> deviceInfo) {
+        this.deviceInfo = deviceInfo;
     }
 
 }

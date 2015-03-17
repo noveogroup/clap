@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  */
 
-package com.noveogroup.android.reporter.library.beans;
+package com.noveogroup.android.reporter.library.events;
 
 import java.util.List;
 

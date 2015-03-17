@@ -24,39 +24,60 @@
  * THE SOFTWARE.
  */
 
-package com.noveogroup.android.reporter.library.beans;
+package com.noveogroup.android.reporter.library.events;
 
-import com.noveogroup.android.reporter.library.system.Utils;
+import com.noveogroup.android.reporter.library.Logger;
 
-public class SystemErrorEvent extends Event {
+public class LogEvent extends Event {
 
-    public static SystemErrorEvent create(long timestamp, long uptime,
-                                          String description, Throwable exception) {
-        SystemErrorEvent event = new SystemErrorEvent();
+    public static LogEvent create(long timestamp, long uptime,
+                                  String loggerName, String threadName,
+                                  Logger.Level level, String message) {
+        LogEvent event = new LogEvent();
         event.setTimestamp(timestamp);
         event.setUptime(uptime);
-        event.setDescription(description);
-        event.setException(Utils.getStackTrace(exception));
+        event.setLoggerName(loggerName);
+        event.setThreadName(threadName);
+        event.setLevel(level);
+        event.setMessage(message);
         return event;
     }
 
-    private String description;
-    private String exception;
+    private String loggerName;
+    private String threadName;
+    private Logger.Level level;
+    private String message;
 
-    public String getDescription() {
-        return description;
+    public String getLoggerName() {
+        return loggerName;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setLoggerName(String loggerName) {
+        this.loggerName = loggerName;
     }
 
-    public String getException() {
-        return exception;
+    public String getThreadName() {
+        return threadName;
     }
 
-    public void setException(String exception) {
-        this.exception = exception;
+    public void setThreadName(String threadName) {
+        this.threadName = threadName;
+    }
+
+    public Logger.Level getLevel() {
+        return level;
+    }
+
+    public void setLevel(Logger.Level level) {
+        this.level = level;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
 }

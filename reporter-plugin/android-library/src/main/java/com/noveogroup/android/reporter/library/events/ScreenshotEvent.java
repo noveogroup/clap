@@ -24,38 +24,27 @@
  * THE SOFTWARE.
  */
 
-package com.noveogroup.android.reporter.library.beans;
+package com.noveogroup.android.reporter.library.events;
 
-import com.noveogroup.android.reporter.library.system.ThreadInfo;
-import com.noveogroup.android.reporter.library.system.Utils;
+import android.graphics.Bitmap;
 
-import java.util.List;
-import java.util.Map;
+public class ScreenshotEvent extends Event {
 
-public class CrashEvent extends Event {
-
-    public static CrashEvent create(long timestamp, long uptime,
-                                    String loggerName, String description,
-                                    Thread thread, Throwable exception,
-                                    Map<String, String> deviceInfo, List<ThreadInfo> threads) {
-        CrashEvent event = new CrashEvent();
+    public static ScreenshotEvent create(long timestamp, long uptime,
+                                         String loggerName, String description,
+                                         Bitmap screenshot) {
+        ScreenshotEvent event = new ScreenshotEvent();
         event.setTimestamp(timestamp);
         event.setUptime(uptime);
         event.setLoggerName(loggerName);
         event.setDescription(description);
-        event.setThreadId(thread.getId());
-        event.setException(Utils.getStackTrace(exception));
-        event.setDeviceInfo(deviceInfo);
-        event.setThreads(threads);
+        event.setScreenshot(screenshot);
         return event;
     }
 
     private String loggerName;
     private String description;
-    private long threadId;
-    private String exception;
-    private Map<String, String> deviceInfo;
-    private List<ThreadInfo> threads;
+    private Bitmap screenshot;
 
     public String getLoggerName() {
         return loggerName;
@@ -73,36 +62,12 @@ public class CrashEvent extends Event {
         this.description = description;
     }
 
-    public long getThreadId() {
-        return threadId;
+    public Bitmap getScreenshot() {
+        return screenshot;
     }
 
-    public void setThreadId(long threadId) {
-        this.threadId = threadId;
-    }
-
-    public String getException() {
-        return exception;
-    }
-
-    public void setException(String exception) {
-        this.exception = exception;
-    }
-
-    public Map<String, String> getDeviceInfo() {
-        return deviceInfo;
-    }
-
-    public void setDeviceInfo(Map<String, String> deviceInfo) {
-        this.deviceInfo = deviceInfo;
-    }
-
-    public List<ThreadInfo> getThreads() {
-        return threads;
-    }
-
-    public void setThreads(List<ThreadInfo> threads) {
-        this.threads = threads;
+    public void setScreenshot(Bitmap screenshot) {
+        this.screenshot = screenshot;
     }
 
 }
