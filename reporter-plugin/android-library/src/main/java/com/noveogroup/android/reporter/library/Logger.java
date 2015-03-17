@@ -71,7 +71,7 @@ public class Logger {
                 System.currentTimeMillis(), SystemClock.uptimeMillis(),
                 name, description,
                 thread, exception,
-                Utils.getDeviceInfo(Reporter.getApplicationContext()), Utils.getThreadsInfo());
+                Utils.getDeviceInfo(Reporter.getApplicationContext(), Reporter.getCustomInfo()), Utils.getThreadsInfo());
     }
 
     public void screenshot(Bitmap screenshot) {

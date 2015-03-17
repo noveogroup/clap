@@ -215,11 +215,12 @@ public class Utils {
     /**
      * Returns device info.
      *
-     * @param context an Android context. Can be {@code null}.
+     * @param context    an Android context. Can be {@code null}.
+     * @param customInfo custom info map.
      * @return device info map.
      */
-    public static Map<String, String> getDeviceInfo(Context context) {
-        HashMap<String, String> map = new HashMap<>();
+    public static Map<String, String> getDeviceInfo(Context context, Map<String, String> customInfo) {
+        HashMap<String, String> map = new HashMap<>(customInfo);
 
         map.put(INFO_SYSTEM_LANGUAGE, getSystemLanguage(context));
         map.put(INFO_ANDROID_VERSION, getAndroidVersion());

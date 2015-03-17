@@ -31,11 +31,20 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.SystemClock;
 
+import com.noveogroup.android.reporter.library.beans.CrashEvent;
+import com.noveogroup.android.reporter.library.beans.Event;
+import com.noveogroup.android.reporter.library.beans.InfoEvent;
+import com.noveogroup.android.reporter.library.beans.LogEvent;
+import com.noveogroup.android.reporter.library.beans.LogcatEvent;
+import com.noveogroup.android.reporter.library.beans.ScreenshotEvent;
+import com.noveogroup.android.reporter.library.beans.SystemErrorEvent;
 import com.noveogroup.android.reporter.library.system.ThreadInfo;
 import com.noveogroup.android.reporter.library.system.Utils;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -60,7 +69,8 @@ public final class Reporter {
         sendCachedEvents(applicationContext);
 
         // send info
-        sendInfo(System.currentTimeMillis(), SystemClock.uptimeMillis(), Utils.getDeviceInfo(applicationContext));
+        sendInfo(System.currentTimeMillis(), SystemClock.uptimeMillis(),
+                Utils.getDeviceInfo(applicationContext, getCustomInfo()));
     }
 
     public static synchronized Context getApplicationContext() {
@@ -108,42 +118,71 @@ public final class Reporter {
         }
     }
 
+    private static final List<Event> eventCache = new ArrayList<>();
+
     private static synchronized void sendCachedEvents(Context applicationContext) {
-        // todo implement
+        for (Iterator<Event> iterator = eventCache.iterator(); iterator.hasNext(); ) {
+            Event event = iterator.next();
+            // todo send event
+            iterator.remove();
+        }
+    }
+
+    private static synchronized void send(Event event) {
+        eventCache.add(event);
+        if (applicationContext != null) {
+            sendCachedEvents(applicationContext);
+        }
     }
 
     public static synchronized void sendCrash(long timestamp, long uptime,
                                               String loggerName, String description,
                                               Thread thread, Throwable exception,
                                               Map<String, String> deviceInfo, List<ThreadInfo> threads) {
-        // todo implement
+        send(CrashEvent.create(
+                timestamp, uptime,
+                loggerName, description,
+                thread, exception,
+                deviceInfo, threads));
     }
 
     public static synchronized void sendInfo(long timestamp, long uptime,
                                              Map<String, String> deviceInfo) {
-        // todo implement
+        send(InfoEvent.create(
+                timestamp, uptime,
+                deviceInfo));
     }
 
     public static synchronized void sendLogcat(long timestamp, long uptime,
                                                List<String> messages) {
-        // todo implement
+        send(LogcatEvent.create(
+                timestamp, uptime,
+                messages));
     }
 
     public static synchronized void sendLog(long timestamp, long uptime,
                                             String loggerName, String threadName,
                                             Logger.Level level, String message) {
-        // todo implement
+        send(LogEvent.create(
+                timestamp, uptime,
+                loggerName, threadName,
+                level, message));
     }
 
     public static synchronized void sendScreenshot(long timestamp, long uptime,
                                                    String loggerName, String description,
                                                    Bitmap screenshot) {
-        // todo implement
+        send(ScreenshotEvent.create(
+                timestamp, uptime,
+                loggerName, description,
+                screenshot));
     }
 
     public static synchronized void sendSystemError(long timestamp, long uptime,
                                                     String description, Throwable exception) {
-        // todo implement
+        send(SystemErrorEvent.create(
+                timestamp, uptime,
+                description, exception));
     }
 
     private static final WeakHashMap<String, Logger> loggerMap = new WeakHashMap<>();
