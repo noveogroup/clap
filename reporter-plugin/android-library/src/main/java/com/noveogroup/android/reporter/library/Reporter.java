@@ -27,8 +27,15 @@
 package com.noveogroup.android.reporter.library;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.os.SystemClock;
 
+import com.noveogroup.android.reporter.library.system.ThreadInfo;
 import com.noveogroup.android.reporter.library.system.Utils;
+
+import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 public final class Reporter {
 
@@ -36,9 +43,64 @@ public final class Reporter {
         throw new UnsupportedOperationException();
     }
 
-    public static void init(Context context) {
+    private static volatile Context applicationContext;
 
+    public static synchronized void init(Context context) {
+        if (applicationContext == null) {
+            applicationContext = context.getApplicationContext();
+        }
+
+        sendInfo(System.currentTimeMillis(), SystemClock.uptimeMillis(), Utils.getDeviceInfo(applicationContext));
     }
+
+    public static synchronized Context getApplicationContext() {
+        return applicationContext;
+    }
+
+    public static synchronized void putCustomInfo(String key, String value) {
+        // todo implement
+    }
+
+    public static synchronized Map<String, String> getCustomInfo() {
+        // todo implement
+        return null;
+    }
+
+    public static synchronized void sendCrash(long timestamp, long uptime,
+                                              String loggerName, String description,
+                                              Thread thread, Throwable exception,
+                                              Map<String, String> deviceInfo, List<ThreadInfo> threads) {
+        // todo implement
+    }
+
+    public static synchronized void sendInfo(long timestamp, long uptime,
+                                             Map<String, String> deviceInfo) {
+        // todo implement
+    }
+
+    public static synchronized void sendLogcat(long timestamp, long uptime,
+                                               List<String> messages) {
+        // todo implement
+    }
+
+    public static synchronized void sendLog(long timestamp, long uptime,
+                                            String loggerName, String threadName,
+                                            Logger.Level level, String message) {
+        // todo implement
+    }
+
+    public static synchronized void sendScreenshot(long timestamp, long uptime,
+                                                   String loggerName, String description,
+                                                   Bitmap screenshot) {
+        // todo implement
+    }
+
+    public static synchronized void sendSystemError(long timestamp, long uptime,
+                                                    String description, Throwable exception) {
+        // todo implement
+    }
+
+    private static final WeakHashMap<String, Logger> loggerMap = new WeakHashMap<>();
 
     public static Logger getLogger() {
         return getLogger(Utils.getCallerClassName());
@@ -48,8 +110,12 @@ public final class Reporter {
         return getLogger(aClass.getName());
     }
 
-    public static Logger getLogger(String name) {
-        return null;
+    public static synchronized Logger getLogger(String name) {
+        Logger logger = loggerMap.get(name);
+        if (logger == null) {
+            loggerMap.put(name, logger = new Logger(name));
+        }
+        return logger;
     }
 
 }
