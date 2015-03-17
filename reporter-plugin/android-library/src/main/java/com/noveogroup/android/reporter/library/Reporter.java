@@ -27,12 +27,15 @@
 package com.noveogroup.android.reporter.library;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.SystemClock;
 
 import com.noveogroup.android.reporter.library.system.ThreadInfo;
 import com.noveogroup.android.reporter.library.system.Utils;
 
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.WeakHashMap;
@@ -50,6 +53,13 @@ public final class Reporter {
             applicationContext = context.getApplicationContext();
         }
 
+        // save custom info
+        syncCustomInfo(applicationContext);
+
+        // send cached log events
+        sendCachedEvents(applicationContext);
+
+        // send info
         sendInfo(System.currentTimeMillis(), SystemClock.uptimeMillis(), Utils.getDeviceInfo(applicationContext));
     }
 
@@ -57,13 +67,49 @@ public final class Reporter {
         return applicationContext;
     }
 
+    private static final String CUSTOM_INFO_PREFERENCES = "com.noveogroup.android.reporter.library.preferences";
+    private static final Map<String, String> customInfoCache = new HashMap<>();
+
+    private static synchronized void syncCustomInfo(Context applicationContext) {
+        SharedPreferences preferences = applicationContext.getSharedPreferences(CUSTOM_INFO_PREFERENCES, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        for (Map.Entry<String, String> entry : customInfoCache.entrySet()) {
+            if (entry.getValue() == null) {
+                editor.remove(entry.getKey());
+            } else {
+                editor.putString(entry.getKey(), entry.getValue());
+            }
+        }
+        editor.commit();
+
+        customInfoCache.clear();
+        for (Map.Entry<String, ?> entry : preferences.getAll().entrySet()) {
+            customInfoCache.put(entry.getKey(), entry.getValue().toString());
+        }
+    }
+
     public static synchronized void putCustomInfo(String key, String value) {
-        // todo implement
+        if (applicationContext == null) {
+            customInfoCache.put(key, value);
+        } else {
+            SharedPreferences preferences = applicationContext.getSharedPreferences(CUSTOM_INFO_PREFERENCES, Context.MODE_PRIVATE);
+            preferences.edit()
+                    .putString(key, value)
+                    .commit();
+        }
     }
 
     public static synchronized Map<String, String> getCustomInfo() {
+        if (applicationContext == null) {
+            return Collections.unmodifiableMap(new HashMap<>(customInfoCache));
+        } else {
+            syncCustomInfo(applicationContext);
+            return customInfoCache;
+        }
+    }
+
+    private static synchronized void sendCachedEvents(Context applicationContext) {
         // todo implement
-        return null;
     }
 
     public static synchronized void sendCrash(long timestamp, long uptime,
