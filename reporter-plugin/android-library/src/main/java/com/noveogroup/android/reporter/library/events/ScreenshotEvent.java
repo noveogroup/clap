@@ -28,6 +28,8 @@ package com.noveogroup.android.reporter.library.events;
 
 import android.graphics.Bitmap;
 
+import com.noveogroup.android.reporter.library.system.Utils;
+
 public class ScreenshotEvent extends Event {
 
     public static ScreenshotEvent create(long timestamp, long uptime,
@@ -38,13 +40,13 @@ public class ScreenshotEvent extends Event {
         event.setUptime(uptime);
         event.setLoggerName(loggerName);
         event.setDescription(description);
-        event.setScreenshot(screenshot);
+        event.setScreenshot(Utils.encodeBitmap(screenshot));
         return event;
     }
 
     private String loggerName;
     private String description;
-    private Bitmap screenshot;
+    private byte[] screenshot;
 
     public String getLoggerName() {
         return loggerName;
@@ -62,11 +64,11 @@ public class ScreenshotEvent extends Event {
         this.description = description;
     }
 
-    public Bitmap getScreenshot() {
+    public byte[] getScreenshot() {
         return screenshot;
     }
 
-    public void setScreenshot(Bitmap screenshot) {
+    public void setScreenshot(byte[] screenshot) {
         this.screenshot = screenshot;
     }
 

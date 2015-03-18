@@ -31,6 +31,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Environment;
@@ -40,6 +41,7 @@ import android.util.Log;
 
 import com.noveogroup.android.reporter.library.Reporter;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -268,6 +270,15 @@ public class Utils {
         }
 
         return list;
+    }
+
+    public static byte[] encodeBitmap(Bitmap bitmap) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        if (bitmap != null && bitmap.compress(Bitmap.CompressFormat.JPEG, 10, outputStream)) {
+            return outputStream.toByteArray();
+        } else {
+            return null;
+        }
     }
 
 }

@@ -26,7 +26,9 @@
 
 package com.noveogroup.android.reporter.library.system;
 
-public class StackTraceItem {
+import java.io.Serializable;
+
+public class StackTraceItem implements Serializable {
 
     private String className;
     private String methodName;

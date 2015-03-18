@@ -26,9 +26,10 @@
 
 package com.noveogroup.android.reporter.library.system;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class ThreadInfo {
+public class ThreadInfo implements Serializable {
 
     private long id;
     private String name;

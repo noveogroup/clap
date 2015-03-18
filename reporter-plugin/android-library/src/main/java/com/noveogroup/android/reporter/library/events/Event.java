@@ -26,7 +26,9 @@
 
 package com.noveogroup.android.reporter.library.events;
 
-public abstract class Event {
+import java.io.Serializable;
+
+public abstract class Event implements Serializable {
 
     private long timestamp;
     private long uptime;
