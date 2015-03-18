@@ -38,6 +38,7 @@ import com.noveogroup.android.reporter.library.events.LogEvent;
 import com.noveogroup.android.reporter.library.events.LogcatEvent;
 import com.noveogroup.android.reporter.library.events.ScreenshotEvent;
 import com.noveogroup.android.reporter.library.events.SystemErrorEvent;
+import com.noveogroup.android.reporter.library.service.ReporterService;
 import com.noveogroup.android.reporter.library.system.ThreadInfo;
 import com.noveogroup.android.reporter.library.system.Utils;
 
@@ -123,7 +124,7 @@ public final class Reporter {
     private static synchronized void sendCachedEvents(Context applicationContext) {
         for (Iterator<Event> iterator = eventCache.iterator(); iterator.hasNext(); ) {
             Event event = iterator.next();
-            // todo send event
+            ReporterService.sendEvent(applicationContext, event);
             iterator.remove();
         }
     }

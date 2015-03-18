@@ -3,6 +3,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.noveogroup.android.reporter.library">
 
-    <application />
+    <application>
+
+        <service
+            android:name=".service.ReporterService"
+            android:description="@string/service_description"
+            android:exported="false"
+            android:icon="@mipmap/ic_reporter"
+            android:label="@string/service_label" />
+
+    </application>
 
 </manifest>
