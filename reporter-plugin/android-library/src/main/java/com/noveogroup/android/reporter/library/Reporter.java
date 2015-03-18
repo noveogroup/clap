@@ -56,13 +56,45 @@ public final class Reporter {
         throw new UnsupportedOperationException();
     }
 
-    private static volatile Context applicationContext;
+    static {
+        Reporter.initStatic();
+    }
 
-    public static synchronized void init(Context context) {
-        if (applicationContext == null) {
-            applicationContext = context.getApplicationContext();
+    private static final Object lock = new Object();
+    private static volatile boolean initStatic = false;
+    private static volatile boolean initContext = false;
+    private static volatile Context applicationContext = null;
+
+    public static void initStatic() {
+        synchronized (lock) {
+            if (!initStatic) {
+                doInitStatic();
+                initStatic = true;
+            }
         }
+    }
 
+    public static synchronized void initContext(Context context) {
+        synchronized (lock) {
+            if (!initContext) {
+                applicationContext = context.getApplicationContext();
+                doInitContext(applicationContext);
+                initContext = true;
+            }
+        }
+    }
+
+    public static Context getApplicationContext() {
+        synchronized (lock) {
+            return applicationContext;
+        }
+    }
+
+    private static void doInitStatic() {
+        // todo
+    }
+
+    private static void doInitContext(Context applicationContext) {
         // save custom info
         syncCustomInfo(applicationContext);
 
@@ -72,10 +104,6 @@ public final class Reporter {
         // send info
         sendInfo(System.currentTimeMillis(), SystemClock.uptimeMillis(),
                 Utils.getDeviceInfo(applicationContext, getCustomInfo()));
-    }
-
-    public static synchronized Context getApplicationContext() {
-        return applicationContext;
     }
 
     private static final String CUSTOM_INFO_PREFERENCES = "com.noveogroup.android.reporter.library.preferences";

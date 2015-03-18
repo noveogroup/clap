@@ -30,10 +30,14 @@ import android.app.Application;
 
 public final class ReporterApplication extends Application {
 
+    static {
+        Reporter.initStatic();
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
-        Reporter.init(this);
+        Reporter.initContext(this);
     }
 
 }
