@@ -91,7 +91,17 @@ public final class Reporter {
     }
 
     private static void doInitStatic() {
-        // todo
+        final Thread.UncaughtExceptionHandler previousHandler = Thread.getDefaultUncaughtExceptionHandler();
+        Thread.setDefaultUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+            @Override
+            public void uncaughtException(Thread thread, Throwable ex) {
+                try {
+                    getRootLogger().crash(thread, ex);
+                } finally {
+                    previousHandler.uncaughtException(thread, ex);
+                }
+            }
+        });
     }
 
     private static void doInitContext(Context applicationContext) {
@@ -215,6 +225,10 @@ public final class Reporter {
     }
 
     private static final WeakHashMap<String, Logger> loggerMap = new WeakHashMap<>();
+
+    public static Logger getRootLogger() {
+        return getLogger("");
+    }
 
     public static Logger getLogger() {
         return getLogger(Utils.getCallerClassName());
