@@ -35,11 +35,9 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import com.noveogroup.android.reporter.library.events.Event;
-import com.noveogroup.android.reporter.library.events.Message;
 import com.noveogroup.android.reporter.library.sender.Sender;
+import com.noveogroup.android.reporter.library.sender.SocketSender;
 import com.noveogroup.android.reporter.library.system.Utils;
-
-import java.util.List;
 
 public class ReporterService extends Service {
 
@@ -96,15 +94,11 @@ public class ReporterService extends Service {
 
         openHelper = new OpenHelper(this);
 
-        Sender sender = new Sender() {
-            @Override
-            public void send(String applicationId, String deviceId, List<Message<?>> message) {
-                // todo implement
-            }
-        };
+        Sender sender = new SocketSender("10.0.0.129", 8888);
         senderThread = new Thread(new SenderRunnable(openHelper, sender,
                 Utils.getApplicationId(this), Utils.getDeviceId(this),
                 MAX_SIZE_KB, DELAY));
+        senderThread.start();
     }
 
     @Override
@@ -112,7 +106,7 @@ public class ReporterService extends Service {
         if (ACTION_SEND.equals(intent.getAction())) {
             Event event = (Event) intent.getSerializableExtra(EXTRA_EVENT);
             openHelper.saveEvent(event);
-            return START_STICKY;
+            return START_NOT_STICKY;
         }
 
         return super.onStartCommand(intent, flags, startId);

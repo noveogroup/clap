@@ -43,16 +43,16 @@ public final class Reporter {
         throw new UnsupportedOperationException();
     }
 
-    static {
-        Reporter.initStatic();
-    }
-
     private static final Object lock = new Object();
     private static volatile boolean initStatic = false;
     private static volatile boolean initContext = false;
     private static volatile Context applicationContext = null;
 
     private static final List<Event> eventCache = new ArrayList<>();
+
+    static {
+        Reporter.initStatic();
+    }
 
     public static void initStatic() {
         synchronized (lock) {

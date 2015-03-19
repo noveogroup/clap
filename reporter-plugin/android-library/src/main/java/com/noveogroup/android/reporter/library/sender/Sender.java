@@ -28,10 +28,11 @@ package com.noveogroup.android.reporter.library.sender;
 
 import com.noveogroup.android.reporter.library.events.Message;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface Sender {
 
-    public void send(String applicationId, String deviceId, List<Message<?>> message);
+    public void send(String applicationId, String deviceId, List<Message<?>> messages) throws IOException;
 
 }
