@@ -96,7 +96,7 @@ public class Logger {
         Reporter.send(CrashEvent.create(
                 System.currentTimeMillis(), SystemClock.uptimeMillis(),
                 name, thread, exception, Utils.getThreadsInfo(),
-                Utils.getDeviceInfo(Reporter.getApplicationContext(), Reporter.getCustomInfo()),
+                Utils.getDeviceInfo(Reporter.getApplicationContext()),
                 description, info));
     }
 
