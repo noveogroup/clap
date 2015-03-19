@@ -62,7 +62,6 @@ public class ReporterService extends Service {
         alarmManager.cancel(pendingIntent);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
                 System.currentTimeMillis() + STARTER_INTERVAL, STARTER_INTERVAL, pendingIntent);
-
     }
 
     private static final String ACTION_SEND = "com.noveogroup.android.reporter.library.ACTION_SEND";
@@ -80,11 +79,19 @@ public class ReporterService extends Service {
         return null;
     }
 
+    private OpenHelper openHelper;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        openHelper = new OpenHelper(this);
+    }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (ACTION_SEND.equals(intent.getAction())) {
             Event event = (Event) intent.getSerializableExtra(EXTRA_EVENT);
-            // todo process event
+            openHelper.saveEvent(event);
             return START_STICKY;
         }
 
