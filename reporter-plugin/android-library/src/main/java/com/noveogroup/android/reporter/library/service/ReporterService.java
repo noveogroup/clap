@@ -35,6 +35,11 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import com.noveogroup.android.reporter.library.events.Event;
+import com.noveogroup.android.reporter.library.events.Message;
+import com.noveogroup.android.reporter.library.sender.Sender;
+import com.noveogroup.android.reporter.library.system.Utils;
+
+import java.util.List;
 
 public class ReporterService extends Service {
 
@@ -74,17 +79,32 @@ public class ReporterService extends Service {
         context.startService(intent);
     }
 
+    private static final int MAX_SIZE_KB = 1024;
+    private static final long DELAY = 30 * 1000;
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
 
     private OpenHelper openHelper;
+    private Thread senderThread;
 
     @Override
     public void onCreate() {
         super.onCreate();
+
         openHelper = new OpenHelper(this);
+
+        Sender sender = new Sender() {
+            @Override
+            public void send(String applicationId, String deviceId, List<Message<?>> message) {
+                // todo implement
+            }
+        };
+        senderThread = new Thread(new SenderRunnable(openHelper, sender,
+                Utils.getApplicationId(this), Utils.getDeviceId(this),
+                MAX_SIZE_KB, DELAY));
     }
 
     @Override
@@ -96,6 +116,12 @@ public class ReporterService extends Service {
         }
 
         return super.onStartCommand(intent, flags, startId);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        senderThread.interrupt();
     }
 
 }

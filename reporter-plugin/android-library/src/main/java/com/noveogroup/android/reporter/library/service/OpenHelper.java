@@ -85,13 +85,13 @@ public class OpenHelper extends SQLiteOpenHelper {
         }
     }
 
-    public List<Message<Event>> loadMessages(int maxSize) {
+    public List<Message<?>> loadMessages(int maxSize) {
         SQLiteDatabase db = getWritableDatabase();
 
         try {
             db.beginTransaction();
 
-            List<Message<Event>> messages = new ArrayList<>();
+            List<Message<?>> messages = new ArrayList<>();
 
             Cursor cursor = db.query(TABLE_MESSAGE, null, null, null, null, null, COLUMN_ID + " ASC");
             try {

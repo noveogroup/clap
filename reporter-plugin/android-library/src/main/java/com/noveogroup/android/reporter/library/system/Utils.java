@@ -29,6 +29,7 @@ package com.noveogroup.android.reporter.library.system;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -147,6 +148,16 @@ public class Utils {
     private static final String INFO_DATA_DISK_USAGE = "data-disk-usage";
     private static final String INFO_STORAGE_DISK_USAGE = "storage-disk-usage";
     private static final String INFO_RAM_USAGE = "ram-usage";
+
+    public static String getApplicationId(Context context) {
+        String packageName = context.getPackageName();
+        try {
+            PackageInfo info = context.getPackageManager().getPackageInfo(packageName, 0);
+            return String.format("%s[%s](%d)", packageName, info.versionName, info.versionCode);
+        } catch (PackageManager.NameNotFoundException e) {
+            return String.format("%s[?](?)", packageName);
+        }
+    }
 
     public static String getDeviceId(Context context) {
         return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
