@@ -29,6 +29,9 @@ package com.noveogroup.android.reporter.library;
 import android.graphics.Bitmap;
 import android.os.SystemClock;
 
+import com.noveogroup.android.reporter.library.events.CrashEvent;
+import com.noveogroup.android.reporter.library.events.LogEvent;
+import com.noveogroup.android.reporter.library.events.ScreenshotEvent;
 import com.noveogroup.android.reporter.library.system.Utils;
 
 public class Logger {
@@ -67,11 +70,11 @@ public class Logger {
     }
 
     public void crash(String description, Thread thread, Throwable exception) {
-        Reporter.sendCrash(
+        Reporter.send(CrashEvent.create(
                 System.currentTimeMillis(), SystemClock.uptimeMillis(),
                 name, description,
                 thread, exception,
-                Utils.getDeviceInfo(Reporter.getApplicationContext(), Reporter.getCustomInfo()), Utils.getThreadsInfo());
+                Utils.getDeviceInfo(Reporter.getApplicationContext(), Reporter.getCustomInfo()), Utils.getThreadsInfo()));
     }
 
     public void screenshot(Bitmap screenshot) {
@@ -79,10 +82,10 @@ public class Logger {
     }
 
     public void screenshot(String description, Bitmap screenshot) {
-        Reporter.sendScreenshot(
+        Reporter.send(ScreenshotEvent.create(
                 System.currentTimeMillis(), SystemClock.uptimeMillis(),
                 name, description,
-                screenshot);
+                screenshot));
     }
 
     public void t(String message) {
@@ -206,10 +209,10 @@ public class Logger {
     }
 
     private void sendLog(Level level, String message) {
-        Reporter.sendLog(
+        Reporter.send(LogEvent.create(
                 System.currentTimeMillis(), SystemClock.uptimeMillis(),
                 name, Thread.currentThread().getName(),
-                level, message);
+                level, message));
     }
 
 }

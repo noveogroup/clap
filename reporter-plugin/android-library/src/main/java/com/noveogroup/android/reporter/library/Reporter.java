@@ -28,18 +28,11 @@ package com.noveogroup.android.reporter.library;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.SystemClock;
 
-import com.noveogroup.android.reporter.library.events.CrashEvent;
 import com.noveogroup.android.reporter.library.events.Event;
 import com.noveogroup.android.reporter.library.events.InfoEvent;
-import com.noveogroup.android.reporter.library.events.LogEvent;
-import com.noveogroup.android.reporter.library.events.LogcatEvent;
-import com.noveogroup.android.reporter.library.events.ScreenshotEvent;
-import com.noveogroup.android.reporter.library.events.SystemErrorEvent;
 import com.noveogroup.android.reporter.library.service.ReporterService;
-import com.noveogroup.android.reporter.library.system.ThreadInfo;
 import com.noveogroup.android.reporter.library.system.Utils;
 
 import java.util.ArrayList;
@@ -112,8 +105,8 @@ public final class Reporter {
         sendCachedEvents(applicationContext);
 
         // send info
-        sendInfo(System.currentTimeMillis(), SystemClock.uptimeMillis(),
-                Utils.getDeviceInfo(applicationContext, getCustomInfo()));
+        send(InfoEvent.create(System.currentTimeMillis(), SystemClock.uptimeMillis(),
+                Utils.getDeviceInfo(applicationContext, getCustomInfo())));
     }
 
     private static final String CUSTOM_INFO_PREFERENCES = "com.noveogroup.android.reporter.library.preferences";
@@ -167,61 +160,11 @@ public final class Reporter {
         }
     }
 
-    private static synchronized void send(Event event) {
+    public static synchronized void send(Event event) {
         eventCache.add(event);
         if (applicationContext != null) {
             sendCachedEvents(applicationContext);
         }
-    }
-
-    public static synchronized void sendCrash(long timestamp, long uptime,
-                                              String loggerName, String description,
-                                              Thread thread, Throwable exception,
-                                              Map<String, String> deviceInfo, List<ThreadInfo> threads) {
-        send(CrashEvent.create(
-                timestamp, uptime,
-                loggerName, description,
-                thread, exception,
-                deviceInfo, threads));
-    }
-
-    public static synchronized void sendInfo(long timestamp, long uptime,
-                                             Map<String, String> deviceInfo) {
-        send(InfoEvent.create(
-                timestamp, uptime,
-                deviceInfo));
-    }
-
-    public static synchronized void sendLogcat(long timestamp, long uptime,
-                                               List<String> messages) {
-        send(LogcatEvent.create(
-                timestamp, uptime,
-                messages));
-    }
-
-    public static synchronized void sendLog(long timestamp, long uptime,
-                                            String loggerName, String threadName,
-                                            Logger.Level level, String message) {
-        send(LogEvent.create(
-                timestamp, uptime,
-                loggerName, threadName,
-                level, message));
-    }
-
-    public static synchronized void sendScreenshot(long timestamp, long uptime,
-                                                   String loggerName, String description,
-                                                   Bitmap screenshot) {
-        send(ScreenshotEvent.create(
-                timestamp, uptime,
-                loggerName, description,
-                screenshot));
-    }
-
-    public static synchronized void sendSystemError(long timestamp, long uptime,
-                                                    String description, Throwable exception) {
-        send(SystemErrorEvent.create(
-                timestamp, uptime,
-                description, exception));
     }
 
     private static final WeakHashMap<String, Logger> loggerMap = new WeakHashMap<>();
