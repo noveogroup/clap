@@ -24,39 +24,56 @@
  * THE SOFTWARE.
  */
 
-package com.noveogroup.android.reporter.library.events;
+package com.noveogroup.android.reporter.library.system;
 
-import com.noveogroup.android.reporter.library.system.Utils;
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
-public class SystemErrorEvent extends Event {
+public class Info implements Serializable {
 
-    public static SystemErrorEvent create(long timestamp, long uptime,
-                                          String description, Throwable exception) {
-        SystemErrorEvent event = new SystemErrorEvent();
-        event.setTimestamp(timestamp);
-        event.setUptime(uptime);
-        event.setDescription(description);
-        event.setException(Utils.getStackTrace(exception));
-        return event;
+    private final Map<String, String> map;
+
+    public Info() {
+        this(Collections.<String, String>emptyMap());
     }
 
-    private String description;
-    private String exception;
-
-    public String getDescription() {
-        return description;
+    public Info(Info info) {
+        this(info.map);
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public Info(Map<String, String> info) {
+        this.map = Collections.unmodifiableMap(new HashMap<>(info));
     }
 
-    public String getException() {
-        return exception;
+    public boolean contains(String key) {
+        return map.containsKey(key);
     }
 
-    public void setException(String exception) {
-        this.exception = exception;
+    public String get(String key) {
+        return map.get(key);
+    }
+
+    public Set<String> keySet() {
+        return map.keySet();
+    }
+
+    public Info put(String key, String value) {
+        HashMap<String, String> copyMap = new HashMap<>(map);
+        copyMap.put(key, value);
+        return new Info(copyMap);
+    }
+
+    public Info putAll(Map<String, String> info) {
+        HashMap<String, String> copyMap = new HashMap<>(map);
+        copyMap.putAll(info);
+        return new Info(copyMap);
+    }
+
+    public Info putAll(Info info) {
+        return putAll(info.map);
     }
 
 }

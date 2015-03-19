@@ -26,12 +26,12 @@
 
 package com.noveogroup.android.reporter.library.events;
 
-import java.util.Map;
+import com.noveogroup.android.reporter.library.system.Info;
 
 public class InfoEvent extends Event {
 
     public static InfoEvent create(long timestamp, long uptime,
-                                   Map<String, String> deviceInfo) {
+                                   Info deviceInfo) {
         InfoEvent event = new InfoEvent();
         event.setTimestamp(timestamp);
         event.setUptime(uptime);
@@ -39,13 +39,13 @@ public class InfoEvent extends Event {
         return event;
     }
 
-    private Map<String, String> deviceInfo;
+    private Info deviceInfo;
 
-    public Map<String, String> getDeviceInfo() {
+    public Info getDeviceInfo() {
         return deviceInfo;
     }
 
-    public void setDeviceInfo(Map<String, String> deviceInfo) {
+    public void setDeviceInfo(Info deviceInfo) {
         this.deviceInfo = deviceInfo;
     }
 

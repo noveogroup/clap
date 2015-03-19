@@ -37,6 +37,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.Settings;
+import android.util.Base64;
 import android.util.Log;
 
 import com.noveogroup.android.reporter.library.Reporter;
@@ -44,7 +45,6 @@ import com.noveogroup.android.reporter.library.Reporter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -221,7 +221,7 @@ public class Utils {
      * @param customInfo custom info map.
      * @return device info map.
      */
-    public static Map<String, String> getDeviceInfo(Context context, Map<String, String> customInfo) {
+    public static Info getDeviceInfo(Context context, Map<String, String> customInfo) {
         HashMap<String, String> map = new HashMap<>(customInfo);
 
         map.put(INFO_SYSTEM_LANGUAGE, getSystemLanguage(context));
@@ -235,7 +235,7 @@ public class Utils {
         map.put(INFO_STORAGE_DISK_USAGE, getDiskUsage(Environment.getExternalStorageDirectory()));
         map.put(INFO_RAM_USAGE, getRamUsage());
 
-        return Collections.unmodifiableMap(map);
+        return new Info(map);
     }
 
     public static String getStackTrace(Throwable throwable) {
@@ -272,10 +272,10 @@ public class Utils {
         return list;
     }
 
-    public static byte[] encodeBitmap(Bitmap bitmap) {
+    public static String encodeBitmap(Bitmap bitmap) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         if (bitmap != null && bitmap.compress(Bitmap.CompressFormat.JPEG, 10, outputStream)) {
-            return outputStream.toByteArray();
+            return Base64.encodeToString(outputStream.toByteArray(), Base64.NO_WRAP);
         } else {
             return null;
         }

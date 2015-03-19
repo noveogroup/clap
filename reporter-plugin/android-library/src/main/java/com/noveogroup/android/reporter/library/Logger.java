@@ -30,12 +30,14 @@ import android.graphics.Bitmap;
 import android.os.SystemClock;
 
 import com.noveogroup.android.reporter.library.events.CrashEvent;
-import com.noveogroup.android.reporter.library.events.InfoEvent;
+import com.noveogroup.android.reporter.library.events.ImageEvent;
 import com.noveogroup.android.reporter.library.events.LogEvent;
-import com.noveogroup.android.reporter.library.events.ScreenshotEvent;
+import com.noveogroup.android.reporter.library.system.Info;
 import com.noveogroup.android.reporter.library.system.Utils;
 
 public class Logger {
+
+    public static final String ROOT_LOGGER_NAME = "";
 
     public static enum Level {
 
@@ -51,6 +53,10 @@ public class Logger {
     private final String name;
 
     public Logger(String name) {
+        if (name == null) {
+            throw new NullPointerException();
+        }
+
         this.name = name;
     }
 
@@ -58,41 +64,58 @@ public class Logger {
         return name;
     }
 
-    public void info() {
-        Reporter.send(InfoEvent.create(
-                System.currentTimeMillis(), SystemClock.uptimeMillis(),
-                Utils.getDeviceInfo(Reporter.getApplicationContext(), Reporter.getCustomInfo())));
+    public void crash(Throwable exception) {
+        crash(Thread.currentThread(), exception, null, null);
     }
 
-    public void crash(Throwable exception) {
-        crash(null, Thread.currentThread(), exception);
+    public void crash(Throwable exception, String description) {
+        crash(Thread.currentThread(), exception, description, null);
+    }
+
+    public void crash(Throwable exception, Info info) {
+        crash(Thread.currentThread(), exception, null, info);
+    }
+
+    public void crash(Throwable exception, String description, Info info) {
+        crash(Thread.currentThread(), exception, description, info);
     }
 
     public void crash(Thread thread, Throwable exception) {
-        crash(null, thread, exception);
+        crash(thread, exception, null, null);
     }
 
-    public void crash(String description, Throwable exception) {
-        crash(description, Thread.currentThread(), exception);
+    public void crash(Thread thread, Throwable exception, String description) {
+        crash(thread, exception, description, null);
     }
 
-    public void crash(String description, Thread thread, Throwable exception) {
+    public void crash(Thread thread, Throwable exception, Info info) {
+        crash(thread, exception, null, info);
+    }
+
+    public void crash(Thread thread, Throwable exception, String description, Info info) {
         Reporter.send(CrashEvent.create(
                 System.currentTimeMillis(), SystemClock.uptimeMillis(),
-                name, description,
-                thread, exception,
-                Utils.getDeviceInfo(Reporter.getApplicationContext(), Reporter.getCustomInfo()), Utils.getThreadsInfo()));
+                name, thread, exception, Utils.getThreadsInfo(),
+                Utils.getDeviceInfo(Reporter.getApplicationContext(), Reporter.getCustomInfo()),
+                description, info));
     }
 
-    public void screenshot(Bitmap screenshot) {
-        screenshot(null, screenshot);
+    public void image(Bitmap image) {
+        image(image, null, null);
     }
 
-    public void screenshot(String description, Bitmap screenshot) {
-        Reporter.send(ScreenshotEvent.create(
+    public void image(Bitmap image, String description) {
+        image(image, description, null);
+    }
+
+    public void image(Bitmap image, Info info) {
+        image(image, null, info);
+    }
+
+    public void image(Bitmap image, String description, Info info) {
+        Reporter.send(ImageEvent.create(
                 System.currentTimeMillis(), SystemClock.uptimeMillis(),
-                name, description,
-                screenshot));
+                name, image, description, info));
     }
 
     public void t(String message) {

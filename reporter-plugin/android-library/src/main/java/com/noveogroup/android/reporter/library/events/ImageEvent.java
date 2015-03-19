@@ -28,25 +28,28 @@ package com.noveogroup.android.reporter.library.events;
 
 import android.graphics.Bitmap;
 
+import com.noveogroup.android.reporter.library.system.Info;
 import com.noveogroup.android.reporter.library.system.Utils;
 
-public class ScreenshotEvent extends Event {
+public class ImageEvent extends Event {
 
-    public static ScreenshotEvent create(long timestamp, long uptime,
-                                         String loggerName, String description,
-                                         Bitmap screenshot) {
-        ScreenshotEvent event = new ScreenshotEvent();
+    public static ImageEvent create(long timestamp, long uptime,
+                                    String loggerName, Bitmap image,
+                                    String description, Info info) {
+        ImageEvent event = new ImageEvent();
         event.setTimestamp(timestamp);
         event.setUptime(uptime);
         event.setLoggerName(loggerName);
+        event.setImageBase64(Utils.encodeBitmap(image));
         event.setDescription(description);
-        event.setScreenshot(Utils.encodeBitmap(screenshot));
+        event.setInfo(info);
         return event;
     }
 
     private String loggerName;
+    private String imageBase64;
     private String description;
-    private byte[] screenshot;
+    private Info info;
 
     public String getLoggerName() {
         return loggerName;
@@ -54,6 +57,14 @@ public class ScreenshotEvent extends Event {
 
     public void setLoggerName(String loggerName) {
         this.loggerName = loggerName;
+    }
+
+    public String getImageBase64() {
+        return imageBase64;
+    }
+
+    public void setImageBase64(String imageBase64) {
+        this.imageBase64 = imageBase64;
     }
 
     public String getDescription() {
@@ -64,12 +75,12 @@ public class ScreenshotEvent extends Event {
         this.description = description;
     }
 
-    public byte[] getScreenshot() {
-        return screenshot;
+    public Info getInfo() {
+        return info;
     }
 
-    public void setScreenshot(byte[] screenshot) {
-        this.screenshot = screenshot;
+    public void setInfo(Info info) {
+        this.info = info;
     }
 
 }

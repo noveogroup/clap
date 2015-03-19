@@ -26,36 +26,40 @@
 
 package com.noveogroup.android.reporter.library.events;
 
+import com.noveogroup.android.reporter.library.system.Info;
 import com.noveogroup.android.reporter.library.system.ThreadInfo;
 import com.noveogroup.android.reporter.library.system.Utils;
 
 import java.util.List;
-import java.util.Map;
 
 public class CrashEvent extends Event {
 
     public static CrashEvent create(long timestamp, long uptime,
-                                    String loggerName, String description,
+                                    String loggerName,
                                     Thread thread, Throwable exception,
-                                    Map<String, String> deviceInfo, List<ThreadInfo> threads) {
+                                    List<ThreadInfo> threads,
+                                    Info deviceInfo,
+                                    String description, Info info) {
         CrashEvent event = new CrashEvent();
         event.setTimestamp(timestamp);
         event.setUptime(uptime);
         event.setLoggerName(loggerName);
-        event.setDescription(description);
         event.setThreadId(thread.getId());
         event.setException(Utils.getStackTrace(exception));
-        event.setDeviceInfo(deviceInfo);
         event.setThreads(threads);
+        event.setDeviceInfo(deviceInfo);
+        event.setDescription(description);
+        event.setInfo(info);
         return event;
     }
 
     private String loggerName;
-    private String description;
     private long threadId;
     private String exception;
-    private Map<String, String> deviceInfo;
     private List<ThreadInfo> threads;
+    private Info deviceInfo;
+    private String description;
+    private Info info;
 
     public String getLoggerName() {
         return loggerName;
@@ -63,14 +67,6 @@ public class CrashEvent extends Event {
 
     public void setLoggerName(String loggerName) {
         this.loggerName = loggerName;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     public long getThreadId() {
@@ -89,20 +85,36 @@ public class CrashEvent extends Event {
         this.exception = exception;
     }
 
-    public Map<String, String> getDeviceInfo() {
-        return deviceInfo;
-    }
-
-    public void setDeviceInfo(Map<String, String> deviceInfo) {
-        this.deviceInfo = deviceInfo;
-    }
-
     public List<ThreadInfo> getThreads() {
         return threads;
     }
 
     public void setThreads(List<ThreadInfo> threads) {
         this.threads = threads;
+    }
+
+    public Info getDeviceInfo() {
+        return deviceInfo;
+    }
+
+    public void setDeviceInfo(Info deviceInfo) {
+        this.deviceInfo = deviceInfo;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Info getInfo() {
+        return info;
+    }
+
+    public void setInfo(Info info) {
+        this.info = info;
     }
 
 }
