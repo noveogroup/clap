@@ -30,6 +30,7 @@ import android.graphics.Bitmap;
 import android.os.SystemClock;
 
 import com.noveogroup.android.reporter.library.events.CrashEvent;
+import com.noveogroup.android.reporter.library.events.InfoEvent;
 import com.noveogroup.android.reporter.library.events.LogEvent;
 import com.noveogroup.android.reporter.library.events.ScreenshotEvent;
 import com.noveogroup.android.reporter.library.system.Utils;
@@ -55,6 +56,12 @@ public class Logger {
 
     public String getName() {
         return name;
+    }
+
+    public void info() {
+        Reporter.send(InfoEvent.create(
+                System.currentTimeMillis(), SystemClock.uptimeMillis(),
+                Utils.getDeviceInfo(Reporter.getApplicationContext(), Reporter.getCustomInfo())));
     }
 
     public void crash(Throwable exception) {

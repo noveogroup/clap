@@ -28,10 +28,8 @@ package com.noveogroup.android.reporter.library;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.SystemClock;
 
 import com.noveogroup.android.reporter.library.events.Event;
-import com.noveogroup.android.reporter.library.events.InfoEvent;
 import com.noveogroup.android.reporter.library.service.ReporterService;
 import com.noveogroup.android.reporter.library.system.Utils;
 
@@ -105,8 +103,7 @@ public final class Reporter {
         sendCachedEvents(applicationContext);
 
         // send info
-        send(InfoEvent.create(System.currentTimeMillis(), SystemClock.uptimeMillis(),
-                Utils.getDeviceInfo(applicationContext, getCustomInfo())));
+        getRootLogger().info();
     }
 
     private static final String CUSTOM_INFO_PREFERENCES = "com.noveogroup.android.reporter.library.preferences";
