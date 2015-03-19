@@ -12,6 +12,19 @@
             android:icon="@mipmap/ic_reporter"
             android:label="@string/service_label" />
 
+        <receiver
+            android:name=".service.ReporterService$Starter"
+            android:description="@string/starter_description"
+            android:icon="@mipmap/ic_reporter"
+            android:label="@string/starter_label">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_POWER_CONNECTED" />
+                <action android:name="android.intent.action.ACTION_POWER_DISCONNECTED" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
     </application>
 
 </manifest>

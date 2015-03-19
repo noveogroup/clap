@@ -26,7 +26,10 @@
 
 package com.noveogroup.android.reporter.library.service;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.app.Service;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
@@ -35,10 +38,37 @@ import com.noveogroup.android.reporter.library.events.Event;
 
 public class ReporterService extends Service {
 
+    public static class Starter extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            context.startService(new Intent(context, ReporterService.class));
+        }
+
+    }
+
+    private static final long STARTER_INTERVAL = 60 * 1000;
+
+    public static void initStarter(Context context) {
+        // create intents
+        Intent intent = new Intent(context, ReporterService.class);
+        PendingIntent pendingIntent = PendingIntent.getService(context.getApplicationContext(), 0, intent, 0);
+
+        // start service immediately
+        context.startService(intent);
+
+        // register reporting alarm
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+                System.currentTimeMillis() + STARTER_INTERVAL, STARTER_INTERVAL, pendingIntent);
+
+    }
+
     private static final String ACTION_SEND = "com.noveogroup.android.reporter.library.ACTION_SEND";
     private static final String EXTRA_EVENT = "com.noveogroup.android.reporter.library.EXTRA_EVENT";
 
-    public static void sendEvent(Context context, Event event) {
+    public static void send(Context context, Event event) {
         Intent intent = new Intent(context, ReporterService.class)
                 .setAction(ACTION_SEND)
                 .putExtra(EXTRA_EVENT, event);
@@ -54,7 +84,7 @@ public class ReporterService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (ACTION_SEND.equals(intent.getAction())) {
             Event event = (Event) intent.getSerializableExtra(EXTRA_EVENT);
-            stopSelf(startId); // todo process event
+            // todo process event
             return START_STICKY;
         }
 

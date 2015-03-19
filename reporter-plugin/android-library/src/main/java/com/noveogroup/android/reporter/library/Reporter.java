@@ -27,20 +27,14 @@
 package com.noveogroup.android.reporter.library;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.SystemClock;
 
 import com.noveogroup.android.reporter.library.events.Event;
-import com.noveogroup.android.reporter.library.events.InfoEvent;
 import com.noveogroup.android.reporter.library.service.ReporterService;
 import com.noveogroup.android.reporter.library.system.Utils;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.WeakHashMap;
 
 public final class Reporter {
@@ -58,6 +52,8 @@ public final class Reporter {
     private static volatile boolean initContext = false;
     private static volatile Context applicationContext = null;
 
+    private static final List<Event> eventCache = new ArrayList<>();
+
     public static void initStatic() {
         synchronized (lock) {
             if (!initStatic) {
@@ -67,7 +63,7 @@ public final class Reporter {
         }
     }
 
-    public static synchronized void initContext(Context context) {
+    public static void initContext(Context context) {
         synchronized (lock) {
             if (!initContext) {
                 applicationContext = context.getApplicationContext();
@@ -98,73 +94,26 @@ public final class Reporter {
     }
 
     private static void doInitContext(Context applicationContext) {
-        // save custom info
-        syncCustomInfo(applicationContext);
-
-        // send cached log events
-        sendCachedEvents(applicationContext);
-
-        // send info
-        Reporter.send(InfoEvent.create(
-                System.currentTimeMillis(), SystemClock.uptimeMillis(),
-                Utils.getDeviceInfo(Reporter.getApplicationContext(), Reporter.getCustomInfo())));
+        ReporterService.initStarter(applicationContext);
+        sendCachedEvents();
     }
 
-    private static final String CUSTOM_INFO_PREFERENCES = "com.noveogroup.android.reporter.library.preferences";
-    private static final Map<String, String> customInfoCache = new HashMap<>();
+    public static <E extends Event> void send(E event) {
+        synchronized (lock) {
+            eventCache.add(event);
+            sendCachedEvents();
+        }
+    }
 
-    private static synchronized void syncCustomInfo(Context applicationContext) {
-        SharedPreferences preferences = applicationContext.getSharedPreferences(CUSTOM_INFO_PREFERENCES, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        for (Map.Entry<String, String> entry : customInfoCache.entrySet()) {
-            if (entry.getValue() == null) {
-                editor.remove(entry.getKey());
-            } else {
-                editor.putString(entry.getKey(), entry.getValue());
+    private static void sendCachedEvents() {
+        synchronized (lock) {
+            if (applicationContext != null) {
+                for (Iterator<Event> iterator = eventCache.iterator(); iterator.hasNext(); ) {
+                    Event event = iterator.next();
+                    ReporterService.send(applicationContext, event);
+                    iterator.remove();
+                }
             }
-        }
-        editor.commit();
-
-        customInfoCache.clear();
-        for (Map.Entry<String, ?> entry : preferences.getAll().entrySet()) {
-            customInfoCache.put(entry.getKey(), entry.getValue().toString());
-        }
-    }
-
-    public static synchronized void putCustomInfo(String key, String value) {
-        if (applicationContext == null) {
-            customInfoCache.put(key, value);
-        } else {
-            SharedPreferences preferences = applicationContext.getSharedPreferences(CUSTOM_INFO_PREFERENCES, Context.MODE_PRIVATE);
-            preferences.edit()
-                    .putString(key, value)
-                    .commit();
-        }
-    }
-
-    public static synchronized Map<String, String> getCustomInfo() {
-        if (applicationContext == null) {
-            return Collections.unmodifiableMap(new HashMap<>(customInfoCache));
-        } else {
-            syncCustomInfo(applicationContext);
-            return customInfoCache;
-        }
-    }
-
-    private static final List<Event> eventCache = new ArrayList<>();
-
-    private static synchronized void sendCachedEvents(Context applicationContext) {
-        for (Iterator<Event> iterator = eventCache.iterator(); iterator.hasNext(); ) {
-            Event event = iterator.next();
-            ReporterService.sendEvent(applicationContext, event);
-            iterator.remove();
-        }
-    }
-
-    public static synchronized void send(Event event) {
-        eventCache.add(event);
-        if (applicationContext != null) {
-            sendCachedEvents(applicationContext);
         }
     }
 
@@ -182,12 +131,14 @@ public final class Reporter {
         return getLogger(aClass.getName());
     }
 
-    public static synchronized Logger getLogger(String name) {
-        Logger logger = loggerMap.get(name);
-        if (logger == null) {
-            loggerMap.put(name, logger = new Logger(name));
+    public static Logger getLogger(String name) {
+        synchronized (lock) {
+            Logger logger = loggerMap.get(name);
+            if (logger == null) {
+                loggerMap.put(name, logger = new Logger(name));
+            }
+            return logger;
         }
-        return logger;
     }
 
 }
