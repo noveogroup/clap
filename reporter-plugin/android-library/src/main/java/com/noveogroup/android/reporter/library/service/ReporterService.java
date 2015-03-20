@@ -77,8 +77,11 @@ public class ReporterService extends Service {
         context.startService(intent);
     }
 
-    private static final int MAX_SIZE_KB = 1024;
-    private static final long DELAY = 30 * 1000;
+    private static final int SENDER_MAX_SIZE_KB = 1024;
+    private static final long SENDER_DELAY = 10 * 1000;
+    private static final long INFO_DELAY = 60 * 1000;
+    private static final int LOGCAT_MAX_SIZE = 100;
+    private static final long LOGCAT_DELAY = 10 * 1000;
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -87,6 +90,8 @@ public class ReporterService extends Service {
 
     private OpenHelper openHelper;
     private Thread senderThread;
+    private final InfoSender infoSender = new InfoSender(INFO_DELAY);
+    private final LogcatReader logcatReader = new LogcatReader(LOGCAT_MAX_SIZE, LOGCAT_DELAY);
 
     @Override
     public void onCreate() {
@@ -97,8 +102,10 @@ public class ReporterService extends Service {
         Sender sender = new SocketSender("10.0.0.129", 8888);
         senderThread = new Thread(new SenderRunnable(openHelper, sender,
                 Utils.getApplicationId(this), Utils.getDeviceId(this),
-                MAX_SIZE_KB, DELAY));
+                SENDER_MAX_SIZE_KB, SENDER_DELAY));
         senderThread.start();
+        infoSender.start();
+        logcatReader.start();
     }
 
     @Override
@@ -116,6 +123,8 @@ public class ReporterService extends Service {
     public void onDestroy() {
         super.onDestroy();
         senderThread.interrupt();
+        infoSender.interrupt();
+        logcatReader.interrupt();
     }
 
 }
