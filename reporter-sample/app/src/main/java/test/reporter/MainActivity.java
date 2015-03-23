@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.noveogroup.android.reporter.library.Log;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +27,7 @@ public class MainActivity extends Activity {
         findViewById(R.id.main_log).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Log.i(String.format("now is %1$tF %1$tT", System.currentTimeMillis()));
                 LOGGER.info(String.format("now is %1$tF %1$tT", System.currentTimeMillis()));
             }
         });
