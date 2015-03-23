@@ -30,6 +30,7 @@ import java.io.Serializable;
 
 public abstract class Event implements Serializable {
 
+    private final String type = getClass().getName();
     private long timestamp;
     private long uptime;
 
