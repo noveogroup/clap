@@ -27,6 +27,14 @@ publishing {
                 asNode().appendNode('description', project.description)
                 asNode().appendNode('url', project.ext.website)
                 asNode().children().last() + project.ext.pom
+
+                Node dependenciesNode = asNode().appendNode('dependencies')
+                configurations.compile.allDependencies.each {
+                    Node dependencyNode = dependenciesNode.appendNode('dependency')
+                    dependencyNode.appendNode('groupId', it.group)
+                    dependencyNode.appendNode('artifactId', it.name)
+                    dependencyNode.appendNode('version', it.version)
+                }
             }
         }
     }
