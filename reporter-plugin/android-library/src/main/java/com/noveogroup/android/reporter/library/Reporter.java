@@ -27,8 +27,10 @@
 package com.noveogroup.android.reporter.library;
 
 import android.content.Context;
+import android.os.SystemClock;
 
 import com.noveogroup.android.reporter.library.events.Event;
+import com.noveogroup.android.reporter.library.events.InfoEvent;
 import com.noveogroup.android.reporter.library.service.ReporterService;
 import com.noveogroup.android.reporter.library.system.Utils;
 
@@ -91,6 +93,9 @@ public final class Reporter {
                 }
             }
         });
+        send(InfoEvent.create(
+                System.currentTimeMillis(), SystemClock.uptimeMillis(),
+                Utils.getDeviceInfo(null)));
     }
 
     private static void doInitContext(Context applicationContext) {
