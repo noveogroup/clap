@@ -11,6 +11,10 @@
         android:icon="@drawable/ic_launcher"
         android:label="@string/application_name">
 
+        <meta-data
+            android:name="com.noveogroup.android.reporter.ENDPOINT"
+            android:value="http://10.0.0.129:8888/" />
+
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait">

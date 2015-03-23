@@ -36,7 +36,7 @@ import android.os.IBinder;
 
 import com.noveogroup.android.reporter.library.events.Event;
 import com.noveogroup.android.reporter.library.sender.Sender;
-import com.noveogroup.android.reporter.library.sender.SocketSender;
+import com.noveogroup.android.reporter.library.sender.SenderLoader;
 import com.noveogroup.android.reporter.library.system.Utils;
 
 public class ReporterService extends Service {
@@ -99,7 +99,7 @@ public class ReporterService extends Service {
 
         openHelper = new OpenHelper(this);
 
-        Sender sender = new SocketSender("10.0.0.129", 8888);
+        Sender sender = SenderLoader.load(this);
         senderThread = new Thread(new SenderRunnable(openHelper, sender,
                 Utils.getApplicationId(this), Utils.getDeviceId(this),
                 SENDER_MAX_SIZE_KB, SENDER_DELAY));
