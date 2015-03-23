@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <resources>
-    <string name="application_name">Example</string>
+    <string name="application_name">Reporter Test</string>
+
+    <string name="main_log">Log</string>
+    <string name="main_crash">Crash</string>
 </resources>
