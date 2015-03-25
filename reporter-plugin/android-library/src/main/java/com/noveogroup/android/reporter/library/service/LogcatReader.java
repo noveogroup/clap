@@ -125,7 +125,7 @@ public class LogcatReader {
             while (logcat.size() > 0) {
                 // get messages
                 List<String> list = new ArrayList<>();
-                for (int size = 0; size < maxSizeKb * 1024; ) {
+                for (int size = 0; size < maxSizeKb * 1024 && logcat.size() > 0; ) {
                     String line = logcat.remove(0);
                     list.add(line);
                     size += line.length();
