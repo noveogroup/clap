@@ -45,14 +45,12 @@ public class RestSender implements Sender {
 
     }
 
-    private final String endpoint;
     private final SenderService senderService;
 
     public RestSender(String endpoint) {
-        this.endpoint = endpoint;
-
         RestAdapter restAdapter = new RestAdapter.Builder()
                 .setEndpoint(endpoint)
+                .setLogLevel(RestAdapter.LogLevel.NONE)
                 .build();
         this.senderService = restAdapter.create(SenderService.class);
     }
