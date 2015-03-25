@@ -6,15 +6,33 @@
     android:orientation="vertical">
 
     <Button
-        android:id="@+id/main_log"
+        android:id="@+id/main_system_crash"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/main_log" />
+        android:text="@string/main_system_crash" />
 
     <Button
-        android:id="@+id/main_crash"
+        android:id="@+id/main_system_logcat"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/main_crash" />
+        android:text="@string/main_system_logcat" />
+
+    <Button
+        android:id="@+id/main_reporter_crash"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/main_reporter_crash" />
+
+    <Button
+        android:id="@+id/main_reporter_log"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/main_reporter_log" />
+
+    <Button
+        android:id="@+id/main_reporter_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/main_reporter_image" />
 
 </LinearLayout>

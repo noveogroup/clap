@@ -3,6 +3,9 @@
 <resources>
     <string name="application_name">Reporter Test</string>
 
-    <string name="main_log">Log</string>
-    <string name="main_crash">Crash</string>
+    <string name="main_system_crash">System Crash</string>
+    <string name="main_system_logcat">System Logcat</string>
+    <string name="main_reporter_crash">Reporter Crash</string>
+    <string name="main_reporter_log">Reporter Log</string>
+    <string name="main_reporter_image">Reporter Image</string>
 </resources>
