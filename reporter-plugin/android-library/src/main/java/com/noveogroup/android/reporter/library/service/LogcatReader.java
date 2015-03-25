@@ -41,36 +41,39 @@ public class LogcatReader {
     private static final String LOGCAT_COMMAND = "logcat -v time";
     private static final long RETRY_TIME = 10 * 1000;
 
-    private final int maxSize;
+    private final int maxSizeKb;
     private final long delay;
 
     private final List<String> logcat = new ArrayList<>();
     private final Thread readThread = new Thread() {
+        private void readLogcat() {
+            try {
+
+                Process process = null;
+                try {
+                    process = Runtime.getRuntime().exec(LOGCAT_COMMAND);
+
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+                    for (String line = ""; line != null; line = reader.readLine()) {
+                        appendLogcat(line);
+                    }
+                } finally {
+                    if (process != null) {
+                        process.destroy();
+                    }
+                }
+
+            } catch (Exception ignored) {
+                // ignore exception, we will retry to read logcat later
+            }
+        }
+
         @Override
         public void run() {
             try {
                 while (!isInterrupted()) {
-                    try {
+                    readLogcat();
 
-                        Process process = null;
-                        try {
-                            process = Runtime.getRuntime().exec(LOGCAT_COMMAND);
-
-                            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-                            for (String line = ""; line != null; line = reader.readLine()) {
-                                appendLine(line);
-                            }
-                        } finally {
-                            if (process != null) {
-                                process.destroy();
-                            }
-                        }
-
-                    } catch (Exception ignored) {
-                        // ignore exception, we will retry to read logcat later
-                    }
-
-                    // wait before retry reading
                     Thread.sleep(RETRY_TIME);
                 }
             } catch (InterruptedException ignored) {
@@ -82,63 +85,57 @@ public class LogcatReader {
         @Override
         public void run() {
             try {
-                long lastSendTime = 0;
                 while (!isInterrupted()) {
+                    // wait for messages
                     synchronized (logcat) {
-                        while (logcat.size() < maxSize) {
-                            long remainingDelay = delay - (SystemClock.uptimeMillis() - lastSendTime);
-                            if (remainingDelay > 0) {
-                                logcat.wait(remainingDelay);
-                            } else {
-                                break;
-                            }
-                        }
-
-                        if (logcat.size() > 0) {
-                            List<String> list = new ArrayList<>();
-                            for (int i = 0; i < maxSize; i++) {
-                                if (logcat.size() <= 0) {
-                                    break;
-                                } else {
-                                    list.add(logcat.remove(0));
-                                }
-                            }
-                            send(list);
-                            lastSendTime = SystemClock.uptimeMillis();
+                        while (logcat.size() <= 0) {
+                            logcat.wait();
                         }
                     }
+
+                    // wait a bit more
+                    Thread.sleep(delay);
+
+                    // send logcat messages
+                    sendLogcat();
                 }
             } catch (InterruptedException ignored) {
                 // exit when interrupted
             } finally {
                 // send rest of messages
-                synchronized (logcat) {
-                    if (logcat.size() > 0) {
-                        send(new ArrayList<>(logcat));
-                        logcat.clear();
-                    }
-                }
+                sendLogcat();
             }
         }
     };
 
-    public LogcatReader(int maxSize, long delay) {
-        this.maxSize = maxSize;
+    public LogcatReader(int maxSizeKb, long delay) {
+        this.maxSizeKb = maxSizeKb;
         this.delay = delay;
     }
 
-    private void appendLine(String line) {
+    private void appendLogcat(String line) {
         synchronized (logcat) {
             logcat.add(line);
-            if (logcat.size() >= maxSize) {
-                logcat.notifyAll();
-            }
+            logcat.notifyAll();
         }
     }
 
-    private void send(List<String> lines) {
-        Reporter.send(LogcatEvent.create(
-                System.currentTimeMillis(), SystemClock.uptimeMillis(), lines));
+    private void sendLogcat() {
+        synchronized (logcat) {
+            while (logcat.size() > 0) {
+                // get messages
+                List<String> list = new ArrayList<>();
+                for (int size = 0; size < maxSizeKb * 1024; ) {
+                    String line = logcat.remove(0);
+                    list.add(line);
+                    size += line.length();
+                }
+
+                // send messages
+                Reporter.send(LogcatEvent.create(
+                        System.currentTimeMillis(), SystemClock.uptimeMillis(), list));
+            }
+        }
     }
 
     public void start() {

@@ -27,29 +27,33 @@ public class SenderRunnable implements Runnable {
         this.delay = delay;
     }
 
-    @Override
-    public void run() {
-        while (!Thread.interrupted()) {
-            while (true) {
-                try {
-                    List<Message<?>> messages = openHelper.loadMessages(maxSizeKb * 1024);
-                    if (messages.size() <= 0) {
-                        break;
-                    } else {
-                        sender.send(applicationId, deviceId, messages);
-                        openHelper.deleteMessage(messages);
-                    }
-                } catch (Exception ignored) {
-                    // try to send later, if we cannot send them now
-                    break;
-                }
-            }
-
+    private void sendMessages() {
+        while (true) {
             try {
-                Thread.sleep(delay);
-            } catch (InterruptedException ignored) {
+                List<Message<?>> messages = openHelper.loadMessages(maxSizeKb * 1024);
+                if (messages.size() <= 0) {
+                    break;
+                } else {
+                    sender.send(applicationId, deviceId, messages);
+                    openHelper.deleteMessage(messages);
+                }
+            } catch (Exception ignored) {
+                // try to send later, if we cannot send them now
                 break;
             }
+        }
+    }
+
+    @Override
+    public void run() {
+        try {
+            while (!Thread.interrupted()) {
+                sendMessages();
+
+                Thread.sleep(delay);
+            }
+        } catch (InterruptedException ignored) {
+            // exit when interrupted
         }
     }
 
