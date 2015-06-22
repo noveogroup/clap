@@ -3,6 +3,10 @@ Reporter - Plugin
 
 TODO: description
 
+TODO: rename the project
+
+TODO: how handle system exceptions (not from app but from plugin & library)?
+
 License
 =======
 

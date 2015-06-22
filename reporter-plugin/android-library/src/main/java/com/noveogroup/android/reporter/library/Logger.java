@@ -100,6 +100,8 @@ public class Logger {
                 description, info));
     }
 
+    // TODO improve API for screenshots
+
     public void image(Bitmap image) {
         image(image, null, null);
     }
