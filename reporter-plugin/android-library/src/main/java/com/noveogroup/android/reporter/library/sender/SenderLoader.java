@@ -36,16 +36,15 @@ public final class SenderLoader {
         throw new UnsupportedOperationException();
     }
 
-    private static final String META_SENDER_ENDPOINT = "com.noveogroup.android.reporter.ENDPOINT";
+    private static final String META_SENDER = "com.noveogroup.android.reporter.SENDER";
 
-    public static Sender load(Context context) {
-        try {
-            ApplicationInfo info = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
-            String endpoint = info.metaData.getString(META_SENDER_ENDPOINT);
-            return endpoint == null ? null : new RestSender(endpoint);
-        } catch (PackageManager.NameNotFoundException e) {
-            return null;
-        }
+    public static Sender load(Context context) throws Exception {
+        ApplicationInfo info = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+        String senderClassName = info.metaData.getString(META_SENDER);
+        Class<?> senderClass = Class.forName(senderClassName);
+        Sender sender = (Sender) senderClass.newInstance();
+        sender.init(context, info.metaData);
+        return sender;
     }
 
 }

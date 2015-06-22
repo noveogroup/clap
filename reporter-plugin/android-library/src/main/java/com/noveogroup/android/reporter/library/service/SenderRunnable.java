@@ -26,15 +26,19 @@
 
 package com.noveogroup.android.reporter.library.service;
 
+import android.content.Context;
+import android.util.Log;
+
 import com.noveogroup.android.reporter.library.events.Message;
 import com.noveogroup.android.reporter.library.sender.Sender;
+import com.noveogroup.android.reporter.library.sender.SenderLoader;
 
 import java.util.List;
 
 public class SenderRunnable implements Runnable {
 
+    private final Context context;
     private final OpenHelper openHelper;
-    private final Sender sender;
 
     private final String applicationId;
     private final String deviceId;
@@ -42,18 +46,18 @@ public class SenderRunnable implements Runnable {
     private final int maxSizeKb;
     private final long delay;
 
-    public SenderRunnable(OpenHelper openHelper, Sender sender,
+    public SenderRunnable(Context context, OpenHelper openHelper,
                           String applicationId, String deviceId,
                           int maxSizeKb, long delay) {
+        this.context = context.getApplicationContext();
         this.openHelper = openHelper;
-        this.sender = sender;
         this.applicationId = applicationId;
         this.deviceId = deviceId;
         this.maxSizeKb = maxSizeKb;
         this.delay = delay;
     }
 
-    private void sendMessages() {
+    private void sendMessages(Sender sender) {
         while (true) {
             try {
                 List<Message<?>> messages = openHelper.loadMessages(maxSizeKb * 1024);
@@ -72,9 +76,18 @@ public class SenderRunnable implements Runnable {
 
     @Override
     public void run() {
+        Sender sender = null;
+        try {
+            sender = SenderLoader.load(context);
+        } catch (Exception e) {
+            // TODO handle exception properly
+            Log.e("XXX", "", e);
+        }
+        // TODO sender can be null
+
         try {
             while (!Thread.interrupted()) {
-                sendMessages();
+                sendMessages(sender);
 
                 Thread.sleep(delay);
             }

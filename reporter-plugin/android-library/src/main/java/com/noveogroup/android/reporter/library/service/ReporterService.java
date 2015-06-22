@@ -35,8 +35,6 @@ import android.content.Intent;
 import android.os.IBinder;
 
 import com.noveogroup.android.reporter.library.events.Event;
-import com.noveogroup.android.reporter.library.sender.Sender;
-import com.noveogroup.android.reporter.library.sender.SenderLoader;
 import com.noveogroup.android.reporter.library.system.Utils;
 
 public class ReporterService extends Service {
@@ -99,8 +97,7 @@ public class ReporterService extends Service {
 
         openHelper = new OpenHelper(this);
 
-        Sender sender = SenderLoader.load(this);
-        senderThread = new Thread(new SenderRunnable(openHelper, sender,
+        senderThread = new Thread(new SenderRunnable(this, openHelper,
                 Utils.getApplicationId(this), Utils.getDeviceId(this),
                 SENDER_MAX_SIZE_KB, SENDER_DELAY));
         senderThread.start();

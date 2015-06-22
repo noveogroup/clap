@@ -26,13 +26,17 @@
 
 package com.noveogroup.android.reporter.library.sender;
 
+import android.content.Context;
+import android.os.Bundle;
+
 import com.noveogroup.android.reporter.library.events.Message;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface Sender {
 
-    public void send(String applicationId, String deviceId, List<Message<?>> messages) throws IOException;
+    public void init(Context context, Bundle meta) throws Exception;
+
+    public void send(String applicationId, String deviceId, List<Message<?>> messages) throws Exception;
 
 }
