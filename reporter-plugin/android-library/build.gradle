@@ -2,7 +2,7 @@ apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 22
-    buildToolsVersion '22.0.0'
+    buildToolsVersion '22.0.1'
 
     defaultConfig {
         versionCode 1
@@ -20,9 +20,40 @@ android {
 }
 
 dependencies {
-    compile 'com.google.code.gson:gson:2.3.1'
-    compile 'com.squareup.retrofit:retrofit:1.9.0'
+    compile('com.google.gdata:core:1.47.1') {
+        exclude group: 'javax.mail'
+        exclude group: 'org.mortbay.jetty'
+        exclude group: 'org.apache.httpcomponents'
+        exclude group: 'xpp3'
+    }
 }
+/*
+  <dependencies>
+    <dependency>
+      <groupId>com.google.gdata</groupId>
+      <artifactId>core</artifactId>
+      <version>1.47.1</version>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.mail</groupId>
+          <artifactId>mail</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.mortbay.jetty</groupId>
+          <artifactId>jetty</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.apache.httpcomponents</groupId>
+          <artifactId>httpclient</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>xpp3</groupId>
+          <artifactId>xpp3</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+  </dependencies>
+*/
 
 group = 'com.noveogroup.android.reporter'
 version = '0.1.0'

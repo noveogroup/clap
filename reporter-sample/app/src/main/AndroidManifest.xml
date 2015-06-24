@@ -12,8 +12,18 @@
         android:label="@string/application_name">
 
         <meta-data
-            android:name="com.noveogroup.android.reporter.ENDPOINT"
-            android:value="http://10.0.0.129:8888/" />
+            android:name="com.noveogroup.android.reporter.SENDER"
+            android:value="com.noveogroup.android.reporter.library.sender.GoogleSender" />
+        <!-- https://docs.google.com/spreadsheets/d/1bts03f5dFL3cLuTiNsrTaH4dBebvXNGJ7-Dp5gw7E5Q -->
+        <meta-data
+            android:name="com.noveogroup.android.reporter.SPREADSHEET"
+            android:value="1bts03f5dFL3cLuTiNsrTaH4dBebvXNGJ7-Dp5gw7E5Q" />
+        <meta-data
+            android:name="com.noveogroup.android.reporter.USERNAME"
+            android:value="noveo.test" />
+        <meta-data
+            android:name="com.noveogroup.android.reporter.PASSWORD"
+            android:value="noveonsk" />
 
         <activity
             android:name=".MainActivity"
