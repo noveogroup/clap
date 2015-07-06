@@ -41,10 +41,15 @@ dependencies {
     compile project(':libs:some-android-library')
     compile project(':libs:some-java-library')
 
-    compile('com.noveogroup.android.reporter:android-library:0.1.0') {
+    compile('com.google.api-client:google-api-client:1.20.0') {
+        exclude group: 'org.apache.httpcomponents'
+        exclude group: 'com.google.guava'
+    }
+    compile('com.google.gdata:core:1.47.1') {
         exclude group: 'javax.mail'
         exclude group: 'org.mortbay.jetty'
         exclude group: 'org.apache.httpcomponents'
         exclude group: 'xpp3'
     }
+    compile 'com.noveogroup.android.reporter:android-library:0.1.0'
 }
