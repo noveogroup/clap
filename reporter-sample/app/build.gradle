@@ -51,5 +51,11 @@ dependencies {
         exclude group: 'org.apache.httpcomponents'
         exclude group: 'xpp3'
     }
-    compile 'com.noveogroup.android.reporter:android-library:0.1.0'
+    compile('com.noveogroup.android.reporter:android-library:0.1.0') {
+        exclude group: 'com.google.guava'
+        exclude group: 'javax.mail'
+        exclude group: 'org.mortbay.jetty'
+        exclude group: 'org.apache.httpcomponents'
+        exclude group: 'xpp3'
+    }
 }
