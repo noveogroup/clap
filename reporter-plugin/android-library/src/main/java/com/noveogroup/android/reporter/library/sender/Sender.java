@@ -37,6 +37,6 @@ public interface Sender {
 
     public void init(Context context, Bundle meta) throws Exception;
 
-    public void send(String applicationId, String deviceId, List<Message<?>> messages) throws Exception;
+    public boolean send(String applicationId, String deviceId, List<Message<?>> messages) throws Exception;
 
 }
