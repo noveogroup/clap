@@ -2,6 +2,7 @@
 
 <resources>
 
+    <!-- TODO this resources are public !!! -->
     <string name="service_label">Reporter</string>
     <string name="service_description">This service sends logs to remote server</string>
     <string name="starter_label">Reporter starter</string>

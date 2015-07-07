@@ -288,6 +288,7 @@ public class Utils {
 
     public static String encodeBitmap(Bitmap bitmap) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        // TODO do not compress bitmap here
         if (bitmap != null && bitmap.compress(Bitmap.CompressFormat.JPEG, 10, outputStream)) {
             return Base64.encodeToString(outputStream.toByteArray(), Base64.NO_WRAP);
         } else {
