@@ -64,9 +64,10 @@ public class SenderRunnable implements Runnable {
                 if (messages.size() <= 0) {
                     break;
                 } else {
-                    if (sender.send(applicationId, deviceId, messages)) {
-                        openHelper.deleteMessage(messages);
+                    if (!sender.send(applicationId, deviceId, messages)) {
+                        break;
                     }
+                    openHelper.deleteMessage(messages);
                 }
             } catch (Exception e) {
                 // TODO handle exception properly
