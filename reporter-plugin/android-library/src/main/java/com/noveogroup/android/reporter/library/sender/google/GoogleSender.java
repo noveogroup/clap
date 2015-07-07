@@ -36,9 +36,14 @@ import java.util.List;
 
 public class GoogleSender implements Sender {
 
+    public static final String META_SPREADSHEET = "com.noveogroup.android.reporter.SPREADSHEET";
+    public static final String META_CLIENT_ID = "com.noveogroup.android.reporter.CLIEND_ID";
+    public static final String META_CLIENT_SECRET = "com.noveogroup.android.reporter.CLIENT_SECRET";
+    public static final String META_REDIRECT_URI = "com.noveogroup.android.reporter.REDIRECT_URI";
+
     @Override
     public void init(Context context, Bundle meta) throws Exception {
-
+        InitActivity.start(context, meta);
     }
 
     @Override

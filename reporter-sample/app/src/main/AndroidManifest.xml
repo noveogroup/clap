@@ -19,11 +19,14 @@
             android:name="com.noveogroup.android.reporter.SPREADSHEET"
             android:value="1bts03f5dFL3cLuTiNsrTaH4dBebvXNGJ7-Dp5gw7E5Q" />
         <meta-data
-            android:name="com.noveogroup.android.reporter.USERNAME"
-            android:value="noveo.test" />
+            android:name="com.noveogroup.android.reporter.CLIEND_ID"
+            android:value="490993927495-i2p8vdrjuiucjsdlguudbapmq6625c45.apps.googleusercontent.com" />
         <meta-data
-            android:name="com.noveogroup.android.reporter.PASSWORD"
-            android:value="noveonsk" />
+            android:name="com.noveogroup.android.reporter.CLIENT_SECRET"
+            android:value="pGO3fVqiukex4SB9Jbi0jY7y" />
+        <meta-data
+            android:name="com.noveogroup.android.reporter.REDIRECT_URI"
+            android:value="https://www.server.com/oauth2callback" />
 
         <activity
             android:name=".MainActivity"
