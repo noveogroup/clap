@@ -29,12 +29,14 @@ package com.noveogroup.android.reporter.library.system;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.os.BatteryManager;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.Settings;
@@ -284,6 +286,16 @@ public class Utils {
         }
 
         return list;
+    }
+
+    public static Bundle getMetaData(Context context) {
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            ApplicationInfo info = packageManager.getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
+            return info.metaData;
+        } catch (PackageManager.NameNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public static String encodeBitmap(Bitmap bitmap) {
