@@ -27,8 +27,8 @@
 package com.noveogroup.android.reporter.library.service;
 
 import android.content.Context;
-import android.util.Log;
 
+import com.noveogroup.android.reporter.library.Reporter;
 import com.noveogroup.android.reporter.library.events.Message;
 import com.noveogroup.android.reporter.library.sender.Sender;
 import com.noveogroup.android.reporter.library.sender.SenderLoader;
@@ -57,46 +57,35 @@ public class SenderRunnable implements Runnable {
         this.delay = delay;
     }
 
-    private void sendMessages(Sender sender) {
+    private void sendMessages(Sender sender) throws Exception {
         while (true) {
-            try {
-                List<Message<?>> messages = openHelper.loadMessages(maxSizeKb * 1024);
-                if (messages.size() <= 0) {
-                    break;
-                } else {
-                    if (!sender.send(applicationId, deviceId, messages)) {
-                        break;
-                    }
-                    openHelper.deleteMessage(messages);
-                }
-            } catch (Exception e) {
-                // TODO handle exception properly
-                Log.e("XXX", "", e);
-                // try to send later, if we cannot send them now
+            List<Message<?>> messages = openHelper.loadMessages(maxSizeKb * 1024);
+            if (messages.size() <= 0) {
                 break;
+            } else {
+                if (!sender.send(applicationId, deviceId, messages)) {
+                    break;
+                }
+                openHelper.deleteMessage(messages);
             }
         }
     }
 
     @Override
     public void run() {
-        Sender sender = null;
         try {
-            sender = SenderLoader.load(context);
-        } catch (Exception e) {
-            // TODO handle exception properly
-            Log.e("XXX", "", e);
-        }
-        // TODO sender can be null
+            Sender sender = SenderLoader.load(context);
+            if (sender != null) {
+                while (!Thread.interrupted()) {
+                    sendMessages(sender);
 
-        try {
-            while (!Thread.interrupted()) {
-                sendMessages(sender);
-
-                Thread.sleep(delay);
+                    Thread.sleep(delay);
+                }
             }
         } catch (InterruptedException ignored) {
             // exit when interrupted
+        } catch (Exception e) {
+            Reporter.status("cannot send messages", e);
         }
     }
 

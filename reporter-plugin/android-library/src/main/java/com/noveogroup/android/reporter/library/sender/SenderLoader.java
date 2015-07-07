@@ -29,6 +29,7 @@ package com.noveogroup.android.reporter.library.sender;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.text.TextUtils;
 
 public final class SenderLoader {
 
@@ -41,10 +42,14 @@ public final class SenderLoader {
     public static Sender load(Context context) throws Exception {
         ApplicationInfo info = context.getPackageManager().getApplicationInfo(context.getPackageName(), PackageManager.GET_META_DATA);
         String senderClassName = info.metaData.getString(META_SENDER);
-        Class<?> senderClass = Class.forName(senderClassName);
-        Sender sender = (Sender) senderClass.newInstance();
-        sender.init(context, info.metaData);
-        return sender;
+        if (TextUtils.isEmpty(senderClassName)) {
+            return null;
+        } else {
+            Class<?> senderClass = Class.forName(senderClassName);
+            Sender sender = (Sender) senderClass.newInstance();
+            sender.init(context, info.metaData);
+            return sender;
+        }
     }
 
 }
