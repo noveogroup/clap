@@ -32,6 +32,11 @@
             </intent-filter>
         </receiver>
 
+        <activity
+            android:name=".sender.google.InitActivity"
+            android:theme="@android:style/Theme.Translucent"
+            android:windowSoftInputMode="adjustPan|stateHidden" />
+
     </application>
 
 </manifest>
