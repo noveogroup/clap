@@ -125,11 +125,11 @@ public final class Reporter {
     }
 
     public static void status(String message) {
-        Log.i(TAG_STATUS, message);
+        android.util.Log.i(TAG_STATUS, message);
     }
 
     public static void status(String message, Exception exception) {
-        Log.e(TAG_STATUS, message, exception);
+        android.util.Log.e(TAG_STATUS, message, exception);
     }
 
     private static final WeakHashMap<String, Logger> loggerMap = new WeakHashMap<>();
