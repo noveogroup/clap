@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="320dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="center"
+    android:layout_margin="64dp"
+    android:background="#212121"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:text="@string/com_noveogroup_reporter_google_init_title"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#03A9F4" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#2196F3" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="4dp"
+        android:text="@string/com_noveogroup_reporter_google_init_message"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <WebView
+        android:id="@+id/com_noveogroup_reporter_google_init_web"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="4dp"
+        android:layout_weight="1" />
+
+    <LinearLayout
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <Button
+            android:id="@+id/com_noveogroup_reporter_google_init_later"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/com_noveogroup_reporter_google_init_later" />
+
+        <Button
+            android:id="@+id/com_noveogroup_reporter_google_init_never"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/com_noveogroup_reporter_google_init_never" />
+
+    </LinearLayout>
+
+</LinearLayout>

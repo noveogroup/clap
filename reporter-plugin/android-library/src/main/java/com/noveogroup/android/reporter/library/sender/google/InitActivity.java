@@ -31,12 +31,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.noveogroup.android.reporter.library.R;
+
 public class InitActivity extends Activity {
 
-    public static Intent start(Context context, Bundle meta) {
-        return new Intent(context, InitActivity.class)
-                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                .putExtras(meta);
+    public static void start(Context context, Bundle meta) {
+        context.startActivity(
+                new Intent(context, InitActivity.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .putExtras(meta));
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.com_noveogroup_reporter_google_init);
     }
 
 }

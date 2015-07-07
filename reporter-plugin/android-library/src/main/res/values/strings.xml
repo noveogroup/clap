@@ -8,4 +8,11 @@
     <string name="starter_label">Reporter starter</string>
     <string name="starter_description">Starter of reporter service</string>
 
+    <string name="com_noveogroup_reporter_google_init_title">Sign in</string>
+    <string name="com_noveogroup_reporter_google_init_message">
+        Reporter plugin requires Google account to send application\'s logs.
+    </string>
+    <string name="com_noveogroup_reporter_google_init_later">Later</string>
+    <string name="com_noveogroup_reporter_google_init_never">Never</string>
+
 </resources>
