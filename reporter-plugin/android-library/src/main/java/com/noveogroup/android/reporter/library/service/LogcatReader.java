@@ -35,8 +35,11 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class LogcatReader {
+
+    private static final Pattern STATUS_MESSAGE_PATTERN = Pattern.compile("^\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}\\.\\d{3} \\w/\\Q" + Reporter.TAG_STATUS + "\\E");
 
     private static final String LOGCAT_COMMAND = "logcat -v time";
     private static final long RETRY_TIME = 10 * 1000;
@@ -55,7 +58,9 @@ public class LogcatReader {
 
                     BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
                     for (String line = ""; line != null; line = reader.readLine()) {
-                        appendLogcat(line);
+                        if (!STATUS_MESSAGE_PATTERN.matcher(line).find()) {
+                            appendLogcat(line);
+                        }
                     }
                 } finally {
                     if (process != null) {

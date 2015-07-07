@@ -45,6 +45,8 @@ public final class Reporter {
         throw new UnsupportedOperationException();
     }
 
+    public static final String TAG_STATUS = "REPORTER";
+
     private static final Object lock = new Object();
     private static volatile boolean initStatic = false;
     private static volatile boolean initContext = false;
@@ -120,6 +122,14 @@ public final class Reporter {
                 }
             }
         }
+    }
+
+    public static void status(String message) {
+        Log.i(TAG_STATUS, message);
+    }
+
+    public static void status(String message, Exception exception) {
+        Log.e(TAG_STATUS, message, exception);
     }
 
     private static final WeakHashMap<String, Logger> loggerMap = new WeakHashMap<>();
